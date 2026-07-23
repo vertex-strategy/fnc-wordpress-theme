@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main>
+<main id="main">
 	<div class="moment" style="min-height:40vh;">
 		<?php if ( have_posts() ) : ?>
 			<?php

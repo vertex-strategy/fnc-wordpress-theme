@@ -42,25 +42,52 @@ function fnc_theme_assets() {
 add_action( 'wp_enqueue_scripts', 'fnc_theme_assets' );
 
 /**
- * Menu de repli pour l'emplacement "primary", tant qu'aucun menu WordPress
- * n'est configure dans l'administration (Apparence > Menus).
+ * URL d'une Page WordPress publiee par son slug, avec repli sur "#" si
+ * elle n'existe pas encore (installation fraiche du theme sans contenu).
+ */
+function fnc_page_url( $slug ) {
+	$page = get_page_by_path( $slug );
+	return $page ? get_permalink( $page ) : '#';
+}
+
+/**
+ * URL de l'archive d'un custom post type, avec le meme repli sur "#".
+ */
+function fnc_archive_url( $post_type ) {
+	$url = get_post_type_archive_link( $post_type );
+	return $url ? $url : '#';
+}
+
+/**
+ * Items de navigation principale, alignes sur le site officiel reel
+ * (localhost:3000/fr) suite a l'amendement de la Decision 1 de
+ * l'ADR-007 : 6 items (Le Forum, Edition en cours, Editions,
+ * Ressources, Partenaires, Contact), pas les ancres de la maquette
+ * mono-page d'origine. Liens reels vers les Pages/archives creees
+ * dans cette instance ; reste sur "#" pour celles qui n'existent pas
+ * encore.
  *
- * Reprend les ancres de la maquette homepage-v2 (page unique, M1 a M8) :
- * seule la page d'accueil est aujourd'hui committee et validee (ADR-007).
+ * @return array Liste de [url, libelle].
+ */
+function fnc_default_menu_items() {
+	return array(
+		array( fnc_page_url( 'le-forum' ), __( 'Le Forum', 'fnc-wordpress-theme' ) ),
+		array( fnc_page_url( 'edition-en-cours' ), __( 'Édition en cours', 'fnc-wordpress-theme' ) ),
+		array( fnc_archive_url( 'fnc_edition' ), __( 'Éditions', 'fnc-wordpress-theme' ) ),
+		array( fnc_archive_url( 'fnc_publication' ), __( 'Ressources', 'fnc-wordpress-theme' ) ),
+		array( fnc_page_url( 'partenaires' ), __( 'Partenaires', 'fnc-wordpress-theme' ) ),
+		array( fnc_page_url( 'contact' ), __( 'Contact', 'fnc-wordpress-theme' ) ),
+	);
+}
+
+/**
+ * Menu de repli pour l'emplacement "primary", tant qu'aucun menu
+ * WordPress n'est configure dans l'administration (Apparence > Menus).
  */
 function fnc_default_primary_menu() {
-	$items = array(
-		'#m2'     => __( 'Le Forum', 'fnc-wordpress-theme' ),
-		'#m3'     => __( 'Intervenants', 'fnc-wordpress-theme' ),
-		'#m5'     => __( 'Programme', 'fnc-wordpress-theme' ),
-		'#m7'     => __( 'Éditions', 'fnc-wordpress-theme' ),
-		'#'       => __( 'Publications', 'fnc-wordpress-theme' ),
-		'#footer' => __( 'Contact', 'fnc-wordpress-theme' ),
-	);
-
 	echo '<ul>';
-	foreach ( $items as $href => $label ) {
-		printf( '<li><a href="%s">%s</a></li>', esc_url( $href ), esc_html( $label ) );
+	foreach ( fnc_default_menu_items() as $fnc_item ) {
+		printf( '<li><a href="%s">%s</a></li>', esc_url( $fnc_item[0] ), esc_html( $fnc_item[1] ) );
 	}
 	echo '</ul>';
 }
@@ -71,17 +98,8 @@ function fnc_default_primary_menu() {
  * `.mobile-panel a` cible des liens directs, pas une liste).
  */
 function fnc_default_mobile_menu() {
-	$items = array(
-		'#m2'     => __( 'Le Forum', 'fnc-wordpress-theme' ),
-		'#m3'     => __( 'Intervenants', 'fnc-wordpress-theme' ),
-		'#m5'     => __( 'Programme', 'fnc-wordpress-theme' ),
-		'#m7'     => __( 'Éditions', 'fnc-wordpress-theme' ),
-		'#'       => __( 'Publications', 'fnc-wordpress-theme' ),
-		'#footer' => __( 'Contact', 'fnc-wordpress-theme' ),
-	);
-
-	foreach ( $items as $href => $label ) {
-		printf( '<a href="%s">%s</a>', esc_url( $href ), esc_html( $label ) );
+	foreach ( fnc_default_menu_items() as $fnc_item ) {
+		printf( '<a href="%s">%s</a>', esc_url( $fnc_item[0] ), esc_html( $fnc_item[1] ) );
 	}
 }
 

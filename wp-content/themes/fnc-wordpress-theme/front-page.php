@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main>
+<main id="main">
 	<!-- M1 — OPENING EXPERIENCE -->
 	<section class="moment" id="m1" aria-labelledby="m1-title">
 		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/les-portes.png' ); ?>" alt="<?php esc_attr_e( 'Portes du Forum Numérique Congo s’ouvrant sur la salle plénière', 'fnc-wordpress-theme' ); ?>" />

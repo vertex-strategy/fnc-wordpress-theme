@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-<a class="skip" href="#m1"><?php esc_html_e( 'Aller au contenu', 'fnc-wordpress-theme' ); ?></a>
+<a class="skip" href="#main"><?php esc_html_e( 'Aller au contenu', 'fnc-wordpress-theme' ); ?></a>
 
 <header class="nav" id="nav">
 	<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Forum Numérique Congo — accueil', 'fnc-wordpress-theme' ); ?>">
@@ -52,9 +52,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="nav-utils">
 		<?php fnc_language_switcher(); ?>
-		<button class="cta" type="button"><?php esc_html_e( 'Accréditation', 'fnc-wordpress-theme' ); ?>
+		<a class="cta" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-		</button>
+		</a>
 		<button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="mobile-panel" aria-label="<?php esc_attr_e( 'Ouvrir le menu', 'fnc-wordpress-theme' ); ?>">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 		</button>

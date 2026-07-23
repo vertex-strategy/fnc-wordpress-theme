@@ -71,8 +71,14 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 | Contact | `page-contact.php` | `docs/mockups/homepage-v2/contact.html` (rendu par `site.js`) | Statique (formulaire non fonctionnel) |
 | Éditions | `archive-fnc_edition.php` | `docs/mockups/homepage-v2/editions.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
 | Publications | `archive-fnc_publication.php` | `docs/mockups/homepage-v2/publications.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
+| Programme | `archive-fnc_session.php` | `docs/mockups/homepage-v2/programme.html` (rendu par `site.js`) | **Dynamique** — agenda réel (horaire, titre, salle) |
+| Intervenants | `archive-fnc_intervenant.php` | `docs/mockups/homepage-v2/intervenants.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
 
-**Statut des sources à la date d'intégration :** ces 4 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+**Statut des sources à la date d'intégration :** ces 6 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+
+**Programme** a nécessité d'étendre le plugin : deux nouveaux champs meta sur `fnc_session` (`_fnc_session_time`, `_fnc_session_room`), ajoutés à la meta box existante « Édition et intervenants », nécessaires pour afficher un agenda réel (horaire + salle) plutôt qu'une simple liste de titres.
+
+Les toolbars de filtres par type (Institutionnel/Panel/Atelier/Presse pour le programme, Institution/Entreprise/Recherche/Presse pour les intervenants) de la maquette source ne sont pas reproduits sur ces deux archives — aucune donnée réelle du plugin ne les justifie encore (contrairement aux catégories de publications, qui existent réellement via `fnc_categorie`).
 
 `contact.html`/`editions.html`/`publications.html` ne sont pas des pages HTML statiques comme `le-forum.html` : leur contenu réel est généré côté client par `site.js` (à partir de `data-page` sur `<body>`), un système de gabarits JS partagé qui couvre l'ensemble des 27 pages de cette génération de la maquette (`docs/mockups/homepage-v2/site.css` + `site.js`). Les classes CSS ajoutées pour ces 3 pages (`.hero`, `.section-head`, `.card`/`.grid`, `.agenda`, `.toolbar`, `.empty`, `.form`, `.cta-band`) viennent de ce système et coexistent avec celles déjà utilisées par l'accueil et Le Forum (mêmes tokens de couleur, nommage différent).
 

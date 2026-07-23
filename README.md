@@ -175,6 +175,29 @@ Voir l'amendement complet de la Décision 1 dans [ADR-007](https://github.com/ve
 
 Le gabarit `page-le-forum.php`/`page-contact.php` s'applique automatiquement à toute Page WordPress du slug correspondant (hiérarchie de templates `page-{slug}.php`). Les autres pages intérieures de la maquette (programme, intervenants, etc.) suivront le même principe au fur et à mesure de leur intégration.
 
+## Réglages globaux du site (Customizer) — Lot 1
+
+Le vrai site pilote son identité, ses coordonnées, son footer et son SEO depuis un **Global « Réglages du site »** administrable sans développeur (`src/payload/globals/Settings.ts`, 7 onglets). Le pendant WordPress natif est le **Customizer** (`inc/customizer.php`, panneau « Réglages FNC ») — architecture validée par le Décideur (**Customizer + blocs Gutenberg custom, zéro dépendance tierce**, conforme ADR-007 Décision 2).
+
+Sections couvertes (miroir des onglets Payload) :
+
+| Onglet Payload | Section Customizer FNC | Champs |
+|---|---|---|
+| Identité | Identité | Nom officiel, slogan, sous-titre, description, présentation courte |
+| Logos & icônes | Logos & icônes | Logo principal / clair / sombre (favicon = Icône du site WordPress native) |
+| Communication | Communication | Email, téléphone, adresse, 5 réseaux sociaux (LinkedIn/X/Facebook/Instagram/YouTube) |
+| Communication › Contacts presse | Contacts presse | Répéteur texte (une ligne : Nom \| Rôle \| Organisation \| Email \| Téléphone) |
+| Footer | Footer | Texte, mention de copyright (année ajoutée automatiquement) |
+| SEO par défaut | SEO par défaut | Titre, description, image OpenGraph, type de Twitter card, directive robots |
+
+Câblage : `header.php` (logo administrable, repli sur le sigle SVG intégré ; libellé depuis le nom officiel), `footer.php` (marque, texte, coordonnées, réseaux, copyright), `page-espace-presse.php` (contacts presse, masqués si non renseignés — RÈGLE 4), et le `<head>` (métadonnées `description`/OpenGraph/Twitter ; la directive robots passe par le filtre natif `wp_robots` pour ne pas dupliquer la balise). Helpers de lecture dans `inc/customizer.php` (`fnc_get_setting`, `fnc_social_links`, `fnc_parse_press_contacts`…) et `functions.php` (`fnc_site_name`, `fnc_head_meta`, `fnc_filter_robots`, `fnc_header_logo_img`).
+
+**Simplifications assumées (zéro dépendance)** : le Customizer natif n'a pas de répéteur, donc les réseaux sociaux sont 5 champs URL par plateforme (l'énumération Payload est fermée) et les contacts presse un champ texte structuré une-ligne-par-contact. La **navigation configurable** et les **groupes de liens typés du footer** du vrai site restent gérés par les menus WordPress natifs (Apparence → Menus) déjà en place ; l'**ordre éditorial des pays + drapeaux uploadables** (onglet Intervenants) est reporté à un lot ultérieur.
+
+**Non couvert par ce lot (prochains lots — architecture blocs Gutenberg)** : composition des pages institutionnelles/génériques par blocs, homepage éditable (8 moments), informations pratiques de l'édition (8 rubriques), SEO par page.
+
+**Vérifié en conditions réelles** : Customizer chargé (HTTP 200) avec les 6 sections et tous les réglages enregistrés ; métadonnées SEO/OpenGraph/Twitter et directive robots (via filtre natif, sans doublon) confirmées dans le `<head>` ; footer complet (marque/texte/coordonnées/réseaux/copyright) et contacts presse rendus depuis des réglages de test via wp-cli ; logo administrable et repli SVG tous deux confirmés ; aucun fatal/notice/warning dans les logs du conteneur.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

@@ -198,6 +198,35 @@ Câblage : `header.php` (logo administrable, repli sur le sigle SVG intégré ; 
 
 **Vérifié en conditions réelles** : Customizer chargé (HTTP 200) avec les 6 sections et tous les réglages enregistrés ; métadonnées SEO/OpenGraph/Twitter et directive robots (via filtre natif, sans doublon) confirmées dans le `<head>` ; footer complet (marque/texte/coordonnées/réseaux/copyright) et contacts presse rendus depuis des réglages de test via wp-cli ; logo administrable et repli SVG tous deux confirmés ; aucun fatal/notice/warning dans les logs du conteneur.
 
+## Composition de pages par blocs (Lot 2)
+
+Sur le vrai site, les pages ne sont pas des gabarits figés : elles sont **composées** à partir de palettes de blocs administrables (`institutionalSections.ts` pour Le Forum/Contact, `pageSections.ts` pour les pages composables). Le pendant WordPress natif, ce sont des **blocs Gutenberg custom** — architecture validée par le Décideur.
+
+**14 blocs** sont fournis (`inc/blocks.php`), miroir des palettes Payload :
+
+| Palette | Blocs |
+|---|---|
+| Institutionnelle | Ouverture, Mot du Président, Mission (média + texte), Objectifs (séquence numérotée), FAQ, Ancrage (manifeste), Callout (CTA) |
+| Générique | Héros, Texte riche, Média + texte, Chiffres clés, Appel à action, FAQ, Documents |
+
+**Principe repris à l'identique du vrai site : la DA reste dans le code.** Tous les blocs sont **dynamiques** (`save` retourne `null`, rendu serveur en PHP) et produisent le markup DA figé du thème (`.opening`, `.split`, `.obj`, `.territory`, `.callout`, `.metric-strip`…). L'éditeur administre le contenu, les médias et les CTA — jamais la mise en forme.
+
+**Implémentation « pilotée par schéma »** : les champs de chaque bloc sont déclarés une seule fois en PHP, puis (a) convertis en attributs de bloc, (b) rendus en PHP, (c) transmis à un moteur d'édition générique (`assets/js/blocks.js`) qui construit l'interface. Il n'y a donc pas 14 composants d'édition à maintenir, et **aucune étape de build** (pas de JSX, pas de bundler) — conforme au « zéro dépendance tierce » de l'ADR-007. Types de champs pris en charge : texte, zone de texte, texte riche, URL, liste déroulante, média (image/fichier) et **répéteur** (ajout/suppression/réordonnancement).
+
+### Gabarit `page.php` — manque corrigé
+
+Le thème n'avait **aucun `page.php`** : les Pages sans gabarit dédié retombaient sur `index.php`, qui affiche `the_excerpt()` et non `the_content()` — le contenu composé n'aurait jamais été rendu. Le gabarit est ajouté avec deux modes : page composée de blocs FNC (rendu direct, chaque bloc portant déjà ses sections pleine largeur) ou page de contenu simple (habillage sobre en colonne de lecture).
+
+### Bascule des gabarits dédiés
+
+`page-le-forum.php` et `page-contact.php` avaient priorité sur `page.php` : ces pages n'auraient pas pu être composées. Elles cèdent désormais la place au contenu composé **dès que l'éditorial ajoute un bloc FNC** (`fnc_page_has_blocks()`), tout en conservant leur contenu de démonstration tant que ce n'est pas le cas — non destructif.
+
+**Frontière assumée** : les champs « texte riche » sont des zones de texte rendues avec `wpautop()`. Le vrai site utilise un éditeur riche Lexical ; répliquer un éditeur riche multi-champs sans build JS n'apporterait pas assez au regard de la complexité induite sur un produit vitrine.
+
+**Vérifié en conditions réelles** : 14 blocs enregistrés côté serveur et 14 schémas chargés côté éditeur ; page de démonstration composée de 9 blocs rendue correctement (titre sur deux lignes, numérotation automatique 01/02/03, FAQ dépliables, paragraphes multiples, chiffres clés, callout) ; dans l'éditeur, 9 blocs affichés avec 58 champs et **aucun bloc invalide** ; répéteur testé (ajout d'une ligne propagé au store et à l'interface) ; bascule statique → composé vérifiée sur « Le Forum » puis état initial restauré ; aucun fatal/notice/warning dans les logs.
+
+Une page de démonstration reste disponible dans l'installation locale (« Test blocs ») pour visualiser les blocs assemblés.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

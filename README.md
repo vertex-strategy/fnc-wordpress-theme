@@ -76,9 +76,25 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 
 **Statut des sources à la date d'intégration :** ces 6 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
 
-**Programme** a nécessité d'étendre le plugin : deux nouveaux champs meta sur `fnc_session` (`_fnc_session_time`, `_fnc_session_room`), ajoutés à la meta box existante « Édition et intervenants », nécessaires pour afficher un agenda réel (horaire + salle) plutôt qu'une simple liste de titres.
+**Programme** a nécessité d'étendre le plugin : trois nouveaux champs meta sur `fnc_session` (`_fnc_session_time`, `_fnc_session_room`, `_fnc_session_jour`), ajoutés à la meta box existante « Édition et intervenants », nécessaires pour afficher un agenda réel (horaire, salle, regroupement par journée) plutôt qu'une simple liste de titres.
 
-Les toolbars de filtres par type (Institutionnel/Panel/Atelier/Presse pour le programme, Institution/Entreprise/Recherche/Presse pour les intervenants) de la maquette source ne sont pas reproduits sur ces deux archives — aucune donnée réelle du plugin ne les justifie encore (contrairement aux catégories de publications, qui existent réellement via `fnc_categorie`).
+## Amendement de la Décision 1 (ADR-007) : alignement structurel sur le site officiel réel
+
+Une exploration du site officiel réel (`localhost:3000/fr`) a révélé que Programme, Intervenants et Ressources y sont déjà fonctionnellement plus riches que ce que la seule maquette statique laissait supposer :
+
+- **Intervenants** : filtre par profil (Officiels/Experts/Hôtes) **et** par pays (avec drapeaux), pas de simple liste.
+- **Programme** : agenda réel réparti sur plusieurs jours avec navigation par ancres, pas une liste plate.
+- **Ressources** : recherche et filtre par type de document.
+
+Le choix de source visuelle (maquette statique, pas le rendu Next.js — Décision 1 initiale) n'a pas été renversé, mais la **structure fonctionnelle** de ces 3 gabarits a été alignée sur celle du site officiel réel :
+
+- `archive-fnc_intervenant.php` : filtre par profil (`fnc_profil`, chips) et par pays (`fnc_pays`, liste déroulante), via requête GET native WordPress (query vars publics de taxonomie), sans JavaScript de soumission automatique.
+- `archive-fnc_session.php` : sessions regroupées par jour (`_fnc_session_jour`), avec navigation par ancres.
+- `archive-fnc_publication.php` : formulaire de recherche natif (`s`), en plus des chips de catégorie déjà en place.
+
+**Le contenu de démonstration reste explicitement fictif** : les vraies identités de responsables publics visibles sur le site officiel réel (noms, fonctions) ne sont **jamais** reprises dans ce produit distinct — seule la structure des champs (profil, pays, jour) est répliquée, avec des exemples génériques non officiels.
+
+Voir l'amendement complet de la Décision 1 dans [ADR-007](https://github.com/vertex-strategy/forum-numerique-congo/blob/codex/m4-wcag-integration/docs/adr/ADR-007-template-wordpress-produit-parallele.md) (v1.2) — cet amendement a été validé directement par le Décideur, sans nouvelle revue d'architecture indépendante (raffinement de structure, pas un renversement de la Décision 1).
 
 `contact.html`/`editions.html`/`publications.html` ne sont pas des pages HTML statiques comme `le-forum.html` : leur contenu réel est généré côté client par `site.js` (à partir de `data-page` sur `<body>`), un système de gabarits JS partagé qui couvre l'ensemble des 27 pages de cette génération de la maquette (`docs/mockups/homepage-v2/site.css` + `site.js`). Les classes CSS ajoutées pour ces 3 pages (`.hero`, `.section-head`, `.card`/`.grid`, `.agenda`, `.toolbar`, `.empty`, `.form`, `.cta-band`) viennent de ce système et coexistent avec celles déjà utilisées par l'accueil et Le Forum (mêmes tokens de couleur, nommage différent).
 

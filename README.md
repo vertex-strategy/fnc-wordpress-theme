@@ -227,6 +227,32 @@ Le thème n'avait **aucun `page.php`** : les Pages sans gabarit dédié retombai
 
 Une page de démonstration reste disponible dans l'installation locale (« Test blocs ») pour visualiser les blocs assemblés.
 
+## Page d'accueil éditable (Lot 3)
+
+Sur le vrai site, la page d'accueil est administrable via l'archétype « Homepage » (`homepageFields.ts`) : le storyboard M1→M8 est **figé** (groupes fixes, pas des blocs réordonnables) et l'éditorial n'administre que le contenu. Le thème avait sa page d'accueil **entièrement codée en dur**.
+
+Les 8 moments sont désormais administrables dans **Apparence → Personnaliser → « Page d'accueil (M1 → M8) »** (`inc/homepage.php`, 8 sections, ~60 réglages). Ce lot passe par le Customizer et non par des blocs : il ne s'agit pas de composition (cf. Lot 2) mais du **paramétrage d'une structure figée** — et le Customizer offre en prime l'aperçu en direct. Chaque champ retombe sur le contenu de la maquette s'il n'est pas renseigné.
+
+### Héros M1 : image, vidéo ou slider
+
+Extension par rapport au vrai site (demande du Décideur) — celui-ci ne propose qu'une image de fond. Le média du héros est configurable en trois modes :
+
+| Mode | Champs | Comportement |
+|---|---|---|
+| **Image fixe** | Image de fond | Comportement historique |
+| **Vidéo** | Fichier vidéo **ou** URL externe, image d'attente (poster) | Muette, en boucle, `playsinline`, `preload="metadata"`, `poster` (évite le décalage de mise en page) |
+| **Slider** | Jusqu'à 5 images, durée par image (3–20 s) | Fondu enchaîné, mise en pause automatique quand l'onglet passe en arrière-plan |
+
+**Replis systématiques** : mode vidéo sans média renseigné → image ; mode slider avec une seule image → image simple sans slider. Le héros n'est jamais vide.
+
+**Accessibilité** : les médias du héros sont décoratifs (le texte porte le sens) — `alt` vide et `aria-hidden`. Sous `prefers-reduced-motion`, la vidéo est masquée au profit de son poster et le slider n'affiche que la première image, sans transition ; le script s'abstient également de lancer la lecture ou le défilement.
+
+### Moments alimentés par les vraies données
+
+Comme sur le vrai site, les moments qui présentent des données métier ne sont plus des placeholders : **M3** (voix → fiches Intervenants, avec civilité/organisation/pays), **M5** (programme → sessions de l'édition en cours), **M6** (partenaires → fiches Partenaires, logo si disponible), **M7** (archives → Éditions, triées par année) et **M8** (compte à rebours **réellement calculé** depuis la date de début de l'édition en cours). Chacun retombe sur un état « à confirmer » explicite si la donnée n'existe pas — jamais sur des données inventées présentées comme confirmées.
+
+**Vérifié en conditions réelles** : panneau Customizer chargé (HTTP 200) avec les 8 sections et 61 réglages, dont les 11 champs du héros ; les trois modes testés (image ; vidéo avec attributs `muted`/`loop`/`playsinline`/`poster`/`aria-hidden` corrects ; slider dont la bascule automatique a été observée après l'intervalle configuré) ; les deux replis testés (vidéo sans média, slider à une image) ; règles `prefers-reduced-motion` confirmées chargées ; moments dynamiques vérifiés sur les données de test (intervenant, session, partenaire, édition 2027 et compte à rebours à 230 jours) ; aucune erreur console ni fatal/notice/warning dans les logs.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

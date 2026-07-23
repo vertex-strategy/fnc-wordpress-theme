@@ -1,0 +1,55 @@
+# Environnement de developpement local (Podman) pour verifier le theme et
+# le plugin en conditions reelles. Ne fait pas partie du produit distribue
+# (thème + plugin) : sert uniquement a tester ce depot.
+#
+# Demarrer :   podman-compose up -d
+# Arreter :    podman-compose down
+# Reset complet (perd le contenu de test) : podman-compose down -v
+
+services:
+  db:
+    image: docker.io/library/mariadb:11.4
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: wordpress
+    volumes:
+      - fnc_wp_db:/var/lib/mysql
+
+  wordpress:
+    image: docker.io/library/wordpress:latest
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 1
+    ports:
+      - "8090:80"
+    volumes:
+      - fnc_wp_data:/var/www/html
+      - ./wp-content/themes/fnc-wordpress-theme:/var/www/html/wp-content/themes/fnc-wordpress-theme
+      - ./wp-content/plugins/fnc-content-model:/var/www/html/wp-content/plugins/fnc-content-model
+
+  wpcli:
+    image: docker.io/library/wordpress:cli
+    depends_on:
+      - db
+      - wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - fnc_wp_data:/var/www/html
+      - ./wp-content/themes/fnc-wordpress-theme:/var/www/html/wp-content/themes/fnc-wordpress-theme
+      - ./wp-content/plugins/fnc-content-model:/var/www/html/wp-content/plugins/fnc-content-model
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+volumes:
+  fnc_wp_db:
+  fnc_wp_data:

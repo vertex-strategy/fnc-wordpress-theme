@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 const FNC_META_SESSION_EDITION     = '_fnc_session_edition';
 const FNC_META_SESSION_SPEAKERS    = '_fnc_session_speakers';
+const FNC_META_SESSION_TIME        = '_fnc_session_time';
+const FNC_META_SESSION_ROOM        = '_fnc_session_room';
 const FNC_META_PUBLICATION_EDITION = '_fnc_publication_edition';
 
 /**
@@ -47,6 +49,26 @@ function fnc_content_model_register_meta() {
 					'items' => array( 'type' => 'integer' ),
 				),
 			),
+		)
+	);
+
+	register_post_meta(
+		'fnc_session',
+		FNC_META_SESSION_TIME,
+		array(
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		)
+	);
+
+	register_post_meta(
+		'fnc_session',
+		FNC_META_SESSION_ROOM,
+		array(
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
 		)
 	);
 
@@ -116,6 +138,14 @@ function fnc_content_model_render_session_meta_box( $post ) {
 	$edition_id  = get_post_meta( $post->ID, FNC_META_SESSION_EDITION, true );
 	$speaker_ids = get_post_meta( $post->ID, FNC_META_SESSION_SPEAKERS, true );
 	$speaker_ids = is_array( $speaker_ids ) ? array_map( 'intval', $speaker_ids ) : array();
+	$time        = get_post_meta( $post->ID, FNC_META_SESSION_TIME, true );
+	$room        = get_post_meta( $post->ID, FNC_META_SESSION_ROOM, true );
+
+	echo '<p><label for="fnc_session_time"><strong>' . esc_html__( 'Horaire', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="text" id="fnc_session_time" name="fnc_session_time" value="%s" placeholder="09:00" style="width:100%%;" /></p>', esc_attr( $time ) );
+
+	echo '<p><label for="fnc_session_room"><strong>' . esc_html__( 'Salle', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="text" id="fnc_session_room" name="fnc_session_room" value="%s" style="width:100%%;" /></p>', esc_attr( $room ) );
 
 	echo '<p><label for="fnc_session_edition"><strong>' . esc_html__( 'Édition', 'fnc-content-model' ) . '</strong></label></p>';
 	fnc_content_model_render_edition_select( 'fnc_session_edition', $edition_id );
@@ -185,6 +215,9 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 			? array_map( 'absint', wp_unslash( $_POST['fnc_session_speakers'] ) )
 			: array();
 		update_post_meta( $post_id, FNC_META_SESSION_SPEAKERS, $speaker_ids );
+
+		update_post_meta( $post_id, FNC_META_SESSION_TIME, isset( $_POST['fnc_session_time'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_session_time'] ) ) : '' );
+		update_post_meta( $post_id, FNC_META_SESSION_ROOM, isset( $_POST['fnc_session_room'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_session_room'] ) ) : '' );
 	}
 
 	if ( 'fnc_publication' === $post->post_type

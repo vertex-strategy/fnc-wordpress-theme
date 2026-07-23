@@ -253,6 +253,35 @@ Comme sur le vrai site, les moments qui présentent des données métier ne sont
 
 **Vérifié en conditions réelles** : panneau Customizer chargé (HTTP 200) avec les 8 sections et 61 réglages, dont les 11 champs du héros ; les trois modes testés (image ; vidéo avec attributs `muted`/`loop`/`playsinline`/`poster`/`aria-hidden` corrects ; slider dont la bascule automatique a été observée après l'intervalle configuré) ; les deux replis testés (vidéo sans média, slider à une image) ; règles `prefers-reduced-motion` confirmées chargées ; moments dynamiques vérifiés sur les données de test (intervenant, session, partenaire, édition 2027 et compte à rebours à 230 jours) ; aucune erreur console ni fatal/notice/warning dans les logs.
 
+## Informations pratiques (Lot 4)
+
+Décision de modélisation reprise **à l'identique du vrai site** (`practicalInfo.ts`) : les informations pratiques ne sont ni un texte libre, ni une collection autonome, mais un **agrégat de rubriques rattaché à l'objet pivot Édition**. Chaque rubrique est optionnelle et **masquée si elle est vide** (Content Readiness Gate) — une page à moitié remplie ne montre jamais de section creuse.
+
+**8 rubriques**, composées dans le contenu de la fiche Édition via des blocs dédiés (catégorie « FNC · Informations pratiques ») :
+
+| Rubrique | Contenu |
+|---|---|
+| Lieu & plan d'accès | Adresse, détails d'accès, plan statique, carte interactive optionnelle |
+| Transport & accès | Texte |
+| Hébergement | Liste d'hôtels (nom, précision, site web) |
+| Visa & formalités | Texte |
+| Badge & accréditation | Texte |
+| Contacts utiles | Liste libellé / valeur (email cliquable détecté automatiquement) |
+| FAQ logistique | Questions dépliables |
+| Accessibilité sur site | Texte |
+
+Ces rubriques sont rendues à trois endroits, toujours depuis la même source : la page **Informations pratiques** (édition en cours), la page **Édition en cours**, et la **fiche de l'édition**. Tant qu'aucune rubrique n'est renseignée, l'état d'attente sobre du site réel est conservé.
+
+**Carte privacy-first** : comme sur le vrai site, la carte tierce n'est **chargée qu'au clic explicite** — aucune requête vers le service externe n'est émise avant. L'iframe créée porte `referrerpolicy="no-referrer"`, `loading="lazy"` et un titre décrivant son contenu.
+
+### Gabarit `single-fnc_edition.php` — manque corrigé
+
+Les liens « Voir l'édition » (frise des éditions, archives de l'accueil, partenaires) retombaient sur `index.php`, qui n'affiche qu'un extrait : la fiche était quasi vide. Le gabarit ajouté présente l'identité de l'édition (année, statut, thème, dates, lieu, note d'édition spéciale), son contenu éditorial, ses informations pratiques, ses sessions et ses ressources liées — chaque section masquée si la donnée n'existe pas.
+
+Le contenu éditorial de la fiche est rendu **en excluant les rubriques pratiques** (`fnc_render_content_excluding_practical()`) : composées dans ce même contenu mais affichées dans leur section dédiée, elles seraient sinon rendues deux fois.
+
+**Vérifié en conditions réelles** : les 8 blocs enregistrés (22 blocs FNC au total) ; 5 rubriques de test rendues sur les trois emplacements, une rubrique laissée vide correctement **masquée** ; privacy-first confirmé (aucune iframe ni requête réseau vers le service tiers avant clic, puis iframe créée avec les bons attributs au clic) ; repli « en cours de finalisation » vérifié en vidant les rubriques, puis état restauré ; aucune erreur console ni fatal/notice/warning.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

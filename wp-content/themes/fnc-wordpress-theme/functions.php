@@ -25,6 +25,12 @@ require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/blocks.php';
 
 /**
+ * Page d'accueil editable — storyboard fige M1 -> M8 (heros image/video/
+ * slider inclus). Voir inc/homepage.php.
+ */
+require_once get_template_directory() . '/inc/homepage.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

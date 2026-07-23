@@ -55,6 +55,59 @@
 		});
 	}
 
+	// Heros de la page d'accueil : slider et video (Lot 3).
+	// Le mode est choisi dans le Customizer ; le CSS gere deja l'affichage
+	// statique en cas de prefers-reduced-motion, ce script ne fait que piloter
+	// le mouvement — et s'abstient totalement si l'utilisateur l'a refuse.
+	var heroVideo = document.querySelector('.hero-video');
+	if (heroVideo && reduce) {
+		// Le CSS masque la video ; on evite en plus de la laisser jouer.
+		heroVideo.pause();
+		heroVideo.removeAttribute('autoplay');
+	}
+
+	var slider = document.querySelector('.hero-slider');
+	if (slider && !reduce) {
+		var slides = slider.querySelectorAll('.hero-slide');
+		if (slides.length > 1) {
+			var interval = parseInt(slider.dataset.interval, 10) || 6000;
+			var current = 0;
+			var timer = null;
+
+			function showSlide(index) {
+				slides[current].classList.remove('is-active');
+				current = index % slides.length;
+				slides[current].classList.add('is-active');
+			}
+
+			function start() {
+				if (!timer) {
+					timer = window.setInterval(function () {
+						showSlide(current + 1);
+					}, interval);
+				}
+			}
+
+			function stop() {
+				if (timer) {
+					window.clearInterval(timer);
+					timer = null;
+				}
+			}
+
+			// Ne pas consommer de ressources quand l'onglet est en arriere-plan.
+			document.addEventListener('visibilitychange', function () {
+				if (document.hidden) {
+					stop();
+				} else {
+					start();
+				}
+			});
+
+			start();
+		}
+	}
+
 	// Reveal au scroll (amelioration progressive)
 	if (!reduce) {
 		document.body.classList.add('js-reveal');

@@ -509,3 +509,31 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 /* Split avec media a gauche (bloc generique « Media + texte ») */
 .split.media-left{grid-template-columns:.95fr 1.05fr;}
 @media (max-width:900px){.split.media-left{grid-template-columns:1fr;}}
+
+/* ============================================================
+   HEROS DE LA PAGE D'ACCUEIL (Lot 3) — image / video / slider
+   Le mode est administrable (Customizer > Page d'accueil > M1).
+   ============================================================ */
+
+/* Video de fond : meme cadrage que .media-cover, muette et decorative. */
+.hero-video{object-fit:cover;}
+/* Image de repli de la video : masquee par defaut, revelee si les
+   animations sont reduites (voir @media prefers-reduced-motion). */
+.hero-video-fallback{display:none;}
+
+/* Slider : les images se superposent, seule .is-active est visible.
+   Le fondu est gere en CSS ; le changement d'image en JS. */
+.hero-slider{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.hero-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s var(--ease);}
+.hero-slide.is-active{opacity:1;}
+/* Ken Burns deja porte par #m1 .media-cover : on le neutralise sur les
+   diapositives pour eviter que l'animation ne se rejoue a chaque bascule. */
+#m1 .hero-slide{animation:none;}
+
+@media (prefers-reduced-motion:reduce){
+  /* Aucune lecture automatique ni defilement : on montre une image fixe. */
+  .hero-video{display:none;}
+  .hero-video-fallback{display:block;}
+  .hero-slide{transition:none;}
+  .hero-slide:not(.is-active){display:none;}
+}

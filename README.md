@@ -65,6 +65,8 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 
 `fnc_edition` porte en plus un champ booléen `_fnc_edition_active` (« édition en cours ») : une seule édition peut être active à la fois — en cocher une désactive automatiquement les autres à la sauvegarde. Utilisé par `page-edition-en-cours.php`.
 
+`fnc_partenaire` porte une taxonomie `fnc_niveau_partenariat` (Institutionnel/Organisateur/Soutien/Sponsor) et 2 champs meta : `_fnc_partenaire_site` (URL) et `_fnc_partenaire_editions` (relation multiple vers des éditions, même logique que `_fnc_session_speakers`). Utilisés par `page-partenaires.php`.
+
 ## Pages intérieures (au-delà de l'accueil)
 
 | Page | Gabarit | Source (`forum-numerique-congo`) | Type de rendu |
@@ -77,8 +79,12 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 | Intervenants | `archive-fnc_intervenant.php` | `docs/mockups/homepage-v2/intervenants.html` (rendu par `site.js`) | **Dynamique** — filtres profil/pays réels |
 | Édition en cours | `page-edition-en-cours.php` | `docs/mockups/homepage-v2/edition-en-cours.html` (rendu par `site.js`) | **Dynamique** — hub (stats, aperçus programme/intervenants) |
 | Informations pratiques | `page-informations-pratiques.php` | `docs/mockups/homepage-v2/informations-pratiques.html` (rendu par `site.js`) | Statique (état d'attente, aligné sur le site réel) |
+| Partenaires | `page-partenaires.php` | `docs/mockups/homepage-v2/partenaires.html` (rendu par `site.js`) | **Dynamique** — groupés par niveau réel |
+| Espace presse | `page-espace-presse.php` | `docs/mockups/homepage-v2/espace-presse.html` (rendu par `site.js`) | **Dynamique** — communiqués (Publications filtrées) |
 
-**Statut des sources à la date d'intégration :** ces 8 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+**Statut des sources à la date d'intégration :** ces 10 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+
+**Partenaires** regroupe les vrais posts `fnc_partenaire` par niveau réel (`fnc_niveau_partenariat`), avec site web et éditions associées si renseignés. **Espace presse** traite les communiqués comme un type de Publication filtré par catégorie (`fnc_categorie` = « Communiques »), pas comme une collection séparée — cohérent avec le constat du site officiel réel (« les communiqués restent des Ressources du portail »). Sa section « Contacts presse » reste volontairement statique : le site réel la relie à des Réglages du site globaux, une configuration hors périmètre du plugin.
 
 **Édition en cours** est le hub le plus dynamique du thème à ce jour : il récupère l'édition marquée « active » (nouveau champ `_fnc_edition_active` sur `fnc_edition`, une seule à la fois), puis calcule en temps réel le nombre de sessions, d'intervenants distincts et de jours à partir des relations déjà construites (session→édition, session→intervenants, session→jour), avec un aperçu programme et un aperçu intervenants. Seul le bloc « Inscription » reste statique/exemple (pas de collection d'inscriptions dans le plugin — hors périmètre, voir modèle de contenu ci-dessus).
 

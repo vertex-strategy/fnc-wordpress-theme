@@ -67,6 +67,39 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 
 `fnc_partenaire` porte une taxonomie `fnc_niveau_partenariat` (Institutionnel/Organisateur/Soutien/Sponsor) et 2 champs meta : `_fnc_partenaire_site` (URL) et `_fnc_partenaire_editions` (relation multiple vers des éditions, même logique que `_fnc_session_speakers`). Utilisés par `page-partenaires.php`.
 
+### Réconciliation du modèle de contenu avec le vrai schéma Payload (v0.2.0)
+
+À la demande du Décideur (« va récupérer tous les éléments et comprendre le vrai site »), le modèle de contenu ci-dessus a été comparé champ par champ aux vraies collections Payload du site officiel (`src/payload/collections/*.ts`, lues directement, pas observées via le rendu). Le plugin ne portait que la structure grossière (relations, quelques métas ajoutées au fil des gabarits) ; plusieurs champs réels en étaient absents. Cette passe les ajoute — **volontairement de façon additive** : aucun champ déjà lu par un gabarit existant n'a été renommé ou supprimé, pour ne rien casser avant la passe de mise à jour des gabarits (prochaine étape, explicitement distincte de celle-ci).
+
+Nouveaux champs par collection :
+
+| CPT | Nouveaux champs meta | Reflète (collection Payload) |
+|---|---|---|
+| `fnc_edition` | `_fnc_edition_status` (select : à venir/en cours/passée — dérive automatiquement `_fnc_edition_active`), `_fnc_edition_year`, `_fnc_edition_theme`, `_fnc_edition_start_date`/`_fnc_edition_end_date`, `_fnc_edition_location`, `_fnc_edition_is_special` + `_fnc_edition_special_note` | `Editions.eventStatus`, `.year`, `.theme`, `.startDate`/`.endDate`, `.location`, `.isSpecialEdition`/`.specialEditionNote` |
+| `fnc_session` | `_fnc_session_type` (select, 9 valeurs : allocution/inaugurale/interview/table-ronde/session/débat/pause/logistique/clôture), `_fnc_session_moderator` (relation simple, distincte des intervenants), `_fnc_session_start`/`_fnc_session_end` (recomposent `_fnc_session_time` automatiquement), `_fnc_session_objectives` (tableau), `_fnc_session_note` | `Sessions.type`, `.moderator` (≠ `.speakers`), `.start`/`.end`, `.objectives`, `.note` |
+| `fnc_intervenant` | `_fnc_speaker_title` (civilité), `_fnc_speaker_org`, `_fnc_speaker_country` (texte libre, ex. « France / États-Unis » — distinct de la taxonomie `fnc_pays` déjà utilisée pour le filtre), `_fnc_speaker_protocol_order`, `_fnc_speaker_links` (tableau libellé/URL) | `Speakers.title`, `.org`, `.country`, `.protocolOrder`, `.links` |
+| `fnc_publication` | `_fnc_publication_type` (select, 8 valeurs : rapport/livre blanc/actes/communiqué de presse/note conceptuelle/vidéo/interview/autre — **distinct** de la catégorie `fnc_categorie`), `_fnc_publication_media_url` | `Publications.type` (séparé de `.category`), `.mediaUrl` |
+| `fnc_partenaire` | `_fnc_partenaire_participations` (tableau `{édition, niveau}` — niveau : principal/majeur/officiel/contributeur, **par édition**), taxonomie `fnc_niveau_partenariat` relabellée « Type de partenaire » (le champ qu'elle modélisait réellement depuis le début) | `Partners.type` (taxonomie existante, mal nommée jusqu'ici) **et** `.participations[].niveau` (nouveau — plus fin, absent avant cette passe) |
+
+Point de vigilance découvert en lisant le vrai schéma : `Partners.type` (institutionnel/organisateur/soutien/sponsor, fixe par partenaire) et `Partners.participations[].niveau` (principal/majeur/officiel/contributeur, variable par édition) sont **deux concepts distincts** dans Payload. La taxonomie `fnc_niveau_partenariat` existante modélisait déjà correctement `type` (ses 4 termes correspondaient) mais portait un nom trompeur — corrigé sans changer le slug ni les termes existants. `niveau` (par édition) était totalement absent avant cette passe ; il est maintenant capturé dans `_fnc_partenaire_participations`, en plus (pas à la place) du tableau plat `_fnc_partenaire_editions` déjà lu par `page-partenaires.php`.
+
+**Non fait dans cette passe, volontairement** : les gabarits du thème (`page-edition-en-cours.php`, `archive-fnc_session.php`, `archive-fnc_edition.php`, `archive-fnc_intervenant.php`, `page-partenaires.php`, `archive-fnc_publication.php`) ne consomment pas encore ces nouveaux champs — ils continuent de fonctionner exactement comme avant. La mise à jour des gabarits (timeline chronologique pour les éditions au lieu d'une grille de cartes, badges de type de session, drapeaux pays sur les intervenants, distinction modérateur/intervenants dans le programme, regroupement partenaires par type **et** niveau, filtre par type sur les publications) est délibérément reportée à une prochaine étape, à la demande du Décideur.
+
+### Passe gabarits (thème v0.2.0) : les nouveaux champs sont maintenant affichés
+
+Suite immédiate de la passe précédente, à la demande du Décideur (« On y va pour la passe gabarits maintenant »). Les 6 gabarits identifiés ci-dessus ont été mis à jour pour consommer les champs ajoutés au plugin :
+
+- **`archive-fnc_edition.php`** : rendu en **frise chronologique** (`.frise`), pas une grille de cartes — année, badge de statut (à venir/en cours/passée), thème, dates, lieu, note d'édition spéciale. Triée par année décroissante (`_fnc_edition_year`, repli sur la date de publication WP si absente), comme la vraie page `/editions`.
+- **`archive-fnc_session.php`** et **la prévisualisation programme de `page-edition-en-cours.php`** : badge de type de session à côté du titre (masqué pour pause/logistique, comme le site officiel), ligne « Modérateur : … » distincte des intervenants.
+- **`page-edition-en-cours.php`** : thème, dates et lieu de l'édition affichés sous le hero.
+- **`archive-fnc_intervenant.php`** : nom affiché avec civilité (« Dr. », « Mme »…), ligne organisation · pays sous chaque nom, **frise « Pays représentés »** avec drapeaux SVG inline au-dessus des filtres (dérivée du champ texte libre `_fnc_speaker_country`, qui peut cumuler plusieurs pays séparés par « / », comme le site officiel).
+- **`page-partenaires.php`** : badge de niveau (principal/majeur/officiel/contributeur) à côté de chaque édition associée, en plus du regroupement déjà existant par type.
+- **`archive-fnc_publication.php`** : le filtre principal utilise désormais le champ dédié `_fnc_publication_type` (8 valeurs, badge affiché sur chaque carte) au lieu de la taxonomie `fnc_categorie` — reflète la séparation réelle `type`/`category` de la collection Payload `Publications`. Lien « Regarder » pour les types vidéo/interview quand `_fnc_publication_media_url` est renseigné.
+
+Nouvelles fonctions utilitaires dans `functions.php` : `fnc_render_badge()`, `fnc_speaker_display_name()`, `fnc_speaker_meta_line()`, `fnc_country_flag_svg()` (11 pays, mêmes géométries simplifiées que `CountryFlag.tsx` du site officiel, sans dépendance tierce), `fnc_split_countries()`. Nouvelles classes CSS : `.badge`, `.frise*`, `.flag-block`/`.flag-frise`/`.flag-chip`/`.flag-svg`, `.person-meta`, `.moderator-line`.
+
+**Vérifié en conditions réelles**, pas seulement en lint : `php -l` sur les 7 fichiers modifiés, puis contrôle dans la pile de développement locale (conteneurs `fnc-wordpress-theme_*`) — contenu de démonstration enrichi via wp-cli, chaque page rechargée dans le navigateur, logs du conteneur inspectés (aucun fatal/notice/warning). Frise des éditions, badges de type, ligne modérateur, drapeaux pays (3 rendus, dont un pays cumulé « France / Cameroun » correctement décomposé), badge de niveau par partenaire et filtre par type de publication confirmés fonctionnels sur les données de test.
+
 ## Pages intérieures (au-delà de l'accueil)
 
 | Page | Gabarit | Source (`forum-numerique-congo`) | Type de rendu |

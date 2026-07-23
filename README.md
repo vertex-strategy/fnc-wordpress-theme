@@ -22,10 +22,13 @@ wp-content/
 │       ├── footer.php         # Pied de page
 │       ├── front-page.php     # Page d'accueil — les 8 "moments" (M1 à M8)
 │       ├── page-le-forum.php  # Page "Le Forum" (page-{slug}.php) — voir note ci-dessous
+│       ├── page-contact.php   # Page "Contact" (formulaire non fonctionnel, fidèle à la source)
+│       ├── archive-fnc_edition.php      # Archive des éditions — DYNAMIQUE (vraies données du plugin)
+│       ├── archive-fnc_publication.php  # Archive des publications — DYNAMIQUE (vraies données du plugin)
 │       ├── index.php          # Gabarit de repli générique (obligatoire WordPress)
 │       └── assets/
 │           ├── js/main.js     # Comportements (nav au scroll, menu mobile, reveal)
-│           └── images/        # Images utilisées par les pages (accueil + Le Forum)
+│           └── images/        # Images utilisées par les pages
 └── plugins/
     └── fnc-content-model/
         ├── fnc-content-model.php
@@ -62,9 +65,20 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 
 ## Pages intérieures (au-delà de l'accueil)
 
-`page-le-forum.php` porte `docs/mockups/homepage-v2/interior/le-forum.html` du dépôt `forum-numerique-congo`. **Statut de la source à la date d'intégration :** ce fichier existe dans le dossier du projet principal mais n'était pas committé sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégré ici à la demande explicite du Décideur, malgré ce statut. Si le fichier source évolue avant d'être committé en amont, ce gabarit devra être resynchronisé.
+| Page | Gabarit | Source (`forum-numerique-congo`) | Type de rendu |
+|---|---|---|---|
+| Le Forum | `page-le-forum.php` | `docs/mockups/homepage-v2/interior/le-forum.html` | Statique (contenu exemple) |
+| Contact | `page-contact.php` | `docs/mockups/homepage-v2/contact.html` (rendu par `site.js`) | Statique (formulaire non fonctionnel) |
+| Éditions | `archive-fnc_edition.php` | `docs/mockups/homepage-v2/editions.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
+| Publications | `archive-fnc_publication.php` | `docs/mockups/homepage-v2/publications.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
 
-Le gabarit s'applique automatiquement à toute Page WordPress dont le slug est `le-forum` (hiérarchie de templates `page-{slug}.php`). Les autres pages intérieures de la maquette (programme, intervenants, éditions, etc.) suivront le même principe au fur et à mesure de leur intégration.
+**Statut des sources à la date d'intégration :** ces 4 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+
+`contact.html`/`editions.html`/`publications.html` ne sont pas des pages HTML statiques comme `le-forum.html` : leur contenu réel est généré côté client par `site.js` (à partir de `data-page` sur `<body>`), un système de gabarits JS partagé qui couvre l'ensemble des 27 pages de cette génération de la maquette (`docs/mockups/homepage-v2/site.css` + `site.js`). Les classes CSS ajoutées pour ces 3 pages (`.hero`, `.section-head`, `.card`/`.grid`, `.agenda`, `.toolbar`, `.empty`, `.form`, `.cta-band`) viennent de ce système et coexistent avec celles déjà utilisées par l'accueil et Le Forum (mêmes tokens de couleur, nommage différent).
+
+**Éditions et Publications sont volontairement dynamiques**, pas de simples portages statiques : leurs URLs (`/editions/`, `/publications/`) correspondent exactement aux archives déjà enregistrées pour `fnc_edition`/`fnc_publication` (`has_archive` + `rewrite`), donc WordPress les sert nativement via ces gabarits `archive-{post_type}.php`, avec une vraie boucle `WP_Query` sur le contenu publié. La section "timeline" d'exemple de `editions.html` (libellés inventés type "Édition 1", "Édition 2") n'a pas été reproduite, pour ne pas afficher de contenu fictif à la place de vraies données.
+
+Le gabarit `page-le-forum.php`/`page-contact.php` s'applique automatiquement à toute Page WordPress du slug correspondant (hiérarchie de templates `page-{slug}.php`). Les autres pages intérieures de la maquette (programme, intervenants, etc.) suivront le même principe au fur et à mesure de leur intégration.
 
 ## Multilinguisme
 
@@ -76,4 +90,4 @@ Voir le plan de mise en œuvre de l'ADR-007 :
 1. ~~Créer le dépôt~~ (fait)
 2. ~~Scaffolder la structure thème~~ (fait — page d'accueil uniquement, seule page committée/validée dans `homepage-v2` à ce jour)
 3. ~~Scaffolder le plugin~~ (fait — CPTs, taxonomies, relations en meta ; Polylang non encore intégré)
-4. Brancher le thème sur les données du plugin (remplacer le contenu statique de `front-page.php` par des requêtes sur les CPTs — éditions, sessions, intervenants), intégrer Polylang
+4. Brancher le thème sur les données du plugin — **amorcé** : `archive-fnc_edition.php` et `archive-fnc_publication.php` interrogent déjà les vraies données ; reste à faire pour `front-page.php` (éditions/sessions/intervenants sur l'accueil) et à intégrer Polylang

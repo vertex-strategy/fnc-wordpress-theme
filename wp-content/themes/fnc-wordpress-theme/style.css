@@ -266,3 +266,70 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
   #m1 .scroll-hint .dot{animation:none;}
   body.js-reveal .reveal{opacity:1;transform:none;}
 }
+
+/* ============================================================
+   PAGES INTERIEURES (ex. Le Forum)
+   Source : docs/mockups/homepage-v2/interior/le-forum.html
+   Gabarit generique pour les pages WordPress natives (page-*.php),
+   distinct des 8 moments de la page d'accueil.
+   ============================================================ */
+.opening{position:relative;min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(120px,20vh,200px) var(--marge) clamp(48px,7vh,88px);color:#fff;overflow:hidden;}
+.opening img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:kb 22s var(--ease) forwards;}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+.opening .ov{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(12,12,16,.86),rgba(12,12,16,.45) 48%,rgba(12,12,16,.15)),linear-gradient(0deg,rgba(10,10,14,.8),transparent 55%);}
+.opening .inner{position:relative;z-index:2;max-width:1000px;}
+.opening .breadcrumb{font-size:.78rem;letter-spacing:.1em;opacity:.8;margin-bottom:20px;}
+.opening .breadcrumb a{text-decoration:underline;}
+.opening .eyebrow{color:#fff;}
+.opening h1{font-size:clamp(2.4rem,6.5vw,5.4rem);line-height:.98;letter-spacing:-.02em;}
+.opening .intro{font-family:var(--serif);font-style:italic;font-size:var(--lead);max-width:52ch;margin-top:22px;opacity:.94;}
+.opening .pcb{position:absolute;left:0;right:0;bottom:0;height:60px;width:100%;z-index:2;pointer-events:none;opacity:.85;}
+.opening .pcb path{fill:none;stroke-width:1.5;stroke-dasharray:1400;stroke-dashoffset:1400;animation:trace 2s var(--ease) forwards;}
+.opening .pcb .r{stroke:var(--rouge);}
+.opening .pcb .y{stroke:var(--jaune);animation-delay:.3s;}
+
+.section{padding:clamp(64px,11vh,132px) var(--marge);}
+.section.linen{background:var(--linen);}
+.section h2{font-size:var(--h2);color:var(--navy);letter-spacing:-.02em;}
+
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(34px,5vw,80px);align-items:center;}
+.split .lines{font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.16;font-weight:700;color:var(--navy);max-width:20ch;letter-spacing:-.015em;}
+.split .lines .muted{color:var(--texte-tert);}
+.split p.body{color:var(--texte-sec);margin-top:22px;max-width:46ch;}
+.split figure{margin:0;overflow:hidden;border-radius:5px;aspect-ratio:4/3;}
+.split figure img{width:100%;height:100%;object-fit:cover;}
+
+.obj{display:flex;flex-direction:column;margin-top:40px;}
+.obj .row{display:grid;grid-template-columns:88px 1fr;gap:26px;align-items:start;padding:28px 0;border-top:1px solid var(--border);}
+.obj .row:last-child{border-bottom:1px solid var(--border);}
+.obj .n{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.6rem;color:var(--vert);line-height:1;}
+.obj .row:nth-child(2) .n{color:var(--navy);}
+.obj .row:nth-child(3) .n{color:var(--jaune);}
+.obj .row:nth-child(4) .n{color:var(--rouge);}
+.obj h3{font-size:1.2rem;color:var(--texte-corps);margin-bottom:6px;}
+.obj p{color:var(--texte-sec);font-size:.98rem;max-width:56ch;}
+
+.territory{position:relative;min-height:72vh;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(64px,10vh,120px) var(--marge);color:#fff;overflow:hidden;}
+.territory img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.territory .ov{position:absolute;inset:0;z-index:1;background:linear-gradient(0deg,rgba(12,12,18,.88),rgba(12,12,18,.2) 62%),linear-gradient(90deg,rgba(12,12,18,.6),transparent 58%);}
+.territory .inner{position:relative;z-index:2;max-width:900px;}
+.territory .eyebrow{color:#fff;}
+.territory .manifest{font-size:var(--h2);line-height:1.14;max-width:24ch;}
+.territory .manifest .light{font-weight:300;color:#e3e4ff;}
+.territory .sub{margin-top:24px;font-family:var(--serif);font-style:italic;font-size:var(--lead);max-width:42ch;opacity:.93;}
+
+.callout{background:var(--navy-deep);color:#fff;text-align:center;padding:clamp(56px,9vh,110px) var(--marge);}
+.callout h2{color:#fff;font-size:var(--h2);margin-bottom:14px;}
+.callout p{max-width:46ch;margin:0 auto 30px;opacity:.88;}
+
+@media (max-width:900px){
+  .split{grid-template-columns:1fr;}
+  .split figure{aspect-ratio:16/10;}
+}
+@media (max-width:560px){
+  .obj .row{grid-template-columns:1fr;gap:8px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .opening img{animation:none;}
+  .opening .pcb path{stroke-dashoffset:0;}
+}

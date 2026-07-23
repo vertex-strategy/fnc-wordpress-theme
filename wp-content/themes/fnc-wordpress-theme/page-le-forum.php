@@ -16,9 +16,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
+
+/*
+ * Lot 2 — composition par blocs. Sur le vrai site, « Le Forum » est une page
+ * institutionnelle entierement composee de blocs administrables. Des que
+ * l'editorial compose cette page avec des blocs FNC, ce gabarit s'efface au
+ * profit du contenu compose ; sinon il conserve le contenu de demonstration
+ * porte par la maquette (comportement inchange).
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
 ?>
 
-<main>
+<main id="main">
 	<header class="opening">
 		<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/la-salle.png' ); ?>" alt="<?php esc_attr_e( 'Salle plénière du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" />
 		<div class="ov" aria-hidden="true"></div>

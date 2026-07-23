@@ -19,6 +19,12 @@ define( 'FNC_THEME_VERSION', '0.3.0' );
 require_once get_template_directory() . '/inc/customizer.php';
 
 /**
+ * Blocs éditoriaux (composition de pages) — pendant des palettes de blocs
+ * Payload (institutionalSections / pageSections). Voir inc/blocks.php.
+ */
+require_once get_template_directory() . '/inc/blocks.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

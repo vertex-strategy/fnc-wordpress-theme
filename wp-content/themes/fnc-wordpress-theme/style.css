@@ -474,3 +474,38 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 .person-meta{display:block;margin-top:2px;font-size:.86rem;color:var(--texte-sec);}
 .moderator-line{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.9rem;color:var(--texte-sec);}
 .moderator-line b{color:var(--navy);}
+
+/* ============================================================
+   BLOCS EDITORIAUX (Lot 2) — composition de pages
+   Rendu serveur des blocs Gutenberg custom (inc/blocks.php).
+   Reutilise les classes DA existantes (.opening/.split/.obj/
+   .territory/.callout/.metric-strip) ; seules les nouveautes
+   (FAQ, bloc President, split inverse) sont definies ici.
+   ============================================================ */
+
+/* FAQ depliable */
+.faq-intro{max-width:60ch;margin-top:14px;color:var(--texte-sec);}
+.faq-list{margin-top:28px;border-top:1px solid var(--border);}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-item summary{cursor:pointer;padding:20px 40px 20px 0;font-weight:600;color:var(--navy);position:relative;list-style:none;}
+.faq-item summary::-webkit-details-marker{display:none;}
+.faq-item summary::after{content:"+";position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:1.3rem;font-weight:400;color:var(--texte-tert);transition:transform .2s var(--ease);}
+.faq-item[open] summary::after{content:"−";}
+.faq-item summary:focus-visible{outline:2px solid var(--jaune);outline-offset:2px;}
+.faq-answer{padding:0 0 22px;color:var(--texte-sec);max-width:66ch;}
+.faq-answer p{margin-bottom:12px;}
+
+/* Bloc « Mot du President » */
+.president-block .split{align-items:start;}
+.president-excerpt{font-family:var(--serif);font-style:italic;font-size:var(--lead);line-height:1.5;color:var(--navy-deep);border-left:2px solid var(--jaune);padding-left:20px;margin-top:18px;}
+.president-message{margin-top:24px;color:var(--texte-sec);max-width:62ch;}
+.president-message p{margin-bottom:14px;}
+.president-identity{margin-top:26px;padding-top:18px;border-top:1px solid var(--border);}
+.president-name{font-family:var(--serif);font-size:1.35rem;color:var(--navy-deep);}
+.president-role{margin-top:4px;font-size:.92rem;color:var(--texte-sec);}
+.president-block figure{margin:0;overflow:hidden;border-radius:5px;aspect-ratio:3/4;}
+.president-block figure img{width:100%;height:100%;object-fit:cover;}
+
+/* Split avec media a gauche (bloc generique « Media + texte ») */
+.split.media-left{grid-template-columns:.95fr 1.05fr;}
+@media (max-width:900px){.split.media-left{grid-template-columns:1fr;}}

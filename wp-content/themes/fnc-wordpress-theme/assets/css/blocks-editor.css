@@ -1,0 +1,120 @@
+/**
+ * Styles de l'éditeur pour les blocs éditoriaux du thème (Lot 2).
+ *
+ * Ces styles ne concernent QUE l'interface d'édition (back-office) : le rendu
+ * public est produit en PHP avec le markup DA figé du thème. On cherche ici la
+ * lisibilité du formulaire, pas la fidélité visuelle au front.
+ */
+
+.fnc-block {
+	border: 1px solid #d5d7e0;
+	border-left: 3px solid #2d3180;
+	border-radius: 4px;
+	background: #fff;
+	padding: 0;
+	margin: 0 0 8px;
+}
+
+.fnc-block__header {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 10px 14px;
+	background: #f6f7fb;
+	border-bottom: 1px solid #e6e7ef;
+	border-radius: 3px 3px 0 0;
+}
+
+.fnc-block__header strong {
+	color: #1a1d5c;
+	font-size: 13px;
+	letter-spacing: 0.02em;
+}
+
+.fnc-block__desc {
+	color: #61637a;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.fnc-block__fields {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 14px;
+}
+
+.fnc-block__field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.fnc-block__label {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #1a1d5c;
+}
+
+/* ---------- Média ---------- */
+
+.fnc-block__media-preview {
+	max-width: 220px;
+	max-height: 140px;
+	width: auto;
+	height: auto;
+	border: 1px solid #e6e7ef;
+	border-radius: 3px;
+	object-fit: cover;
+}
+
+.fnc-block__media-name {
+	font-size: 12px;
+	color: #61637a;
+	word-break: break-all;
+	margin: 0;
+}
+
+.fnc-block__media-actions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+/* ---------- Répéteur ---------- */
+
+.fnc-block__field--repeater {
+	border-top: 1px dashed #e0e1ea;
+	padding-top: 12px;
+}
+
+.fnc-block__repeater-item {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	border: 1px solid #e6e7ef;
+	border-radius: 3px;
+	background: #fbfbfd;
+	padding: 10px 12px;
+	margin-bottom: 8px;
+}
+
+.fnc-block__repeater-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 11px;
+	font-weight: 700;
+	color: #61637a;
+}
+
+.fnc-block__repeater-actions {
+	display: flex;
+	gap: 2px;
+}
+
+.fnc-block__repeater-add {
+	align-self: flex-start;
+}

@@ -20,6 +20,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+/*
+ * Lot 2 — composition par blocs. Sur le vrai site, « Contact » est une page
+ * institutionnelle composee de blocs administrables (le formulaire restant un
+ * composant du code). Des que l'editorial compose cette page avec des blocs
+ * FNC, ce gabarit s'efface ; sinon il conserve le contenu de demonstration.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
+
 fnc_render_hero(
 	array(
 		'eyebrow'    => __( 'Contact', 'fnc-wordpress-theme' ),

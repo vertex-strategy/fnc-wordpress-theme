@@ -47,6 +47,7 @@ const FNC_META_SESSION_NOTE       = '_fnc_session_note';
 const FNC_META_PUBLICATION_EDITION   = '_fnc_publication_edition';
 const FNC_META_PUBLICATION_TYPE      = '_fnc_publication_type';
 const FNC_META_PUBLICATION_MEDIA_URL = '_fnc_publication_media_url';
+const FNC_META_PUBLICATION_FILE      = '_fnc_publication_file';
 
 // --- Editions -------------------------------------------------------------
 const FNC_META_EDITION_ACTIVE       = '_fnc_edition_active';
@@ -158,6 +159,7 @@ function fnc_content_model_register_meta() {
 	register_post_meta( 'fnc_publication', FNC_META_PUBLICATION_EDITION, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_publication', FNC_META_PUBLICATION_TYPE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_publication', FNC_META_PUBLICATION_MEDIA_URL, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_publication', FNC_META_PUBLICATION_FILE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 
 	// Editions.
 	register_post_meta( 'fnc_edition', FNC_META_EDITION_ACTIVE, array( 'type' => 'boolean', 'single' => true, 'show_in_rest' => true ) );
@@ -414,6 +416,7 @@ function fnc_content_model_render_publication_meta_box( $post ) {
 	$edition_id = get_post_meta( $post->ID, FNC_META_PUBLICATION_EDITION, true );
 	$type       = get_post_meta( $post->ID, FNC_META_PUBLICATION_TYPE, true );
 	$media_url  = get_post_meta( $post->ID, FNC_META_PUBLICATION_MEDIA_URL, true );
+	$file_url   = get_post_meta( $post->ID, FNC_META_PUBLICATION_FILE, true );
 
 	echo '<p><label for="fnc_publication_type"><strong>' . esc_html__( 'Type', 'fnc-content-model' ) . '</strong></label></p>';
 	fnc_content_model_render_select( 'fnc_publication_type', fnc_content_model_publication_types(), $type, __( '— À préciser —', 'fnc-content-model' ) );
@@ -421,6 +424,10 @@ function fnc_content_model_render_publication_meta_box( $post ) {
 
 	echo '<p><label for="fnc_publication_media_url"><strong>' . esc_html__( 'URL média (vidéo/interview)', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<input type="url" id="fnc_publication_media_url" name="fnc_publication_media_url" value="%s" placeholder="https://" style="width:100%%;" /></p>', esc_attr( $media_url ) );
+
+	echo '<p><label for="fnc_publication_file"><strong>' . esc_html__( 'Fichier à télécharger', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="url" id="fnc_publication_file" name="fnc_publication_file" value="%s" placeholder="https://" style="width:100%%;" /></p>', esc_attr( $file_url ) );
+	echo '<p class="description">' . esc_html__( 'URL du document (PDF…). Téléversez-le dans la Médiathèque puis copiez son adresse ici. Un champ URL plutôt qu’un sélecteur de média : le plugin reste sans dépendance ni JavaScript d’administration.', 'fnc-content-model' ) . '</p>';
 
 	echo '<p style="margin-top:16px;"><label for="fnc_publication_edition">' . esc_html__( 'Édition liée (optionnel)', 'fnc-content-model' ) . '</label></p>';
 	fnc_content_model_render_edition_select( 'fnc_publication_edition', $edition_id );
@@ -590,6 +597,7 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		update_post_meta( $post_id, FNC_META_PUBLICATION_TYPE, array_key_exists( $type, fnc_content_model_publication_types() ) ? $type : '' );
 
 		update_post_meta( $post_id, FNC_META_PUBLICATION_MEDIA_URL, isset( $_POST['fnc_publication_media_url'] ) ? esc_url_raw( wp_unslash( $_POST['fnc_publication_media_url'] ) ) : '' );
+		update_post_meta( $post_id, FNC_META_PUBLICATION_FILE, isset( $_POST['fnc_publication_file'] ) ? esc_url_raw( wp_unslash( $_POST['fnc_publication_file'] ) ) : '' );
 	}
 
 	if ( 'fnc_edition' === $post->post_type

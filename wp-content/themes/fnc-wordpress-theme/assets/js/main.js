@@ -108,6 +108,27 @@
 		}
 	}
 
+	// Carte des informations pratiques : chargement au clic uniquement
+	// (privacy-first, comme le vrai site). Aucune requete vers le service
+	// tiers n'est emise tant que l'utilisateur ne l'a pas demande.
+	document.querySelectorAll('.pract-map').forEach(function (wrap) {
+		var btn = wrap.querySelector('.pract-map-load');
+		var url = wrap.dataset.mapUrl;
+		if (!btn || !url) {
+			return;
+		}
+		btn.addEventListener('click', function () {
+			var frame = document.createElement('iframe');
+			frame.src = url;
+			frame.loading = 'lazy';
+			frame.referrerPolicy = 'no-referrer';
+			// Le titre decrit le CONTENU du cadre, pas l'action du bouton.
+			frame.setAttribute('title', wrap.dataset.mapTitle || 'Carte du lieu');
+			wrap.innerHTML = '';
+			wrap.appendChild(frame);
+		});
+	});
+
 	// Reveal au scroll (amelioration progressive)
 	if (!reduce) {
 		document.body.classList.add('js-reveal');

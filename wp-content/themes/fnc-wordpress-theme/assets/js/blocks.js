@@ -292,7 +292,7 @@
 			title: schema.title,
 			description: schema.description,
 			icon: schema.icon,
-			category: 'fnc',
+			category: schema.category || 'fnc',
 			attributes: schema.attributes,
 
 			edit: function ( props ) {

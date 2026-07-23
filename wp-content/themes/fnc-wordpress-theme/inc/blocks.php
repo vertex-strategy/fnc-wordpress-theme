@@ -252,6 +252,134 @@ function fnc_block_schemas() {
 				),
 			),
 		),
+
+		/* ---------------- Informations pratiques (rattachees a l'Edition) ----------------
+		 * Miroir de practicalInfo.ts : agregat de rubriques porte par l'objet
+		 * pivot Edition. Chaque rubrique est optionnelle et masquee si vide.
+		 * A composer dans le contenu d'une fiche Edition, pas d'une Page.
+		 */
+		'pract-venue'         => array(
+			'title'       => __( 'Infos pratiques · Lieu & plan d’accès', 'fnc-wordpress-theme' ),
+			'icon'        => 'location',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Adresse, détails d’accès et plan. La carte interactive n’est chargée qu’au clic.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'address', 'type' => 'textarea', 'label' => __( 'Adresse', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Détails d’accès', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'mapImage', 'type' => 'image', 'label' => __( 'Plan (image statique)', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'mapEmbedUrl', 'type' => 'url', 'label' => __( 'URL de carte interactive (optionnel)', 'fnc-wordpress-theme' ) ),
+			),
+		),
+		'pract-transport'     => array(
+			'title'       => __( 'Infos pratiques · Transport & accès', 'fnc-wordpress-theme' ),
+			'icon'        => 'car',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Comment rejoindre le lieu.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
+			),
+		),
+		'pract-lodging'       => array(
+			'title'       => __( 'Infos pratiques · Hébergement', 'fnc-wordpress-theme' ),
+			'icon'        => 'admin-home',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Hôtels recommandés.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array(
+					'name'      => 'items',
+					'type'      => 'repeater',
+					'label'     => __( 'Hôtels recommandés', 'fnc-wordpress-theme' ),
+					'subfields' => array(
+						array( 'name' => 'name', 'type' => 'text', 'label' => __( 'Nom', 'fnc-wordpress-theme' ) ),
+						array( 'name' => 'note', 'type' => 'text', 'label' => __( 'Précision', 'fnc-wordpress-theme' ) ),
+						array( 'name' => 'url', 'type' => 'url', 'label' => __( 'Site web (optionnel)', 'fnc-wordpress-theme' ) ),
+					),
+				),
+			),
+		),
+		'pract-visa'          => array(
+			'title'       => __( 'Infos pratiques · Visa & formalités', 'fnc-wordpress-theme' ),
+			'icon'        => 'id-alt',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Formalités d’entrée sur le territoire.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
+			),
+		),
+		'pract-badge'         => array(
+			'title'       => __( 'Infos pratiques · Badge & accréditation', 'fnc-wordpress-theme' ),
+			'icon'        => 'tickets-alt',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Retrait du badge et accréditation.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
+			),
+		),
+		'pract-contacts'      => array(
+			'title'       => __( 'Infos pratiques · Contacts utiles', 'fnc-wordpress-theme' ),
+			'icon'        => 'phone',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Contacts logistiques de l’édition.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array(
+					'name'      => 'items',
+					'type'      => 'repeater',
+					'label'     => __( 'Contacts', 'fnc-wordpress-theme' ),
+					'subfields' => array(
+						array( 'name' => 'label', 'type' => 'text', 'label' => __( 'Libellé', 'fnc-wordpress-theme' ) ),
+						array( 'name' => 'value', 'type' => 'text', 'label' => __( 'Valeur (email / téléphone / …)', 'fnc-wordpress-theme' ) ),
+					),
+				),
+			),
+		),
+		'pract-faq'           => array(
+			'title'       => __( 'Infos pratiques · FAQ logistique', 'fnc-wordpress-theme' ),
+			'icon'        => 'editor-help',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Questions fréquentes sur la logistique.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array(
+					'name'      => 'items',
+					'type'      => 'repeater',
+					'label'     => __( 'Questions', 'fnc-wordpress-theme' ),
+					'subfields' => array(
+						array( 'name' => 'q', 'type' => 'text', 'label' => __( 'Question', 'fnc-wordpress-theme' ) ),
+						array( 'name' => 'a', 'type' => 'textarea', 'label' => __( 'Réponse', 'fnc-wordpress-theme' ) ),
+					),
+				),
+			),
+		),
+		'pract-accessibility' => array(
+			'title'       => __( 'Infos pratiques · Accessibilité sur site', 'fnc-wordpress-theme' ),
+			'icon'        => 'universal-access',
+			'category'    => 'fnc-pratique',
+			'description' => __( 'Conditions d’accessibilité du lieu.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
+			),
+		),
+	);
+}
+
+/** Slugs des blocs « informations pratiques » (rattaches a l'Edition). */
+function fnc_practical_block_slugs() {
+	return array(
+		'pract-venue',
+		'pract-transport',
+		'pract-lodging',
+		'pract-visa',
+		'pract-badge',
+		'pract-contacts',
+		'pract-faq',
+		'pract-accessibility',
 	);
 }
 
@@ -300,6 +428,11 @@ function fnc_block_category( $categories ) {
 				'title' => __( 'Forum Numérique Congo', 'fnc-wordpress-theme' ),
 				'icon'  => null,
 			),
+			array(
+				'slug'  => 'fnc-pratique',
+				'title' => __( 'FNC · Informations pratiques', 'fnc-wordpress-theme' ),
+				'icon'  => null,
+			),
 		),
 		$categories
 	);
@@ -316,7 +449,7 @@ function fnc_register_blocks() {
 			array(
 				'api_version'     => 2,
 				'title'           => $schema['title'],
-				'category'        => 'fnc',
+				'category'        => isset( $schema['category'] ) ? $schema['category'] : 'fnc',
 				'icon'            => $schema['icon'],
 				'description'     => $schema['description'],
 				'attributes'      => fnc_block_attributes_from_fields( $schema['fields'] ),
@@ -346,6 +479,7 @@ function fnc_enqueue_block_editor_assets() {
 		$payload[ 'fnc/' . $slug ] = array(
 			'title'       => $schema['title'],
 			'icon'        => $schema['icon'],
+			'category'    => isset( $schema['category'] ) ? $schema['category'] : 'fnc',
 			'description' => $schema['description'],
 			'fields'      => $schema['fields'],
 			'attributes'  => fnc_block_attributes_from_fields( $schema['fields'] ),
@@ -835,6 +969,242 @@ function fnc_render_block_cta( $a ) {
 
 function fnc_render_block_faq( $a ) {
 	return fnc_render_faq_section( $a, false );
+}
+
+/* ---------------- Informations pratiques ---------------- */
+
+/**
+ * Enveloppe commune d'une rubrique pratique.
+ *
+ * @param string $title         Titre saisi.
+ * @param string $default_title Titre de repli (libellé de la rubrique).
+ * @param string $inner         Contenu HTML déjà échappé.
+ * @param string $modifier      Suffixe de classe (ex. « venue »).
+ * @return string
+ */
+function fnc_pract_wrap( $title, $default_title, $inner, $modifier = '' ) {
+	if ( '' === trim( $inner ) ) {
+		return '';
+	}
+	return sprintf(
+		'<article class="pract-item%1$s"><h3 class="pract-title">%2$s</h3><div class="pract-body">%3$s</div></article>',
+		$modifier ? ' pract-item--' . esc_attr( $modifier ) : '',
+		esc_html( $title ? $title : $default_title ),
+		$inner
+	);
+}
+
+/** Rubriques « titre + contenu » (transport, visa, badge, accessibilité). */
+function fnc_render_pract_simple( $a, $default_title, $modifier ) {
+	$body = fnc_attr( $a, 'body' );
+	if ( ! $body ) {
+		return '';
+	}
+	return fnc_pract_wrap( fnc_attr( $a, 'title' ), $default_title, fnc_render_rich( $body ), $modifier );
+}
+
+function fnc_render_block_pract_transport( $a ) {
+	return fnc_render_pract_simple( $a, __( 'Transport & accès', 'fnc-wordpress-theme' ), 'transport' );
+}
+
+function fnc_render_block_pract_visa( $a ) {
+	return fnc_render_pract_simple( $a, __( 'Visa & formalités', 'fnc-wordpress-theme' ), 'visa' );
+}
+
+function fnc_render_block_pract_badge( $a ) {
+	return fnc_render_pract_simple( $a, __( 'Badge & accréditation', 'fnc-wordpress-theme' ), 'badge' );
+}
+
+function fnc_render_block_pract_accessibility( $a ) {
+	return fnc_render_pract_simple( $a, __( 'Accessibilité sur site', 'fnc-wordpress-theme' ), 'accessibility' );
+}
+
+function fnc_render_block_pract_venue( $a ) {
+	$address   = fnc_attr( $a, 'address' );
+	$body      = fnc_attr( $a, 'body' );
+	$map_image = fnc_attachment_url( fnc_attr( $a, 'mapImage', 0 ) );
+	$map_url   = fnc_attr( $a, 'mapEmbedUrl' );
+
+	ob_start();
+
+	if ( $address ) {
+		printf( '<p class="pract-address">%s</p>', nl2br( esc_html( $address ) ) );
+	}
+	if ( $body ) {
+		echo fnc_render_rich( $body ); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
+	}
+	if ( $map_image ) {
+		printf( '<img class="pract-map-image" src="%s" alt="" loading="lazy" />', esc_url( $map_image ) );
+	}
+	if ( $map_url ) {
+		// Privacy-first (comme le vrai site) : aucune requête vers le service
+		// tiers avant un clic explicite de l'utilisateur.
+		printf(
+			'<div class="pract-map" data-map-url="%1$s" data-map-title="%2$s"><button type="button" class="btn btn-soft pract-map-load">%3$s</button><p class="help">%4$s</p></div>',
+			esc_url( $map_url ),
+			esc_attr__( 'Carte du lieu', 'fnc-wordpress-theme' ),
+			esc_html__( 'Afficher la carte interactive', 'fnc-wordpress-theme' ),
+			esc_html__( 'La carte n’est chargée qu’à votre demande : aucun contenu tiers n’est appelé avant.', 'fnc-wordpress-theme' )
+		);
+	}
+
+	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Lieu & plan d’accès', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'venue' );
+}
+
+function fnc_render_block_pract_lodging( $a ) {
+	$items = fnc_attr_items( $a );
+	if ( empty( $items ) ) {
+		return '';
+	}
+
+	ob_start();
+	echo '<ul class="pract-list">';
+	foreach ( $items as $item ) {
+		$name = isset( $item['name'] ) ? $item['name'] : '';
+		if ( ! $name ) {
+			continue;
+		}
+		$url  = isset( $item['url'] ) ? $item['url'] : '';
+		$note = isset( $item['note'] ) ? $item['note'] : '';
+		echo '<li>';
+		if ( $url ) {
+			printf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $url ), esc_html( $name ) );
+		} else {
+			echo '<strong>' . esc_html( $name ) . '</strong>';
+		}
+		if ( $note ) {
+			echo ' <span class="pract-note">' . esc_html( $note ) . '</span>';
+		}
+		echo '</li>';
+	}
+	echo '</ul>';
+
+	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Hébergement', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'lodging' );
+}
+
+function fnc_render_block_pract_contacts( $a ) {
+	$items = fnc_attr_items( $a );
+	if ( empty( $items ) ) {
+		return '';
+	}
+
+	ob_start();
+	echo '<dl class="pract-contacts">';
+	foreach ( $items as $item ) {
+		$label = isset( $item['label'] ) ? $item['label'] : '';
+		$value = isset( $item['value'] ) ? $item['value'] : '';
+		if ( ! $label && ! $value ) {
+			continue;
+		}
+		printf( '<dt>%s</dt>', esc_html( $label ) );
+		if ( is_email( $value ) ) {
+			printf( '<dd><a href="mailto:%1$s">%1$s</a></dd>', esc_attr( antispambot( $value ) ) );
+		} else {
+			printf( '<dd>%s</dd>', esc_html( $value ) );
+		}
+	}
+	echo '</dl>';
+
+	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Contacts utiles', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'contacts' );
+}
+
+function fnc_render_block_pract_faq( $a ) {
+	$items = fnc_attr_items( $a );
+	if ( empty( $items ) ) {
+		return '';
+	}
+
+	ob_start();
+	echo '<div class="faq-list">';
+	foreach ( $items as $item ) {
+		$q = isset( $item['q'] ) ? $item['q'] : '';
+		if ( ! $q ) {
+			continue;
+		}
+		echo '<details class="faq-item"><summary>' . esc_html( $q ) . '</summary>';
+		if ( ! empty( $item['a'] ) ) {
+			echo '<div class="faq-answer">' . fnc_render_rich( $item['a'] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
+		}
+		echo '</details>';
+	}
+	echo '</div>';
+
+	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'FAQ logistique', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'faq' );
+}
+
+/**
+ * Rend l'agrégat « informations pratiques » d'une édition.
+ *
+ * Les rubriques sont composées dans le contenu de la fiche Édition (objet
+ * pivot, comme sur le vrai site) : on extrait ici les seuls blocs
+ * `fnc/pract-*` pour les rendre, en ignorant le reste du contenu. Chaque
+ * rubrique vide s'auto-masque (son renderer retourne une chaîne vide).
+ *
+ * @param int|WP_Post|null $edition
+ * @return string HTML, ou chaîne vide si aucune rubrique renseignée.
+ */
+function fnc_render_practical_info( $edition ) {
+	$post = get_post( $edition );
+	if ( ! $post ) {
+		return '';
+	}
+
+	$slugs  = fnc_practical_block_slugs();
+	$output = '';
+
+	foreach ( parse_blocks( $post->post_content ) as $block ) {
+		if ( empty( $block['blockName'] ) ) {
+			continue;
+		}
+		$slug = str_replace( 'fnc/', '', $block['blockName'] );
+		if ( ! in_array( $slug, $slugs, true ) ) {
+			continue;
+		}
+		$output .= render_block( $block );
+	}
+
+	return $output;
+}
+
+/**
+ * L'édition fournie porte-t-elle au moins une rubrique pratique renseignée ?
+ *
+ * @param int|WP_Post|null $edition
+ * @return bool
+ */
+function fnc_has_practical_info( $edition ) {
+	return '' !== trim( fnc_render_practical_info( $edition ) );
+}
+
+/**
+ * Rend le contenu d'un post en EXCLUANT les rubriques pratiques.
+ *
+ * Les rubriques sont composées dans le contenu de la fiche Édition mais
+ * affichées dans une section dédiée : sans cette exclusion, elles
+ * apparaîtraient deux fois sur la même page.
+ *
+ * @param int|WP_Post|null $post
+ * @return string
+ */
+function fnc_render_content_excluding_practical( $post = null ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return '';
+	}
+
+	$slugs  = fnc_practical_block_slugs();
+	$output = '';
+
+	foreach ( parse_blocks( $post->post_content ) as $block ) {
+		$slug = ! empty( $block['blockName'] ) ? str_replace( 'fnc/', '', $block['blockName'] ) : '';
+		if ( $slug && in_array( $slug, $slugs, true ) ) {
+			continue;
+		}
+		$output .= render_block( $block );
+	}
+
+	/** Mêmes filtres que the_content() pour rester cohérent (shortcodes, etc.). */
+	return apply_filters( 'the_content', $output );
 }
 
 function fnc_render_block_documents( $a ) {

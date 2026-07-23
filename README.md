@@ -21,10 +21,11 @@ wp-content/
 │       ├── header.php         # <head>, navigation desktop + panneau mobile
 │       ├── footer.php         # Pied de page
 │       ├── front-page.php     # Page d'accueil — les 8 "moments" (M1 à M8)
+│       ├── page-le-forum.php  # Page "Le Forum" (page-{slug}.php) — voir note ci-dessous
 │       ├── index.php          # Gabarit de repli générique (obligatoire WordPress)
 │       └── assets/
 │           ├── js/main.js     # Comportements (nav au scroll, menu mobile, reveal)
-│           └── images/        # Les 6 images utilisées par la page d'accueil
+│           └── images/        # Images utilisées par les pages (accueil + Le Forum)
 └── plugins/
     └── fnc-content-model/
         ├── fnc-content-model.php
@@ -58,6 +59,12 @@ Les relations entité-à-entité (une session appartient à une édition, une se
 *(Ce choix précise, sans le contredire, le principe de la Décision 2 de l'ADR-007 : `intervenant` reste un post type indépendant, pas une taxonomie décorative — l'exemple de taxonomie mentionné dans l'ADR ne s'applique qu'à `fnc_categorie`/`fnc_tag`, de véritables vocabulaires partagés.)*
 
 Ceci reste conforme au principe « zéro dépendance tierce » (hors multilinguisme) : aucun plugin de champs, uniquement des meta boxes natives (`add_meta_box`, `register_post_meta`).
+
+## Pages intérieures (au-delà de l'accueil)
+
+`page-le-forum.php` porte `docs/mockups/homepage-v2/interior/le-forum.html` du dépôt `forum-numerique-congo`. **Statut de la source à la date d'intégration :** ce fichier existe dans le dossier du projet principal mais n'était pas committé sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégré ici à la demande explicite du Décideur, malgré ce statut. Si le fichier source évolue avant d'être committé en amont, ce gabarit devra être resynchronisé.
+
+Le gabarit s'applique automatiquement à toute Page WordPress dont le slug est `le-forum` (hiérarchie de templates `page-{slug}.php`). Les autres pages intérieures de la maquette (programme, intervenants, éditions, etc.) suivront le même principe au fur et à mesure de leur intégration.
 
 ## Multilinguisme
 

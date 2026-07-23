@@ -305,6 +305,30 @@ La directive robots passe par le filtre natif `wp_robots`, donc **une seule** ba
 
 **Vérifié en conditions réelles** : métaboîte présente sur une Page et deux types du plugin ; cascade testée aux trois niveaux (sans surcharge → titre du document ; avec surcharge → titre et description SEO repris dans `<title>`, `og:title`, `description` et `og:description` ; `noindex` du document appliqué sans dupliquer la balise robots) ; image mise en avant confirmée comme `og:image` ; application aux CPT vérifiée sur la fiche d'une édition ; aucune erreur console ni fatal/notice/warning.
 
+## Fiches individuelles des contenus (Lot 6)
+
+Le thème n'avait aucun gabarit `single` : les permaliens de sessions, intervenants et ressources — pourtant utilisés dans le programme, l'annuaire, l'espace presse et les fiches d'édition — retombaient sur `index.php`, qui n'affiche qu'un extrait. Les fiches étaient donc quasi vides pour n'importe quel visiteur. Trois gabarits sont ajoutés (le quatrième, `single-fnc_edition.php`, l'avait été au Lot 4) :
+
+| Fiche | Contenu |
+|---|---|
+| **Session** | Type, jour, horaire, salle, édition de rattachement, objectifs, note, **modérateur distingué des intervenants**, ressources de l'édition |
+| **Intervenant** | Nom avec civilité, organisation, pays (avec drapeaux, plusieurs pays gérés), profil, biographie, liens externes, sessions où la personne intervient — en signalant celles qu'elle **modère** |
+| **Ressource** | Type, date, édition liée, catégorie et étiquettes, action adaptée au type (**Regarder** pour vidéo/interview, **Télécharger** si un fichier est renseigné, sinon état d'attente), autres ressources de la même édition |
+
+Chaque information est masquée si la donnée n'existe pas — aucune section creuse.
+
+### Champ fichier ajouté au plugin (v0.3.0)
+
+Le modèle n'avait **aucun champ fichier** pour les ressources : un rapport ou un livre blanc n'avait donc aucun document téléchargeable (seul le champ média vidéo existait). `_fnc_publication_file` est ajouté. C'est un champ URL et non un sélecteur de média : le plugin reste sans dépendance ni JavaScript d'administration — l'éditeur téléverse dans la Médiathèque puis copie l'adresse. Limite assumée et documentée dans le champ lui-même.
+
+### Bug corrigé : relations d'intervenants non trouvées
+
+La liste des sessions d'un intervenant s'appuyait d'abord sur une `meta_query` `LIKE 'i:12;'`. Or les identifiants du tableau sérialisé sont stockés **tantôt en entiers, tantôt en chaînes** selon la voie d'écriture (formulaire, import, wp-cli) : un `LIKE` sur `i:12;` rate `s:2:"12";`, et pouvait en prime matcher un *indice* de tableau plutôt qu'une valeur. La recherche se fait désormais par filtrage PHP avec comparaison d'entiers — plus sûr et plus lisible, le volume restant faible sur une vitrine.
+
+**Vérifié en conditions réelles** : les trois fiches rendues sur des contenus de test ; distinction modérateur/intervenant confirmée sur deux fiches (mention « En modération » présente sur la session modérée, absente sur celle où la personne est simple intervenante) ; le correctif valide justement le cas où l'identifiant était stocké en chaîne ; pays multiples décomposés en deux drapeaux ; action de ressource testée dans ses deux variantes (Télécharger avec fichier, Regarder pour une vidéo, avec `target="_blank"` et `rel="noopener noreferrer"`) ; masquage vérifié sur les données absentes ; aucune erreur console ni fatal/notice/warning.
+
+**Reste connu** : `fnc_partenaire` et `fnc_actualite` n'ont pas encore de fiche individuelle. Ces deux types ne sont liés depuis aucun gabarit aujourd'hui (les partenaires s'affichent en logos non cliquables), l'impact est donc nul en navigation — mais leurs URLs restent publiques.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

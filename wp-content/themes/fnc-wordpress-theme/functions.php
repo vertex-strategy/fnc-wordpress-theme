@@ -179,6 +179,24 @@ function fnc_render_hero( array $args ) {
 }
 
 /**
+ * Bloc d'en-tete sobre pour les pages legales (mentions, confidentialite,
+ * CGU), aligne sur le site officiel reel : pas de photo, juste un fil
+ * d'ariane, une date de mise a jour et un titre — a la difference du
+ * bloc "hero" utilise par les autres pages interieures.
+ */
+function fnc_render_legal_header( $title, $updated_label, $breadcrumb ) {
+	?>
+	<header class="section" style="padding-top:calc(clamp(64px,9vh,118px) + 60px);">
+		<div class="container reading">
+			<p class="breadcrumb" style="color:var(--texte-tert);"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo esc_html( $breadcrumb ); ?></p>
+			<p class="eyebrow"><?php echo esc_html( $updated_label ); ?></p>
+			<h1 style="font-size:var(--h2);color:var(--navy);"><?php echo esc_html( $title ); ?></h1>
+		</div>
+	</header>
+	<?php
+}
+
+/**
  * Bandeau CTA final partage par les pages interieures (site.js: finalCta()).
  */
 function fnc_render_cta_band() {

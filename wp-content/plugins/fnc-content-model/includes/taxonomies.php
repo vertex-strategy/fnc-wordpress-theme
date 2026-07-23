@@ -46,5 +46,42 @@ function fnc_content_model_register_taxonomies() {
 			'rewrite'           => array( 'slug' => 'tag' ),
 		)
 	);
+
+	/*
+	 * Filtres de l'archive Intervenants (ADR-007, amendement Decision 1) :
+	 * alignes sur les fonctionnalites reelles du site officiel (filtre par
+	 * profil et par pays), pas sur la maquette statique qui n'en avait pas.
+	 */
+	register_taxonomy(
+		'fnc_profil',
+		array( 'fnc_intervenant' ),
+		array(
+			'labels'            => array(
+				'name'          => __( 'Profils', 'fnc-content-model' ),
+				'singular_name' => __( 'Profil', 'fnc-content-model' ),
+			),
+			'hierarchical'      => false,
+			'public'            => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'rewrite'           => array( 'slug' => 'profil-intervenant' ),
+		)
+	);
+
+	register_taxonomy(
+		'fnc_pays',
+		array( 'fnc_intervenant' ),
+		array(
+			'labels'            => array(
+				'name'          => __( 'Pays', 'fnc-content-model' ),
+				'singular_name' => __( 'Pays', 'fnc-content-model' ),
+			),
+			'hierarchical'      => false,
+			'public'            => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'rewrite'           => array( 'slug' => 'pays' ),
+		)
+	);
 }
 add_action( 'init', 'fnc_content_model_register_taxonomies' );

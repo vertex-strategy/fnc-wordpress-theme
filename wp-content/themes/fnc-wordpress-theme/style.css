@@ -54,6 +54,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
 .btn-white{background:#fff;color:var(--navy-deep);}
 .btn-white:hover{box-shadow:0 14px 30px rgba(0,0,0,.28);}
 .btn-ghost{border-color:rgba(255,255,255,.55);color:#fff;background:transparent;}
+.btn-soft{background:#eef0ff;color:var(--navy);}
+.btn-soft:hover{background:#e2e5ff;}
 .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08);}
 
 /* ---------- NAVIGATION ---------- */

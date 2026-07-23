@@ -371,6 +371,12 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 .card h3{margin-top:12px;color:var(--texte-corps);font-size:1.22rem;line-height:1.22;}
 .card p{margin-top:10px;color:var(--texte-sec);}
 
+.metric-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:8px;border:1px solid var(--border);background:var(--border);}
+.metric{padding:18px;}
+.metric b{display:block;font-size:2rem;line-height:1;}
+.metric span{display:block;margin-top:6px;font-size:.76rem;text-transform:uppercase;letter-spacing:.12em;}
+@media (max-width:720px){.metric-strip{grid-template-columns:1fr;}}
+
 .agenda{border-top:2px solid var(--navy);}
 .agenda-row{display:grid;grid-template-columns:104px minmax(0,1fr) 210px;gap:18px;align-items:center;padding:24px 8px;border-bottom:1px solid var(--border);transition:background .2s var(--ease),padding-left .2s var(--ease);}
 .agenda-row:hover{background:#fff;padding-left:16px;}

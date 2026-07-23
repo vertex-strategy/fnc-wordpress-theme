@@ -23,6 +23,7 @@ const FNC_META_SESSION_TIME        = '_fnc_session_time';
 const FNC_META_SESSION_ROOM        = '_fnc_session_room';
 const FNC_META_SESSION_JOUR        = '_fnc_session_jour';
 const FNC_META_PUBLICATION_EDITION = '_fnc_publication_edition';
+const FNC_META_EDITION_ACTIVE      = '_fnc_edition_active';
 
 /**
  * Expose les meta en REST (compatibilite editeur de blocs / Polylang).
@@ -92,6 +93,16 @@ function fnc_content_model_register_meta() {
 			'show_in_rest' => true,
 		)
 	);
+
+	register_post_meta(
+		'fnc_edition',
+		FNC_META_EDITION_ACTIVE,
+		array(
+			'type'         => 'boolean',
+			'single'       => true,
+			'show_in_rest' => true,
+		)
+	);
 }
 add_action( 'init', 'fnc_content_model_register_meta' );
 
@@ -112,6 +123,14 @@ function fnc_content_model_add_meta_boxes() {
 		__( 'Édition liée', 'fnc-content-model' ),
 		'fnc_content_model_render_publication_meta_box',
 		'fnc_publication',
+		'side'
+	);
+
+	add_meta_box(
+		'fnc_edition_active',
+		__( 'Édition en cours', 'fnc-content-model' ),
+		'fnc_content_model_render_edition_meta_box',
+		'fnc_edition',
 		'side'
 	);
 }
@@ -193,6 +212,18 @@ function fnc_content_model_render_session_meta_box( $post ) {
 	echo '</div>';
 }
 
+function fnc_content_model_render_edition_meta_box( $post ) {
+	wp_nonce_field( 'fnc_edition_active_save', 'fnc_edition_active_nonce' );
+
+	$active = get_post_meta( $post->ID, FNC_META_EDITION_ACTIVE, true );
+
+	printf(
+		'<label><input type="checkbox" name="fnc_edition_active" value="1" %s /> %s</label>',
+		checked( $active, '1', false ),
+		esc_html__( 'Il s’agit de l’édition en cours (affichée sur la page « Édition en cours »)', 'fnc-content-model' )
+	);
+}
+
 function fnc_content_model_render_publication_meta_box( $post ) {
 	wp_nonce_field( 'fnc_publication_relations_save', 'fnc_publication_relations_nonce' );
 
@@ -206,7 +237,10 @@ function fnc_content_model_render_publication_meta_box( $post ) {
  * Sauvegarde des relations, avec verification de nonce et de capacite.
  */
 function fnc_content_model_save_relations( $post_id, $post ) {
-	if ( ! isset( $_POST['fnc_session_relations_nonce'] ) && ! isset( $_POST['fnc_publication_relations_nonce'] ) ) {
+	if ( ! isset( $_POST['fnc_session_relations_nonce'] )
+		&& ! isset( $_POST['fnc_publication_relations_nonce'] )
+		&& ! isset( $_POST['fnc_edition_active_nonce'] )
+	) {
 		return;
 	}
 
@@ -246,6 +280,32 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 			update_post_meta( $post_id, FNC_META_PUBLICATION_EDITION, $edition_id );
 		} else {
 			delete_post_meta( $post_id, FNC_META_PUBLICATION_EDITION );
+		}
+	}
+
+	if ( 'fnc_edition' === $post->post_type
+		&& isset( $_POST['fnc_edition_active_nonce'] )
+		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['fnc_edition_active_nonce'] ) ), 'fnc_edition_active_save' )
+		&& current_user_can( 'edit_post', $post_id )
+	) {
+		$is_active = ! empty( $_POST['fnc_edition_active'] );
+		if ( $is_active ) {
+			$other_editions = get_posts(
+				array(
+					'post_type'      => 'fnc_edition',
+					'posts_per_page' => -1,
+					'exclude'        => array( $post_id ),
+					'fields'         => 'ids',
+					'meta_key'       => FNC_META_EDITION_ACTIVE,
+					'meta_value'     => '1',
+				)
+			);
+			foreach ( $other_editions as $other_id ) {
+				update_post_meta( $other_id, FNC_META_EDITION_ACTIVE, '' );
+			}
+			update_post_meta( $post_id, FNC_META_EDITION_ACTIVE, '1' );
+		} else {
+			update_post_meta( $post_id, FNC_META_EDITION_ACTIVE, '' );
 		}
 	}
 }

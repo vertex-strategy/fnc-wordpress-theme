@@ -24,6 +24,8 @@ const FNC_META_SESSION_ROOM        = '_fnc_session_room';
 const FNC_META_SESSION_JOUR        = '_fnc_session_jour';
 const FNC_META_PUBLICATION_EDITION = '_fnc_publication_edition';
 const FNC_META_EDITION_ACTIVE      = '_fnc_edition_active';
+const FNC_META_PARTENAIRE_SITE     = '_fnc_partenaire_site';
+const FNC_META_PARTENAIRE_EDITIONS = '_fnc_partenaire_editions';
 
 /**
  * Expose les meta en REST (compatibilite editeur de blocs / Polylang).
@@ -103,6 +105,31 @@ function fnc_content_model_register_meta() {
 			'show_in_rest' => true,
 		)
 	);
+
+	register_post_meta(
+		'fnc_partenaire',
+		FNC_META_PARTENAIRE_SITE,
+		array(
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		)
+	);
+
+	register_post_meta(
+		'fnc_partenaire',
+		FNC_META_PARTENAIRE_EDITIONS,
+		array(
+			'type'         => 'array',
+			'single'       => true,
+			'show_in_rest' => array(
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array( 'type' => 'integer' ),
+				),
+			),
+		)
+	);
 }
 add_action( 'init', 'fnc_content_model_register_meta' );
 
@@ -131,6 +158,14 @@ function fnc_content_model_add_meta_boxes() {
 		__( 'Édition en cours', 'fnc-content-model' ),
 		'fnc_content_model_render_edition_meta_box',
 		'fnc_edition',
+		'side'
+	);
+
+	add_meta_box(
+		'fnc_partenaire_details',
+		__( 'Site web et éditions associées', 'fnc-content-model' ),
+		'fnc_content_model_render_partenaire_meta_box',
+		'fnc_partenaire',
 		'side'
 	);
 }
@@ -233,6 +268,44 @@ function fnc_content_model_render_publication_meta_box( $post ) {
 	fnc_content_model_render_edition_select( 'fnc_publication_edition', $edition_id );
 }
 
+function fnc_content_model_render_partenaire_meta_box( $post ) {
+	wp_nonce_field( 'fnc_partenaire_details_save', 'fnc_partenaire_details_nonce' );
+
+	$site            = get_post_meta( $post->ID, FNC_META_PARTENAIRE_SITE, true );
+	$edition_ids      = get_post_meta( $post->ID, FNC_META_PARTENAIRE_EDITIONS, true );
+	$edition_ids      = is_array( $edition_ids ) ? array_map( 'intval', $edition_ids ) : array();
+
+	echo '<p><label for="fnc_partenaire_site"><strong>' . esc_html__( 'Site web', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="url" id="fnc_partenaire_site" name="fnc_partenaire_site" value="%s" placeholder="https://" style="width:100%%;" /></p>', esc_attr( $site ) );
+
+	echo '<p style="margin-top:16px;"><strong>' . esc_html__( 'Éditions associées', 'fnc-content-model' ) . '</strong></p>';
+
+	$editions = get_posts(
+		array(
+			'post_type'      => 'fnc_edition',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		)
+	);
+
+	if ( empty( $editions ) ) {
+		echo '<p>' . esc_html__( 'Aucune édition enregistrée.', 'fnc-content-model' ) . '</p>';
+		return;
+	}
+
+	echo '<div style="max-height:150px;overflow-y:auto;border:1px solid #dcdcde;padding:8px;">';
+	foreach ( $editions as $edition ) {
+		printf(
+			'<label style="display:block;margin-bottom:4px;"><input type="checkbox" name="fnc_partenaire_editions[]" value="%1$d" %2$s /> %3$s</label>',
+			$edition->ID,
+			checked( in_array( $edition->ID, $edition_ids, true ), true, false ),
+			esc_html( get_the_title( $edition ) )
+		);
+	}
+	echo '</div>';
+}
+
 /**
  * Sauvegarde des relations, avec verification de nonce et de capacite.
  */
@@ -240,6 +313,7 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 	if ( ! isset( $_POST['fnc_session_relations_nonce'] )
 		&& ! isset( $_POST['fnc_publication_relations_nonce'] )
 		&& ! isset( $_POST['fnc_edition_active_nonce'] )
+		&& ! isset( $_POST['fnc_partenaire_details_nonce'] )
 	) {
 		return;
 	}
@@ -307,6 +381,19 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		} else {
 			update_post_meta( $post_id, FNC_META_EDITION_ACTIVE, '' );
 		}
+	}
+
+	if ( 'fnc_partenaire' === $post->post_type
+		&& isset( $_POST['fnc_partenaire_details_nonce'] )
+		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['fnc_partenaire_details_nonce'] ) ), 'fnc_partenaire_details_save' )
+		&& current_user_can( 'edit_post', $post_id )
+	) {
+		update_post_meta( $post_id, FNC_META_PARTENAIRE_SITE, isset( $_POST['fnc_partenaire_site'] ) ? esc_url_raw( wp_unslash( $_POST['fnc_partenaire_site'] ) ) : '' );
+
+		$edition_ids = isset( $_POST['fnc_partenaire_editions'] ) && is_array( $_POST['fnc_partenaire_editions'] )
+			? array_map( 'absint', wp_unslash( $_POST['fnc_partenaire_editions'] ) )
+			: array();
+		update_post_meta( $post_id, FNC_META_PARTENAIRE_EDITIONS, $edition_ids );
 	}
 }
 add_action( 'save_post', 'fnc_content_model_save_relations', 10, 2 );

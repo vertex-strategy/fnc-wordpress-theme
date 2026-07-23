@@ -83,5 +83,27 @@ function fnc_content_model_register_taxonomies() {
 			'rewrite'           => array( 'slug' => 'pays' ),
 		)
 	);
+
+	/*
+	 * Niveau de partenariat (ADR-007, amendement Decision 1) : le site
+	 * officiel reel regroupe ses partenaires par type d'engagement
+	 * (Institutionnel/Organisateur/Soutien/Sponsor) - absent de la maquette
+	 * statique, qui ne montrait qu'un mur de logos.
+	 */
+	register_taxonomy(
+		'fnc_niveau_partenariat',
+		array( 'fnc_partenaire' ),
+		array(
+			'labels'            => array(
+				'name'          => __( 'Niveaux de partenariat', 'fnc-content-model' ),
+				'singular_name' => __( 'Niveau de partenariat', 'fnc-content-model' ),
+			),
+			'hierarchical'      => false,
+			'public'            => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'rewrite'           => array( 'slug' => 'niveau-partenariat' ),
+		)
+	);
 }
 add_action( 'init', 'fnc_content_model_register_taxonomies' );

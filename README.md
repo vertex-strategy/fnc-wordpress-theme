@@ -104,6 +104,18 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 
 **Informations pratiques** reste volontairement sobre : sur le site officiel réel, cette page affiche un état « en cours de finalisation », pas une liste de rubriques (visa, hôtels...) comme le suggérait la maquette statique — reproduit ici avec un texte reformulé, pas copié du site officiel.
 
+## Navigation
+
+Une fois les ~16 pages/archives ci-dessus créées, la navigation par défaut (menu et pied de page) pointait encore vers les ancres `#m2`/`#m3`/`#m5`/`#m7` de la maquette mono-page d'origine — cassée sur toute page autre que l'accueil. Corrigé :
+
+- `fnc_page_url( $slug )` / `fnc_archive_url( $post_type )` (`functions.php`) : URL réelle d'une Page ou d'une archive, repli sur `#` si le contenu n'existe pas encore dans l'installation.
+- `fnc_default_menu_items()` : les 6 items du menu principal réel du site officiel (Le Forum, Édition en cours, Éditions, Ressources, Partenaires, Contact), utilisés par le menu de repli desktop et mobile.
+- `footer.php` : les 3 colonnes et les liens légaux du bas pointent vers les vraies pages/archives, reprenant les groupes du site officiel réel (Le Forum : Présentation/Édition en cours/Programme/Intervenants ; Ressources : Éditions/Ressources/Informations pratiques/Dossier presse ; Contact : Contact/Devenir partenaire/S'inscrire).
+- `header.php` : le CTA statique « Accréditation » (bouton sans lien) devient un vrai lien « S'inscrire » vers la page Inscription.
+- Lien d'évitement (`.skip`) corrigé de `#m1` (ne fonctionnait que sur l'accueil) vers `#main` — `id="main"` ajouté à `front-page.php` et `index.php`, qui ne l'avaient pas contrairement à tous les autres gabarits.
+
+Si un menu WordPress réel est configuré dans Apparence → Menus, il prend le pas sur ce repli, comme prévu depuis le départ (`has_nav_menu()`).
+
 **Programme** a nécessité d'étendre le plugin : trois nouveaux champs meta sur `fnc_session` (`_fnc_session_time`, `_fnc_session_room`, `_fnc_session_jour`), ajoutés à la meta box existante « Édition et intervenants », nécessaires pour afficher un agenda réel (horaire, salle, regroupement par journée) plutôt qu'une simple liste de titres.
 
 ## Amendement de la Décision 1 (ADR-007) : alignement structurel sur le site officiel réel

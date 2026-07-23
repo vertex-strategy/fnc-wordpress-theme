@@ -282,6 +282,29 @@ Le contenu éditorial de la fiche est rendu **en excluant les rubriques pratique
 
 **Vérifié en conditions réelles** : les 8 blocs enregistrés (22 blocs FNC au total) ; 5 rubriques de test rendues sur les trois emplacements, une rubrique laissée vide correctement **masquée** ; privacy-first confirmé (aucune iframe ni requête réseau vers le service tiers avant clic, puis iframe créée avec les bons attributs au clic) ; repli « en cours de finalisation » vérifié en vidant les rubriques, puis état restauré ; aucune erreur console ni fatal/notice/warning.
 
+## SEO par page (Lot 5)
+
+Pendant WordPress des `seoFields` de Payload (groupe `seo` étalé dans les collections du vrai site) et de la logique de `generateMetadata()`. Une métaboîte **SEO** est ajoutée sur les Pages et articles natifs **et** sur les six types de contenu du plugin :
+
+| Champ | Rôle |
+|---|---|
+| Titre SEO | Surcharge le `<title>` et `og:title` |
+| Description SEO | Surcharge `description` et `og:description` |
+| Ne pas indexer | Ajoute `noindex, nofollow` pour ce document |
+
+**Cascade appliquée** (identique au vrai site) :
+
+- **Titre** : SEO du document → titre du document → titre par défaut du site → nom du site
+- **Description** : SEO du document → extrait du document → description par défaut → description d'identité
+- **Image de partage** : image mise en avant du document → image OpenGraph par défaut *(convention WordPress : pas de champ média supplémentaire à saisir)*
+- **Robots** : `noindex` du document (prioritaire) → directive par défaut du site
+
+La directive robots passe par le filtre natif `wp_robots`, donc **une seule** balise est émise, fusionnée avec celles de WordPress.
+
+**Choix d'implémentation assumé** : ces champs vivent dans le **thème** (`inc/seo.php`) et non dans le plugin de modèle de contenu, alors que le vrai site les porte dans ses collections. Raison : c'est le thème qui produit les balises, et le besoin couvre uniformément les contenus natifs *et* ceux du plugin — garder toute la cascade au même endroit la rend nettement plus simple à raisonner. Les métadonnées et le filtre robots, précédemment dans `functions.php` (Lot 1), y ont été regroupés.
+
+**Vérifié en conditions réelles** : métaboîte présente sur une Page et deux types du plugin ; cascade testée aux trois niveaux (sans surcharge → titre du document ; avec surcharge → titre et description SEO repris dans `<title>`, `og:title`, `description` et `og:description` ; `noindex` du document appliqué sans dupliquer la balise robots) ; image mise en avant confirmée comme `og:image` ; application aux CPT vérifiée sur la fiche d'une édition ; aucune erreur console ni fatal/notice/warning.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).

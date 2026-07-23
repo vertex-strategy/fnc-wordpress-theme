@@ -38,6 +38,19 @@ $fnc_current_profil = isset( $_GET['fnc_profil'] ) ? sanitize_title( wp_unslash(
 $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $_GET['fnc_pays'] ) ) : '';
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
 $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' => false ) );
+
+// Frise "pays representes" (passe gabarits) : derivee du champ texte libre
+// _fnc_speaker_country (peut cumuler plusieurs pays separes par "/"),
+// distinct de la taxonomie fnc_pays utilisee ci-dessous pour le filtre.
+$fnc_all_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
+$fnc_countries       = array();
+foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
+	foreach ( fnc_split_countries( get_post_meta( $fnc_speaker_id, '_fnc_speaker_country', true ) ) as $fnc_country ) {
+		$fnc_countries[ $fnc_country ] = true;
+	}
+}
+$fnc_countries = array_keys( $fnc_countries );
+sort( $fnc_countries );
 ?>
 
 <main id="main">
@@ -49,6 +62,20 @@ $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' =
 					<h2><?php esc_html_e( 'Profils', 'fnc-wordpress-theme' ); ?></h2>
 				</div>
 			</div>
+
+			<?php if ( ! empty( $fnc_countries ) ) : ?>
+				<div class="flag-block">
+					<span class="flag-eyebrow"><?php esc_html_e( 'Pays représentés', 'fnc-wordpress-theme' ); ?></span>
+					<ul class="flag-frise" aria-label="<?php esc_attr_e( 'Pays représentés', 'fnc-wordpress-theme' ); ?>">
+						<?php foreach ( $fnc_countries as $fnc_country ) : ?>
+							<li class="flag-chip">
+								<?php echo fnc_country_flag_svg( $fnc_country ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit par fnc_country_flag_svg(), valeurs deja echappees. ?>
+								<span><?php echo esc_html( $fnc_country ); ?></span>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			<?php endif; ?>
 
 			<?php if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) : ?>
 				<div class="toolbar" role="toolbar" aria-label="<?php esc_attr_e( 'Filtrer par profil', 'fnc-wordpress-theme' ); ?>">
@@ -92,7 +119,11 @@ $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' =
 								);
 								?>
 							</p>
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+							<h3><a href="<?php the_permalink(); ?>"><?php echo esc_html( fnc_speaker_display_name( get_the_ID() ) ); ?></a></h3>
+							<?php $fnc_speaker_meta = fnc_speaker_meta_line( get_the_ID() ); ?>
+							<?php if ( $fnc_speaker_meta ) : ?>
+								<span class="person-meta"><?php echo esc_html( $fnc_speaker_meta ); ?></span>
+							<?php endif; ?>
 							<?php if ( has_excerpt() ) : ?>
 								<p><?php the_excerpt(); ?></p>
 							<?php endif; ?>

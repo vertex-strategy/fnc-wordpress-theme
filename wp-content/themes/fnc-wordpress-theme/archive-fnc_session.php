@@ -65,13 +65,27 @@ if ( have_posts() ) {
 					<?php endforeach; ?>
 				</nav>
 
+				<?php $fnc_session_types = fnc_content_model_session_types(); ?>
 				<?php foreach ( $fnc_sessions_by_day as $fnc_jour_label => $fnc_session_ids ) : ?>
 					<h3 id="fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_jour_label ) ); ?>" style="margin:36px 0 18px;color:var(--navy);"><?php echo esc_html( $fnc_jour_label ); ?></h3>
 					<div class="agenda">
 						<?php foreach ( $fnc_session_ids as $fnc_session_id ) : ?>
+							<?php
+							$fnc_type       = get_post_meta( $fnc_session_id, '_fnc_session_type', true );
+							$fnc_no_badge   = in_array( $fnc_type, array( 'pause', 'logistique' ), true );
+							$fnc_moderator  = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
+							?>
 							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>">
 								<span class="time"><?php echo esc_html( get_post_meta( $fnc_session_id, '_fnc_session_time', true ) ?: '—' ); ?></span>
-								<strong><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></strong>
+								<span>
+									<strong><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></strong>
+									<?php if ( $fnc_type && ! $fnc_no_badge && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
+										<?php fnc_render_badge( $fnc_session_types[ $fnc_type ] ); ?>
+									<?php endif; ?>
+									<?php if ( $fnc_moderator > 0 ) : ?>
+										<span class="person-meta"><?php esc_html_e( 'Modérateur', 'fnc-wordpress-theme' ); ?> : <?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?></span>
+									<?php endif; ?>
+								</span>
 								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session_id, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
 							</a>
 						<?php endforeach; ?>

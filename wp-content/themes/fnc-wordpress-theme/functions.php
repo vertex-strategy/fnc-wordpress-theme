@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.1.0' );
+define( 'FNC_THEME_VERSION', '0.2.0' );
 
 /**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
@@ -242,4 +242,86 @@ function fnc_render_card( $title, $body, $kicker = '' ) {
 		<p><?php echo esc_html( $body ); ?></p>
 	</article>
 	<?php
+}
+
+/**
+ * Passe gabarits (reconciliation du modele de contenu, cf. plugin
+ * fnc-content-model v0.2.0) : petits utilitaires d'affichage partages par
+ * les gabarits qui consomment desormais les nouveaux champs meta.
+ */
+
+/**
+ * Badge non interactif (type de session, type de publication, niveau de
+ * partenariat...), visuellement proche de `.chip` mais jamais cliquable.
+ */
+function fnc_render_badge( $label ) {
+	if ( ! $label ) {
+		return;
+	}
+	printf( '<span class="badge">%s</span>', esc_html( $label ) );
+}
+
+/**
+ * Nom d'affichage d'un intervenant : "Civilité Nom" si une civilite est
+ * renseignee (_fnc_speaker_title), sinon le titre du post seul.
+ */
+function fnc_speaker_display_name( $speaker_id ) {
+	$title_civility = get_post_meta( $speaker_id, FNC_META_SPEAKER_TITLE, true );
+	$name           = get_the_title( $speaker_id );
+	return $title_civility ? trim( $title_civility . ' ' . $name ) : $name;
+}
+
+/**
+ * Ligne "organisation · pays" d'un intervenant, sans separateur superflu si
+ * l'un des deux champs est vide.
+ */
+function fnc_speaker_meta_line( $speaker_id ) {
+	$org     = get_post_meta( $speaker_id, FNC_META_SPEAKER_ORG, true );
+	$country = get_post_meta( $speaker_id, FNC_META_SPEAKER_COUNTRY, true );
+	return trim( implode( ' · ', array_filter( array( $org, $country ) ) ) );
+}
+
+/**
+ * Drapeaux SVG inline des pays representes au Forum — memes pays et memes
+ * geometries simplifiees que le composant CountryFlag.tsx du site officiel
+ * (forum-numerique-congo/src/app/(frontend)/[locale]/intervenants/CountryFlag.tsx),
+ * transposees en PHP puisque zero dependance tierce (ADR-007, Decision 2)
+ * exclut d'importer un paquet de drapeaux.
+ */
+function fnc_country_flag_svg( $country ) {
+	$country = trim( (string) $country );
+	$flags   = array(
+		'France'        => '<rect width="20" height="40" fill="#002654"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
+		'Belgique'      => '<rect width="20" height="40" fill="#000000"/><rect x="20" width="20" height="40" fill="#FAE042"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
+		'Luxembourg'    => '<rect width="60" height="13.34" fill="#ED2939"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#00A1DE"/>',
+		'Sénégal'       => '<rect width="20" height="40" fill="#00853F"/><rect x="20" width="20" height="40" fill="#FDEF42"/><rect x="40" width="20" height="40" fill="#E31B23"/>',
+		'Cameroun'      => '<rect width="20" height="40" fill="#007A5E"/><rect x="20" width="20" height="40" fill="#CE1126"/><rect x="40" width="20" height="40" fill="#FCD116"/>',
+		'Congo'         => '<polygon points="0,0 60,0 0,40" fill="#009543"/><polygon points="60,0 60,40 0,40" fill="#DC241F"/><polygon points="0,40 0,26 46,0 60,0 60,14 14,40" fill="#FBDE4A"/>',
+		'RDC'           => '<rect width="60" height="40" fill="#007FFF"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#F7D618" stroke-width="14"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#CE1021" stroke-width="8"/>',
+		'Royaume-Uni'   => '<rect width="60" height="40" fill="#012169"/><path d="M0,0 60,40 M60,0 0,40" stroke="#FFFFFF" stroke-width="8"/><path d="M0,0 60,40 M60,0 0,40" stroke="#C8102E" stroke-width="4"/><rect x="24" width="12" height="40" fill="#FFFFFF"/><rect y="14" width="60" height="12" fill="#FFFFFF"/><rect x="26" width="8" height="40" fill="#C8102E"/><rect y="16" width="60" height="8" fill="#C8102E"/>',
+		'États-Unis'    => '<rect width="60" height="40" fill="#B22234"/><rect width="60" height="20" fill="#FFFFFF"/><rect width="24" height="20" fill="#3C3B6E"/>',
+		'Inde'          => '<rect width="60" height="13.34" fill="#FF9933"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#138808"/><circle cx="30" cy="20" r="5.2" fill="none" stroke="#000080" stroke-width="1"/>',
+		'Côte d’Ivoire' => '<rect width="20" height="40" fill="#F77F00"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#009E60"/>',
+	);
+
+	if ( ! isset( $flags[ $country ] ) ) {
+		return '';
+	}
+
+	return sprintf(
+		'<svg class="flag-svg" viewBox="0 0 60 40" role="img" aria-label="%s">%s</svg>',
+		esc_attr( $country ),
+		$flags[ $country ]
+	);
+}
+
+/**
+ * Decoupe le champ texte libre `_fnc_speaker_country` (ex. "France / États-Unis")
+ * en une liste de pays, meme convention que le site officiel (SpeakersExplorer.tsx).
+ */
+function fnc_split_countries( $country_field ) {
+	if ( ! $country_field ) {
+		return array();
+	}
+	return array_values( array_filter( array_map( 'trim', explode( '/', $country_field ) ) ) );
 }

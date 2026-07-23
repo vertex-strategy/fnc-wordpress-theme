@@ -113,12 +113,30 @@ fnc_render_hero(
 									<p><?php echo esc_html( get_the_excerpt( $fnc_partner ) ); ?></p>
 								<?php endif; ?>
 								<?php
+								$fnc_participations = get_post_meta( $fnc_partner->ID, '_fnc_partenaire_participations', true );
+								$fnc_niveau_by_edition = array();
+								if ( is_array( $fnc_participations ) ) {
+									foreach ( $fnc_participations as $fnc_participation ) {
+										if ( ! empty( $fnc_participation['edition'] ) ) {
+											$fnc_niveau_by_edition[ (int) $fnc_participation['edition'] ] = $fnc_participation['niveau'] ?? '';
+										}
+									}
+								}
+								$fnc_partner_niveaux   = fnc_content_model_partner_niveaux();
 								$fnc_partner_editions = get_post_meta( $fnc_partner->ID, '_fnc_partenaire_editions', true );
 								if ( is_array( $fnc_partner_editions ) && ! empty( $fnc_partner_editions ) ) :
 									?>
 									<p class="help"><?php esc_html_e( 'Éditions associées', 'fnc-wordpress-theme' ); ?></p>
 									<?php foreach ( $fnc_partner_editions as $fnc_edition_id ) : ?>
-										<a class="link-more" href="<?php echo esc_url( get_permalink( $fnc_edition_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_edition_id ) ); ?></a>
+										<p style="margin-top:6px;">
+											<a class="link-more" href="<?php echo esc_url( get_permalink( $fnc_edition_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_edition_id ) ); ?></a>
+											<?php
+											$fnc_niveau = $fnc_niveau_by_edition[ $fnc_edition_id ] ?? '';
+											if ( $fnc_niveau && isset( $fnc_partner_niveaux[ $fnc_niveau ] ) ) :
+												fnc_render_badge( $fnc_partner_niveaux[ $fnc_niveau ] );
+											endif;
+											?>
+										</p>
 									<?php endforeach; ?>
 								<?php endif; ?>
 								<?php

@@ -102,6 +102,36 @@ fnc_render_hero(
 			</div>
 		</section>
 	<?php else : ?>
+		<?php
+		$fnc_edition_theme    = get_post_meta( $fnc_edition->ID, '_fnc_edition_theme', true );
+		$fnc_edition_start    = get_post_meta( $fnc_edition->ID, '_fnc_edition_start_date', true );
+		$fnc_edition_end      = get_post_meta( $fnc_edition->ID, '_fnc_edition_end_date', true );
+		$fnc_edition_location = get_post_meta( $fnc_edition->ID, '_fnc_edition_location', true );
+		$fnc_edition_dates    = '';
+		if ( $fnc_edition_start ) {
+			$fnc_edition_dates = date_i18n( 'j F Y', strtotime( $fnc_edition_start ) );
+			if ( $fnc_edition_end && $fnc_edition_end !== $fnc_edition_start ) {
+				$fnc_edition_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_edition_end ) );
+			}
+		}
+		?>
+		<?php if ( $fnc_edition_theme || $fnc_edition_dates || $fnc_edition_location ) : ?>
+			<section class="section" style="padding-bottom:0;">
+				<div class="container">
+					<?php if ( $fnc_edition_theme ) : ?>
+						<p class="frise-theme" style="font-size:1.15rem;"><?php echo esc_html( $fnc_edition_theme ); ?></p>
+					<?php endif; ?>
+					<?php if ( $fnc_edition_dates || $fnc_edition_location ) : ?>
+						<p class="frise-meta">
+							<?php if ( $fnc_edition_dates ) : ?><b><?php echo esc_html( $fnc_edition_dates ); ?></b><?php endif; ?>
+							<?php if ( $fnc_edition_dates && $fnc_edition_location ) : ?> · <?php endif; ?>
+							<?php echo esc_html( $fnc_edition_location ); ?>
+						</p>
+					<?php endif; ?>
+				</div>
+			</section>
+		<?php endif; ?>
+
 		<section class="section linen">
 			<div class="container">
 				<div class="metric-strip" style="background:var(--linen);border-color:var(--border);">
@@ -130,12 +160,24 @@ fnc_render_hero(
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
-					<?php $fnc_first_day = array_key_first( $fnc_sessions_by_day ); ?>
+					<?php
+					$fnc_first_day     = array_key_first( $fnc_sessions_by_day );
+					$fnc_session_types = fnc_content_model_session_types();
+					?>
 					<div class="agenda">
 						<?php foreach ( array_slice( $fnc_sessions_by_day[ $fnc_first_day ], 0, 4 ) as $fnc_session ) : ?>
+							<?php
+							$fnc_type     = get_post_meta( $fnc_session->ID, '_fnc_session_type', true );
+							$fnc_no_badge = in_array( $fnc_type, array( 'pause', 'logistique' ), true );
+							?>
 							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_session ) ); ?>">
 								<span class="time"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
-								<strong><?php echo esc_html( get_the_title( $fnc_session ) ); ?></strong>
+								<span>
+									<strong><?php echo esc_html( get_the_title( $fnc_session ) ); ?></strong>
+									<?php if ( $fnc_type && ! $fnc_no_badge && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
+										<?php fnc_render_badge( $fnc_session_types[ $fnc_type ] ); ?>
+									<?php endif; ?>
+								</span>
 								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
 							</a>
 						<?php endforeach; ?>

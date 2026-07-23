@@ -9,10 +9,12 @@
  * amorcee ici) : la liste affichee reflete les editions reellement
  * publiees dans WordPress, pas du contenu d'exemple statique.
  *
- * La section "Memoire du Forum" (timeline) de la maquette source n'est
- * pas reproduite : elle presentait des libelles d'exemple ("Edition 1",
- * "Edition 2"...) qui seraient un contenu invente si affiches ici a la
- * place de vraies editions.
+ * Passe gabarits (reconciliation du modele de contenu) : rendu en frise
+ * chronologique (annee, statut, theme, dates, lieu, edition speciale),
+ * aligne sur la vraie page /editions du site officiel — qui montre une
+ * frise, pas une grille de cartes. Trie par annee decroissante (champ
+ * meta _fnc_edition_year), avec repli sur la date de publication WP si
+ * l'annee n'est pas renseignee.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,6 +33,16 @@ fnc_render_hero(
 		'breadcrumb' => __( 'Éditions', 'fnc-wordpress-theme' ),
 	)
 );
+
+$fnc_editions = get_posts(
+	array(
+		'post_type'      => 'fnc_edition',
+		'posts_per_page' => -1,
+		'orderby'        => array( 'meta_value_num' => 'DESC', 'date' => 'DESC' ),
+		'meta_key'       => '_fnc_edition_year',
+	)
+);
+$fnc_statuses = fnc_content_model_edition_statuses();
 ?>
 
 <main id="main">
@@ -43,26 +55,56 @@ fnc_render_hero(
 				</div>
 			</div>
 
-			<?php if ( have_posts() ) : ?>
-				<div class="grid grid-3">
-					<?php
-					while ( have_posts() ) :
-						the_post();
-						?>
-						<article class="card">
-							<?php if ( has_excerpt() || get_the_content() ) : ?>
-								<p class="card-kicker"><?php esc_html_e( 'Édition', 'fnc-wordpress-theme' ); ?></p>
-							<?php endif; ?>
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-							<?php if ( has_excerpt() ) : ?>
-								<p><?php the_excerpt(); ?></p>
-							<?php endif; ?>
-						</article>
+			<?php if ( ! empty( $fnc_editions ) ) : ?>
+				<ol class="frise">
+					<?php foreach ( $fnc_editions as $fnc_edition ) : ?>
 						<?php
-					endwhile;
-					?>
-				</div>
-				<?php wp_reset_postdata(); ?>
+						$fnc_year       = get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true );
+						$fnc_status     = get_post_meta( $fnc_edition->ID, '_fnc_edition_status', true );
+						$fnc_theme      = get_post_meta( $fnc_edition->ID, '_fnc_edition_theme', true );
+						$fnc_start      = get_post_meta( $fnc_edition->ID, '_fnc_edition_start_date', true );
+						$fnc_end        = get_post_meta( $fnc_edition->ID, '_fnc_edition_end_date', true );
+						$fnc_location   = get_post_meta( $fnc_edition->ID, '_fnc_edition_location', true );
+						$fnc_is_special = get_post_meta( $fnc_edition->ID, '_fnc_edition_is_special', true );
+						$fnc_special    = get_post_meta( $fnc_edition->ID, '_fnc_edition_special_note', true );
+
+						$fnc_dates = '';
+						if ( $fnc_start ) {
+							$fnc_dates = date_i18n( 'j F Y', strtotime( $fnc_start ) );
+							if ( $fnc_end && $fnc_end !== $fnc_start ) {
+								$fnc_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_end ) );
+							}
+						}
+						?>
+						<li class="frise-item<?php echo 'current' === $fnc_status ? ' is-current' : ''; ?>">
+							<div class="frise-rail" aria-hidden="true"><span class="frise-node"></span></div>
+							<div class="frise-body">
+								<div class="frise-head">
+									<span class="frise-year"><?php echo esc_html( $fnc_year ? $fnc_year : get_the_date( 'Y', $fnc_edition ) ); ?></span>
+									<?php fnc_render_badge( isset( $fnc_statuses[ $fnc_status ] ) ? $fnc_statuses[ $fnc_status ] : __( 'Statut à confirmer', 'fnc-wordpress-theme' ) ); ?>
+								</div>
+								<h3 class="frise-title"><a href="<?php echo esc_url( get_permalink( $fnc_edition ) ); ?>"><?php echo esc_html( get_the_title( $fnc_edition ) ); ?></a></h3>
+								<?php if ( $fnc_theme ) : ?>
+									<p class="frise-theme"><?php echo esc_html( $fnc_theme ); ?></p>
+								<?php endif; ?>
+								<?php if ( $fnc_dates || $fnc_location ) : ?>
+									<p class="frise-meta">
+										<?php if ( $fnc_dates ) : ?><b><?php echo esc_html( $fnc_dates ); ?></b><?php endif; ?>
+										<?php if ( $fnc_dates && $fnc_location ) : ?> · <?php endif; ?>
+										<?php echo esc_html( $fnc_location ); ?>
+									</p>
+								<?php endif; ?>
+								<?php if ( $fnc_is_special && $fnc_special ) : ?>
+									<p class="frise-note"><?php echo esc_html( $fnc_special ); ?></p>
+								<?php endif; ?>
+								<a class="frise-more" href="<?php echo esc_url( get_permalink( $fnc_edition ) ); ?>">
+									<?php esc_html_e( 'Voir l’édition', 'fnc-wordpress-theme' ); ?>
+									<span class="arrow" aria-hidden="true">→</span>
+								</a>
+							</div>
+						</li>
+					<?php endforeach; ?>
+				</ol>
 			<?php else : ?>
 				<div class="empty" role="status">
 					<h3><?php esc_html_e( 'Aucune édition publiée', 'fnc-wordpress-theme' ); ?></h3>

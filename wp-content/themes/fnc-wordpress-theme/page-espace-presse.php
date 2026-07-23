@@ -97,11 +97,40 @@ $fnc_communiques      = $fnc_communiques_term
 					<h2><?php esc_html_e( 'Contacts presse confirmés.', 'fnc-wordpress-theme' ); ?></h2>
 				</div>
 			</div>
-			<div class="empty" role="status">
-				<h3><?php esc_html_e( 'Les contacts presse ne sont pas encore publiés.', 'fnc-wordpress-theme' ); ?></h3>
-				<p><?php esc_html_e( 'Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés.', 'fnc-wordpress-theme' ); ?></p>
-				<div class="meta" style="justify-content:center;"><span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></div>
-			</div>
+			<?php
+			// Contacts presse issus des Réglages FNC (onglet « Contacts presse »).
+			// Affichés uniquement s'ils sont renseignés — aucun nom/adresse fictif.
+			$fnc_press_contacts = fnc_parse_press_contacts();
+			if ( ! empty( $fnc_press_contacts ) ) :
+				?>
+				<div class="grid grid-3">
+					<?php foreach ( $fnc_press_contacts as $fnc_contact ) : ?>
+						<article class="card">
+							<?php if ( $fnc_contact['role'] ) : ?>
+								<p class="card-kicker"><?php echo esc_html( $fnc_contact['role'] ); ?></p>
+							<?php endif; ?>
+							<?php if ( $fnc_contact['name'] ) : ?>
+								<h3><?php echo esc_html( $fnc_contact['name'] ); ?></h3>
+							<?php endif; ?>
+							<?php if ( $fnc_contact['organization'] ) : ?>
+								<p><?php echo esc_html( $fnc_contact['organization'] ); ?></p>
+							<?php endif; ?>
+							<?php if ( $fnc_contact['email'] ) : ?>
+								<p style="margin-top:10px;"><a class="link-more" href="mailto:<?php echo esc_attr( antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>
+							<?php endif; ?>
+							<?php if ( $fnc_contact['phone'] ) : ?>
+								<p><a class="link-more" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $fnc_contact['phone'] ) ); ?>"><?php echo esc_html( $fnc_contact['phone'] ); ?></a></p>
+							<?php endif; ?>
+						</article>
+					<?php endforeach; ?>
+				</div>
+			<?php else : ?>
+				<div class="empty" role="status">
+					<h3><?php esc_html_e( 'Les contacts presse ne sont pas encore publiés.', 'fnc-wordpress-theme' ); ?></h3>
+					<p><?php esc_html_e( 'Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés.', 'fnc-wordpress-theme' ); ?></p>
+					<div class="meta" style="justify-content:center;"><span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></div>
+				</div>
+			<?php endif; ?>
 		</div>
 	</section>
 

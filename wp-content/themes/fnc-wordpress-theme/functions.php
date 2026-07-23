@@ -10,7 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.2.0' );
+define( 'FNC_THEME_VERSION', '0.3.0' );
+
+/**
+ * Réglages globaux du site (WordPress Customizer) — pendant du Global
+ * « Réglages du site » de Payload. Voir inc/customizer.php.
+ */
+require_once get_template_directory() . '/inc/customizer.php';
 
 /**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
@@ -324,4 +330,99 @@ function fnc_split_countries( $country_field ) {
 		return array();
 	}
 	return array_values( array_filter( array_map( 'trim', explode( '/', $country_field ) ) ) );
+}
+
+/**
+ * Nom du site : nom officiel des Réglages FNC, repli sur le nom WordPress.
+ */
+function fnc_site_name() {
+	return fnc_get_setting( 'official_name', get_bloginfo( 'name' ) );
+}
+
+/**
+ * Métadonnées SEO/OpenGraph dans le <head>, alimentées par les valeurs par
+ * défaut des Réglages FNC (onglet « SEO par défaut »). Pendant WordPress des
+ * valeurs SEO du Global Settings de Payload. La surcharge SEO par page/document
+ * relève d'un lot ultérieur (blocs / meta de page).
+ */
+function fnc_head_meta() {
+	$site_name   = fnc_site_name();
+	$default_desc = fnc_get_setting( 'seo_default_description', fnc_get_setting( 'description', '' ) );
+	$og_title    = fnc_get_setting( 'seo_default_title', '' );
+	$twitter     = fnc_get_setting( 'twitter_card', 'summary_large_image' );
+	$og_image    = fnc_get_setting_image_url( 'og_default_image', 'full' );
+
+	// Titre OG : titre du document courant si disponible, sinon titre par défaut.
+	if ( is_singular() ) {
+		$og_title = get_the_title();
+	} elseif ( ! $og_title ) {
+		$og_title = $site_name;
+	}
+
+	// La directive robots passe par le filtre natif wp_robots (voir
+	// fnc_filter_robots) pour éviter une seconde balise <meta name="robots">.
+	if ( $default_desc ) {
+		printf( '<meta name="description" content="%s" />' . "\n", esc_attr( $default_desc ) );
+		printf( '<meta property="og:description" content="%s" />' . "\n", esc_attr( $default_desc ) );
+	}
+	printf( '<meta property="og:site_name" content="%s" />' . "\n", esc_attr( $site_name ) );
+	printf( '<meta property="og:title" content="%s" />' . "\n", esc_attr( $og_title ) );
+	printf( '<meta property="og:type" content="%s" />' . "\n", is_singular() ? 'article' : 'website' );
+	printf( '<meta property="og:url" content="%s" />' . "\n", esc_url( ( is_front_page() ? home_url( '/' ) : get_permalink() ) ?: home_url( '/' ) ) );
+	if ( $og_image ) {
+		printf( '<meta property="og:image" content="%s" />' . "\n", esc_url( $og_image ) );
+	}
+	if ( $twitter ) {
+		printf( '<meta name="twitter:card" content="%s" />' . "\n", esc_attr( $twitter ) );
+	}
+}
+add_action( 'wp_head', 'fnc_head_meta', 5 );
+
+/**
+ * Applique la directive robots des Réglages FNC via le filtre natif wp_robots
+ * (plutôt qu'une balise en dur), pour ne pas dupliquer <meta name="robots">.
+ * « index, follow » = comportement indexable par défaut (rien à forcer) ;
+ * « noindex » / « nofollow » sont propagés à WordPress.
+ *
+ * @param array<string,mixed> $robots
+ * @return array<string,mixed>
+ */
+function fnc_filter_robots( $robots ) {
+	$directive = fnc_get_setting( 'robots', '' );
+	if ( ! $directive ) {
+		return $robots;
+	}
+	$tokens = array_map( 'trim', explode( ',', strtolower( $directive ) ) );
+	if ( in_array( 'noindex', $tokens, true ) ) {
+		$robots['noindex'] = true;
+		unset( $robots['index'] );
+	}
+	if ( in_array( 'index', $tokens, true ) ) {
+		unset( $robots['noindex'] );
+	}
+	if ( in_array( 'nofollow', $tokens, true ) ) {
+		$robots['nofollow'] = true;
+		unset( $robots['follow'] );
+	}
+	if ( in_array( 'follow', $tokens, true ) ) {
+		unset( $robots['nofollow'] );
+	}
+	return $robots;
+}
+add_filter( 'wp_robots', 'fnc_filter_robots' );
+
+/**
+ * Marque de l'en-tête : logo principal des Réglages FNC s'il est défini, sinon
+ * le sigle SVG intégré. Retourne le HTML du logo <img> ou une chaîne vide.
+ */
+function fnc_header_logo_img() {
+	$url = fnc_get_setting_image_url( 'logo_principal', 'full' );
+	if ( ! $url ) {
+		return '';
+	}
+	return sprintf(
+		'<img class="brand-logo" src="%s" alt="%s" />',
+		esc_url( $url ),
+		esc_attr( fnc_site_name() )
+	);
 }

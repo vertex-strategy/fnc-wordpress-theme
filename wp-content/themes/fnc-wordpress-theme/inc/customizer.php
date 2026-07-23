@@ -1,0 +1,371 @@
+<?php
+/**
+ * Réglages globaux du site — WordPress Customizer.
+ *
+ * Pendant WordPress natif du Global « Réglages du site » de Payload
+ * (forum-numerique-congo/src/payload/globals/Settings.ts). Porte l'identité,
+ * les logos, les coordonnées, les réseaux sociaux, les contacts presse, le
+ * footer et les valeurs SEO/OpenGraph par défaut du portail — administrables
+ * sans développeur, dans Apparence → Personnaliser → « Réglages FNC ».
+ *
+ * Architecture validée par le Décideur (Customizer + blocs Gutenberg custom,
+ * zéro dépendance tierce — conforme ADR-007, Decision 2). Ce fichier ne couvre
+ * que les réglages globaux (Lot 1) ; la composition de pages par blocs suivra
+ * dans un lot dédié.
+ *
+ * Frontière DA (même principe que côté Payload) : ces réglages portent le
+ * CONTENU (textes, fichiers, liens), jamais la mise en forme ni la structure,
+ * qui restent dans le code du thème.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Lecture d'un réglage global, avec repli.
+ *
+ * Tous les réglages sont stockés en theme_mod préfixés `fnc_`.
+ *
+ * @param string $key     Clé sans préfixe (ex. « email »).
+ * @param mixed  $default Valeur de repli si le réglage est vide/absent.
+ * @return mixed
+ */
+function fnc_get_setting( $key, $default = '' ) {
+	$value = get_theme_mod( 'fnc_' . $key, $default );
+	return ( '' === $value || null === $value ) ? $default : $value;
+}
+
+/**
+ * URL d'un média enregistré comme ID de pièce jointe (logos, image OG).
+ *
+ * @param string $key  Clé du réglage (ex. « logo_principal »).
+ * @param string $size Taille d'image WordPress.
+ * @return string URL, ou chaîne vide si non défini.
+ */
+function fnc_get_setting_image_url( $key, $size = 'full' ) {
+	$attachment_id = (int) fnc_get_setting( $key, 0 );
+	if ( $attachment_id <= 0 ) {
+		return '';
+	}
+	$src = wp_get_attachment_image_src( $attachment_id, $size );
+	return $src ? $src[0] : '';
+}
+
+/**
+ * Réseaux sociaux renseignés, sous forme [plateforme => url].
+ * N'inclut que les plateformes dont l'URL est réellement saisie (RÈGLE 4 :
+ * aucun lien fictif). Ordre stable, aligné sur l'énumération Payload.
+ *
+ * @return array<string,string>
+ */
+function fnc_social_links() {
+	$platforms = array( 'linkedin', 'x', 'facebook', 'instagram', 'youtube' );
+	$links     = array();
+	foreach ( $platforms as $platform ) {
+		$url = fnc_get_setting( 'social_' . $platform, '' );
+		if ( $url ) {
+			$links[ $platform ] = $url;
+		}
+	}
+	return $links;
+}
+
+/**
+ * Libellé lisible d'une plateforme sociale.
+ *
+ * @param string $platform Clé de plateforme.
+ * @return string
+ */
+function fnc_social_label( $platform ) {
+	$labels = array(
+		'linkedin'  => 'LinkedIn',
+		'x'         => 'X',
+		'facebook'  => 'Facebook',
+		'instagram' => 'Instagram',
+		'youtube'   => 'YouTube',
+	);
+	return isset( $labels[ $platform ] ) ? $labels[ $platform ] : ucfirst( $platform );
+}
+
+/**
+ * Analyse le champ « Contacts presse » (une ligne par contact, champs séparés
+ * par « | » dans l'ordre : Nom | Rôle | Organisation | Email | Téléphone).
+ *
+ * Choix zéro-dépendance : le Customizer natif ne fournit pas de répéteur ; ce
+ * format texte reste administrable sans plugin de champs et sans JavaScript.
+ * Les lignes vides sont ignorées ; un contact sans aucune valeur est écarté.
+ *
+ * @param string|null $raw Contenu brut du réglage.
+ * @return array<int,array{name:string,role:string,organization:string,email:string,phone:string}>
+ */
+function fnc_parse_press_contacts( $raw = null ) {
+	if ( null === $raw ) {
+		$raw = fnc_get_setting( 'press_contacts', '' );
+	}
+	$contacts = array();
+	if ( ! $raw ) {
+		return $contacts;
+	}
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $raw ) as $line ) {
+		$line = trim( $line );
+		if ( '' === $line ) {
+			continue;
+		}
+		$parts   = array_map( 'trim', explode( '|', $line ) );
+		$contact = array(
+			'name'         => $parts[0] ?? '',
+			'role'         => $parts[1] ?? '',
+			'organization' => $parts[2] ?? '',
+			'email'        => $parts[3] ?? '',
+			'phone'        => $parts[4] ?? '',
+		);
+		if ( '' === implode( '', $contact ) ) {
+			continue;
+		}
+		$contacts[] = $contact;
+	}
+	return $contacts;
+}
+
+/**
+ * Sanitize d'un <select> restreint à une liste de valeurs autorisées.
+ */
+function fnc_sanitize_choice( $value, $setting ) {
+	$control = $setting->manager->get_control( $setting->id );
+	if ( $control && isset( $control->choices[ $value ] ) ) {
+		return $value;
+	}
+	return $setting->default;
+}
+
+/**
+ * Enregistrement des réglages dans le Customizer.
+ *
+ * @param WP_Customize_Manager $wp_customize
+ */
+function fnc_customize_register( $wp_customize ) {
+	$wp_customize->add_panel(
+		'fnc_settings',
+		array(
+			'title'       => __( 'Réglages FNC', 'fnc-wordpress-theme' ),
+			'description' => __( 'Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur.', 'fnc-wordpress-theme' ),
+			'priority'    => 20,
+		)
+	);
+
+	/* -------------------------------------------------- Identité */
+	$wp_customize->add_section(
+		'fnc_identity',
+		array(
+			'title' => __( 'Identité', 'fnc-wordpress-theme' ),
+			'panel' => 'fnc_settings',
+		)
+	);
+
+	$identity_fields = array(
+		'official_name' => array( __( 'Nom officiel', 'fnc-wordpress-theme' ), 'text', 'Forum Numérique Congo' ),
+		'slogan'        => array( __( 'Slogan', 'fnc-wordpress-theme' ), 'text', '' ),
+		'subtitle'      => array( __( 'Sous-titre', 'fnc-wordpress-theme' ), 'text', '' ),
+		'description'   => array( __( 'Description', 'fnc-wordpress-theme' ), 'textarea', '' ),
+		'short_intro'   => array( __( 'Présentation courte', 'fnc-wordpress-theme' ), 'textarea', '' ),
+	);
+	foreach ( $identity_fields as $key => $conf ) {
+		list( $label, $type, $default ) = $conf;
+		$sanitize = 'textarea' === $type ? 'sanitize_textarea_field' : 'sanitize_text_field';
+		$wp_customize->add_setting(
+			'fnc_' . $key,
+			array( 'default' => $default, 'sanitize_callback' => $sanitize, 'transport' => 'refresh' )
+		);
+		$wp_customize->add_control(
+			'fnc_' . $key,
+			array( 'label' => $label, 'section' => 'fnc_identity', 'type' => $type )
+		);
+	}
+
+	/* -------------------------------------------------- Logos & icônes */
+	$wp_customize->add_section(
+		'fnc_logos',
+		array(
+			'title'       => __( 'Logos & icônes', 'fnc-wordpress-theme' ),
+			'panel'       => 'fnc_settings',
+			'description' => __( 'Le favicon se règle via Réglages généraux → Icône du site (fonction WordPress native).', 'fnc-wordpress-theme' ),
+		)
+	);
+
+	$logo_fields = array(
+		'logo_principal' => __( 'Logo principal', 'fnc-wordpress-theme' ),
+		'logo_light'     => __( 'Logo clair', 'fnc-wordpress-theme' ),
+		'logo_dark'      => __( 'Logo sombre', 'fnc-wordpress-theme' ),
+	);
+	foreach ( $logo_fields as $key => $label ) {
+		$wp_customize->add_setting(
+			'fnc_' . $key,
+			array( 'default' => 0, 'sanitize_callback' => 'absint', 'transport' => 'refresh' )
+		);
+		$wp_customize->add_control(
+			new WP_Customize_Media_Control(
+				$wp_customize,
+				'fnc_' . $key,
+				array( 'label' => $label, 'section' => 'fnc_logos', 'mime_type' => 'image' )
+			)
+		);
+	}
+
+	/* -------------------------------------------------- Communication */
+	$wp_customize->add_section(
+		'fnc_communication',
+		array(
+			'title' => __( 'Communication', 'fnc-wordpress-theme' ),
+			'panel' => 'fnc_settings',
+		)
+	);
+
+	$wp_customize->add_setting( 'fnc_email', array( 'default' => '', 'sanitize_callback' => 'sanitize_email', 'transport' => 'refresh' ) );
+	$wp_customize->add_control( 'fnc_email', array( 'label' => __( 'Email de contact', 'fnc-wordpress-theme' ), 'section' => 'fnc_communication', 'type' => 'email' ) );
+
+	$wp_customize->add_setting( 'fnc_phone', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control( 'fnc_phone', array( 'label' => __( 'Téléphone', 'fnc-wordpress-theme' ), 'section' => 'fnc_communication', 'type' => 'text' ) );
+
+	$wp_customize->add_setting( 'fnc_address', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control( 'fnc_address', array( 'label' => __( 'Adresse', 'fnc-wordpress-theme' ), 'section' => 'fnc_communication', 'type' => 'textarea' ) );
+
+	$social_fields = array(
+		'social_linkedin'  => 'LinkedIn',
+		'social_x'         => 'X (Twitter)',
+		'social_facebook'  => 'Facebook',
+		'social_instagram' => 'Instagram',
+		'social_youtube'   => 'YouTube',
+	);
+	foreach ( $social_fields as $key => $label ) {
+		$wp_customize->add_setting(
+			'fnc_' . $key,
+			array( 'default' => '', 'sanitize_callback' => 'esc_url_raw', 'transport' => 'refresh' )
+		);
+		$wp_customize->add_control(
+			'fnc_' . $key,
+			array(
+				/* translators: %s: nom de la plateforme sociale. */
+				'label'   => sprintf( __( 'URL %s', 'fnc-wordpress-theme' ), $label ),
+				'section' => 'fnc_communication',
+				'type'    => 'url',
+			)
+		);
+	}
+
+	/* -------------------------------------------------- Contacts presse */
+	$wp_customize->add_section(
+		'fnc_press',
+		array(
+			'title'       => __( 'Contacts presse', 'fnc-wordpress-theme' ),
+			'panel'       => 'fnc_settings',
+			'description' => __( 'Un contact par ligne, champs séparés par « | » dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone. Affichés uniquement lorsqu’ils sont renseignés — ne jamais saisir de données fictives.', 'fnc-wordpress-theme' ),
+		)
+	);
+	$wp_customize->add_setting( 'fnc_press_contacts', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_press_contacts',
+		array(
+			'label'       => __( 'Contacts presse', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_press',
+			'type'        => 'textarea',
+			'input_attrs' => array( 'placeholder' => "Nom | Rôle | Organisation | email@exemple.org | +242 …", 'rows' => 5 ),
+		)
+	);
+
+	/* -------------------------------------------------- Footer */
+	$wp_customize->add_section(
+		'fnc_footer',
+		array(
+			'title'       => __( 'Footer', 'fnc-wordpress-theme' ),
+			'panel'       => 'fnc_settings',
+			'description' => __( 'L’année courante est ajoutée automatiquement à la mention de copyright.', 'fnc-wordpress-theme' ),
+		)
+	);
+	$wp_customize->add_setting(
+		'fnc_footer_text',
+		array(
+			'default'           => __( 'Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville.', 'fnc-wordpress-theme' ),
+			'sanitize_callback' => 'sanitize_textarea_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control( 'fnc_footer_text', array( 'label' => __( 'Texte du footer', 'fnc-wordpress-theme' ), 'section' => 'fnc_footer', 'type' => 'textarea' ) );
+
+	$wp_customize->add_setting( 'fnc_footer_copyright', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_footer_copyright',
+		array(
+			'label'       => __( 'Mention de copyright', 'fnc-wordpress-theme' ),
+			'description' => __( 'Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé.', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_footer',
+			'type'        => 'text',
+		)
+	);
+
+	/* -------------------------------------------------- SEO par défaut */
+	$wp_customize->add_section(
+		'fnc_seo',
+		array(
+			'title' => __( 'SEO par défaut', 'fnc-wordpress-theme' ),
+			'panel' => 'fnc_settings',
+		)
+	);
+	$wp_customize->add_setting( 'fnc_seo_default_title', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_seo_default_title',
+		array(
+			'label'       => __( 'Titre par défaut', 'fnc-wordpress-theme' ),
+			'description' => __( 'Recommandé : 50–60 caractères.', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_seo',
+			'type'        => 'text',
+		)
+	);
+	$wp_customize->add_setting( 'fnc_seo_default_description', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_seo_default_description',
+		array(
+			'label'       => __( 'Description par défaut', 'fnc-wordpress-theme' ),
+			'description' => __( 'Recommandé : 150–160 caractères.', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_seo',
+			'type'        => 'textarea',
+		)
+	);
+	$wp_customize->add_setting( 'fnc_og_default_image', array( 'default' => 0, 'sanitize_callback' => 'absint', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		new WP_Customize_Media_Control(
+			$wp_customize,
+			'fnc_og_default_image',
+			array(
+				'label'       => __( 'Image OpenGraph par défaut', 'fnc-wordpress-theme' ),
+				'description' => __( 'Visuel de partage social (1200×630 recommandé).', 'fnc-wordpress-theme' ),
+				'section'     => 'fnc_seo',
+				'mime_type'   => 'image',
+			)
+		)
+	);
+	$wp_customize->add_setting( 'fnc_twitter_card', array( 'default' => 'summary_large_image', 'sanitize_callback' => 'fnc_sanitize_choice', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_twitter_card',
+		array(
+			'label'   => __( 'Type de Twitter Card', 'fnc-wordpress-theme' ),
+			'section' => 'fnc_seo',
+			'type'    => 'select',
+			'choices' => array(
+				'summary_large_image' => __( 'Grande image', 'fnc-wordpress-theme' ),
+				'summary'             => __( 'Résumé', 'fnc-wordpress-theme' ),
+			),
+		)
+	);
+	$wp_customize->add_setting( 'fnc_robots', array( 'default' => 'index, follow', 'sanitize_callback' => 'sanitize_text_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_robots',
+		array(
+			'label'       => __( 'Directive robots par défaut', 'fnc-wordpress-theme' ),
+			'description' => __( 'Ex. « index, follow » ou « noindex, nofollow ».', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_seo',
+			'type'        => 'text',
+		)
+	);
+}
+add_action( 'customize_register', 'fnc_customize_register' );

@@ -20,18 +20,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 <a class="skip" href="#main"><?php esc_html_e( 'Aller au contenu', 'fnc-wordpress-theme' ); ?></a>
 
 <header class="nav" id="nav">
-	<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Forum Numérique Congo — accueil', 'fnc-wordpress-theme' ); ?>">
-		<span class="mark" aria-hidden="true">
-			<svg viewBox="0 0 32 32">
-				<rect x="14.5" y="3" width="3" height="26" fill="currentColor"/>
-				<path d="M6 10 C10 6, 22 6, 25 12" stroke="#CC2222" stroke-width="1.5" fill="none"/>
-				<circle cx="25" cy="12" r="1.6" fill="#CC2222"/>
-				<path d="M7 22 C11 26, 21 26, 24 21" stroke="#F5C000" stroke-width="1.5" fill="none"/>
-				<circle cx="24" cy="21" r="1.6" fill="#F5C000"/>
-				<path d="M11 13 q4 3 0 6 q-3-3 0-6Z" fill="#3BA04A"/>
-			</svg>
-		</span>
-		<span class="wordmark"><b><?php esc_html_e( 'Forum Numérique', 'fnc-wordpress-theme' ); ?></b><span><?php esc_html_e( 'Congo', 'fnc-wordpress-theme' ); ?></span></span>
+	<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( '%s — accueil', 'fnc-wordpress-theme' ), fnc_site_name() ) ); ?>">
+		<?php
+		// Logo administrable (Réglages FNC → Logos) prioritaire ; repli sur le
+		// sigle SVG intégré et le libellé « Forum Numérique / Congo ».
+		$fnc_logo = fnc_header_logo_img();
+		if ( $fnc_logo ) :
+			echo $fnc_logo; // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et échappé par fnc_header_logo_img().
+		else :
+			?>
+			<span class="mark" aria-hidden="true">
+				<svg viewBox="0 0 32 32">
+					<rect x="14.5" y="3" width="3" height="26" fill="currentColor"/>
+					<path d="M6 10 C10 6, 22 6, 25 12" stroke="#CC2222" stroke-width="1.5" fill="none"/>
+					<circle cx="25" cy="12" r="1.6" fill="#CC2222"/>
+					<path d="M7 22 C11 26, 21 26, 24 21" stroke="#F5C000" stroke-width="1.5" fill="none"/>
+					<circle cx="24" cy="21" r="1.6" fill="#F5C000"/>
+					<path d="M11 13 q4 3 0 6 q-3-3 0-6Z" fill="#3BA04A"/>
+				</svg>
+			</span>
+			<span class="wordmark"><b><?php esc_html_e( 'Forum Numérique', 'fnc-wordpress-theme' ); ?></b><span><?php esc_html_e( 'Congo', 'fnc-wordpress-theme' ); ?></span></span>
+			<?php
+		endif;
+		?>
 	</a>
 
 	<nav class="nav-links" aria-label="<?php esc_attr_e( 'Navigation principale', 'fnc-wordpress-theme' ); ?>">

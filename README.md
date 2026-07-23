@@ -63,6 +63,8 @@ Les relations entité-à-entité (une session appartient à une édition, une se
 
 Ceci reste conforme au principe « zéro dépendance tierce » (hors multilinguisme) : aucun plugin de champs, uniquement des meta boxes natives (`add_meta_box`, `register_post_meta`).
 
+`fnc_edition` porte en plus un champ booléen `_fnc_edition_active` (« édition en cours ») : une seule édition peut être active à la fois — en cocher une désactive automatiquement les autres à la sauvegarde. Utilisé par `page-edition-en-cours.php`.
+
 ## Pages intérieures (au-delà de l'accueil)
 
 | Page | Gabarit | Source (`forum-numerique-congo`) | Type de rendu |
@@ -71,10 +73,16 @@ Ceci reste conforme au principe « zéro dépendance tierce » (hors multilingui
 | Contact | `page-contact.php` | `docs/mockups/homepage-v2/contact.html` (rendu par `site.js`) | Statique (formulaire non fonctionnel) |
 | Éditions | `archive-fnc_edition.php` | `docs/mockups/homepage-v2/editions.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
 | Publications | `archive-fnc_publication.php` | `docs/mockups/homepage-v2/publications.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
-| Programme | `archive-fnc_session.php` | `docs/mockups/homepage-v2/programme.html` (rendu par `site.js`) | **Dynamique** — agenda réel (horaire, titre, salle) |
-| Intervenants | `archive-fnc_intervenant.php` | `docs/mockups/homepage-v2/intervenants.html` (rendu par `site.js`) | **Dynamique** — vraies données du plugin |
+| Programme | `archive-fnc_session.php` | `docs/mockups/homepage-v2/programme.html` (rendu par `site.js`) | **Dynamique** — agenda réel, groupé par jour |
+| Intervenants | `archive-fnc_intervenant.php` | `docs/mockups/homepage-v2/intervenants.html` (rendu par `site.js`) | **Dynamique** — filtres profil/pays réels |
+| Édition en cours | `page-edition-en-cours.php` | `docs/mockups/homepage-v2/edition-en-cours.html` (rendu par `site.js`) | **Dynamique** — hub (stats, aperçus programme/intervenants) |
+| Informations pratiques | `page-informations-pratiques.php` | `docs/mockups/homepage-v2/informations-pratiques.html` (rendu par `site.js`) | Statique (état d'attente, aligné sur le site réel) |
 
-**Statut des sources à la date d'intégration :** ces 6 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+**Statut des sources à la date d'intégration :** ces 8 fichiers existent dans le dossier du projet principal mais n'étaient pas committés sur la branche de l'ADR-007 (travail en cours d'un autre agent, non fusionné) — intégrés ici à la demande explicite du Décideur, malgré ce statut. Si les fichiers source évoluent avant d'être committés en amont, les gabarits correspondants devront être resynchronisés.
+
+**Édition en cours** est le hub le plus dynamique du thème à ce jour : il récupère l'édition marquée « active » (nouveau champ `_fnc_edition_active` sur `fnc_edition`, une seule à la fois), puis calcule en temps réel le nombre de sessions, d'intervenants distincts et de jours à partir des relations déjà construites (session→édition, session→intervenants, session→jour), avec un aperçu programme et un aperçu intervenants. Seul le bloc « Inscription » reste statique/exemple (pas de collection d'inscriptions dans le plugin — hors périmètre, voir modèle de contenu ci-dessus).
+
+**Informations pratiques** reste volontairement sobre : sur le site officiel réel, cette page affiche un état « en cours de finalisation », pas une liste de rubriques (visa, hôtels...) comme le suggérait la maquette statique — reproduit ici avec un texte reformulé, pas copié du site officiel.
 
 **Programme** a nécessité d'étendre le plugin : trois nouveaux champs meta sur `fnc_session` (`_fnc_session_time`, `_fnc_session_room`, `_fnc_session_jour`), ajoutés à la meta box existante « Édition et intervenants », nécessaires pour afficher un agenda réel (horaire, salle, regroupement par journée) plutôt qu'une simple liste de titres.
 

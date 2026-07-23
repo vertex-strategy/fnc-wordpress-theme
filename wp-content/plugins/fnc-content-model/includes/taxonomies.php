@@ -85,18 +85,24 @@ function fnc_content_model_register_taxonomies() {
 	);
 
 	/*
-	 * Niveau de partenariat (ADR-007, amendement Decision 1) : le site
-	 * officiel reel regroupe ses partenaires par type d'engagement
-	 * (Institutionnel/Organisateur/Soutien/Sponsor) - absent de la maquette
-	 * statique, qui ne montrait qu'un mur de logos.
+	 * Type de partenaire (ADR-007, amendement Decision 1 ; precise lors de la
+	 * reconciliation du modele de contenu avec le vrai schema Payload) : le
+	 * site officiel reel classe chaque partenaire par type d'engagement fixe
+	 * (Institutionnel/Organisateur/Soutien/Sponsor) sur la fiche partenaire
+	 * elle-meme - c'est le champ `type` de la collection Partners. Le slug de
+	 * cette taxonomie (`fnc_niveau_partenariat`) est conserve tel quel pour ne
+	 * pas casser les URLs/termes existants ; seul l'intitule admin est
+	 * corrige, l'ancien nom pretait a confusion avec le champ distinct
+	 * `niveau` (principal/majeur/officiel/contributeur), qui existe en plus,
+	 * par edition — voir _fnc_partenaire_participations dans relations.php.
 	 */
 	register_taxonomy(
 		'fnc_niveau_partenariat',
 		array( 'fnc_partenaire' ),
 		array(
 			'labels'            => array(
-				'name'          => __( 'Niveaux de partenariat', 'fnc-content-model' ),
-				'singular_name' => __( 'Niveau de partenariat', 'fnc-content-model' ),
+				'name'          => __( 'Types de partenaire', 'fnc-content-model' ),
+				'singular_name' => __( 'Type de partenaire', 'fnc-content-model' ),
 			),
 			'hierarchical'      => false,
 			'public'            => true,

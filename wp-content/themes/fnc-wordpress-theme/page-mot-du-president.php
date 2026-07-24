@@ -2,18 +2,13 @@
 /**
  * Gabarit de page — "Mot du président".
  *
- * Structure alignee sur le site officiel reel
- * (localhost:3000/fr/le-forum/mot-du-president), suite a l'amendement
- * de la Decision 1 de l'ADR-007.
- *
- * IMPORTANT : la page reelle attribue ce message a une personne
- * nommee et cite un texte institutionnel reel. Ni le nom ni le texte
- * ne sont repris ici — coherent avec le reste de ce theme (aucune
- * vraie identite de responsable public reprise dans ce produit
- * distinct) et avec la maquette source elle-meme
- * (site.js, copy.president : "Aucune citation n'est inventee").
- * Le contenu ci-dessous est un placeholder explicite, pas une
- * paraphrase du texte reel.
+ * Aligne sur la page reelle localhost:3000/fr/le-forum/mot-du-president : heros
+ * « Le mot du Président » (avec l'exergue), puis le message en deux colonnes
+ * (portrait + identite a gauche, texte a droite) et un callout « Rejoignez le
+ * Forum ». Le nom et le message sont ceux du teaser deja porte par la page
+ * « Le Forum » (page-le-forum.php) — coherence entre les deux surfaces. Le
+ * portrait reste l'illustration embarquee tant que la vraie photo n'est pas
+ * fournie.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,25 +20,44 @@ get_header();
 
 <main id="main">
 	<header class="opening" style="min-height:56vh;">
-		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Portrait institutionnel', 'fnc-wordpress-theme' ); ?>" />
+		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="" aria-hidden="true" />
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
-			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?> · <?php esc_html_e( 'Mot du Président', 'fnc-wordpress-theme' ); ?></p>
-			<span class="eyebrow"><?php esc_html_e( 'Mot du Président', 'fnc-wordpress-theme' ); ?></span>
+			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <a href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?></a> · <?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></p>
+			<span class="eyebrow"><?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></span>
 			<h1><?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></h1>
+			<p class="intro"><?php esc_html_e( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais. »', 'fnc-wordpress-theme' ); ?></p>
 		</div>
 	</header>
 
-	<section class="section">
-		<div class="container reading">
-			<p><?php esc_html_e( 'Nom du Président', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-			<p style="color:var(--texte-tert);font-size:.95rem;"><?php esc_html_e( 'Fonction officielle — à valider par la MOA', 'fnc-wordpress-theme' ); ?></p>
-			<p style="margin-top:24px;"><?php esc_html_e( '« La prise de parole institutionnelle apparaîtra ici une fois validée par la MOA. Aucune citation n’est inventée. »', 'fnc-wordpress-theme' ); ?></p>
-			<p style="margin-top:24px;"><a class="link-more" href="<?php echo esc_url( home_url( '/le-forum/' ) ); ?>">← <?php esc_html_e( 'Retour à Le Forum', 'fnc-wordpress-theme' ); ?></a></p>
+	<section class="section president-block">
+		<div class="container">
+			<div class="split">
+				<div>
+					<figure><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+					<div class="president-identity">
+						<p class="president-name"><?php esc_html_e( 'Eugène Rufin BOUYA', 'fnc-wordpress-theme' ); ?></p>
+						<p class="president-role"><?php esc_html_e( 'Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?></p>
+					</div>
+				</div>
+				<div class="president-message">
+					<p><?php esc_html_e( 'Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale.', 'fnc-wordpress-theme' ); ?></p>
+					<p><?php esc_html_e( 'Entre les éditions, nous poursuivons un travail continu : réunir les institutions, les entreprises, les chercheurs et la société civile pour transformer une ambition nationale en trajectoire numérique lisible et partagée.', 'fnc-wordpress-theme' ); ?></p>
+					<p><?php esc_html_e( 'Notre conviction est simple : le numérique n’est pas une fin, mais un moyen — celui de rendre nos services publics plus accessibles, nos entreprises plus compétitives et notre jeunesse mieux outillée.', 'fnc-wordpress-theme' ); ?></p>
+					<p><?php esc_html_e( 'Je vous invite à rejoindre cette dynamique, depuis Brazzaville, au cœur du Bassin du Congo, et tournée vers toute l’Afrique centrale.', 'fnc-wordpress-theme' ); ?></p>
+					<p style="margin-top:24px;"><a class="link-more" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>">← <?php esc_html_e( 'Retour à Le Forum', 'fnc-wordpress-theme' ); ?></a></p>
+				</div>
+			</div>
 		</div>
 	</section>
 
-	<?php fnc_render_cta_band(); ?>
+	<section class="callout">
+		<h2><?php esc_html_e( 'Rejoignez le Forum', 'fnc-wordpress-theme' ); ?></h2>
+		<p><?php esc_html_e( 'La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue.', 'fnc-wordpress-theme' ); ?></p>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+		</a>
+	</section>
 </main>
 
 <?php get_footer(); ?>

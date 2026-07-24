@@ -92,9 +92,8 @@ msgstr "News will appear here as soon as it is published."
 #: page-contact.php:97
 #: page-contact.php:105
 #: page-edition-en-cours.php:238
-#: page-espace-presse.php:86
-#: page-espace-presse.php:131
-#: page-mot-du-president.php:39
+#: page-espace-presse.php:83
+#: page-espace-presse.php:129
 #: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
 msgid "À confirmer"
@@ -251,7 +250,7 @@ msgstr "Social networks"
 
 #: footer.php:52
 #: functions.php:185
-#: page-mot-du-president.php:31
+#: page-mot-du-president.php:26
 msgid "Le Forum"
 msgstr "The Forum"
 
@@ -291,6 +290,7 @@ msgstr "Become a partner"
 #: footer.php:74
 #: header.php:51
 #: page-informations-pratiques.php:75
+#: page-mot-du-president.php:57
 msgid "S’inscrire"
 msgstr "Register"
 
@@ -487,7 +487,7 @@ msgstr "Language"
 #: functions.php:342
 #: inc/blocks.php:619
 #: page-le-forum.php:44
-#: page-mot-du-president.php:31
+#: page-mot-du-president.php:26
 msgid "Accueil"
 msgstr "Home"
 
@@ -615,8 +615,6 @@ msgid "Titre — ligne 2"
 msgstr "Title — line 2"
 
 #: inc/blocks.php:77
-#: page-mot-du-president.php:31
-#: page-mot-du-president.php:32
 msgid "Mot du Président"
 msgstr "President’s address"
 
@@ -932,7 +930,7 @@ msgid "Contacts logistiques de l’édition."
 msgstr "Logistics contacts for the edition."
 
 #: inc/blocks.php:333
-#: page-espace-presse.php:96
+#: page-espace-presse.php:93
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -1482,7 +1480,7 @@ msgstr "Message"
 msgid "Institutionnel"
 msgstr "Institutional"
 
-#: page-espace-presse.php:26
+#: page-espace-presse.php:21
 msgid "Presse"
 msgstr "Press"
 
@@ -1575,81 +1573,65 @@ msgstr "Registration"
 msgid "L’ouverture des inscriptions sera annoncée prochainement."
 msgstr "Registration opening will be announced soon."
 
-#: page-espace-presse.php:27
+#: page-espace-presse.php:22
 msgid "Un point d’accès clair pour couvrir le Forum."
 msgstr "A clear entry point to cover the Forum."
 
-#: page-espace-presse.php:28
-msgid "L’Espace presse rassemble les ressources publiées et les contacts confirmés."
-msgstr "The Press area gathers published resources and confirmed contacts."
-
-#: page-espace-presse.php:30
+#: page-espace-presse.php:25
 msgid "Documents préparés dans une atmosphère institutionnelle calme"
 msgstr "Documents prepared in a calm institutional setting"
 
-#: page-espace-presse.php:31
+#: page-espace-presse.php:26
 msgid "Espace presse"
 msgstr "Press area"
 
-#: page-espace-presse.php:56
+#: page-espace-presse.php:51
 msgid "Information"
 msgstr "Information"
 
-#: page-espace-presse.php:57
+#: page-espace-presse.php:52
 msgid "Des ressources vérifiables, pas un dossier de façade."
 msgstr "Verifiable resources, not a façade press kit."
 
-#: page-espace-presse.php:58
-msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés."
-msgstr "Press releases, documents and press contacts appear here once validated."
-
-#: page-espace-presse.php:66
+#: page-espace-presse.php:62
 msgid "Communiqués"
 msgstr "Press releases"
 
-#: page-espace-presse.php:67
+#: page-espace-presse.php:63
 msgid "Ressources presse publiées."
 msgstr "Published press resources."
 
-#: page-espace-presse.php:74
+#: page-espace-presse.php:71
 msgid "Communiqué"
 msgstr "Press release"
 
-#: page-espace-presse.php:84
+#: page-espace-presse.php:81
 msgid "Aucun communiqué n’est publié pour le moment."
 msgstr "No press release is published at the moment."
 
-#: page-espace-presse.php:85
+#: page-espace-presse.php:82
 msgid "Les premiers communiqués apparaîtront ici dès leur validation officielle."
 msgstr "The first press releases will appear here once officially validated."
 
-#: page-espace-presse.php:97
+#: page-espace-presse.php:94
 msgid "Contacts presse confirmés."
 msgstr "Confirmed press contacts."
 
-#: page-espace-presse.php:129
+#: page-espace-presse.php:127
 msgid "Les contacts presse ne sont pas encore publiés."
 msgstr "Press contacts are not published yet."
 
-#: page-espace-presse.php:130
-msgid "Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés."
-msgstr "No address or name is shown until they are validated."
-
-#: page-espace-presse.php:139
+#: page-espace-presse.php:137
 msgid "Accréditation"
 msgstr "Accreditation"
 
-#: page-espace-presse.php:140
+#: page-espace-presse.php:138
 msgid "L’accréditation reste un échange direct."
 msgstr "Accreditation remains a direct exchange."
 
-#: page-espace-presse.php:141
-msgid "Les journalistes peuvent utiliser la page Contact pour toute demande d’accréditation."
-msgstr "Journalists can use the Contact page for any accreditation request."
-
 #: archive-fnc_edition.php:144
 #: archive-fnc_publication.php:136
-#: page-espace-presse.php:142
+#: page-espace-presse.php:140
 msgid "Contacter l’organisation"
 msgstr "Contact the organisation"
 
@@ -1805,28 +1787,14 @@ msgstr "Site publisher: name of the publishing organisation — to be confirmed.
 msgid "Directeur de la publication, hébergeur et coordonnées légales : à confirmer et valider avant toute publication réelle."
 msgstr "Publication director, host and legal details: to be confirmed and validated before any real publication."
 
-#: page-mot-du-president.php:28
-msgid "Portrait institutionnel"
-msgstr "Institutional portrait"
-
 #: page-le-forum.php:59
-#: page-mot-du-president.php:33
+#: page-mot-du-president.php:26
+#: page-mot-du-president.php:27
+#: page-mot-du-president.php:28
 msgid "Le mot du Président"
 msgstr "The President’s address"
 
-#: page-mot-du-president.php:39
-msgid "Nom du Président"
-msgstr "President’s name"
-
-#: page-mot-du-president.php:40
-msgid "Fonction officielle — à valider par la MOA"
-msgstr "Official role — to be validated by the project owner"
-
-#: page-mot-du-president.php:41
-msgid "« La prise de parole institutionnelle apparaîtra ici une fois validée par la MOA. Aucune citation n’est inventée. »"
-msgstr "“The institutional address will appear here once validated by the project owner. No quote is fabricated.”"
-
-#: page-mot-du-president.php:42
+#: page-mot-du-president.php:48
 msgid "Retour à Le Forum"
 msgstr "Back to The Forum"
 
@@ -2324,10 +2292,12 @@ msgid "Le Forum Numérique Congo installe un espace permanent de dialogue, de co
 msgstr "The Forum Numérique Congo sets up a permanent space for dialogue, cooperation and decision around digital matters in Central Africa. Between editions, we turn a national ambition into a concrete trajectory, serving the Congolese people."
 
 #: page-le-forum.php:61
+#: page-mot-du-president.php:39
 msgid "Eugène Rufin BOUYA"
 msgstr "Eugène Rufin BOUYA"
 
 #: page-le-forum.php:61
+#: page-mot-du-president.php:40
 msgid "Président du Forum Numérique Congo"
 msgstr "President of the Forum Numérique Congo"
 
@@ -2336,6 +2306,7 @@ msgid "Lire le mot complet"
 msgstr "Read the full message"
 
 #: page-le-forum.php:64
+#: page-mot-du-president.php:37
 msgid "Eugène Rufin BOUYA, Président du Forum Numérique Congo"
 msgstr "Eugène Rufin BOUYA, President of the Forum Numérique Congo"
 
@@ -2543,3 +2514,59 @@ msgstr "Motivation"
 #: page-inscription.php:101
 msgid "Présentez en quelques lignes votre intérêt (facultatif)"
 msgstr "Briefly describe your interest (optional)"
+
+#: page-espace-presse.php:23
+msgid "L’Espace presse rassemble uniquement les ressources publiées et les contacts confirmés, afin de faciliter un traitement médiatique fiable."
+msgstr "The Press area gathers only published resources and confirmed contacts, so media coverage can rely on traceable information."
+
+#: page-espace-presse.php:53
+msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés. Le Forum privilégie une information traçable, sobre et utilisable."
+msgstr "Releases, documents and press contacts appear here when validated. The Forum prioritises information that is traceable, sober and useful."
+
+#: page-espace-presse.php:54
+msgid "Kit presse, contacts et modalités : à confirmer lorsque non publiés."
+msgstr "Press kit, contacts and terms: to be confirmed when not published."
+
+#: page-espace-presse.php:65
+msgid "Les communiqués de presse restent des ressources du portail. Chaque document publié conserve son lien vers la bibliothèque."
+msgstr "Press releases remain Resources in the portal. Each published item keeps its link to the library."
+
+#: page-espace-presse.php:96
+msgid "Les contacts presse sont portés par les Réglages du site et réutilisables par les surfaces éditoriales."
+msgstr "Press contacts are carried by Site Settings and can be reused by editorial surfaces."
+
+#: page-espace-presse.php:128
+msgid "Aucune adresse, aucun téléphone et aucun nom ne sont affichés tant qu’ils ne sont pas validés."
+msgstr "No email, phone number or name is displayed until validated."
+
+#: page-espace-presse.php:139
+msgid "Il n’existe pas de formulaire d’accréditation : les journalistes peuvent utiliser la page Contact pour signaler leur demande."
+msgstr "There is no accreditation form: journalists can use the Contact page to signal their request."
+
+#: page-mot-du-president.php:29
+msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais. »"
+msgstr "« The Forum Numérique Congo sets up a permanent space for dialogue, cooperation and decision around digital matters in Central Africa. Between editions, we turn a national ambition into a concrete trajectory, serving the Congolese people. »"
+
+#: page-mot-du-president.php:44
+msgid "Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale."
+msgstr "The Forum Numérique Congo sets up a permanent space for dialogue, cooperation and decision around digital matters in Central Africa."
+
+#: page-mot-du-president.php:45
+msgid "Entre les éditions, nous poursuivons un travail continu : réunir les institutions, les entreprises, les chercheurs et la société civile pour transformer une ambition nationale en trajectoire numérique lisible et partagée."
+msgstr "Between editions, we pursue continuous work: bringing together institutions, companies, researchers and civil society to turn a national ambition into a clear, shared digital trajectory."
+
+#: page-mot-du-president.php:46
+msgid "Notre conviction est simple : le numérique n’est pas une fin, mais un moyen — celui de rendre nos services publics plus accessibles, nos entreprises plus compétitives et notre jeunesse mieux outillée."
+msgstr "Our conviction is simple: digital is not an end but a means — one of making our public services more accessible, our companies more competitive and our youth better equipped."
+
+#: page-mot-du-president.php:47
+msgid "Je vous invite à rejoindre cette dynamique, depuis Brazzaville, au cœur du Bassin du Congo, et tournée vers toute l’Afrique centrale."
+msgstr "I invite you to join this momentum, from Brazzaville, at the heart of the Congo Basin, and turned towards all of Central Africa."
+
+#: page-mot-du-president.php:55
+msgid "Rejoignez le Forum"
+msgstr "Join the Forum"
+
+#: page-mot-du-president.php:56
+msgid "La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue."
+msgstr "The next edition brings together decision-makers, experts and civil society around digital. Take part in the dialogue."

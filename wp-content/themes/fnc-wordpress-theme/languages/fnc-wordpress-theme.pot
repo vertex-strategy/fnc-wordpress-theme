@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: FNC WordPress Theme 0.4.8\n"
+"Project-Id-Version: FNC WordPress Theme 0.4.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fnc-wordpress-theme\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-24T13:01:06+00:00\n"
+"POT-Creation-Date: 2026-07-24T13:12:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fnc-wordpress-theme\n"
@@ -92,9 +92,8 @@ msgstr ""
 #: page-contact.php:97
 #: page-contact.php:105
 #: page-edition-en-cours.php:238
-#: page-espace-presse.php:86
-#: page-espace-presse.php:131
-#: page-mot-du-president.php:39
+#: page-espace-presse.php:83
+#: page-espace-presse.php:129
 #: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
 msgid "À confirmer"
@@ -178,7 +177,7 @@ msgstr ""
 
 #: archive-fnc_edition.php:144
 #: archive-fnc_publication.php:136
-#: page-espace-presse.php:142
+#: page-espace-presse.php:140
 msgid "Contacter l’organisation"
 msgstr ""
 
@@ -451,7 +450,7 @@ msgstr ""
 
 #: footer.php:52
 #: functions.php:185
-#: page-mot-du-president.php:31
+#: page-mot-du-president.php:26
 msgid "Le Forum"
 msgstr ""
 
@@ -491,6 +490,7 @@ msgstr ""
 #: footer.php:74
 #: header.php:51
 #: page-informations-pratiques.php:75
+#: page-mot-du-president.php:57
 msgid "S’inscrire"
 msgstr ""
 
@@ -687,7 +687,7 @@ msgstr ""
 #: functions.php:342
 #: inc/blocks.php:619
 #: page-le-forum.php:44
-#: page-mot-du-president.php:31
+#: page-mot-du-president.php:26
 msgid "Accueil"
 msgstr ""
 
@@ -809,8 +809,6 @@ msgid "Titre — ligne 2"
 msgstr ""
 
 #: inc/blocks.php:77
-#: page-mot-du-president.php:31
-#: page-mot-du-president.php:32
 msgid "Mot du Président"
 msgstr ""
 
@@ -1126,7 +1124,7 @@ msgid "Contacts logistiques de l’édition."
 msgstr ""
 
 #: inc/blocks.php:333
-#: page-espace-presse.php:96
+#: page-espace-presse.php:93
 msgid "Contacts"
 msgstr ""
 
@@ -1820,80 +1818,92 @@ msgstr ""
 msgid "L’ouverture des inscriptions sera annoncée prochainement."
 msgstr ""
 
-#: page-espace-presse.php:26
+#: page-espace-presse.php:21
 msgid "Presse"
 msgstr ""
 
-#: page-espace-presse.php:27
+#: page-espace-presse.php:22
 msgid "Un point d’accès clair pour couvrir le Forum."
 msgstr ""
 
-#: page-espace-presse.php:28
-msgid "L’Espace presse rassemble les ressources publiées et les contacts confirmés."
+#: page-espace-presse.php:23
+msgid "L’Espace presse rassemble uniquement les ressources publiées et les contacts confirmés, afin de faciliter un traitement médiatique fiable."
 msgstr ""
 
-#: page-espace-presse.php:30
+#: page-espace-presse.php:25
 msgid "Documents préparés dans une atmosphère institutionnelle calme"
 msgstr ""
 
-#: page-espace-presse.php:31
+#: page-espace-presse.php:26
 msgid "Espace presse"
 msgstr ""
 
-#: page-espace-presse.php:56
+#: page-espace-presse.php:51
 msgid "Information"
 msgstr ""
 
-#: page-espace-presse.php:57
+#: page-espace-presse.php:52
 msgid "Des ressources vérifiables, pas un dossier de façade."
 msgstr ""
 
-#: page-espace-presse.php:58
-msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés."
+#: page-espace-presse.php:53
+msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés. Le Forum privilégie une information traçable, sobre et utilisable."
 msgstr ""
 
-#: page-espace-presse.php:66
+#: page-espace-presse.php:54
+msgid "Kit presse, contacts et modalités : à confirmer lorsque non publiés."
+msgstr ""
+
+#: page-espace-presse.php:62
 msgid "Communiqués"
 msgstr ""
 
-#: page-espace-presse.php:67
+#: page-espace-presse.php:63
 msgid "Ressources presse publiées."
 msgstr ""
 
-#: page-espace-presse.php:74
+#: page-espace-presse.php:65
+msgid "Les communiqués de presse restent des ressources du portail. Chaque document publié conserve son lien vers la bibliothèque."
+msgstr ""
+
+#: page-espace-presse.php:71
 msgid "Communiqué"
 msgstr ""
 
-#: page-espace-presse.php:84
+#: page-espace-presse.php:81
 msgid "Aucun communiqué n’est publié pour le moment."
 msgstr ""
 
-#: page-espace-presse.php:85
+#: page-espace-presse.php:82
 msgid "Les premiers communiqués apparaîtront ici dès leur validation officielle."
 msgstr ""
 
-#: page-espace-presse.php:97
+#: page-espace-presse.php:94
 msgid "Contacts presse confirmés."
 msgstr ""
 
-#: page-espace-presse.php:129
+#: page-espace-presse.php:96
+msgid "Les contacts presse sont portés par les Réglages du site et réutilisables par les surfaces éditoriales."
+msgstr ""
+
+#: page-espace-presse.php:127
 msgid "Les contacts presse ne sont pas encore publiés."
 msgstr ""
 
-#: page-espace-presse.php:130
-msgid "Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés."
+#: page-espace-presse.php:128
+msgid "Aucune adresse, aucun téléphone et aucun nom ne sont affichés tant qu’ils ne sont pas validés."
 msgstr ""
 
-#: page-espace-presse.php:139
+#: page-espace-presse.php:137
 msgid "Accréditation"
 msgstr ""
 
-#: page-espace-presse.php:140
+#: page-espace-presse.php:138
 msgid "L’accréditation reste un échange direct."
 msgstr ""
 
-#: page-espace-presse.php:141
-msgid "Les journalistes peuvent utiliser la page Contact pour toute demande d’accréditation."
+#: page-espace-presse.php:139
+msgid "Il n’existe pas de formulaire d’accréditation : les journalistes peuvent utiliser la page Contact pour signaler leur demande."
 msgstr ""
 
 #: page-informations-pratiques.php:25
@@ -2045,7 +2055,9 @@ msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de
 msgstr ""
 
 #: page-le-forum.php:59
-#: page-mot-du-president.php:33
+#: page-mot-du-president.php:26
+#: page-mot-du-president.php:27
+#: page-mot-du-president.php:28
 msgid "Le mot du Président"
 msgstr ""
 
@@ -2054,10 +2066,12 @@ msgid "Le Forum Numérique Congo installe un espace permanent de dialogue, de co
 msgstr ""
 
 #: page-le-forum.php:61
+#: page-mot-du-president.php:39
 msgid "Eugène Rufin BOUYA"
 msgstr ""
 
 #: page-le-forum.php:61
+#: page-mot-du-president.php:40
 msgid "Président du Forum Numérique Congo"
 msgstr ""
 
@@ -2066,6 +2080,7 @@ msgid "Lire le mot complet"
 msgstr ""
 
 #: page-le-forum.php:64
+#: page-mot-du-president.php:37
 msgid "Eugène Rufin BOUYA, Président du Forum Numérique Congo"
 msgstr ""
 
@@ -2169,24 +2184,36 @@ msgstr ""
 msgid "Directeur de la publication, hébergeur et coordonnées légales : à confirmer et valider avant toute publication réelle."
 msgstr ""
 
-#: page-mot-du-president.php:28
-msgid "Portrait institutionnel"
+#: page-mot-du-president.php:29
+msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais. »"
 msgstr ""
 
-#: page-mot-du-president.php:39
-msgid "Nom du Président"
+#: page-mot-du-president.php:44
+msgid "Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale."
 msgstr ""
 
-#: page-mot-du-president.php:40
-msgid "Fonction officielle — à valider par la MOA"
+#: page-mot-du-president.php:45
+msgid "Entre les éditions, nous poursuivons un travail continu : réunir les institutions, les entreprises, les chercheurs et la société civile pour transformer une ambition nationale en trajectoire numérique lisible et partagée."
 msgstr ""
 
-#: page-mot-du-president.php:41
-msgid "« La prise de parole institutionnelle apparaîtra ici une fois validée par la MOA. Aucune citation n’est inventée. »"
+#: page-mot-du-president.php:46
+msgid "Notre conviction est simple : le numérique n’est pas une fin, mais un moyen — celui de rendre nos services publics plus accessibles, nos entreprises plus compétitives et notre jeunesse mieux outillée."
 msgstr ""
 
-#: page-mot-du-president.php:42
+#: page-mot-du-president.php:47
+msgid "Je vous invite à rejoindre cette dynamique, depuis Brazzaville, au cœur du Bassin du Congo, et tournée vers toute l’Afrique centrale."
+msgstr ""
+
+#: page-mot-du-president.php:48
 msgid "Retour à Le Forum"
+msgstr ""
+
+#: page-mot-du-president.php:55
+msgid "Rejoignez le Forum"
+msgstr ""
+
+#: page-mot-du-president.php:56
+msgid "La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue."
 msgstr ""
 
 #: page-partenaires.php:26

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.4.0' );
+define( 'FNC_THEME_VERSION', '0.4.2' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -128,6 +128,11 @@ function fnc_theme_assets() {
 	foreach ( $fnc_catchup as $handle => $conf ) {
 		wp_enqueue_style( $handle, $dir . '/' . $conf[0], array( $conf[1] ), $ver );
 	}
+
+	// Correctif empreinte EN DERNIER : le kit reference /images/brand/… (chemin
+	// absolu Next.js, 404 en WP) ; ce fichier repointe le motif vers ../img/
+	// (relatif a assets/css/). Depend de fnc-catchup-complet pour passer apres.
+	wp_enqueue_style( 'fnc-empreinte-fix', $dir . '/assets/css/wordpress-empreinte-fix.css', array( 'fnc-catchup-complet' ), $ver );
 
 	wp_enqueue_script( 'fnc-theme-main', $dir . '/assets/js/main.js', array(), $ver, true );
 }
@@ -491,16 +496,56 @@ function fnc_site_name() {
  */
 
 /**
- * Marque de l'en-tête : logo principal des Réglages FNC s'il est défini, sinon
- * le sigle SVG intégré. Retourne le HTML du logo <img> ou une chaîne vide.
+ * Marque de l'en-tête : les deux versions du logo Forum Numérique Congo. La
+ * version claire (blanche) s'affiche sur l'en-tête transparent au-dessus des
+ * héros sombres ; la version couleur prend le relais sur l'en-tête « solide »
+ * (fond blanc au défilement). Le CSS bascule de l'une à l'autre selon l'état de
+ * la barre (.nav / .nav.solid) — cross-fade porté par le kit CSS prod, via les
+ * classes .brand-logo--white / .brand-logo--color.
+ *
+ * Priorité des sources :
+ *  - « Logo principal » (Réglages FNC) : s'il est défini, il sert aux deux états
+ *    (identité mono-logo choisie par l'administrateur) ;
+ *  - sinon « Logo clair » / « Logo sombre » chacun pour son état ;
+ *  - à défaut, les logos officiels embarqués dans le thème.
+ *
+ * Retourne le HTML des deux <img> (toujours non vide : le repli embarqué existe).
  */
 function fnc_header_logo_img() {
-	$url = fnc_get_setting_image_url( 'logo_principal', 'full' );
+	$base      = get_template_directory_uri() . '/assets/images/';
+	$principal = fnc_get_setting_image_url( 'logo_principal', 'full' );
+
+	if ( $principal ) {
+		$light = $principal;
+		$dark  = $principal;
+	} else {
+		$light = fnc_get_setting_image_url( 'logo_light', 'full' );
+		$dark  = fnc_get_setting_image_url( 'logo_dark', 'full' );
+		$light = $light ? $light : $base . 'logo-fnc-white.png';
+		$dark  = $dark ? $dark : $base . 'logo-fnc-color.png';
+	}
+
+	return sprintf(
+		'<img class="brand-logo brand-logo--white" src="%1$s" alt="%3$s" />' .
+		'<img class="brand-logo brand-logo--color" src="%2$s" alt="" aria-hidden="true" />',
+		esc_url( $light ),
+		esc_url( $dark ),
+		esc_attr( fnc_site_name() )
+	);
+}
+
+/**
+ * Logo du pied de page : version claire (blanche) posée sur le footer navy, en
+ * remplacement du wordmark texte (comportement du vrai site). Prend « Logo
+ * clair » des Réglages FNC s'il est défini, sinon le logo blanc embarqué.
+ */
+function fnc_footer_logo_img() {
+	$url = fnc_get_setting_image_url( 'logo_light', 'full' );
 	if ( ! $url ) {
-		return '';
+		$url = get_template_directory_uri() . '/assets/images/logo-fnc-white.png';
 	}
 	return sprintf(
-		'<img class="brand-logo" src="%s" alt="%s" />',
+		'<img class="foot-logo-img" src="%s" alt="%s" />',
 		esc_url( $url ),
 		esc_attr( fnc_site_name() )
 	);

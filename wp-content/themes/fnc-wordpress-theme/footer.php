@@ -11,7 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <footer id="footer" class="dad-footer">
 	<div class="foot-grid">
 		<div class="foot-brand">
-			<b><?php echo esc_html( fnc_site_name() ); ?></b>
+			<a class="foot-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( '%s — accueil', 'fnc-wordpress-theme' ), fnc_site_name() ) ); ?>">
+				<?php echo fnc_footer_logo_img(); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et échappé par fnc_footer_logo_img(). ?>
+			</a>
 			<p><?php echo esc_html( fnc_get_setting_i18n( 'footer_text', __( 'Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville.', 'fnc-wordpress-theme' ) ) ); ?></p>
 			<?php
 			// Coordonnées : affichées uniquement si renseignées dans les Réglages
@@ -37,11 +39,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$fnc_social = fnc_social_links();
 			if ( ! empty( $fnc_social ) ) :
 				?>
-				<ul class="foot-social" aria-label="<?php esc_attr_e( 'Réseaux sociaux', 'fnc-wordpress-theme' ); ?>">
+				<div class="social-row" aria-label="<?php esc_attr_e( 'Réseaux sociaux', 'fnc-wordpress-theme' ); ?>">
 					<?php foreach ( $fnc_social as $fnc_platform => $fnc_url ) : ?>
-						<li><a href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( fnc_social_label( $fnc_platform ) ); ?></a></li>
+						<a class="social-chip social-chip--icon" href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( sprintf( '%s, %s', fnc_social_label( $fnc_platform ), __( 's’ouvre dans un nouvel onglet', 'fnc-wordpress-theme' ) ) ); ?>">
+							<?php echo fnc_social_icon( $fnc_platform ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique interne (fnc_social_icon). ?>
+						</a>
 					<?php endforeach; ?>
-				</ul>
+				</div>
 			<?php endif; ?>
 		</div>
 		<div>

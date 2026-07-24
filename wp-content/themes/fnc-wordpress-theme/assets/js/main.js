@@ -134,7 +134,11 @@
 		document.body.classList.add('js-reveal');
 		var sel =
 			'.eyebrow,.kicker,h1,.tagline,.actions,.lines,.link-more,figure,.name,.role,.org,.quote,.dots,.manifest,.sub,h2,.prog-date,.rule,.session,.tier,.rule-c,.arch,.count-label,#m8 .btn-red,.foot-grid > *';
-		document.querySelectorAll('main > section, footer').forEach(function (sec) {
+		// Le hero #m1 est EXCLU du reveal JS : le kit lui donne une entrée
+		// cinématographique en CSS pur (#m1 .hero-inner > * → hero-enter), fiable
+		// au chargement, là où le reveal JS « claque » au premier paint. Aligné
+		// sur HomeMotion du site réel (voir wordpress-catchup-complet.css).
+		document.querySelectorAll('main > section:not(#m1), footer').forEach(function (sec) {
 			sec.querySelectorAll(sel).forEach(function (el, i) {
 				el.classList.add('reveal');
 				el.style.setProperty('--d', Math.min(i, 7) * 70 + 'ms');

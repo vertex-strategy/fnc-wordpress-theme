@@ -175,6 +175,34 @@ function fnc_social_label( $platform ) {
 }
 
 /**
+ * Icône SVG inline d'une plateforme sociale — port fidèle du composant
+ * SocialIcon du site réel (src/components/layout/Footer.tsx). Chaque icône fait
+ * 16×16 dans un viewBox 0 0 24 24, en currentColor (le CSS .social-chip du kit
+ * gère la couleur selon le contexte). Repli neutre (maillon) si la plateforme
+ * n'est pas reconnue. Retourne du markup SVG destiné à être échappé au sortir.
+ *
+ * @param string $platform Clé de plateforme (linkedin, x, facebook, …).
+ * @return string SVG inline.
+ */
+function fnc_social_icon( $platform ) {
+	$common = 'width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"';
+	switch ( $platform ) {
+		case 'linkedin':
+			return '<svg ' . $common . ' fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.5 8.65 22 10.9 22 14.3V21h-4v-5.9c0-1.4-.03-3.2-1.95-3.2-1.95 0-2.25 1.52-2.25 3.1V21H9z"/></svg>';
+		case 'x':
+			return '<svg ' . $common . ' fill="currentColor"><path d="M18.24 2H21l-6.56 7.5L22 22h-6.4l-4.7-6.16L5.5 22H2.74l7.02-8.02L2 2h6.56l4.25 5.62zm-1.12 18h1.53L7.02 3.9H5.38z"/></svg>';
+		case 'facebook':
+			return '<svg ' . $common . ' fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>';
+		case 'instagram':
+			return '<svg ' . $common . ' fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
+		case 'youtube':
+			return '<svg ' . $common . ' fill="currentColor"><path d="M23 12s0-3.2-.4-4.73a2.5 2.5 0 0 0-1.76-1.77C19.28 5.1 12 5.1 12 5.1s-7.28 0-8.84.4A2.5 2.5 0 0 0 1.4 7.27C1 8.8 1 12 1 12s0 3.2.4 4.73a2.5 2.5 0 0 0 1.76 1.77c1.56.4 8.84.4 8.84.4s7.28 0 8.84-.4a2.5 2.5 0 0 0 1.76-1.77C23 15.2 23 12 23 12zM9.75 15.02V8.98L15.5 12z"/></svg>';
+		default:
+			return '<svg ' . $common . ' fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+	}
+}
+
+/**
  * Analyse le champ « Contacts presse » (une ligne par contact, champs séparés
  * par « | » dans l'ordre : Nom | Rôle | Organisation | Email | Téléphone).
  *

@@ -9,9 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-07-24T09:24:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language: en_GB\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fnc-wordpress-theme\n"
-"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Theme Name of the theme
@@ -34,7 +34,8 @@ msgstr "Showcase template derived from the homepage-v2 mockup of the Forum Numé
 msgid "Vertex Strategy"
 msgstr ""
 
-#: archive-fnc_actualite.php:24 archive-fnc_actualite.php:29
+#: archive-fnc_actualite.php:24
+#: archive-fnc_actualite.php:29
 #: archive-fnc_actualite.php:39
 msgid "Actualités"
 msgstr "News"
@@ -47,10 +48,15 @@ msgstr "The Forum’s highlights, as they happen."
 msgid "Annonces, comptes rendus et informations publiés lorsqu’ils sont validés."
 msgstr "Announcements, reports and information published once validated."
 
-#: archive-fnc_actualite.php:28 archive-fnc_edition.php:32
-#: archive-fnc_intervenant.php:31 archive-fnc_publication.php:28
-#: archive-fnc_session.php:28 page-contact.php:46 page-edition-en-cours.php:88
-#: page-informations-pratiques.php:29 page-inscription.php:30
+#: archive-fnc_actualite.php:28
+#: archive-fnc_edition.php:32
+#: archive-fnc_intervenant.php:31
+#: archive-fnc_publication.php:28
+#: archive-fnc_session.php:28
+#: page-contact.php:46
+#: page-edition-en-cours.php:88
+#: page-informations-pratiques.php:29
+#: page-inscription.php:30
 msgid "Image éditoriale institutionnelle du Forum"
 msgstr "Institutional editorial image of the Forum"
 
@@ -78,12 +84,23 @@ msgstr "No published news"
 msgid "Les actualités apparaîtront ici dès leur publication."
 msgstr "News will appear here as soon as it is published."
 
-#: archive-fnc_actualite.php:82 front-page.php:55 front-page.php:113
-#: front-page.php:161 front-page.php:177 front-page.php:217 page-contact.php:74
-#: page-contact.php:76 page-edition-en-cours.php:252 page-espace-presse.php:86
-#: page-espace-presse.php:131 page-informations-pratiques.php:70
-#: page-inscription.php:69 page-inscription.php:77 page-le-forum.php:120
-#: page-mot-du-president.php:39 single-fnc_intervenant.php:51
+#: archive-fnc_actualite.php:82
+#: front-page.php:55
+#: front-page.php:113
+#: front-page.php:161
+#: front-page.php:177
+#: front-page.php:217
+#: page-contact.php:74
+#: page-contact.php:76
+#: page-edition-en-cours.php:252
+#: page-espace-presse.php:86
+#: page-espace-presse.php:131
+#: page-informations-pratiques.php:70
+#: page-inscription.php:69
+#: page-inscription.php:77
+#: page-le-forum.php:120
+#: page-mot-du-president.php:39
+#: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
 msgid "À confirmer"
 msgstr "To be confirmed"
@@ -100,11 +117,14 @@ msgstr "The Forum’s history as an institutional asset."
 msgid "Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés."
 msgstr "Each edition connects its review, resources, gallery and partners once that content is validated."
 
-#: archive-fnc_edition.php:33 footer.php:59 functions.php:140
+#: archive-fnc_edition.php:33
+#: footer.php:63
+#: functions.php:187
 msgid "Éditions"
 msgstr "Editions"
 
-#: archive-fnc_edition.php:53 archive-fnc_edition.php:54
+#: archive-fnc_edition.php:53
+#: archive-fnc_edition.php:54
 msgid "Éditions publiées"
 msgstr "Published editions"
 
@@ -136,15 +156,19 @@ msgstr "Profiles that give meaning to the sessions."
 msgid "Profils exemples non officiels, rattachés à sessions et ressources."
 msgstr "Unofficial example profiles, linked to sessions and resources."
 
-#: archive-fnc_intervenant.php:32 footer.php:53 inc/customizer.php:491
+#: archive-fnc_intervenant.php:32
+#: footer.php:57
+#: inc/customizer.php:519
 msgid "Intervenants"
 msgstr "Speakers"
 
-#: archive-fnc_intervenant.php:62 archive-fnc_intervenant.php:63
+#: archive-fnc_intervenant.php:62
+#: archive-fnc_intervenant.php:63
 msgid "Profils"
 msgstr "Profiles"
 
-#: archive-fnc_intervenant.php:69 archive-fnc_intervenant.php:70
+#: archive-fnc_intervenant.php:69
+#: archive-fnc_intervenant.php:70
 msgid "Pays représentés"
 msgstr "Countries represented"
 
@@ -152,11 +176,13 @@ msgstr "Countries represented"
 msgid "Filtrer par profil"
 msgstr "Filter by profile"
 
-#: archive-fnc_intervenant.php:83 archive-fnc_publication.php:67
+#: archive-fnc_intervenant.php:83
+#: archive-fnc_publication.php:67
 msgid "Tous"
 msgstr "All"
 
-#: archive-fnc_intervenant.php:95 single-fnc_intervenant.php:86
+#: archive-fnc_intervenant.php:95
+#: single-fnc_intervenant.php:86
 msgid "Pays"
 msgstr "Country"
 
@@ -168,7 +194,8 @@ msgstr "All countries"
 msgid "Filtrer"
 msgstr "Filter"
 
-#: archive-fnc_intervenant.php:118 single-fnc_intervenant.php:33
+#: archive-fnc_intervenant.php:118
+#: single-fnc_intervenant.php:33
 #: single-fnc_session.php:131
 msgid "Intervenant"
 msgstr "Speaker"
@@ -181,7 +208,10 @@ msgstr "No published speaker"
 msgid "Les profils apparaîtront ici dès leur publication."
 msgstr "Profiles will appear here as soon as they are published."
 
-#: archive-fnc_publication.php:24 footer.php:57 footer.php:60 functions.php:141
+#: archive-fnc_publication.php:24
+#: footer.php:61
+#: footer.php:64
+#: functions.php:188
 #: single-fnc_edition.php:166
 msgid "Ressources"
 msgstr "Resources"
@@ -214,12 +244,15 @@ msgstr "Search"
 msgid "Filtrer par type"
 msgstr "Filter by type"
 
-#: archive-fnc_publication.php:82 single-fnc_edition.php:174
-#: single-fnc_publication.php:132 single-fnc_session.php:173
+#: archive-fnc_publication.php:82
+#: single-fnc_edition.php:174
+#: single-fnc_publication.php:132
+#: single-fnc_session.php:173
 msgid "Publication"
 msgstr "Publication"
 
-#: archive-fnc_publication.php:88 single-fnc_publication.php:58
+#: archive-fnc_publication.php:88
+#: single-fnc_publication.php:58
 msgid "Regarder"
 msgstr "Watch"
 
@@ -243,12 +276,16 @@ msgstr "A programme that reads clearly before, during and after."
 msgid "Chaque session devient un nœud de navigation vers édition, intervenants et ressources."
 msgstr "Each session becomes a navigation node to its edition, speakers and resources."
 
-#: archive-fnc_session.php:29 archive-fnc_session.php:56 footer.php:52
-#: front-page.php:155 single-fnc_edition.php:123
+#: archive-fnc_session.php:29
+#: archive-fnc_session.php:56
+#: footer.php:56
+#: front-page.php:155
+#: single-fnc_edition.php:123
 msgid "Programme"
 msgstr "Programme"
 
-#: archive-fnc_session.php:41 page-edition-en-cours.php:73
+#: archive-fnc_session.php:41
+#: page-edition-en-cours.php:73
 msgid "Jour à confirmer"
 msgstr "Day to be confirmed"
 
@@ -264,72 +301,92 @@ msgstr "Days"
 msgid "Modérateur"
 msgstr "Moderator"
 
-#: archive-fnc_session.php:89 front-page.php:171 page-edition-en-cours.php:181
-#: single-fnc_edition.php:141 single-fnc_intervenant.php:163
+#: archive-fnc_session.php:89
+#: front-page.php:171
+#: page-edition-en-cours.php:181
+#: single-fnc_edition.php:141
+#: single-fnc_intervenant.php:163
 msgid "Salle à confirmer"
 msgstr "Room to be confirmed"
 
-#: archive-fnc_session.php:96 page-edition-en-cours.php:187
+#: archive-fnc_session.php:96
+#: page-edition-en-cours.php:187
 msgid "Aucune session publiée"
 msgstr "No published session"
 
-#: archive-fnc_session.php:97 page-edition-en-cours.php:188
+#: archive-fnc_session.php:97
+#: page-edition-en-cours.php:188
 msgid "Les données finales proviennent du CMS."
 msgstr "The final data comes from the CMS."
 
-#: footer.php:15 inc/customizer.php:469
+#: footer.php:17
+#: inc/customizer.php:497
 msgid "Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville."
 msgstr "A permanent institution reflecting on the digital future of Central Africa. Brazzaville."
 
-#: footer.php:40
+#: footer.php:42
 msgid "Réseaux sociaux"
 msgstr "Social networks"
 
-#: footer.php:48 functions.php:138 page-mot-du-president.php:31
+#: footer.php:52
+#: functions.php:185
+#: page-mot-du-president.php:31
 msgid "Le Forum"
 msgstr "The Forum"
 
-#: footer.php:50
+#: footer.php:54
 msgid "Présentation"
 msgstr "Overview"
 
-#: footer.php:51 functions.php:139 page-edition-en-cours.php:84
+#: footer.php:55
+#: functions.php:186
+#: page-edition-en-cours.php:84
 #: page-edition-en-cours.php:89
 msgid "Édition en cours"
 msgstr "Current edition"
 
-#: footer.php:61 page-informations-pratiques.php:26
+#: footer.php:65
+#: page-informations-pratiques.php:26
 #: page-informations-pratiques.php:30
 msgid "Informations pratiques"
 msgstr "Practical information"
 
-#: footer.php:62
+#: footer.php:66
 msgid "Dossier presse"
 msgstr "Press kit"
 
-#: footer.php:66 footer.php:68 functions.php:143 page-contact.php:42
+#: footer.php:70
+#: footer.php:72
+#: functions.php:190
+#: page-contact.php:42
 #: page-contact.php:47
 msgid "Contact"
 msgstr "Contact"
 
-#: footer.php:69 front-page.php:222
+#: footer.php:73
+#: front-page.php:222
 msgid "Devenir partenaire"
 msgstr "Become a partner"
 
-#: footer.php:70 header.php:66 page-informations-pratiques.php:80
+#: footer.php:74
+#: header.php:51
+#: page-informations-pratiques.php:80
+#: page-le-forum.php:121
 msgid "S’inscrire"
 msgstr "Register"
 
-#: footer.php:81
+#: footer.php:85
 #, php-format
 msgid "© %1$s %2$s"
 msgstr "© %1$s %2$s"
 
-#: footer.php:83 page-mentions-legales.php:20 page-mentions-legales.php:22
+#: footer.php:87
+#: page-mentions-legales.php:20
+#: page-mentions-legales.php:22
 msgid "Mentions légales"
 msgstr "Legal notice"
 
-#: footer.php:84
+#: footer.php:88
 msgid "Confidentialité"
 msgstr "Privacy"
 
@@ -349,15 +406,12 @@ msgstr "“The space where Central Africa decides its digital future.”"
 msgid "Voir le programme"
 msgstr "See the programme"
 
-#: front-page.php:63 page-le-forum.php:121
-msgid "Demander une accréditation"
-msgstr "Request accreditation"
-
 #: front-page.php:66
 msgid "Défiler"
 msgstr "Scroll"
 
-#: front-page.php:73 page-le-forum.php:45
+#: front-page.php:73
+#: page-le-forum.php:45
 msgid "Ce que nous sommes"
 msgstr "Who we are"
 
@@ -449,7 +503,8 @@ msgstr "The community"
 msgid "Ils construisent le Forum avec nous"
 msgstr "They build the Forum with us"
 
-#: front-page.php:212 front-page.php:213
+#: front-page.php:212
+#: front-page.php:213
 msgid "Partenaire · À confirmer"
 msgstr "Partner · To be confirmed"
 
@@ -477,7 +532,8 @@ msgstr "The next edition"
 msgid "Le Forum Numérique Congo commence dans"
 msgstr "The Forum Numérique Congo starts in"
 
-#: front-page.php:281 page-edition-en-cours.php:148
+#: front-page.php:281
+#: page-edition-en-cours.php:148
 msgid "jours"
 msgstr "days"
 
@@ -485,40 +541,44 @@ msgstr "days"
 msgid "Date à confirmer"
 msgstr "Date to be confirmed"
 
-#: front-page.php:286
-msgid "Demander votre accréditation"
-msgstr "Request your accreditation"
-
-#: functions.php:92 header.php:48
+#: functions.php:92
+#: header.php:33
 msgid "Navigation principale"
 msgstr "Main navigation"
 
-#: functions.php:93 header.php:76
+#: functions.php:93
+#: header.php:61
 msgid "Navigation mobile"
 msgstr "Mobile navigation"
 
-#: functions.php:142 page-partenaires.php:27 page-partenaires.php:32
+#: functions.php:189
+#: page-partenaires.php:27
+#: page-partenaires.php:32
 msgid "Partenaires"
 msgstr "Partners"
 
-#: functions.php:208 functions.php:231
+#: functions.php:255
+#: functions.php:278
 msgid "Langue"
 msgstr "Language"
 
-#: functions.php:269 functions.php:295 inc/blocks.php:619 page-le-forum.php:44
+#: functions.php:316
+#: functions.php:342
+#: inc/blocks.php:619
+#: page-le-forum.php:44
 #: page-mot-du-president.php:31
 msgid "Accueil"
 msgstr "Home"
 
-#: functions.php:309
+#: functions.php:356
 msgid "Poursuivre le parcours."
 msgstr "Continue the journey."
 
-#: functions.php:310
+#: functions.php:357
 msgid "Les contenus non confirmés restent masqués ou signalés."
 msgstr "Unconfirmed content stays hidden or flagged."
 
-#: functions.php:311
+#: functions.php:358
 msgid "Contacter l’équipe"
 msgstr "Contact the team"
 
@@ -526,20 +586,13 @@ msgstr "Contact the team"
 msgid "Aller au contenu"
 msgstr "Skip to content"
 
+#: footer.php:14
 #: header.php:23
 #, php-format
 msgid "%s — accueil"
 msgstr "%s — home"
 
-#: header.php:42
-msgid "Forum Numérique"
-msgstr "Forum Numérique"
-
-#: header.php:42
-msgid "Congo"
-msgstr "Congo"
-
-#: header.php:69
+#: header.php:54
 msgid "Ouvrir le menu"
 msgstr "Open the menu"
 
@@ -551,36 +604,65 @@ msgstr "Button label"
 msgid "Lien du bouton"
 msgstr "Button link"
 
-#: inc/blocks.php:47 inc/blocks.php:70 inc/blocks.php:81 inc/blocks.php:96
-#: inc/blocks.php:109 inc/blocks.php:134 inc/blocks.php:160 inc/blocks.php:174
-#: inc/blocks.php:185 inc/homepage.php:276 inc/homepage.php:293
-#: inc/homepage.php:307 inc/homepage.php:322 inc/homepage.php:336
+#: inc/blocks.php:47
+#: inc/blocks.php:70
+#: inc/blocks.php:81
+#: inc/blocks.php:96
+#: inc/blocks.php:109
+#: inc/blocks.php:134
+#: inc/blocks.php:160
+#: inc/blocks.php:174
+#: inc/blocks.php:185
+#: inc/homepage.php:276
+#: inc/homepage.php:293
+#: inc/homepage.php:307
+#: inc/homepage.php:322
+#: inc/homepage.php:336
 #: inc/homepage.php:349
 msgid "Sur-titre"
 msgstr "Eyebrow"
 
-#: inc/blocks.php:48 inc/blocks.php:110 inc/blocks.php:116 inc/blocks.php:146
-#: inc/blocks.php:161 inc/blocks.php:175 inc/blocks.php:186 inc/blocks.php:208
-#: inc/blocks.php:226 inc/blocks.php:243 inc/blocks.php:267 inc/blocks.php:280
-#: inc/blocks.php:290 inc/blocks.php:309 inc/blocks.php:319 inc/blocks.php:329
-#: inc/blocks.php:347 inc/blocks.php:365 inc/homepage.php:323
-#: inc/homepage.php:337 inc/homepage.php:350
+#: inc/blocks.php:48
+#: inc/blocks.php:110
+#: inc/blocks.php:116
+#: inc/blocks.php:146
+#: inc/blocks.php:161
+#: inc/blocks.php:175
+#: inc/blocks.php:186
+#: inc/blocks.php:208
+#: inc/blocks.php:226
+#: inc/blocks.php:243
+#: inc/blocks.php:267
+#: inc/blocks.php:280
+#: inc/blocks.php:290
+#: inc/blocks.php:309
+#: inc/blocks.php:319
+#: inc/blocks.php:329
+#: inc/blocks.php:347
+#: inc/blocks.php:365
+#: inc/homepage.php:323
+#: inc/homepage.php:337
+#: inc/homepage.php:350
 msgid "Titre"
 msgstr "Title"
 
-#: inc/blocks.php:49 inc/blocks.php:73
+#: inc/blocks.php:49
+#: inc/blocks.php:73
 msgid "Introduction"
 msgstr "Introduction"
 
-#: inc/blocks.php:53 inc/blocks.php:351
+#: inc/blocks.php:53
+#: inc/blocks.php:351
 msgid "Questions"
 msgstr "Questions"
 
-#: inc/blocks.php:55 inc/blocks.php:353
+#: inc/blocks.php:55
+#: inc/blocks.php:353
 msgid "Question"
 msgstr "Question"
 
-#: inc/blocks.php:56 inc/blocks.php:354
+#: inc/blocks.php:56
+#: inc/blocks.php:354
 msgid "Réponse"
 msgstr "Answer"
 
@@ -600,15 +682,20 @@ msgstr "Opening image"
 msgid "Fil d’Ariane (libellé page)"
 msgstr "Breadcrumb (page label)"
 
-#: inc/blocks.php:71 inc/blocks.php:97 inc/homepage.php:264
+#: inc/blocks.php:71
+#: inc/blocks.php:97
+#: inc/homepage.php:264
 msgid "Titre — ligne 1"
 msgstr "Title — line 1"
 
-#: inc/blocks.php:72 inc/blocks.php:98
+#: inc/blocks.php:72
+#: inc/blocks.php:98
 msgid "Titre — ligne 2"
 msgstr "Title — line 2"
 
-#: inc/blocks.php:77 page-mot-du-president.php:31 page-mot-du-president.php:32
+#: inc/blocks.php:77
+#: page-mot-du-president.php:31
+#: page-mot-du-president.php:32
 msgid "Mot du Président"
 msgstr "President’s address"
 
@@ -620,7 +707,9 @@ msgstr "Portrait, identity and excerpt of the President’s address."
 msgid "Portrait"
 msgstr "Portrait"
 
-#: inc/blocks.php:83 inc/blocks.php:296 page-contact.php:62
+#: inc/blocks.php:83
+#: inc/blocks.php:296
+#: page-contact.php:62
 msgid "Nom"
 msgstr "Name"
 
@@ -656,12 +745,17 @@ msgstr "Three-line title, text and image."
 msgid "Titre — ligne 3 (atténuée)"
 msgstr "Title — line 3 (muted)"
 
-#: inc/blocks.php:100 inc/blocks.php:147 inc/blocks.php:163 inc/blocks.php:187
+#: inc/blocks.php:100
+#: inc/blocks.php:147
+#: inc/blocks.php:163
+#: inc/blocks.php:187
 #: inc/blocks.php:227
 msgid "Texte"
 msgstr "Text"
 
-#: inc/blocks.php:101 inc/blocks.php:188 inc/homepage.php:282
+#: inc/blocks.php:101
+#: inc/blocks.php:188
+#: inc/homepage.php:282
 #: inc/homepage.php:321
 msgid "Image"
 msgstr "Image"
@@ -674,11 +768,14 @@ msgstr "Objectives (numbered sequence)"
 msgid "Séquence numérotée ; la numérotation et les couleurs DA sont automatiques."
 msgstr "Numbered sequence; numbering and brand colours are automatic."
 
-#: inc/blocks.php:114 single-fnc_session.php:60
+#: inc/blocks.php:114
+#: single-fnc_session.php:60
 msgid "Objectifs"
 msgstr "Objectives"
 
-#: inc/blocks.php:117 inc/customizer.php:49 inc/customizer.php:351
+#: inc/blocks.php:117
+#: inc/customizer.php:49
+#: inc/customizer.php:379
 msgid "Description"
 msgstr "Description"
 
@@ -686,7 +783,8 @@ msgstr "Description"
 msgid "FAQ (institutionnel)"
 msgstr "FAQ (institutional)"
 
-#: inc/blocks.php:125 inc/blocks.php:235
+#: inc/blocks.php:125
+#: inc/blocks.php:235
 msgid "Questions fréquentes, dépliables."
 msgstr "Frequently asked questions, expandable."
 
@@ -702,15 +800,18 @@ msgstr "Full-width band with background image and manifesto."
 msgid "Image pleine largeur"
 msgstr "Full-width image"
 
-#: inc/blocks.php:135 inc/homepage.php:308
+#: inc/blocks.php:135
+#: inc/homepage.php:308
 msgid "Manifeste — début"
 msgstr "Manifesto — start"
 
-#: inc/blocks.php:136 inc/homepage.php:309
+#: inc/blocks.php:136
+#: inc/homepage.php:309
 msgid "Manifeste — accent"
 msgstr "Manifesto — accent"
 
-#: inc/blocks.php:137 inc/homepage.php:310
+#: inc/blocks.php:137
+#: inc/homepage.php:310
 msgid "Sous-texte"
 msgstr "Sub-text"
 
@@ -730,11 +831,15 @@ msgstr "Hero"
 msgid "Héros secondaire avec image de fond et CTA."
 msgstr "Secondary hero with background image and CTA."
 
-#: inc/blocks.php:162 inc/customizer.php:48 inc/customizer.php:350
+#: inc/blocks.php:162
+#: inc/customizer.php:48
+#: inc/customizer.php:378
 msgid "Sous-titre"
 msgstr "Subtitle"
 
-#: inc/blocks.php:164 inc/homepage.php:187 inc/homepage.php:306
+#: inc/blocks.php:164
+#: inc/homepage.php:187
+#: inc/homepage.php:306
 #: inc/homepage.php:355
 msgid "Image de fond"
 msgstr "Background image"
@@ -747,7 +852,10 @@ msgstr "Rich text"
 msgid "Bloc de lecture (colonne étroite)."
 msgstr "Reading block (narrow column)."
 
-#: inc/blocks.php:176 inc/blocks.php:281 inc/blocks.php:310 inc/blocks.php:320
+#: inc/blocks.php:176
+#: inc/blocks.php:281
+#: inc/blocks.php:310
+#: inc/blocks.php:320
 #: inc/blocks.php:366
 msgid "Contenu"
 msgstr "Content"
@@ -788,7 +896,9 @@ msgstr "Figures"
 msgid "Valeur"
 msgstr "Value"
 
-#: inc/blocks.php:215 inc/blocks.php:249 inc/blocks.php:335
+#: inc/blocks.php:215
+#: inc/blocks.php:249
+#: inc/blocks.php:335
 msgid "Libellé"
 msgstr "Label"
 
@@ -828,7 +938,9 @@ msgstr "Practical info · Venue & directions"
 msgid "Adresse, détails d’accès et plan. La carte interactive n’est chargée qu’au clic."
 msgstr "Address, directions and map. The interactive map only loads on click."
 
-#: inc/blocks.php:268 inc/customizer.php:51 inc/customizer.php:412
+#: inc/blocks.php:268
+#: inc/customizer.php:51
+#: inc/customizer.php:440
 msgid "Adresse"
 msgstr "Address"
 
@@ -896,7 +1008,8 @@ msgstr "Practical info · Useful contacts"
 msgid "Contacts logistiques de l’édition."
 msgstr "Logistics contacts for the edition."
 
-#: inc/blocks.php:333 page-espace-presse.php:96
+#: inc/blocks.php:333
+#: page-espace-presse.php:96
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -984,19 +1097,23 @@ msgstr "Download"
 msgid "Fichier à venir"
 msgstr "File coming soon"
 
-#: inc/customizer.php:47 inc/customizer.php:349
+#: inc/customizer.php:47
+#: inc/customizer.php:377
 msgid "Slogan"
 msgstr "Slogan"
 
-#: inc/customizer.php:50 inc/customizer.php:352
+#: inc/customizer.php:50
+#: inc/customizer.php:380
 msgid "Présentation courte"
 msgstr "Short introduction"
 
-#: inc/customizer.php:52 inc/customizer.php:474
+#: inc/customizer.php:52
+#: inc/customizer.php:502
 msgid "Texte du footer"
 msgstr "Footer text"
 
-#: inc/customizer.php:53 inc/customizer.php:480
+#: inc/customizer.php:53
+#: inc/customizer.php:508
 msgid "Mention de copyright"
 msgstr "Copyright notice"
 
@@ -1008,133 +1125,136 @@ msgstr "Default SEO title"
 msgid "Description SEO par défaut"
 msgstr "Default SEO description"
 
-#: inc/customizer.php:332
+#: inc/customizer.php:360
 msgid "Réglages FNC"
 msgstr "FNC settings"
 
-#: inc/customizer.php:333
+#: inc/customizer.php:361
 msgid "Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur."
 msgstr "Identity, logos, contact details, footer and default SEO values of the portal. Editable without a developer."
 
-#: inc/customizer.php:342
+#: inc/customizer.php:370
 msgid "Identité"
 msgstr "Identity"
 
-#: inc/customizer.php:348
+#: inc/customizer.php:376
 msgid "Nom officiel"
 msgstr "Official name"
 
-#: inc/customizer.php:371
+#: inc/customizer.php:399
 msgid "Logos & icônes"
 msgstr "Logos & icons"
 
-#: inc/customizer.php:373
+#: inc/customizer.php:401
 msgid "Le favicon se règle via Réglages généraux → Icône du site (fonction WordPress native)."
 msgstr "The favicon is set via Settings → Site Icon (native WordPress feature)."
 
-#: inc/customizer.php:378
+#: inc/customizer.php:406
 msgid "Logo principal"
 msgstr "Main logo"
 
-#: inc/customizer.php:379
+#: inc/customizer.php:407
 msgid "Logo clair"
 msgstr "Light logo"
 
-#: inc/customizer.php:380
+#: inc/customizer.php:408
 msgid "Logo sombre"
 msgstr "Dark logo"
 
-#: inc/customizer.php:400
+#: inc/customizer.php:428
 msgid "Communication"
 msgstr "Communication"
 
-#: inc/customizer.php:406
+#: inc/customizer.php:434
 msgid "Email de contact"
 msgstr "Contact email"
 
-#: inc/customizer.php:409
+#: inc/customizer.php:437
 msgid "Téléphone"
 msgstr "Phone"
 
 #. translators: %s: nom de la plateforme sociale.
-#: inc/customizer.php:430
+#: inc/customizer.php:458
 #, php-format
 msgid "URL %s"
 msgstr "URL %s"
 
-#: inc/customizer.php:441 inc/customizer.php:450
+#: inc/customizer.php:469
+#: inc/customizer.php:478
 msgid "Contacts presse"
 msgstr "Press contacts"
 
-#: inc/customizer.php:443
+#: inc/customizer.php:471
 msgid "Un contact par ligne, champs séparés par « | » dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone. Affichés uniquement lorsqu’ils sont renseignés — ne jamais saisir de données fictives."
 msgstr "One contact per line, fields separated by “|” in this order: Name | Role | Organisation | Email | Phone. Shown only when filled in — never enter fictional data."
 
-#: inc/customizer.php:461
+#: inc/customizer.php:489
 msgid "Footer"
 msgstr "Footer"
 
-#: inc/customizer.php:463
+#: inc/customizer.php:491
 msgid "L’année courante est ajoutée automatiquement à la mention de copyright."
 msgstr "The current year is added automatically to the copyright notice."
 
-#: inc/customizer.php:481
+#: inc/customizer.php:509
 msgid "Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé."
 msgstr "Without the year (added automatically). Empty → official name is used."
 
-#: inc/customizer.php:493
+#: inc/customizer.php:521
 msgid "Ordonne la frise « Pays représentés » de la page Intervenants. Un pays par ligne, dans l’ordre voulu, avec un drapeau optionnel : « Pays | URL du drapeau ». Les pays non listés apparaissent ensuite, par ordre alphabétique. Vide → tri alphabétique. Sans URL de drapeau, le drapeau intégré est utilisé si le pays est reconnu."
 msgstr "Orders the “Countries represented” strip on the Speakers page. One country per line, in the desired order, with an optional flag: “Country | flag URL”. Unlisted countries follow, in alphabetical order. Empty → alphabetical order. Without a flag URL, the built-in flag is used when the country is recognised."
 
-#: inc/customizer.php:500
+#: inc/customizer.php:528
 msgid "Ordre des pays représentés"
 msgstr "Order of countries represented"
 
-#: inc/customizer.php:511
+#: inc/customizer.php:539
 msgid "SEO par défaut"
 msgstr "Default SEO"
 
-#: inc/customizer.php:519
+#: inc/customizer.php:547
 msgid "Titre par défaut"
 msgstr "Default title"
 
-#: inc/customizer.php:520 inc/seo.php:91
+#: inc/customizer.php:548
+#: inc/seo.php:91
 msgid "Recommandé : 50–60 caractères."
 msgstr "Recommended: 50–60 characters."
 
-#: inc/customizer.php:529
+#: inc/customizer.php:557
 msgid "Description par défaut"
 msgstr "Default description"
 
-#: inc/customizer.php:530 inc/seo.php:97
+#: inc/customizer.php:558
+#: inc/seo.php:97
 msgid "Recommandé : 150–160 caractères."
 msgstr "Recommended: 150–160 characters."
 
-#: inc/customizer.php:541
+#: inc/customizer.php:569
 msgid "Image OpenGraph par défaut"
 msgstr "Default OpenGraph image"
 
-#: inc/customizer.php:542
+#: inc/customizer.php:570
 msgid "Visuel de partage social (1200×630 recommandé)."
 msgstr "Social sharing image (1200×630 recommended)."
 
-#: inc/customizer.php:552
+#: inc/customizer.php:580
 msgid "Type de Twitter Card"
 msgstr "Twitter Card type"
 
-#: inc/customizer.php:556
+#: inc/customizer.php:584
 msgid "Grande image"
 msgstr "Large image"
 
-#: inc/customizer.php:557
+#: inc/customizer.php:585
 msgid "Résumé"
 msgstr "Summary"
 
-#: inc/customizer.php:565
+#: inc/customizer.php:593
 msgid "Directive robots par défaut"
 msgstr "Default robots directive"
 
-#: inc/customizer.php:566
+#: inc/customizer.php:594
 msgid "Ex. « index, follow » ou « noindex, nofollow »."
 msgstr "E.g. “index, follow” or “noindex, nofollow”."
 
@@ -1260,7 +1380,9 @@ msgstr "Line 2"
 msgid "Ligne 3 (atténuée)"
 msgstr "Line 3 (muted)"
 
-#: inc/homepage.php:280 inc/homepage.php:325 inc/homepage.php:338
+#: inc/homepage.php:280
+#: inc/homepage.php:325
+#: inc/homepage.php:338
 #: inc/homepage.php:351
 msgid "Lien — libellé"
 msgstr "Link — label"
@@ -1376,7 +1498,8 @@ msgid "Conditions générales d’utilisation"
 msgstr "Terms of use"
 
 #: page-conditions-generales-utilisation.php:26
-#: page-declaration-accessibilite.php:28 page-mentions-legales.php:21
+#: page-declaration-accessibilite.php:28
+#: page-mentions-legales.php:21
 #: page-politique-confidentialite.php:22
 msgid "Mise à jour le à confirmer"
 msgstr "Updated on to be confirmed"
@@ -1387,9 +1510,12 @@ msgstr "Terms"
 
 #: page-conditions-generales-utilisation.php:34
 #: page-conditions-generales-utilisation.php:35
-#: page-declaration-accessibilite.php:36 page-declaration-accessibilite.php:37
-#: page-mentions-legales.php:29 page-mentions-legales.php:30
-#: page-politique-confidentialite.php:30 page-politique-confidentialite.php:31
+#: page-declaration-accessibilite.php:36
+#: page-declaration-accessibilite.php:37
+#: page-mentions-legales.php:29
+#: page-mentions-legales.php:30
+#: page-politique-confidentialite.php:30
+#: page-politique-confidentialite.php:31
 #: page-politique-confidentialite.php:34
 msgid "DÉMO"
 msgstr "DEMO"
@@ -1410,7 +1536,8 @@ msgstr "Directing each request to the right channel."
 msgid "Contact général, presse, partenariat et accessibilité restent à confirmer."
 msgstr "General, press, partnership and accessibility contacts remain to be confirmed."
 
-#: page-contact.php:55 page-contact.php:57
+#: page-contact.php:55
+#: page-contact.php:57
 msgid "Formulaire de contact"
 msgstr "Contact form"
 
@@ -1418,11 +1545,14 @@ msgstr "Contact form"
 msgid "Formulaire"
 msgstr "Form"
 
-#: page-contact.php:58 page-inscription.php:84
+#: page-contact.php:58
+#: page-inscription.php:84
 msgid "Le service d’envoi reste à connecter."
 msgstr "The sending service is still to be connected."
 
-#: page-contact.php:63 page-inscription.php:59 single-fnc_intervenant.php:82
+#: page-contact.php:63
+#: page-inscription.php:59
+#: single-fnc_intervenant.php:82
 msgid "Organisation"
 msgstr "Organisation"
 
@@ -1450,7 +1580,8 @@ msgstr "Official contact details remain to be confirmed before publication."
 msgid "Envoyer"
 msgstr "Send"
 
-#: page-contact.php:91 page-partenaires.php:61
+#: page-contact.php:91
+#: page-partenaires.php:61
 msgid "Institutionnel"
 msgstr "Institutional"
 
@@ -1458,7 +1589,8 @@ msgstr "Institutional"
 msgid "Email officiel à confirmer"
 msgstr "Official email to be confirmed"
 
-#: page-contact.php:92 page-espace-presse.php:26
+#: page-contact.php:92
+#: page-espace-presse.php:26
 msgid "Presse"
 msgstr "Press"
 
@@ -1474,7 +1606,8 @@ msgstr "Accessibility"
 msgid "Contact dédié à confirmer"
 msgstr "Dedicated contact to be confirmed"
 
-#: page-declaration-accessibilite.php:27 page-declaration-accessibilite.php:29
+#: page-declaration-accessibilite.php:27
+#: page-declaration-accessibilite.php:29
 msgid "Déclaration d’accessibilité"
 msgstr "Accessibility statement"
 
@@ -1486,7 +1619,8 @@ msgstr "This statement certifies no compliance: it will be written after a real 
 msgid "Référentiel visé, résultats d’audit, contenus non accessibles et voies de recours : à confirmer et valider avant toute publication réelle."
 msgstr "Target standard, audit results, non-accessible content and remedies: to be confirmed and validated before any real publication."
 
-#: page-edition-en-cours.php:85 page-inscription.php:43
+#: page-edition-en-cours.php:85
+#: page-inscription.php:43
 msgid "Édition à confirmer"
 msgstr "Edition to be confirmed"
 
@@ -1542,12 +1676,14 @@ msgstr "Link speakers to the sessions of this edition."
 msgid "Voir tous les intervenants"
 msgstr "See all speakers"
 
-#: page-edition-en-cours.php:237 page-informations-pratiques.php:53
+#: page-edition-en-cours.php:237
+#: page-informations-pratiques.php:53
 #: single-fnc_edition.php:93
 msgid "Sur place"
 msgstr "On site"
 
-#: page-edition-en-cours.php:238 single-fnc_edition.php:94
+#: page-edition-en-cours.php:238
+#: single-fnc_edition.php:94
 msgid "Informations pratiques."
 msgstr "Practical information."
 
@@ -1555,7 +1691,8 @@ msgstr "Practical information."
 msgid "Toutes les informations pratiques"
 msgstr "All practical information"
 
-#: page-edition-en-cours.php:251 page-inscription.php:31
+#: page-edition-en-cours.php:251
+#: page-inscription.php:31
 msgid "Inscription"
 msgstr "Registration"
 
@@ -1931,7 +2068,8 @@ msgstr "Confirmed partners."
 msgid "Éditions associées"
 msgstr "Associated editions"
 
-#: page-partenaires.php:153 single-fnc_partenaire.php:69
+#: page-partenaires.php:153
+#: single-fnc_partenaire.php:69
 msgid "Visiter le site"
 msgstr "Visit the website"
 
@@ -1943,7 +2081,8 @@ msgstr "No confirmed partner"
 msgid "Les partenaires apparaîtront ici dès leur confirmation."
 msgstr "Partners will appear here as soon as they are confirmed."
 
-#: page-politique-confidentialite.php:21 page-politique-confidentialite.php:23
+#: page-politique-confidentialite.php:21
+#: page-politique-confidentialite.php:23
 msgid "Politique de confidentialité"
 msgstr "Privacy policy"
 
@@ -1973,7 +2112,8 @@ msgstr "Updated: %s"
 msgid "Toutes les actualités"
 msgstr "All news"
 
-#: single-fnc_edition.php:45 single-fnc_publication.php:83
+#: single-fnc_edition.php:45
+#: single-fnc_publication.php:83
 #: single-fnc_session.php:94
 msgid "Édition"
 msgstr "Edition"
@@ -1998,8 +2138,10 @@ msgstr "Links"
 msgid "Profil"
 msgstr "Profile"
 
-#: single-fnc_intervenant.php:97 single-fnc_partenaire.php:87
-#: single-fnc_publication.php:77 single-fnc_session.php:78
+#: single-fnc_intervenant.php:97
+#: single-fnc_partenaire.php:87
+#: single-fnc_publication.php:77
+#: single-fnc_session.php:78
 msgid "Type"
 msgstr "Type"
 
@@ -2118,3 +2260,44 @@ msgstr "Resources from this edition."
 #: single-fnc_session.php:184
 msgid "Voir tout le programme"
 msgstr "See the whole programme"
+
+#: footer.php:44
+msgid "s’ouvre dans un nouvel onglet"
+msgstr "opens in a new tab"
+
+#: front-page.php:63
+#: front-page.php:286
+msgid "Réserver votre place"
+msgstr "Reserve your seat"
+
+#: assets/js/blocks.js:86
+msgid "Remplacer"
+msgstr ""
+
+#: assets/js/blocks.js:86
+msgid "Choisir…"
+msgstr ""
+
+#: assets/js/blocks.js:98
+msgid "Retirer"
+msgstr ""
+
+#: assets/js/blocks.js:182
+msgid "Monter"
+msgstr ""
+
+#: assets/js/blocks.js:194
+msgid "Descendre"
+msgstr ""
+
+#: assets/js/blocks.js:206
+msgid "Supprimer"
+msgstr ""
+
+#: assets/js/blocks.js:227
+msgid "Ajouter"
+msgstr ""
+
+#: assets/js/blocks.js:268
+msgid "Les sauts de ligne créent des paragraphes."
+msgstr ""

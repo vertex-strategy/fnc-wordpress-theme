@@ -60,7 +60,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 			<p class="tagline"><?php echo esc_html( fnc_home_setting( 'm1_tagline', __( '« L’espace où l’Afrique centrale décide de son avenir numérique. »', 'fnc-wordpress-theme' ) ) ); ?></p>
 			<div class="actions">
 				<a class="btn btn-white" href="<?php echo esc_url( fnc_home_setting( 'm1_cta_primary_url', '#m5' ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm1_cta_primary', __( 'Voir le programme', 'fnc-wordpress-theme' ) ) ); ?></a>
-				<a class="btn btn-ghost" href="<?php echo esc_url( fnc_home_setting( 'm1_cta_secondary_url', '#m8' ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm1_cta_secondary', __( 'Demander une accréditation', 'fnc-wordpress-theme' ) ) ); ?></a>
+				<a class="btn btn-ghost" href="<?php echo esc_url( fnc_home_setting( 'm1_cta_secondary_url', '#m8' ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm1_cta_secondary', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?></a>
 			</div>
 		</div>
 		<div class="scroll-hint" aria-hidden="true"><span class="dot"></span><?php echo esc_html( fnc_home_setting( 'm1_scroll', __( 'Défiler', 'fnc-wordpress-theme' ) ) ); ?></div>
@@ -283,7 +283,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 					<span class="tbc"><?php esc_html_e( 'Date à confirmer', 'fnc-wordpress-theme' ); ?></span>
 				<?php endif; ?>
 			</h2>
-			<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Demander votre accréditation', 'fnc-wordpress-theme' ) ) ); ?>
+			<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 			</a>
 		</div>

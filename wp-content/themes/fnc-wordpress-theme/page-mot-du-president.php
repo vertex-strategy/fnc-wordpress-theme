@@ -25,7 +25,7 @@ get_header();
 
 <main id="main">
 	<header class="opening" style="min-height:56vh;">
-		<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Portrait institutionnel', 'fnc-wordpress-theme' ); ?>" />
+		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Portrait institutionnel', 'fnc-wordpress-theme' ); ?>" />
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?> · <?php esc_html_e( 'Mot du Président', 'fnc-wordpress-theme' ); ?></p>

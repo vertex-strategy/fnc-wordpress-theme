@@ -38,7 +38,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 
 <main id="main">
 	<header class="opening">
-		<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/la-salle.png' ); ?>" alt="<?php esc_attr_e( 'Salle plénière du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" />
+		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/la-salle.png' ); ?>" alt="<?php esc_attr_e( 'Salle plénière du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" />
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php the_title(); ?></p>
@@ -118,7 +118,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	<section class="callout">
 		<h2><?php esc_html_e( 'Participer au Forum', 'fnc-wordpress-theme' ); ?></h2>
 		<p><?php esc_html_e( 'Rejoignez la prochaine édition. L’ouverture des accréditations sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-		<a class="btn btn-red" href="#"><?php esc_html_e( 'Demander une accréditation', 'fnc-wordpress-theme' ); ?>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 	</section>

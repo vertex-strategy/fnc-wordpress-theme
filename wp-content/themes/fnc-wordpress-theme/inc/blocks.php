@@ -611,7 +611,7 @@ function fnc_render_block_inst_hero( $a ) {
 	?>
 	<header class="opening">
 		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="" />
+			<img class="media-cover" src="<?php echo esc_url( $image ); ?>" alt="" />
 		<?php endif; ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">

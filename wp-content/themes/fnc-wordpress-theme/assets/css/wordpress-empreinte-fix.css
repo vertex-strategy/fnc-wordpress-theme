@@ -1,0 +1,20 @@
+/* ==========================================================================
+   FNC — Correctif : motif « empreinte » (chemin d'asset)  [fix kit]
+   ==========================================================================
+   Le kit (extrait fidèle de globals.css) référence
+       url('/images/brand/empreinte-motif.svg')
+   un chemin absolu propre au site Next.js → renvoie 404 en WordPress, d'où le
+   motif signature invisible (footer, #m3 « Les voix », page-head, frise active).
+
+   INSTALLATION
+   1. Copier empreinte-motif.svg (fourni à côté de ce fichier) dans le thème :
+        assets/img/empreinte-motif.svg
+   2. Enqueue CE fichier EN DERNIER (après wordpress-catchup-complet.css).
+   Le chemin ../img/ est relatif à l'emplacement de ce .css (assets/css/).
+   ========================================================================== */
+.dad-footer::before,
+#m3::before,
+.page-head::before,
+.frise-item.is-current .frise-body::before {
+  background-image: url('../img/empreinte-motif.svg');
+}

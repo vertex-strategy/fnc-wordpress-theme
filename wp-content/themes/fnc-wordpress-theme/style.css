@@ -3,7 +3,7 @@ Theme Name: FNC WordPress Theme
 Theme URI: https://github.com/vertex-strategy/fnc-wordpress-theme
 Author: Vertex Strategy
 Description: Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload.
-Version: 0.4.4
+Version: 0.4.5
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -45,7 +45,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
 .link-more:hover::after{width:calc(100% - 26px);}
 .link-more .arrow{transition:transform .28s var(--ease);}
 .link-more:hover .arrow{transform:translateX(6px);}
-.btn{display:inline-flex;align-items:center;gap:9px;padding:16px 30px;border-radius:2px;font-weight:600;font-size:.98rem;cursor:pointer;border:1.5px solid transparent;transition:transform .2s var(--ease),background .2s var(--ease),box-shadow .3s var(--ease),border-color .2s var(--ease);min-height:52px;}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:16px 30px;border-radius:2px;font-weight:600;font-size:.98rem;cursor:pointer;border:1.5px solid transparent;transition:transform .2s var(--ease),background .2s var(--ease),box-shadow .3s var(--ease),border-color .2s var(--ease);min-height:52px;position:relative;overflow:hidden;}
 .btn svg{width:16px;height:16px;transition:transform .28s var(--ease);}
 .btn:hover{transform:translateY(-2px);}
 .btn:hover svg{transform:translateX(4px);}

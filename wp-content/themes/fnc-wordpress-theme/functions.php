@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.4.4' );
+define( 'FNC_THEME_VERSION', '0.4.5' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global

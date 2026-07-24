@@ -159,4 +159,59 @@
 			io.observe(el);
 		});
 	}
+
+	// Calque d'ambiance du hero (#m1) : nappe de points en vague dessinee sur
+	// canvas. Port fidele de la variante « dots » du composant HeroBackdrop du
+	// site reel. Statique (une passe) sous prefers-reduced-motion.
+	(function heroBackdrop() {
+		var canvas = document.querySelector('#m1 .hb-canvas');
+		var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+		if (!canvas || !ctx) {
+			return;
+		}
+		var dpr = Math.min(window.devicePixelRatio || 1, 2);
+		var w = 0;
+		var h = 0;
+		var raf = 0;
+		var t = 0;
+		var gap = 40;
+
+		function resize() {
+			var r = canvas.getBoundingClientRect();
+			w = r.width;
+			h = r.height;
+			canvas.width = Math.max(1, Math.round(w * dpr));
+			canvas.height = Math.max(1, Math.round(h * dpr));
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, w, h);
+			if (!reduce) {
+				t += 0.016;
+			}
+			for (var y = gap / 2; y < h; y += gap) {
+				for (var x = gap / 2; x < w; x += gap) {
+					var wave = Math.sin(x * 0.011 + y * 0.013 + t);
+					var a = 0.11 + (wave + 1) * 0.11;
+					var r = 0.55 + (wave + 1) * 0.5;
+					ctx.fillStyle = 'rgba(214,218,255,' + a + ')';
+					ctx.beginPath();
+					ctx.arc(x, y, r, 0, Math.PI * 2);
+					ctx.fill();
+				}
+			}
+			if (!reduce) {
+				raf = window.requestAnimationFrame(draw);
+			}
+		}
+
+		resize();
+		window.addEventListener('resize', function () {
+			window.cancelAnimationFrame(raf);
+			resize();
+			draw();
+		});
+		draw();
+	})();
 })();

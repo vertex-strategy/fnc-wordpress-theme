@@ -43,6 +43,8 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	<section class="moment" id="m1" aria-labelledby="m1-title">
 		<?php fnc_render_home_hero_media(); ?>
 		<div class="overlay" aria-hidden="true"></div>
+		<?php // Calque d'ambiance du hero : nappe de points en vague dessinee sur canvas (variante « dots » du site reel, HeroBackdrop). Anime par assets/js/main.js, statique sous prefers-reduced-motion. ?>
+		<div class="hero-backdrop" aria-hidden="true"><canvas class="hb-canvas"></canvas></div>
 		<div class="hero-inner">
 			<div class="kicker">
 				<?php if ( fnc_home_setting( 'm1_place', 'Brazzaville · République du Congo' ) ) : ?>

@@ -37,6 +37,12 @@ require_once get_template_directory() . '/inc/homepage.php';
 require_once get_template_directory() . '/inc/seo.php';
 
 /**
+ * Rendu partage des formulaires (Module A) et des coordonnees (Reglages),
+ * reutilise par les gabarits ET par les blocs fnc/form et fnc/coordonnees.
+ */
+require_once get_template_directory() . '/inc/forms.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

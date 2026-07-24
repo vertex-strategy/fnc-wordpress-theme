@@ -366,6 +366,49 @@ function fnc_block_schemas() {
 				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
 			),
 		),
+
+		/* ---------------- Blocs fonctionnels (formulaire / coordonnees) ---------------- */
+		'form'                => array(
+			'title'       => __( 'Formulaire', 'fnc-wordpress-theme' ),
+			'icon'        => 'feedback',
+			'description' => __( 'Formulaire (contact, inscription ou partenariat) traité par FNC Core — les champs et l’envoi restent gérés par le plugin.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array(
+					'name'    => 'formType',
+					'type'    => 'select',
+					'label'   => __( 'Type de formulaire', 'fnc-wordpress-theme' ),
+					'default' => 'contact',
+					'options' => array(
+						'contact'     => __( 'Contact', 'fnc-wordpress-theme' ),
+						'inscription' => __( 'Inscription', 'fnc-wordpress-theme' ),
+						'partenariat' => __( 'Partenariat', 'fnc-wordpress-theme' ),
+					),
+				),
+				array( 'name' => 'eyebrow', 'type' => 'text', 'label' => __( 'Sur-titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'intro', 'type' => 'textarea', 'label' => __( 'Introduction', 'fnc-wordpress-theme' ) ),
+				array(
+					'name'    => 'linen',
+					'type'    => 'select',
+					'label'   => __( 'Fond', 'fnc-wordpress-theme' ),
+					'default' => '0',
+					'options' => array(
+						'0' => __( 'Standard', 'fnc-wordpress-theme' ),
+						'1' => __( 'Lin', 'fnc-wordpress-theme' ),
+					),
+				),
+			),
+		),
+		'coordonnees'         => array(
+			'title'       => __( 'Coordonnées', 'fnc-wordpress-theme' ),
+			'icon'        => 'phone',
+			'description' => __( 'Coordonnées officielles issues des Réglages du site (e-mail, téléphone, adresse, réseaux). Modifiez-les dans Réglages FNC.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'eyebrow', 'type' => 'text', 'label' => __( 'Sur-titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'intro', 'type' => 'textarea', 'label' => __( 'Introduction', 'fnc-wordpress-theme' ) ),
+			),
+		),
 	);
 }
 
@@ -743,6 +786,57 @@ function fnc_render_block_inst_callout( $a ) {
 			<p><?php echo esc_html( fnc_attr( $a, 'desc' ) ); ?></p>
 		<?php endif; ?>
 		<?php echo fnc_render_cta_button( fnc_attr( $a, 'ctaLabel' ), fnc_attr( $a, 'ctaHref' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans le helper. ?>
+	</section>
+	<?php
+	return (string) ob_get_clean();
+}
+
+/** Bloc formulaire : rend le formulaire Module A du type choisi. */
+function fnc_render_block_form( $a ) {
+	$type  = fnc_attr( $a, 'formType', 'contact' );
+	$linen = '1' === (string) fnc_attr( $a, 'linen', '0' );
+
+	ob_start();
+	?>
+	<section class="section<?php echo $linen ? ' linen' : ''; ?>">
+		<div class="container reading">
+			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
+				<span class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></span>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'title' ) ) : ?>
+				<h2><?php echo esc_html( fnc_attr( $a, 'title' ) ); ?></h2>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'intro' ) ) : ?>
+				<p class="body"><?php echo esc_html( fnc_attr( $a, 'intro' ) ); ?></p>
+			<?php endif; ?>
+			<?php
+			echo function_exists( 'fnc_render_submission_form' ) ? fnc_render_submission_form( $type ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			?>
+		</div>
+	</section>
+	<?php
+	return (string) ob_get_clean();
+}
+
+/** Bloc coordonnees : rend les coordonnees officielles (Reglages). */
+function fnc_render_block_coordonnees( $a ) {
+	ob_start();
+	?>
+	<section class="section linen">
+		<div class="container reading">
+			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
+				<span class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></span>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'title' ) ) : ?>
+				<h2><?php echo esc_html( fnc_attr( $a, 'title' ) ); ?></h2>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'intro' ) ) : ?>
+				<p class="body"><?php echo esc_html( fnc_attr( $a, 'intro' ) ); ?></p>
+			<?php endif; ?>
+			<?php
+			echo function_exists( 'fnc_render_contact_coordinates' ) ? fnc_render_contact_coordinates() : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			?>
+		</div>
 	</section>
 	<?php
 	return (string) ob_get_clean();

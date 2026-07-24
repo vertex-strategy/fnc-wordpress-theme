@@ -15,10 +15,12 @@
  *   wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php
  *   wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php force
  *
- * NB : ne concerne QUE les pages purement editoriales. Les pages a composant
- * fonctionnel (formulaires contact/inscription/partenariat, coordonnees issues
- * des Reglages, agenda live d'edition-en-cours, rubriques pratiques) gardent
- * leur gabarit : les composer en blocs ferait disparaitre ces parties dynamiques.
+ * Couvre les pages composables en blocs, y compris via les blocs fonctionnels
+ * fnc/form et fnc/coordonnees (contact, inscription). Les pages a LISTE
+ * dynamique (mur de partenaires, ressources presse, rubriques pratiques de
+ * l'edition, agenda live) ne sont volontairement PAS semees : leur liste
+ * disparaitrait. Elles relevent de l'approche « hero editable + liste auto »
+ * (options), comme les archives.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -231,6 +233,69 @@ fnc_seed_page(
 				'ctaLabel' => 'S’inscrire',
 				'ctaHref'  => '/inscription',
 			)
+		),
+	),
+	$fnc_seed_force
+);
+
+/* ---- Contact (héros + orientation + coordonnées + formulaire) ---- */
+fnc_seed_page(
+	'contact',
+	array(
+		fnc_seed_block(
+			'inst-hero',
+			array(
+				'image'      => fnc_seed_image( 'contact.png' ),
+				'breadcrumb' => 'Contact',
+				'eyebrow'    => 'Contact',
+				'titleA'     => 'Une porte d’entrée claire,',
+				'titleB'     => 'pour chaque demande.',
+				'intro'      => 'Partenariat, presse, intervention ou simple question : dites-nous ce qui vous amène, nous orientons votre demande vers le bon interlocuteur.',
+			)
+		),
+		fnc_seed_block(
+			'inst-split',
+			array(
+				'eyebrow' => 'Orientation',
+				'l1'      => 'Vous orienter,',
+				'l2'      => 'sans rien promettre',
+				'l3'      => 'à la légère.',
+				'body'    => 'Un bon contact inspire confiance avant de demander quoi que ce soit. Vous trouverez ici les coordonnées officielles et un formulaire pour préciser votre demande — nous l’orientons vers le bon interlocuteur.',
+				'image'   => fnc_seed_image( 'le-pupitre.png' ),
+			)
+		),
+		fnc_seed_block(
+			'coordonnees',
+			array(
+				'eyebrow' => 'Coordonnées',
+				'intro'   => 'Chaque emplacement attend son information validée. Rien n’est complété au hasard.',
+			)
+		),
+		fnc_seed_block(
+			'form',
+			array( 'formType' => 'contact' )
+		),
+	),
+	$fnc_seed_force
+);
+
+/* ---- Inscription (héros + formulaire) ---- */
+fnc_seed_page(
+	'inscription',
+	array(
+		fnc_seed_block(
+			'inst-hero',
+			array(
+				'image'      => fnc_seed_image( 'le-badge.png' ),
+				'breadcrumb' => 'Inscription',
+				'eyebrow'    => 'Participer',
+				'titleA'     => 'Demander une inscription',
+				'intro'      => 'Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation.',
+			)
+		),
+		fnc_seed_block(
+			'form',
+			array( 'formType' => 'inscription', 'linen' => '1' )
 		),
 	),
 	$fnc_seed_force

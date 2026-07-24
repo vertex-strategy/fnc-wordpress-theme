@@ -53,7 +53,6 @@ msgstr "Announcements, reports and information published once validated."
 #: archive-fnc_publication.php:28
 #: page-edition-en-cours.php:88
 #: page-informations-pratiques.php:29
-#: page-inscription.php:30
 msgid "Image éditoriale institutionnelle du Forum"
 msgstr "Institutional editorial image of the Forum"
 
@@ -95,9 +94,6 @@ msgstr "News will appear here as soon as it is published."
 #: page-edition-en-cours.php:238
 #: page-espace-presse.php:86
 #: page-espace-presse.php:131
-#: page-informations-pratiques.php:70
-#: page-inscription.php:69
-#: page-inscription.php:77
 #: page-mot-du-president.php:39
 #: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
@@ -294,7 +290,7 @@ msgstr "Become a partner"
 
 #: footer.php:74
 #: header.php:51
-#: page-informations-pratiques.php:80
+#: page-informations-pratiques.php:75
 msgid "S’inscrire"
 msgstr "Register"
 
@@ -1457,12 +1453,12 @@ msgstr "Site terms of use — to be confirmed and validated before any real publ
 msgid "Page structurelle, à maintenir non publiée tant que le texte n’est pas validé."
 msgstr "Structural page, to be kept unpublished until the text is validated."
 
-#: page-inscription.php:84
+#: page-inscription.php:105
 msgid "Le service d’envoi reste à connecter."
 msgstr "The sending service is still to be connected."
 
 #: page-contact.php:57
-#: page-inscription.php:59
+#: page-inscription.php:80
 #: page-partenaires.php:203
 #: single-fnc_intervenant.php:82
 msgid "Organisation"
@@ -1504,7 +1500,6 @@ msgid "Référentiel visé, résultats d’audit, contenus non accessibles et vo
 msgstr "Target standard, audit results, non-accessible content and remedies: to be confirmed and validated before any real publication."
 
 #: page-edition-en-cours.php:85
-#: page-inscription.php:43
 msgid "Édition à confirmer"
 msgstr "Edition to be confirmed"
 
@@ -1572,7 +1567,7 @@ msgid "Informations pratiques."
 msgstr "Practical information."
 
 #: page-edition-en-cours.php:237
-#: page-inscription.php:31
+#: page-inscription.php:28
 msgid "Inscription"
 msgstr "Registration"
 
@@ -1662,83 +1657,47 @@ msgstr "Contact the organisation"
 msgid "Préparez votre venue"
 msgstr "Prepare your visit"
 
-#: page-informations-pratiques.php:27
-msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et accessibilité."
-msgstr "Everything you need to organise your participation — venue, transport, accommodation, visa, badge and accessibility."
-
 #: page-informations-pratiques.php:56
 msgid "Seules les rubriques confirmées sont publiées."
 msgstr "Only confirmed sections are published."
 
-#: page-informations-pratiques.php:67
-msgid "Informations en cours de finalisation"
-msgstr "Information being finalised"
-
-#: page-informations-pratiques.php:68
-msgid "Les détails pratiques de la prochaine édition seront publiés ici dès leur confirmation."
-msgstr "The practical details of the next edition will be published here once confirmed."
-
-#: page-informations-pratiques.php:78
+#: page-informations-pratiques.php:73
 msgid "Prêt à participer ?"
 msgstr "Ready to take part?"
 
-#: page-informations-pratiques.php:79
-msgid "Rejoignez la prochaine édition du Forum Numérique Congo."
-msgstr "Join the next edition of the Forum Numérique Congo."
-
-#: page-inscription.php:26
+#: page-inscription.php:23
 msgid "Participer"
 msgstr "Take part"
 
-#: page-inscription.php:27
-msgid "Demander une inscription."
-msgstr "Request a registration."
-
-#: page-inscription.php:28
-msgid "Adressez votre demande de participation à la prochaine édition."
-msgstr "Send your request to take part in the next edition."
-
-#: page-inscription.php:49
+#: page-inscription.php:59
 msgid "Votre demande"
 msgstr "Your request"
 
-#: page-inscription.php:50
+#: page-inscription.php:60
 msgid "Les champs marqués d’un astérisque sont obligatoires."
 msgstr "Fields marked with an asterisk are required."
 
-#: page-inscription.php:52
+#: page-inscription.php:58
 msgid "Formulaire d’inscription"
 msgstr "Registration form"
 
-#: page-inscription.php:53
+#: page-inscription.php:62
 msgid "Vous vous inscrivez à"
 msgstr "You are registering for"
 
-#: page-inscription.php:57
-msgid "Nom complet *"
-msgstr "Full name *"
-
-#: page-inscription.php:58
-msgid "E-mail *"
-msgstr "Email *"
-
-#: page-inscription.php:60
+#: page-inscription.php:92
 msgid "Mode de participation"
 msgstr "Participation mode"
 
-#: page-inscription.php:60
+#: page-inscription.php:50
 msgid "Présentiel"
 msgstr "On site"
 
-#: page-inscription.php:60
+#: page-inscription.php:51
 msgid "En ligne"
 msgstr "Online"
 
-#: page-inscription.php:61
-msgid "Motivation (facultatif)"
-msgstr "Motivation (optional)"
-
-#: page-inscription.php:85
+#: page-inscription.php:106
 msgid "Envoyer ma demande"
 msgstr "Send my request"
 
@@ -2001,6 +1960,7 @@ msgstr "The biography will be published once validated."
 msgid "Liens"
 msgstr "Links"
 
+#: page-inscription.php:84
 #: single-fnc_intervenant.php:79
 msgid "Profil"
 msgstr "Profile"
@@ -2319,6 +2279,7 @@ msgid "Chaque emplacement attend son information validée. Rien n’est complét
 msgstr "Each slot is waiting for its validated information. Nothing is filled in at random."
 
 #: page-contact.php:84
+#: page-inscription.php:76
 msgid "E-mail"
 msgstr "Email"
 
@@ -2336,6 +2297,7 @@ msgid "Préciser le sujet nous aide à orienter votre demande dès l’ouverture
 msgstr "A precise subject helps us route your request as soon as the official channel opens."
 
 #: page-contact.php:129
+#: page-inscription.php:67
 #: page-partenaires.php:194
 msgid "Ne pas remplir"
 msgstr "Do not fill in"
@@ -2401,6 +2363,7 @@ msgstr "Media support"
 msgid "Coopération technique"
 msgstr "Technical cooperation"
 
+#: page-inscription.php:47
 #: page-partenaires.php:40
 msgid "Autre"
 msgstr "Other"
@@ -2438,6 +2401,7 @@ msgstr "Partnership request"
 msgid "Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation."
 msgstr "Your request is stored before any acknowledgement is attempted. Detailed terms remain to be confirmed by the organisation."
 
+#: page-inscription.php:72
 #: page-partenaires.php:199
 msgid "Nom complet"
 msgstr "Full name"
@@ -2519,3 +2483,63 @@ msgstr "Reserve your seat"
 #: archive-fnc_session.php:126
 msgid "L’accès aux sessions se fait sur inscription. L’ouverture des inscriptions sera annoncée prochainement."
 msgstr "Access to sessions is by registration. Registration opening will be announced soon."
+
+#: page-informations-pratiques.php:27
+msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles."
+msgstr "Everything you need to organize your participation — venue, transport, accommodation, visa, badge and useful contacts."
+
+#: page-informations-pratiques.php:67
+msgid "Les informations pratiques de la prochaine édition sont en cours de finalisation et seront publiées ici dès leur confirmation."
+msgstr "The practical information for the next edition is being finalized and will be published here as soon as it is confirmed."
+
+#: page-informations-pratiques.php:74
+msgid "Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville."
+msgstr "Join the next edition of the Forum Numérique Congo in Brazzaville."
+
+#: page-inscription.php:24
+msgid "Demander une inscription"
+msgstr "Request registration"
+
+#: page-inscription.php:25
+msgid "Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation."
+msgstr "Submit your participation request. Our team reviews it and gets back to you — this request is not a confirmation."
+
+#: page-inscription.php:27
+msgid "Badge du Forum Numérique Congo"
+msgstr "Forum Numérique Congo badge"
+
+#: page-inscription.php:43
+msgid "Institution / secteur public"
+msgstr "Institution / public sector"
+
+#: page-inscription.php:44
+msgid "Entreprise"
+msgstr "Company"
+
+#: page-inscription.php:45
+msgid "Étudiant·e / académique"
+msgstr "Student / academic"
+
+#: page-inscription.php:46
+msgid "Presse / média"
+msgstr "Press / media"
+
+#: page-inscription.php:73
+msgid "Prénom et nom"
+msgstr "First and last name"
+
+#: page-inscription.php:77
+msgid "nom@organisation.org"
+msgstr "name@organization.org"
+
+#: page-inscription.php:81
+msgid "Organisation ou institution"
+msgstr "Organization or institution"
+
+#: page-inscription.php:100
+msgid "Motivation"
+msgstr "Motivation"
+
+#: page-inscription.php:101
+msgid "Présentez en quelques lignes votre intérêt (facultatif)"
+msgstr "Briefly describe your interest (optional)"

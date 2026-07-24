@@ -24,7 +24,7 @@ fnc_render_hero(
 	array(
 		'eyebrow'    => __( 'Préparez votre venue', 'fnc-wordpress-theme' ),
 		'title'      => __( 'Informations pratiques', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et accessibilité.', 'fnc-wordpress-theme' ),
+		'lead'       => __( 'Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-badge.png',
 		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Informations pratiques', 'fnc-wordpress-theme' ),
@@ -62,22 +62,17 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 		</section>
 	<?php else : ?>
 		<section class="section">
-			<div class="container">
-				<div class="empty" role="status">
-					<h3><?php esc_html_e( 'Informations en cours de finalisation', 'fnc-wordpress-theme' ); ?></h3>
-					<p><?php esc_html_e( 'Les détails pratiques de la prochaine édition seront publiés ici dès leur confirmation.', 'fnc-wordpress-theme' ); ?></p>
-					<div class="meta" style="justify-content:center;">
-						<span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span>
-					</div>
-				</div>
+			<div class="container reading">
+				<p class="eyebrow"><?php echo esc_html( $fnc_ip_edition ? get_the_title( $fnc_ip_edition ) : fnc_site_name() ); ?></p>
+				<p class="body"><?php esc_html_e( 'Les informations pratiques de la prochaine édition sont en cours de finalisation et seront publiées ici dès leur confirmation.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 		</section>
 	<?php endif; ?>
 
-	<section class="cta-band">
+	<section class="callout">
 		<h2><?php esc_html_e( 'Prêt à participer ?', 'fnc-wordpress-theme' ); ?></h2>
-		<p><?php esc_html_e( 'Rejoignez la prochaine édition du Forum Numérique Congo.', 'fnc-wordpress-theme' ); ?></p>
-		<a class="btn btn-red" href="#"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+		<p><?php esc_html_e( 'Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville.', 'fnc-wordpress-theme' ); ?></p>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 	</section>

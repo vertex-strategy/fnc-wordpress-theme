@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: FNC WordPress Theme 0.4.7\n"
+"Project-Id-Version: FNC WordPress Theme 0.4.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fnc-wordpress-theme\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-24T12:42:27+00:00\n"
+"POT-Creation-Date: 2026-07-24T13:01:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fnc-wordpress-theme\n"
@@ -53,7 +53,6 @@ msgstr ""
 #: archive-fnc_publication.php:28
 #: page-edition-en-cours.php:88
 #: page-informations-pratiques.php:29
-#: page-inscription.php:30
 msgid "Image éditoriale institutionnelle du Forum"
 msgstr ""
 
@@ -95,9 +94,6 @@ msgstr ""
 #: page-edition-en-cours.php:238
 #: page-espace-presse.php:86
 #: page-espace-presse.php:131
-#: page-informations-pratiques.php:70
-#: page-inscription.php:69
-#: page-inscription.php:77
 #: page-mot-du-president.php:39
 #: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
@@ -494,7 +490,7 @@ msgstr ""
 
 #: footer.php:74
 #: header.php:51
-#: page-informations-pratiques.php:80
+#: page-informations-pratiques.php:75
 msgid "S’inscrire"
 msgstr ""
 
@@ -1665,7 +1661,7 @@ msgid "Prise de parole au Forum Numérique Congo"
 msgstr ""
 
 #: page-contact.php:57
-#: page-inscription.php:59
+#: page-inscription.php:80
 #: page-partenaires.php:203
 #: single-fnc_intervenant.php:82
 msgid "Organisation"
@@ -1714,6 +1710,7 @@ msgid "Chaque emplacement attend son information validée. Rien n’est complét
 msgstr ""
 
 #: page-contact.php:84
+#: page-inscription.php:76
 msgid "E-mail"
 msgstr ""
 
@@ -1731,6 +1728,7 @@ msgid "Préciser le sujet nous aide à orienter votre demande dès l’ouverture
 msgstr ""
 
 #: page-contact.php:129
+#: page-inscription.php:67
 #: page-partenaires.php:194
 msgid "Ne pas remplir"
 msgstr ""
@@ -1758,7 +1756,6 @@ msgid "Référentiel visé, résultats d’audit, contenus non accessibles et vo
 msgstr ""
 
 #: page-edition-en-cours.php:85
-#: page-inscription.php:43
 msgid "Édition à confirmer"
 msgstr ""
 
@@ -1815,7 +1812,7 @@ msgid "Voir tous les intervenants"
 msgstr ""
 
 #: page-edition-en-cours.php:237
-#: page-inscription.php:31
+#: page-inscription.php:28
 msgid "Inscription"
 msgstr ""
 
@@ -1904,7 +1901,7 @@ msgid "Préparez votre venue"
 msgstr ""
 
 #: page-informations-pratiques.php:27
-msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et accessibilité."
+msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles."
 msgstr ""
 
 #: page-informations-pratiques.php:53
@@ -1917,78 +1914,117 @@ msgid "Seules les rubriques confirmées sont publiées."
 msgstr ""
 
 #: page-informations-pratiques.php:67
-msgid "Informations en cours de finalisation"
+msgid "Les informations pratiques de la prochaine édition sont en cours de finalisation et seront publiées ici dès leur confirmation."
 msgstr ""
 
-#: page-informations-pratiques.php:68
-msgid "Les détails pratiques de la prochaine édition seront publiés ici dès leur confirmation."
-msgstr ""
-
-#: page-informations-pratiques.php:78
+#: page-informations-pratiques.php:73
 msgid "Prêt à participer ?"
 msgstr ""
 
-#: page-informations-pratiques.php:79
-msgid "Rejoignez la prochaine édition du Forum Numérique Congo."
+#: page-informations-pratiques.php:74
+msgid "Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville."
 msgstr ""
 
-#: page-inscription.php:26
+#: page-inscription.php:23
 msgid "Participer"
 msgstr ""
 
+#: page-inscription.php:24
+msgid "Demander une inscription"
+msgstr ""
+
+#: page-inscription.php:25
+msgid "Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation."
+msgstr ""
+
 #: page-inscription.php:27
-msgid "Demander une inscription."
+msgid "Badge du Forum Numérique Congo"
 msgstr ""
 
-#: page-inscription.php:28
-msgid "Adressez votre demande de participation à la prochaine édition."
+#: page-inscription.php:43
+msgid "Institution / secteur public"
 msgstr ""
 
-#: page-inscription.php:49
-msgid "Votre demande"
+#: page-inscription.php:44
+msgid "Entreprise"
+msgstr ""
+
+#: page-inscription.php:45
+msgid "Étudiant·e / académique"
+msgstr ""
+
+#: page-inscription.php:46
+msgid "Presse / média"
+msgstr ""
+
+#: page-inscription.php:47
+#: page-partenaires.php:40
+msgid "Autre"
 msgstr ""
 
 #: page-inscription.php:50
-msgid "Les champs marqués d’un astérisque sont obligatoires."
-msgstr ""
-
-#: page-inscription.php:52
-msgid "Formulaire d’inscription"
-msgstr ""
-
-#: page-inscription.php:53
-msgid "Vous vous inscrivez à"
-msgstr ""
-
-#: page-inscription.php:57
-msgid "Nom complet *"
-msgstr ""
-
-#: page-inscription.php:58
-msgid "E-mail *"
-msgstr ""
-
-#: page-inscription.php:60
-msgid "Mode de participation"
-msgstr ""
-
-#: page-inscription.php:60
 msgid "Présentiel"
 msgstr ""
 
-#: page-inscription.php:60
+#: page-inscription.php:51
 msgid "En ligne"
 msgstr ""
 
-#: page-inscription.php:61
-msgid "Motivation (facultatif)"
+#: page-inscription.php:58
+msgid "Formulaire d’inscription"
+msgstr ""
+
+#: page-inscription.php:59
+msgid "Votre demande"
+msgstr ""
+
+#: page-inscription.php:60
+msgid "Les champs marqués d’un astérisque sont obligatoires."
+msgstr ""
+
+#: page-inscription.php:62
+msgid "Vous vous inscrivez à"
+msgstr ""
+
+#: page-inscription.php:72
+#: page-partenaires.php:199
+msgid "Nom complet"
+msgstr ""
+
+#: page-inscription.php:73
+msgid "Prénom et nom"
+msgstr ""
+
+#: page-inscription.php:77
+msgid "nom@organisation.org"
+msgstr ""
+
+#: page-inscription.php:81
+msgid "Organisation ou institution"
 msgstr ""
 
 #: page-inscription.php:84
+#: single-fnc_intervenant.php:79
+msgid "Profil"
+msgstr ""
+
+#: page-inscription.php:92
+msgid "Mode de participation"
+msgstr ""
+
+#: page-inscription.php:100
+msgid "Motivation"
+msgstr ""
+
+#: page-inscription.php:101
+msgid "Présentez en quelques lignes votre intérêt (facultatif)"
+msgstr ""
+
+#: page-inscription.php:105
 msgid "Le service d’envoi reste à connecter."
 msgstr ""
 
-#: page-inscription.php:85
+#: page-inscription.php:106
 msgid "Envoyer ma demande"
 msgstr ""
 
@@ -2181,10 +2217,6 @@ msgstr ""
 msgid "Coopération technique"
 msgstr ""
 
-#: page-partenaires.php:40
-msgid "Autre"
-msgstr ""
-
 #: page-partenaires.php:49
 msgid "S’associer"
 msgstr ""
@@ -2291,10 +2323,6 @@ msgstr ""
 msgid "Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation."
 msgstr ""
 
-#: page-partenaires.php:199
-msgid "Nom complet"
-msgstr ""
-
 #: page-partenaires.php:223
 msgid "Type d’intérêt"
 msgstr ""
@@ -2363,10 +2391,6 @@ msgstr ""
 
 #: single-fnc_intervenant.php:55
 msgid "Liens"
-msgstr ""
-
-#: single-fnc_intervenant.php:79
-msgid "Profil"
 msgstr ""
 
 #: single-fnc_intervenant.php:97

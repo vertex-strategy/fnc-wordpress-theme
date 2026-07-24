@@ -201,17 +201,26 @@ fnc_render_opening_hero(
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_speaker_ids ) ) : ?>
-					<div class="grid grid-3">
+					<div class="spk-grid is-preview">
 						<?php foreach ( array_slice( $fnc_speaker_ids, 0, 6 ) as $fnc_speaker_id ) : ?>
-							<article class="card fnc-card">
-								<h3><a href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_speaker_id ) ); ?></a></h3>
-								<?php
-								$fnc_excerpt = get_the_excerpt( $fnc_speaker_id );
-								if ( $fnc_excerpt ) :
+							<a class="spk" href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>">
+								<div class="ph">
+									<?php
+									// RÈGLE 7 : portrait uniquement si le droit est « obtenu » et non expire.
+									$fnc_pv = function_exists( 'fnc_speaker_portrait' )
+										? fnc_speaker_portrait( $fnc_speaker_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_speaker_id ) ) )
+										: '';
+									if ( $fnc_pv ) {
+										echo $fnc_pv; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+									} else {
+										printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+									}
 									?>
-									<p><?php echo esc_html( $fnc_excerpt ); ?></p>
-								<?php endif; ?>
-							</article>
+								</div>
+								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_speaker_id ) ); ?></div>
+								<?php $fnc_pv_org = get_post_meta( $fnc_speaker_id, '_fnc_speaker_org', true ); ?>
+								<?php if ( $fnc_pv_org ) : ?><div class="r"><?php echo esc_html( $fnc_pv_org ); ?></div><?php endif; ?>
+							</a>
 						<?php endforeach; ?>
 					</div>
 				<?php else : ?>
@@ -232,11 +241,16 @@ fnc_render_opening_hero(
 		 * restent accessibles via la navigation et le pied de page.
 		 */
 		?>
-		<section class="section">
-			<div class="container reading">
-				<h2><?php esc_html_e( 'Inscription', 'fnc-wordpress-theme' ); ?></h2>
-				<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-			</div>
+		<section class="callout">
+			<h2><?php esc_html_e( 'Inscription', 'fnc-wordpress-theme' ); ?></h2>
+			<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?></p>
+			<?php if ( function_exists( 'fnc_registration_enabled' ) && fnc_registration_enabled() ) : ?>
+				<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+				</a>
+			<?php else : ?>
+				<span class="btn btn-disabled" aria-disabled="true"><?php esc_html_e( 'Inscriptions à venir', 'fnc-wordpress-theme' ); ?></span>
+			<?php endif; ?>
 		</section>
 	<?php endif; ?>
 </main>

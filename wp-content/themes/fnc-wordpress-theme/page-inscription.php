@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Participer', 'fnc-wordpress-theme' ),
 		'title'      => __( 'Demander une inscription', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation.', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-badge.png',
 		'image_alt'  => __( 'Badge du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Inscription', 'fnc-wordpress-theme' ),

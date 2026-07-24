@@ -1,0 +1,2051 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FNC WordPress Theme\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fnc-wordpress-theme\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-24T07:36:50+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: fnc-wordpress-theme\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "FNC WordPress Theme"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload."
+msgstr "Showcase template derived from the homepage-v2 mockup of the Forum Numérique Congo (ADR-007). A parallel product, independent from the official Next.js/Payload site."
+
+#. Author of the theme
+#: style.css
+msgid "Vertex Strategy"
+msgstr ""
+
+#: archive-fnc_edition.php:28
+msgid "Mémoire"
+msgstr "Memory"
+
+#: archive-fnc_edition.php:29
+msgid "L’histoire du Forum comme actif institutionnel."
+msgstr "The Forum’s history as an institutional asset."
+
+#: archive-fnc_edition.php:30
+msgid "Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés."
+msgstr "Each edition connects its review, resources, gallery and partners once that content is validated."
+
+#: archive-fnc_edition.php:32 archive-fnc_intervenant.php:31
+#: archive-fnc_publication.php:28 archive-fnc_session.php:28
+#: page-contact.php:46 page-edition-en-cours.php:88
+#: page-informations-pratiques.php:29 page-inscription.php:30
+msgid "Image éditoriale institutionnelle du Forum"
+msgstr "Institutional editorial image of the Forum"
+
+#: archive-fnc_edition.php:33 footer.php:59 functions.php:100
+msgid "Éditions"
+msgstr "Editions"
+
+#: archive-fnc_edition.php:53 archive-fnc_edition.php:54
+msgid "Éditions publiées"
+msgstr "Published editions"
+
+#: archive-fnc_edition.php:84
+msgid "Statut à confirmer"
+msgstr "Status to be confirmed"
+
+#: archive-fnc_edition.php:101
+msgid "Voir l’édition"
+msgstr "View the edition"
+
+#: archive-fnc_edition.php:110
+msgid "Aucune édition publiée"
+msgstr "No published edition"
+
+#: archive-fnc_edition.php:111
+msgid "Les éditions apparaîtront ici dès leur publication."
+msgstr "Editions will appear here as soon as they are published."
+
+#: archive-fnc_intervenant.php:27
+msgid "Voix"
+msgstr "Voices"
+
+#: archive-fnc_intervenant.php:28
+msgid "Des profils qui donnent du sens aux interventions."
+msgstr "Profiles that give meaning to the sessions."
+
+#: archive-fnc_intervenant.php:29
+msgid "Profils exemples non officiels, rattachés à sessions et ressources."
+msgstr "Unofficial example profiles, linked to sessions and resources."
+
+#: archive-fnc_intervenant.php:32 footer.php:53 inc/customizer.php:405
+msgid "Intervenants"
+msgstr "Speakers"
+
+#: archive-fnc_intervenant.php:62 archive-fnc_intervenant.php:63
+msgid "Profils"
+msgstr "Profiles"
+
+#: archive-fnc_intervenant.php:69 archive-fnc_intervenant.php:70
+msgid "Pays représentés"
+msgstr "Countries represented"
+
+#: archive-fnc_intervenant.php:82
+msgid "Filtrer par profil"
+msgstr "Filter by profile"
+
+#: archive-fnc_intervenant.php:83 archive-fnc_publication.php:67
+msgid "Tous"
+msgstr "All"
+
+#: archive-fnc_intervenant.php:95 single-fnc_intervenant.php:86
+msgid "Pays"
+msgstr "Country"
+
+#: archive-fnc_intervenant.php:97
+msgid "Tous les pays"
+msgstr "All countries"
+
+#: archive-fnc_intervenant.php:102
+msgid "Filtrer"
+msgstr "Filter"
+
+#: archive-fnc_intervenant.php:118 single-fnc_intervenant.php:33
+#: single-fnc_session.php:131
+msgid "Intervenant"
+msgstr "Speaker"
+
+#: archive-fnc_intervenant.php:139
+msgid "Aucun intervenant publié"
+msgstr "No published speaker"
+
+#: archive-fnc_intervenant.php:140
+msgid "Les profils apparaîtront ici dès leur publication."
+msgstr "Profiles will appear here as soon as they are published."
+
+#: archive-fnc_publication.php:24 footer.php:57 footer.php:60 functions.php:101
+#: single-fnc_edition.php:166
+msgid "Ressources"
+msgstr "Resources"
+
+#: archive-fnc_publication.php:25
+msgid "La réflexion continue après les sessions."
+msgstr "Reflection continues after the sessions."
+
+#: archive-fnc_publication.php:26
+msgid "Rapports, communiqués, vidéos et analyses sont structurés sans contenu fictif."
+msgstr "Reports, press releases, videos and analyses are structured without fictional content."
+
+#: archive-fnc_publication.php:29
+msgid "Publications"
+msgstr "Publications"
+
+#: archive-fnc_publication.php:58
+msgid "Recherche"
+msgstr "Search"
+
+#: archive-fnc_publication.php:59
+msgid "Rechercher une publication"
+msgstr "Search for a publication"
+
+#: archive-fnc_publication.php:63
+msgid "Rechercher"
+msgstr "Search"
+
+#: archive-fnc_publication.php:66
+msgid "Filtrer par type"
+msgstr "Filter by type"
+
+#: archive-fnc_publication.php:82 single-fnc_edition.php:174
+#: single-fnc_publication.php:132 single-fnc_session.php:173
+msgid "Publication"
+msgstr "Publication"
+
+#: archive-fnc_publication.php:88 single-fnc_publication.php:58
+msgid "Regarder"
+msgstr "Watch"
+
+#: archive-fnc_publication.php:95
+msgid "Aucune publication validée"
+msgstr "No validated publication"
+
+#: archive-fnc_publication.php:96
+msgid "L’état vide reste sobre, sans faux contenu."
+msgstr "The empty state stays understated, with no fake content."
+
+#: archive-fnc_session.php:24
+msgid "Agenda"
+msgstr "Agenda"
+
+#: archive-fnc_session.php:25
+msgid "Un programme lisible avant, pendant et après."
+msgstr "A programme that reads clearly before, during and after."
+
+#: archive-fnc_session.php:26
+msgid "Chaque session devient un nœud de navigation vers édition, intervenants et ressources."
+msgstr "Each session becomes a navigation node to its edition, speakers and resources."
+
+#: archive-fnc_session.php:29 archive-fnc_session.php:56 footer.php:52
+#: front-page.php:155 single-fnc_edition.php:123
+msgid "Programme"
+msgstr "Programme"
+
+#: archive-fnc_session.php:41 page-edition-en-cours.php:73
+msgid "Jour à confirmer"
+msgstr "Day to be confirmed"
+
+#: archive-fnc_session.php:57
+msgid "Sessions"
+msgstr "Sessions"
+
+#: archive-fnc_session.php:62
+msgid "Journées"
+msgstr "Days"
+
+#: archive-fnc_session.php:86
+msgid "Modérateur"
+msgstr "Moderator"
+
+#: archive-fnc_session.php:89 front-page.php:171 page-edition-en-cours.php:181
+#: single-fnc_edition.php:141 single-fnc_intervenant.php:163
+msgid "Salle à confirmer"
+msgstr "Room to be confirmed"
+
+#: archive-fnc_session.php:96 page-edition-en-cours.php:187
+msgid "Aucune session publiée"
+msgstr "No published session"
+
+#: archive-fnc_session.php:97 page-edition-en-cours.php:188
+msgid "Les données finales proviennent du CMS."
+msgstr "The final data comes from the CMS."
+
+#: footer.php:15 inc/customizer.php:383
+msgid "Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville."
+msgstr "A permanent institution reflecting on the digital future of Central Africa. Brazzaville."
+
+#: footer.php:40
+msgid "Réseaux sociaux"
+msgstr "Social networks"
+
+#: footer.php:48 functions.php:98 page-mot-du-president.php:31
+msgid "Le Forum"
+msgstr "The Forum"
+
+#: footer.php:50
+msgid "Présentation"
+msgstr "Overview"
+
+#: footer.php:51 functions.php:99 page-edition-en-cours.php:84
+#: page-edition-en-cours.php:89
+msgid "Édition en cours"
+msgstr "Current edition"
+
+#: footer.php:61 page-informations-pratiques.php:26
+#: page-informations-pratiques.php:30
+msgid "Informations pratiques"
+msgstr "Practical information"
+
+#: footer.php:62
+msgid "Dossier presse"
+msgstr "Press kit"
+
+#: footer.php:66 footer.php:68 functions.php:103 page-contact.php:42
+#: page-contact.php:47
+msgid "Contact"
+msgstr "Contact"
+
+#: footer.php:69 front-page.php:222
+msgid "Devenir partenaire"
+msgstr "Become a partner"
+
+#: footer.php:70 header.php:66 page-informations-pratiques.php:80
+msgid "S’inscrire"
+msgstr "Register"
+
+#: footer.php:81
+#, php-format
+msgid "© %1$s %2$s"
+msgstr "© %1$s %2$s"
+
+#: footer.php:83 page-mentions-legales.php:20 page-mentions-legales.php:22
+msgid "Mentions légales"
+msgstr "Legal notice"
+
+#: footer.php:84
+msgid "Confidentialité"
+msgstr "Privacy"
+
+#: front-page.php:55
+msgid "Dates"
+msgstr "Dates"
+
+#: front-page.php:55 front-page.php:113 front-page.php:161 front-page.php:177
+#: front-page.php:217 page-contact.php:74 page-contact.php:76
+#: page-edition-en-cours.php:252 page-espace-presse.php:86
+#: page-espace-presse.php:131 page-informations-pratiques.php:70
+#: page-inscription.php:69 page-inscription.php:77 page-le-forum.php:120
+#: page-mot-du-president.php:39 single-fnc_intervenant.php:51
+#: single-fnc_publication.php:67
+msgid "À confirmer"
+msgstr "To be confirmed"
+
+#: front-page.php:59
+msgid "Numérique"
+msgstr "Numérique"
+
+#: front-page.php:60
+msgid "« L’espace où l’Afrique centrale décide de son avenir numérique. »"
+msgstr "“The space where Central Africa decides its digital future.”"
+
+#: front-page.php:62
+msgid "Voir le programme"
+msgstr "See the programme"
+
+#: front-page.php:63 page-le-forum.php:121
+msgid "Demander une accréditation"
+msgstr "Request accreditation"
+
+#: front-page.php:66
+msgid "Défiler"
+msgstr "Scroll"
+
+#: front-page.php:73 page-le-forum.php:45
+msgid "Ce que nous sommes"
+msgstr "Who we are"
+
+#: front-page.php:74
+msgid "Pas une conférence."
+msgstr "Not a conference."
+
+#: front-page.php:74
+msgid "Un espace de décision."
+msgstr "A space for decisions."
+
+#: front-page.php:74
+msgid "Une institution permanente."
+msgstr "A permanent institution."
+
+#: front-page.php:75
+msgid "Découvrir le Forum"
+msgstr "Discover the Forum"
+
+#: front-page.php:77
+msgid "Salle plénière du Forum Numérique Congo avant l’ouverture"
+msgstr "Plenary hall of the Forum Numérique Congo before opening"
+
+#: front-page.php:97
+msgid "Portrait d’un participant du Forum Numérique Congo"
+msgstr "Portrait of a Forum Numérique Congo participant"
+
+#: front-page.php:99
+msgid "Les voix"
+msgstr "The voices"
+
+#: front-page.php:113
+msgid "Intervenant·e"
+msgstr "Speaker"
+
+#: front-page.php:114
+msgid "Fonction officielle — à valider"
+msgstr "Official role — to be validated"
+
+#: front-page.php:115
+msgid "Institution — à valider"
+msgstr "Institution — to be validated"
+
+#: front-page.php:116
+msgid "« La citation de l’intervenant apparaîtra ici une fois sa participation confirmée. »"
+msgstr "“The speaker’s quote will appear here once their participation is confirmed.”"
+
+#: front-page.php:128
+msgid "Le territoire"
+msgstr "The territory"
+
+#: front-page.php:129
+msgid "L’Afrique centrale décide"
+msgstr "Central Africa decides"
+
+#: front-page.php:129
+msgid "de son avenir numérique."
+msgstr "its digital future."
+
+#: front-page.php:130
+msgid "Depuis Brazzaville. Depuis le Bassin du Congo. Une parole ancrée, pas importée."
+msgstr "From Brazzaville. From the Congo Basin. A voice rooted here, not imported."
+
+#: front-page.php:153
+msgid "Pupitre du Forum Numérique Congo sur la scène plénière"
+msgstr "Lectern of the Forum Numérique Congo on the plenary stage"
+
+#: front-page.php:156
+msgid "Trois jours de travail collectif"
+msgstr "Three days of collective work"
+
+#: front-page.php:161
+msgid "Journée d’ouverture · Date"
+msgstr "Opening day · Date"
+
+#: front-page.php:177
+msgid "Programme en préparation"
+msgstr "Programme in preparation"
+
+#: front-page.php:182
+msgid "Programme complet"
+msgstr "Full programme"
+
+#: front-page.php:192
+msgid "La communauté"
+msgstr "The community"
+
+#: front-page.php:193
+msgid "Ils construisent le Forum avec nous"
+msgstr "They build the Forum with us"
+
+#: front-page.php:212 front-page.php:213
+msgid "Partenaire · À confirmer"
+msgstr "Partner · To be confirmed"
+
+#: front-page.php:237
+msgid "Les éditions"
+msgstr "The editions"
+
+#: front-page.php:238
+msgid "Une histoire qui se construit, édition après édition"
+msgstr "A history built edition after edition"
+
+#: front-page.php:249
+msgid "Édition · Archive à confirmer"
+msgstr "Edition · Archive to be confirmed"
+
+#: front-page.php:253
+msgid "Voir toutes les éditions"
+msgstr "See all editions"
+
+#: front-page.php:277
+msgid "La prochaine édition"
+msgstr "The next edition"
+
+#: front-page.php:279
+msgid "Le Forum Numérique Congo commence dans"
+msgstr "The Forum Numérique Congo starts in"
+
+#: front-page.php:281 page-edition-en-cours.php:148
+msgid "jours"
+msgstr "days"
+
+#: front-page.php:283
+msgid "Date à confirmer"
+msgstr "Date to be confirmed"
+
+#: front-page.php:286
+msgid "Demander votre accréditation"
+msgstr "Request your accreditation"
+
+#: functions.php:52 header.php:48
+msgid "Navigation principale"
+msgstr "Main navigation"
+
+#: functions.php:53 header.php:76
+msgid "Navigation mobile"
+msgstr "Mobile navigation"
+
+#: functions.php:102 page-partenaires.php:27 page-partenaires.php:32
+msgid "Partenaires"
+msgstr "Partners"
+
+#: functions.php:148 functions.php:169
+msgid "Langue"
+msgstr "Language"
+
+#: functions.php:207 functions.php:233 inc/blocks.php:619 page-le-forum.php:44
+#: page-mot-du-president.php:31
+msgid "Accueil"
+msgstr "Home"
+
+#: functions.php:247
+msgid "Poursuivre le parcours."
+msgstr "Continue the journey."
+
+#: functions.php:248
+msgid "Les contenus non confirmés restent masqués ou signalés."
+msgstr "Unconfirmed content stays hidden or flagged."
+
+#: functions.php:249
+msgid "Contacter l’équipe"
+msgstr "Contact the team"
+
+#: header.php:20
+msgid "Aller au contenu"
+msgstr "Skip to content"
+
+#: header.php:23
+#, php-format
+msgid "%s — accueil"
+msgstr "%s — home"
+
+#: header.php:42
+msgid "Forum Numérique"
+msgstr "Forum Numérique"
+
+#: header.php:42
+msgid "Congo"
+msgstr "Congo"
+
+#: header.php:69
+msgid "Ouvrir le menu"
+msgstr "Open the menu"
+
+#: inc/blocks.php:42
+msgid "Libellé du bouton"
+msgstr "Button label"
+
+#: inc/blocks.php:43
+msgid "Lien du bouton"
+msgstr "Button link"
+
+#: inc/blocks.php:47 inc/blocks.php:70 inc/blocks.php:81 inc/blocks.php:96
+#: inc/blocks.php:109 inc/blocks.php:134 inc/blocks.php:160 inc/blocks.php:174
+#: inc/blocks.php:185 inc/homepage.php:276 inc/homepage.php:293
+#: inc/homepage.php:307 inc/homepage.php:322 inc/homepage.php:336
+#: inc/homepage.php:349
+msgid "Sur-titre"
+msgstr "Eyebrow"
+
+#: inc/blocks.php:48 inc/blocks.php:110 inc/blocks.php:116 inc/blocks.php:146
+#: inc/blocks.php:161 inc/blocks.php:175 inc/blocks.php:186 inc/blocks.php:208
+#: inc/blocks.php:226 inc/blocks.php:243 inc/blocks.php:267 inc/blocks.php:280
+#: inc/blocks.php:290 inc/blocks.php:309 inc/blocks.php:319 inc/blocks.php:329
+#: inc/blocks.php:347 inc/blocks.php:365 inc/homepage.php:323
+#: inc/homepage.php:337 inc/homepage.php:350
+msgid "Titre"
+msgstr "Title"
+
+#: inc/blocks.php:49 inc/blocks.php:73
+msgid "Introduction"
+msgstr "Introduction"
+
+#: inc/blocks.php:53 inc/blocks.php:351
+msgid "Questions"
+msgstr "Questions"
+
+#: inc/blocks.php:55 inc/blocks.php:353
+msgid "Question"
+msgstr "Question"
+
+#: inc/blocks.php:56 inc/blocks.php:354
+msgid "Réponse"
+msgstr "Answer"
+
+#: inc/blocks.php:64
+msgid "Ouverture (institutionnel)"
+msgstr "Opening (institutional)"
+
+#: inc/blocks.php:66
+msgid "Héros pleine hauteur avec image, fil d’Ariane et introduction."
+msgstr "Full-height hero with image, breadcrumb and introduction."
+
+#: inc/blocks.php:68
+msgid "Image d’ouverture"
+msgstr "Opening image"
+
+#: inc/blocks.php:69
+msgid "Fil d’Ariane (libellé page)"
+msgstr "Breadcrumb (page label)"
+
+#: inc/blocks.php:71 inc/blocks.php:97 inc/homepage.php:264
+msgid "Titre — ligne 1"
+msgstr "Title — line 1"
+
+#: inc/blocks.php:72 inc/blocks.php:98
+msgid "Titre — ligne 2"
+msgstr "Title — line 2"
+
+#: inc/blocks.php:77 page-mot-du-president.php:31 page-mot-du-president.php:32
+msgid "Mot du Président"
+msgstr "President’s address"
+
+#: inc/blocks.php:79
+msgid "Portrait, identité et extrait du mot du Président."
+msgstr "Portrait, identity and excerpt of the President’s address."
+
+#: inc/blocks.php:82
+msgid "Portrait"
+msgstr "Portrait"
+
+#: inc/blocks.php:83 inc/blocks.php:296 page-contact.php:62
+msgid "Nom"
+msgstr "Name"
+
+#: inc/blocks.php:84
+msgid "Fonction"
+msgstr "Role"
+
+#: inc/blocks.php:85
+msgid "Extrait (affiché sur la page)"
+msgstr "Excerpt (shown on the page)"
+
+#: inc/blocks.php:86
+msgid "Mot complet"
+msgstr "Full address"
+
+#: inc/blocks.php:87
+msgid "Libellé du lien « lire tout »"
+msgstr "Label of the “read more” link"
+
+#: inc/blocks.php:88
+msgid "Lien « lire tout »"
+msgstr "“Read more” link"
+
+#: inc/blocks.php:92
+msgid "Mission (média + texte)"
+msgstr "Mission (media + text)"
+
+#: inc/blocks.php:94
+msgid "Titre sur trois lignes, texte et image."
+msgstr "Three-line title, text and image."
+
+#: inc/blocks.php:99
+msgid "Titre — ligne 3 (atténuée)"
+msgstr "Title — line 3 (muted)"
+
+#: inc/blocks.php:100 inc/blocks.php:147 inc/blocks.php:163 inc/blocks.php:187
+#: inc/blocks.php:227
+msgid "Texte"
+msgstr "Text"
+
+#: inc/blocks.php:101 inc/blocks.php:188 inc/homepage.php:282
+#: inc/homepage.php:321
+msgid "Image"
+msgstr "Image"
+
+#: inc/blocks.php:105
+msgid "Objectifs (séquence numérotée)"
+msgstr "Objectives (numbered sequence)"
+
+#: inc/blocks.php:107
+msgid "Séquence numérotée ; la numérotation et les couleurs DA sont automatiques."
+msgstr "Numbered sequence; numbering and brand colours are automatic."
+
+#: inc/blocks.php:114 single-fnc_session.php:60
+msgid "Objectifs"
+msgstr "Objectives"
+
+#: inc/blocks.php:117 inc/customizer.php:265
+msgid "Description"
+msgstr "Description"
+
+#: inc/blocks.php:123
+msgid "FAQ (institutionnel)"
+msgstr "FAQ (institutional)"
+
+#: inc/blocks.php:125 inc/blocks.php:235
+msgid "Questions fréquentes, dépliables."
+msgstr "Frequently asked questions, expandable."
+
+#: inc/blocks.php:129
+msgid "Ancrage (manifeste pleine largeur)"
+msgstr "Anchor (full-width manifesto)"
+
+#: inc/blocks.php:131
+msgid "Bande pleine largeur avec image de fond et manifeste."
+msgstr "Full-width band with background image and manifesto."
+
+#: inc/blocks.php:133
+msgid "Image pleine largeur"
+msgstr "Full-width image"
+
+#: inc/blocks.php:135 inc/homepage.php:308
+msgid "Manifeste — début"
+msgstr "Manifesto — start"
+
+#: inc/blocks.php:136 inc/homepage.php:309
+msgid "Manifeste — accent"
+msgstr "Manifesto — accent"
+
+#: inc/blocks.php:137 inc/homepage.php:310
+msgid "Sous-texte"
+msgstr "Sub-text"
+
+#: inc/blocks.php:141
+msgid "Callout (CTA)"
+msgstr "Callout (CTA)"
+
+#: inc/blocks.php:143
+msgid "Bandeau d’appel à action sur fond navy."
+msgstr "Call-to-action band on a navy background."
+
+#: inc/blocks.php:155
+msgid "Héros"
+msgstr "Hero"
+
+#: inc/blocks.php:157
+msgid "Héros secondaire avec image de fond et CTA."
+msgstr "Secondary hero with background image and CTA."
+
+#: inc/blocks.php:162 inc/customizer.php:264
+msgid "Sous-titre"
+msgstr "Subtitle"
+
+#: inc/blocks.php:164 inc/homepage.php:187 inc/homepage.php:306
+#: inc/homepage.php:355
+msgid "Image de fond"
+msgstr "Background image"
+
+#: inc/blocks.php:170
+msgid "Texte riche"
+msgstr "Rich text"
+
+#: inc/blocks.php:172
+msgid "Bloc de lecture (colonne étroite)."
+msgstr "Reading block (narrow column)."
+
+#: inc/blocks.php:176 inc/blocks.php:281 inc/blocks.php:310 inc/blocks.php:320
+#: inc/blocks.php:366
+msgid "Contenu"
+msgstr "Content"
+
+#: inc/blocks.php:180
+msgid "Média + texte"
+msgstr "Media + text"
+
+#: inc/blocks.php:182
+msgid "Texte et image côte à côte, image à droite ou à gauche."
+msgstr "Text and image side by side, image on the right or left."
+
+#: inc/blocks.php:192
+msgid "Côté de l’image"
+msgstr "Image side"
+
+#: inc/blocks.php:195
+msgid "Droite"
+msgstr "Right"
+
+#: inc/blocks.php:196
+msgid "Gauche"
+msgstr "Left"
+
+#: inc/blocks.php:204
+msgid "Chiffres clés"
+msgstr "Key figures"
+
+#: inc/blocks.php:206
+msgid "Bande de chiffres clés."
+msgstr "Band of key figures."
+
+#: inc/blocks.php:212
+msgid "Chiffres"
+msgstr "Figures"
+
+#: inc/blocks.php:214
+msgid "Valeur"
+msgstr "Value"
+
+#: inc/blocks.php:215 inc/blocks.php:249 inc/blocks.php:335
+msgid "Libellé"
+msgstr "Label"
+
+#: inc/blocks.php:221
+msgid "Appel à action"
+msgstr "Call to action"
+
+#: inc/blocks.php:223
+msgid "Bandeau CTA pleine largeur."
+msgstr "Full-width CTA band."
+
+#: inc/blocks.php:233
+msgid "FAQ"
+msgstr "FAQ"
+
+#: inc/blocks.php:239
+msgid "Documents"
+msgstr "Documents"
+
+#: inc/blocks.php:241
+msgid "Liste de fichiers à télécharger."
+msgstr "List of downloadable files."
+
+#: inc/blocks.php:247
+msgid "Fichiers"
+msgstr "Files"
+
+#: inc/blocks.php:250
+msgid "Fichier"
+msgstr "File"
+
+#: inc/blocks.php:262
+msgid "Infos pratiques · Lieu & plan d’accès"
+msgstr "Practical info · Venue & directions"
+
+#: inc/blocks.php:265
+msgid "Adresse, détails d’accès et plan. La carte interactive n’est chargée qu’au clic."
+msgstr "Address, directions and map. The interactive map only loads on click."
+
+#: inc/blocks.php:268 inc/customizer.php:326
+msgid "Adresse"
+msgstr "Address"
+
+#: inc/blocks.php:269
+msgid "Détails d’accès"
+msgstr "Directions"
+
+#: inc/blocks.php:270
+msgid "Plan (image statique)"
+msgstr "Map (static image)"
+
+#: inc/blocks.php:271
+msgid "URL de carte interactive (optionnel)"
+msgstr "Interactive map URL (optional)"
+
+#: inc/blocks.php:275
+msgid "Infos pratiques · Transport & accès"
+msgstr "Practical info · Transport & access"
+
+#: inc/blocks.php:278
+msgid "Comment rejoindre le lieu."
+msgstr "How to reach the venue."
+
+#: inc/blocks.php:285
+msgid "Infos pratiques · Hébergement"
+msgstr "Practical info · Accommodation"
+
+#: inc/blocks.php:288
+msgid "Hôtels recommandés."
+msgstr "Recommended hotels."
+
+#: inc/blocks.php:294
+msgid "Hôtels recommandés"
+msgstr "Recommended hotels"
+
+#: inc/blocks.php:297
+msgid "Précision"
+msgstr "Detail"
+
+#: inc/blocks.php:298
+msgid "Site web (optionnel)"
+msgstr "Website (optional)"
+
+#: inc/blocks.php:304
+msgid "Infos pratiques · Visa & formalités"
+msgstr "Practical info · Visa & formalities"
+
+#: inc/blocks.php:307
+msgid "Formalités d’entrée sur le territoire."
+msgstr "Entry formalities for the country."
+
+#: inc/blocks.php:314
+msgid "Infos pratiques · Badge & accréditation"
+msgstr "Practical info · Badge & accreditation"
+
+#: inc/blocks.php:317
+msgid "Retrait du badge et accréditation."
+msgstr "Badge collection and accreditation."
+
+#: inc/blocks.php:324
+msgid "Infos pratiques · Contacts utiles"
+msgstr "Practical info · Useful contacts"
+
+#: inc/blocks.php:327
+msgid "Contacts logistiques de l’édition."
+msgstr "Logistics contacts for the edition."
+
+#: inc/blocks.php:333 page-espace-presse.php:96
+msgid "Contacts"
+msgstr "Contacts"
+
+#: inc/blocks.php:336
+msgid "Valeur (email / téléphone / …)"
+msgstr "Value (email / phone / …)"
+
+#: inc/blocks.php:342
+msgid "Infos pratiques · FAQ logistique"
+msgstr "Practical info · Logistics FAQ"
+
+#: inc/blocks.php:345
+msgid "Questions fréquentes sur la logistique."
+msgstr "Frequently asked logistics questions."
+
+#: inc/blocks.php:360
+msgid "Infos pratiques · Accessibilité sur site"
+msgstr "Practical info · On-site accessibility"
+
+#: inc/blocks.php:363
+msgid "Conditions d’accessibilité du lieu."
+msgstr "Accessibility conditions of the venue."
+
+#: inc/blocks.php:428
+msgid "Forum Numérique Congo"
+msgstr "Forum Numérique Congo"
+
+#: inc/blocks.php:433
+msgid "FNC · Informations pratiques"
+msgstr "FNC · Practical information"
+
+#: inc/blocks.php:1007
+msgid "Transport & accès"
+msgstr "Transport & access"
+
+#: inc/blocks.php:1011
+msgid "Visa & formalités"
+msgstr "Visa & formalities"
+
+#: inc/blocks.php:1015
+msgid "Badge & accréditation"
+msgstr "Badge & accreditation"
+
+#: inc/blocks.php:1019
+msgid "Accessibilité sur site"
+msgstr "On-site accessibility"
+
+#: inc/blocks.php:1045
+msgid "Carte du lieu"
+msgstr "Venue map"
+
+#: inc/blocks.php:1046
+msgid "Afficher la carte interactive"
+msgstr "Show the interactive map"
+
+#: inc/blocks.php:1047
+msgid "La carte n’est chargée qu’à votre demande : aucun contenu tiers n’est appelé avant."
+msgstr "The map only loads at your request: no third-party content is called before that."
+
+#: inc/blocks.php:1051
+msgid "Lieu & plan d’accès"
+msgstr "Venue & directions"
+
+#: inc/blocks.php:1082
+msgid "Hébergement"
+msgstr "Accommodation"
+
+#: inc/blocks.php:1108
+msgid "Contacts utiles"
+msgstr "Useful contacts"
+
+#: inc/blocks.php:1132
+msgid "FAQ logistique"
+msgstr "Logistics FAQ"
+
+#: inc/blocks.php:1234
+msgid "Document"
+msgstr "Document"
+
+#: inc/blocks.php:1237
+msgid "Télécharger"
+msgstr "Download"
+
+#: inc/blocks.php:1239
+msgid "Fichier à venir"
+msgstr "File coming soon"
+
+#: inc/customizer.php:246
+msgid "Réglages FNC"
+msgstr "FNC settings"
+
+#: inc/customizer.php:247
+msgid "Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur."
+msgstr "Identity, logos, contact details, footer and default SEO values of the portal. Editable without a developer."
+
+#: inc/customizer.php:256
+msgid "Identité"
+msgstr "Identity"
+
+#: inc/customizer.php:262
+msgid "Nom officiel"
+msgstr "Official name"
+
+#: inc/customizer.php:263
+msgid "Slogan"
+msgstr "Slogan"
+
+#: inc/customizer.php:266
+msgid "Présentation courte"
+msgstr "Short introduction"
+
+#: inc/customizer.php:285
+msgid "Logos & icônes"
+msgstr "Logos & icons"
+
+#: inc/customizer.php:287
+msgid "Le favicon se règle via Réglages généraux → Icône du site (fonction WordPress native)."
+msgstr "The favicon is set via Settings → Site Icon (native WordPress feature)."
+
+#: inc/customizer.php:292
+msgid "Logo principal"
+msgstr "Main logo"
+
+#: inc/customizer.php:293
+msgid "Logo clair"
+msgstr "Light logo"
+
+#: inc/customizer.php:294
+msgid "Logo sombre"
+msgstr "Dark logo"
+
+#: inc/customizer.php:314
+msgid "Communication"
+msgstr "Communication"
+
+#: inc/customizer.php:320
+msgid "Email de contact"
+msgstr "Contact email"
+
+#: inc/customizer.php:323
+msgid "Téléphone"
+msgstr "Phone"
+
+#. translators: %s: nom de la plateforme sociale.
+#: inc/customizer.php:344
+#, php-format
+msgid "URL %s"
+msgstr "URL %s"
+
+#: inc/customizer.php:355 inc/customizer.php:364
+msgid "Contacts presse"
+msgstr "Press contacts"
+
+#: inc/customizer.php:357
+msgid "Un contact par ligne, champs séparés par « | » dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone. Affichés uniquement lorsqu’ils sont renseignés — ne jamais saisir de données fictives."
+msgstr "One contact per line, fields separated by “|” in this order: Name | Role | Organisation | Email | Phone. Shown only when filled in — never enter fictional data."
+
+#: inc/customizer.php:375
+msgid "Footer"
+msgstr "Footer"
+
+#: inc/customizer.php:377
+msgid "L’année courante est ajoutée automatiquement à la mention de copyright."
+msgstr "The current year is added automatically to the copyright notice."
+
+#: inc/customizer.php:388
+msgid "Texte du footer"
+msgstr "Footer text"
+
+#: inc/customizer.php:394
+msgid "Mention de copyright"
+msgstr "Copyright notice"
+
+#: inc/customizer.php:395
+msgid "Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé."
+msgstr "Without the year (added automatically). Empty → official name is used."
+
+#: inc/customizer.php:407
+msgid "Ordonne la frise « Pays représentés » de la page Intervenants. Un pays par ligne, dans l’ordre voulu, avec un drapeau optionnel : « Pays | URL du drapeau ». Les pays non listés apparaissent ensuite, par ordre alphabétique. Vide → tri alphabétique. Sans URL de drapeau, le drapeau intégré est utilisé si le pays est reconnu."
+msgstr "Orders the “Countries represented” strip on the Speakers page. One country per line, in the desired order, with an optional flag: “Country | flag URL”. Unlisted countries follow, in alphabetical order. Empty → alphabetical order. Without a flag URL, the built-in flag is used when the country is recognised."
+
+#: inc/customizer.php:414
+msgid "Ordre des pays représentés"
+msgstr "Order of countries represented"
+
+#: inc/customizer.php:425
+msgid "SEO par défaut"
+msgstr "Default SEO"
+
+#: inc/customizer.php:433
+msgid "Titre par défaut"
+msgstr "Default title"
+
+#: inc/customizer.php:434 inc/seo.php:91
+msgid "Recommandé : 50–60 caractères."
+msgstr "Recommended: 50–60 characters."
+
+#: inc/customizer.php:443
+msgid "Description par défaut"
+msgstr "Default description"
+
+#: inc/customizer.php:444 inc/seo.php:97
+msgid "Recommandé : 150–160 caractères."
+msgstr "Recommended: 150–160 characters."
+
+#: inc/customizer.php:455
+msgid "Image OpenGraph par défaut"
+msgstr "Default OpenGraph image"
+
+#: inc/customizer.php:456
+msgid "Visuel de partage social (1200×630 recommandé)."
+msgstr "Social sharing image (1200×630 recommended)."
+
+#: inc/customizer.php:466
+msgid "Type de Twitter Card"
+msgstr "Twitter Card type"
+
+#: inc/customizer.php:470
+msgid "Grande image"
+msgstr "Large image"
+
+#: inc/customizer.php:471
+msgid "Résumé"
+msgstr "Summary"
+
+#: inc/customizer.php:479
+msgid "Directive robots par défaut"
+msgstr "Default robots directive"
+
+#: inc/customizer.php:480
+msgid "Ex. « index, follow » ou « noindex, nofollow »."
+msgstr "E.g. “index, follow” or “noindex, nofollow”."
+
+#: inc/homepage.php:148
+msgid "Page d’accueil (M1 → M8)"
+msgstr "Home page (M1 → M8)"
+
+#: inc/homepage.php:149
+msgid "Contenu éditorial des 8 moments. La composition et la direction artistique sont figées : vous administrez les textes, les médias et les libellés de boutons."
+msgstr "Editorial content of the 8 moments. The composition and art direction are fixed: you manage the text, media and button labels."
+
+#: inc/homepage.php:158
+msgid "M1 · Ouverture"
+msgstr "M1 · Opening"
+
+#: inc/homepage.php:160
+msgid "Le média de fond peut être une image fixe, une vidéo ou un slider."
+msgstr "The background media can be a still image, a video or a slider."
+
+#: inc/homepage.php:171
+msgid "Type de média de fond"
+msgstr "Background media type"
+
+#: inc/homepage.php:175
+msgid "Image fixe"
+msgstr "Still image"
+
+#: inc/homepage.php:176
+msgid "Vidéo"
+msgstr "Video"
+
+#: inc/homepage.php:177
+msgid "Slider (plusieurs images)"
+msgstr "Slider (multiple images)"
+
+#: inc/homepage.php:204
+msgid "Vidéo (fichier)"
+msgstr "Video (file)"
+
+#: inc/homepage.php:212
+msgid "Vidéo (URL externe)"
+msgstr "Video (external URL)"
+
+#: inc/homepage.php:216
+msgid "Utilisée si aucun fichier n’est choisi. Fichier vidéo direct (.mp4/.webm), pas une page YouTube."
+msgstr "Used if no file is chosen. Direct video file (.mp4/.webm), not a YouTube page."
+
+#: inc/homepage.php:224
+msgid "Image d’attente (poster)"
+msgstr "Poster image"
+
+#: inc/homepage.php:227
+msgid "Affichée avant le chargement de la vidéo, et à la place de la vidéo si l’utilisateur a demandé de réduire les animations."
+msgstr "Shown before the video loads, and instead of the video if the user has requested reduced motion."
+
+#. translators: %d: numéro de l'image du slider.
+#: inc/homepage.php:242
+#, php-format
+msgid "Image %d du slider"
+msgstr "Slider image %d"
+
+#: inc/homepage.php:251
+msgid "Durée par image (secondes)"
+msgstr "Time per image (seconds)"
+
+#: inc/homepage.php:255
+msgid "Le défilement est automatiquement désactivé si l’utilisateur a demandé de réduire les animations."
+msgstr "Autoplay is automatically disabled if the user has requested reduced motion."
+
+#: inc/homepage.php:262
+msgid "Lieu (kicker)"
+msgstr "Place (kicker)"
+
+#: inc/homepage.php:263
+msgid "Dates (kicker)"
+msgstr "Dates (kicker)"
+
+#: inc/homepage.php:265
+msgid "Titre — ligne 2 (fine)"
+msgstr "Title — line 2 (thin)"
+
+#: inc/homepage.php:266
+msgid "Titre — ligne 3"
+msgstr "Title — line 3"
+
+#: inc/homepage.php:267
+msgid "Accroche"
+msgstr "Tagline"
+
+#: inc/homepage.php:268
+msgid "CTA principal — libellé"
+msgstr "Primary CTA — label"
+
+#: inc/homepage.php:269
+msgid "CTA principal — lien"
+msgstr "Primary CTA — link"
+
+#: inc/homepage.php:270
+msgid "CTA secondaire — libellé"
+msgstr "Secondary CTA — label"
+
+#: inc/homepage.php:271
+msgid "CTA secondaire — lien"
+msgstr "Secondary CTA — link"
+
+#: inc/homepage.php:272
+msgid "Indication de défilement"
+msgstr "Scroll hint"
+
+#: inc/homepage.php:275
+msgid "M2 · Ce que nous sommes"
+msgstr "M2 · Who we are"
+
+#: inc/homepage.php:277
+msgid "Ligne 1"
+msgstr "Line 1"
+
+#: inc/homepage.php:278
+msgid "Ligne 2"
+msgstr "Line 2"
+
+#: inc/homepage.php:279
+msgid "Ligne 3 (atténuée)"
+msgstr "Line 3 (muted)"
+
+#: inc/homepage.php:280 inc/homepage.php:325 inc/homepage.php:338
+#: inc/homepage.php:351
+msgid "Lien — libellé"
+msgstr "Link — label"
+
+#: inc/homepage.php:281
+msgid "Lien — URL"
+msgstr "Link — URL"
+
+#: inc/homepage.php:288
+msgid "M3 · Les voix"
+msgstr "M3 · The voices"
+
+#: inc/homepage.php:290
+msgid "Les intervenants affichés proviennent des fiches Intervenants publiées. Tant qu’aucune n’existe, un état « à confirmer » est affiché."
+msgstr "The speakers shown come from published Speaker entries. Until one exists, a “to be confirmed” state is displayed."
+
+#: inc/homepage.php:298
+msgid "Nombre de vignettes"
+msgstr "Number of thumbnails"
+
+#: inc/homepage.php:305
+msgid "M4 · Le territoire"
+msgstr "M4 · The territory"
+
+#: inc/homepage.php:316
+msgid "M5 · Programme"
+msgstr "M5 · Programme"
+
+#: inc/homepage.php:318
+msgid "Les sessions affichées proviennent de l’édition en cours."
+msgstr "The sessions shown come from the current edition."
+
+#: inc/homepage.php:324
+msgid "Libellé de date"
+msgstr "Date label"
+
+#: inc/homepage.php:331
+msgid "M6 · Partenaires"
+msgstr "M6 · Partners"
+
+#: inc/homepage.php:333
+msgid "Les partenaires affichés proviennent des fiches Partenaires publiées."
+msgstr "The partners shown come from published Partner entries."
+
+#: inc/homepage.php:344
+msgid "M7 · Archives"
+msgstr "M7 · Archives"
+
+#: inc/homepage.php:346
+msgid "Les éditions affichées proviennent des fiches Éditions publiées."
+msgstr "The editions shown come from published Edition entries."
+
+#: inc/homepage.php:354
+msgid "M8 · La décision"
+msgstr "M8 · The decision"
+
+#: inc/homepage.php:356
+msgid "Label"
+msgstr "Label"
+
+#: inc/homepage.php:357
+msgid "Titre — avant le compte"
+msgstr "Title — before the count"
+
+#: inc/homepage.php:358
+msgid "Titre — après le compte"
+msgstr "Title — after the count"
+
+#: inc/homepage.php:359
+msgid "CTA — libellé"
+msgstr "CTA — label"
+
+#: inc/homepage.php:360
+msgid "CTA — lien"
+msgstr "CTA — link"
+
+#: inc/seo.php:67
+msgid "SEO"
+msgstr "SEO"
+
+#: inc/seo.php:85
+msgid "Laissez vide pour utiliser le titre du contenu et les valeurs par défaut du site (Personnaliser → Réglages FNC → SEO par défaut)."
+msgstr "Leave empty to use the content title and the site defaults (Customize → FNC settings → Default SEO)."
+
+#: inc/seo.php:89
+msgid "Titre SEO"
+msgstr "SEO title"
+
+#: inc/seo.php:95
+msgid "Description SEO"
+msgstr "SEO description"
+
+#: inc/seo.php:103
+msgid "Demander aux moteurs de ne pas indexer ce contenu (noindex, nofollow)"
+msgstr "Ask search engines not to index this content (noindex, nofollow)"
+
+#: inc/seo.php:108
+msgid "L’image mise en avant de ce contenu sert d’image de partage (OpenGraph) ; à défaut, l’image par défaut du site est utilisée."
+msgstr "This content’s featured image is used as the sharing image (OpenGraph); otherwise the site default image is used."
+
+#. translators: %s: terme recherché.
+#: inc/seo.php:159
+#, php-format
+msgid "Recherche : %s"
+msgstr "Search: %s"
+
+#: index.php:31
+msgid "Aucun contenu à afficher."
+msgstr "No content to display."
+
+#: page-conditions-generales-utilisation.php:25
+msgid "Conditions générales d’utilisation"
+msgstr "Terms of use"
+
+#: page-conditions-generales-utilisation.php:26
+#: page-declaration-accessibilite.php:28 page-mentions-legales.php:21
+#: page-politique-confidentialite.php:22
+msgid "Mise à jour le à confirmer"
+msgstr "Updated on to be confirmed"
+
+#: page-conditions-generales-utilisation.php:27
+msgid "CGU"
+msgstr "Terms"
+
+#: page-conditions-generales-utilisation.php:34
+#: page-conditions-generales-utilisation.php:35
+#: page-declaration-accessibilite.php:36 page-declaration-accessibilite.php:37
+#: page-mentions-legales.php:29 page-mentions-legales.php:30
+#: page-politique-confidentialite.php:30 page-politique-confidentialite.php:31
+#: page-politique-confidentialite.php:34
+msgid "DÉMO"
+msgstr "DEMO"
+
+#: page-conditions-generales-utilisation.php:34
+msgid "Conditions d’usage du site — à confirmer et valider avant toute publication réelle."
+msgstr "Site terms of use — to be confirmed and validated before any real publication."
+
+#: page-conditions-generales-utilisation.php:35
+msgid "Page structurelle, à maintenir non publiée tant que le texte n’est pas validé."
+msgstr "Structural page, to be kept unpublished until the text is validated."
+
+#: page-contact.php:43
+msgid "Orienter chaque demande vers le bon canal."
+msgstr "Directing each request to the right channel."
+
+#: page-contact.php:44
+msgid "Contact général, presse, partenariat et accessibilité restent à confirmer."
+msgstr "General, press, partnership and accessibility contacts remain to be confirmed."
+
+#: page-contact.php:55 page-contact.php:57
+msgid "Formulaire de contact"
+msgstr "Contact form"
+
+#: page-contact.php:56
+msgid "Formulaire"
+msgstr "Form"
+
+#: page-contact.php:58 page-inscription.php:84
+msgid "Le service d’envoi reste à connecter."
+msgstr "The sending service is still to be connected."
+
+#: page-contact.php:63 page-inscription.php:59 single-fnc_intervenant.php:82
+msgid "Organisation"
+msgstr "Organisation"
+
+#: page-contact.php:64
+msgid "Email"
+msgstr "Email"
+
+#: page-contact.php:65
+msgid "Sujet"
+msgstr "Subject"
+
+#: page-contact.php:66
+msgid "Message"
+msgstr "Message"
+
+#: page-contact.php:78
+msgid "Champ requis."
+msgstr "Required field."
+
+#: page-contact.php:84
+msgid "Les coordonnées officielles restent à confirmer avant publication."
+msgstr "Official contact details remain to be confirmed before publication."
+
+#: page-contact.php:85
+msgid "Envoyer"
+msgstr "Send"
+
+#: page-contact.php:91 page-partenaires.php:61
+msgid "Institutionnel"
+msgstr "Institutional"
+
+#: page-contact.php:91
+msgid "Email officiel à confirmer"
+msgstr "Official email to be confirmed"
+
+#: page-contact.php:92 page-espace-presse.php:26
+msgid "Presse"
+msgstr "Press"
+
+#: page-contact.php:92
+msgid "Contact presse à confirmer"
+msgstr "Press contact to be confirmed"
+
+#: page-contact.php:93
+msgid "Accessibilité"
+msgstr "Accessibility"
+
+#: page-contact.php:93
+msgid "Contact dédié à confirmer"
+msgstr "Dedicated contact to be confirmed"
+
+#: page-declaration-accessibilite.php:27 page-declaration-accessibilite.php:29
+msgid "Déclaration d’accessibilité"
+msgstr "Accessibility statement"
+
+#: page-declaration-accessibilite.php:36
+msgid "Cette déclaration ne certifie aucune conformité : elle sera rédigée après audit d’accessibilité réel, jamais présentée comme conforme sans validation explicite."
+msgstr "This statement certifies no compliance: it will be written after a real accessibility audit, never presented as compliant without explicit validation."
+
+#: page-declaration-accessibilite.php:37
+msgid "Référentiel visé, résultats d’audit, contenus non accessibles et voies de recours : à confirmer et valider avant toute publication réelle."
+msgstr "Target standard, audit results, non-accessible content and remedies: to be confirmed and validated before any real publication."
+
+#: page-edition-en-cours.php:85 page-inscription.php:43
+msgid "Édition à confirmer"
+msgstr "Edition to be confirmed"
+
+#: page-edition-en-cours.php:86
+msgid "Trois jours de travail collectif. Voici tout ce qu’il faut pour suivre l’édition en préparation."
+msgstr "Three days of collective work. Here is everything you need to follow the edition in preparation."
+
+#: page-edition-en-cours.php:99
+msgid "Aucune édition en cours"
+msgstr "No current edition"
+
+#: page-edition-en-cours.php:100
+msgid "Créez une édition et marquez-la « en cours » dans son panneau d’administration."
+msgstr "Create an edition and mark it “current” in its admin panel."
+
+#: page-edition-en-cours.php:140
+msgid "sessions"
+msgstr "sessions"
+
+#: page-edition-en-cours.php:144
+msgid "intervenants"
+msgstr "speakers"
+
+#: page-edition-en-cours.php:158
+msgid "Le programme"
+msgstr "The programme"
+
+#: page-edition-en-cours.php:159
+msgid "Un aperçu des prochaines sessions."
+msgstr "A preview of the upcoming sessions."
+
+#: page-edition-en-cours.php:191
+msgid "Voir le programme complet"
+msgstr "See the full programme"
+
+#: page-edition-en-cours.php:199
+msgid "Les intervenants"
+msgstr "The speakers"
+
+#: page-edition-en-cours.php:200
+msgid "Décideurs, experts et acteurs de la société civile."
+msgstr "Decision-makers, experts and civil-society actors."
+
+#: page-edition-en-cours.php:219
+msgid "Aucun intervenant rattaché"
+msgstr "No linked speaker"
+
+#: page-edition-en-cours.php:220
+msgid "Rattachez des intervenants aux sessions de cette édition."
+msgstr "Link speakers to the sessions of this edition."
+
+#: page-edition-en-cours.php:223
+msgid "Voir tous les intervenants"
+msgstr "See all speakers"
+
+#: page-edition-en-cours.php:237 page-informations-pratiques.php:53
+#: single-fnc_edition.php:93
+msgid "Sur place"
+msgstr "On site"
+
+#: page-edition-en-cours.php:238 single-fnc_edition.php:94
+msgid "Informations pratiques."
+msgstr "Practical information."
+
+#: page-edition-en-cours.php:244
+msgid "Toutes les informations pratiques"
+msgstr "All practical information"
+
+#: page-edition-en-cours.php:251 page-inscription.php:31
+msgid "Inscription"
+msgstr "Registration"
+
+#: page-edition-en-cours.php:252
+msgid "L’ouverture des inscriptions sera annoncée prochainement."
+msgstr "Registration opening will be announced soon."
+
+#: page-espace-presse.php:27
+msgid "Un point d’accès clair pour couvrir le Forum."
+msgstr "A clear entry point to cover the Forum."
+
+#: page-espace-presse.php:28
+msgid "L’Espace presse rassemble les ressources publiées et les contacts confirmés."
+msgstr "The Press area gathers published resources and confirmed contacts."
+
+#: page-espace-presse.php:30
+msgid "Documents préparés dans une atmosphère institutionnelle calme"
+msgstr "Documents prepared in a calm institutional setting"
+
+#: page-espace-presse.php:31
+msgid "Espace presse"
+msgstr "Press area"
+
+#: page-espace-presse.php:56
+msgid "Information"
+msgstr "Information"
+
+#: page-espace-presse.php:57
+msgid "Des ressources vérifiables, pas un dossier de façade."
+msgstr "Verifiable resources, not a façade press kit."
+
+#: page-espace-presse.php:58
+msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés."
+msgstr "Press releases, documents and press contacts appear here once validated."
+
+#: page-espace-presse.php:66
+msgid "Communiqués"
+msgstr "Press releases"
+
+#: page-espace-presse.php:67
+msgid "Ressources presse publiées."
+msgstr "Published press resources."
+
+#: page-espace-presse.php:74
+msgid "Communiqué"
+msgstr "Press release"
+
+#: page-espace-presse.php:84
+msgid "Aucun communiqué n’est publié pour le moment."
+msgstr "No press release is published at the moment."
+
+#: page-espace-presse.php:85
+msgid "Les premiers communiqués apparaîtront ici dès leur validation officielle."
+msgstr "The first press releases will appear here once officially validated."
+
+#: page-espace-presse.php:97
+msgid "Contacts presse confirmés."
+msgstr "Confirmed press contacts."
+
+#: page-espace-presse.php:129
+msgid "Les contacts presse ne sont pas encore publiés."
+msgstr "Press contacts are not published yet."
+
+#: page-espace-presse.php:130
+msgid "Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés."
+msgstr "No address or name is shown until they are validated."
+
+#: page-espace-presse.php:139
+msgid "Accréditation"
+msgstr "Accreditation"
+
+#: page-espace-presse.php:140
+msgid "L’accréditation reste un échange direct."
+msgstr "Accreditation remains a direct exchange."
+
+#: page-espace-presse.php:141
+msgid "Les journalistes peuvent utiliser la page Contact pour toute demande d’accréditation."
+msgstr "Journalists can use the Contact page for any accreditation request."
+
+#: page-espace-presse.php:142
+msgid "Contacter l’organisation"
+msgstr "Contact the organisation"
+
+#: page-informations-pratiques.php:25
+msgid "Préparez votre venue"
+msgstr "Prepare your visit"
+
+#: page-informations-pratiques.php:27
+msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et accessibilité."
+msgstr "Everything you need to organise your participation — venue, transport, accommodation, visa, badge and accessibility."
+
+#: page-informations-pratiques.php:56
+msgid "Seules les rubriques confirmées sont publiées."
+msgstr "Only confirmed sections are published."
+
+#: page-informations-pratiques.php:67
+msgid "Informations en cours de finalisation"
+msgstr "Information being finalised"
+
+#: page-informations-pratiques.php:68
+msgid "Les détails pratiques de la prochaine édition seront publiés ici dès leur confirmation."
+msgstr "The practical details of the next edition will be published here once confirmed."
+
+#: page-informations-pratiques.php:78
+msgid "Prêt à participer ?"
+msgstr "Ready to take part?"
+
+#: page-informations-pratiques.php:79
+msgid "Rejoignez la prochaine édition du Forum Numérique Congo."
+msgstr "Join the next edition of the Forum Numérique Congo."
+
+#: page-inscription.php:26
+msgid "Participer"
+msgstr "Take part"
+
+#: page-inscription.php:27
+msgid "Demander une inscription."
+msgstr "Request a registration."
+
+#: page-inscription.php:28
+msgid "Adressez votre demande de participation à la prochaine édition."
+msgstr "Send your request to take part in the next edition."
+
+#: page-inscription.php:49
+msgid "Votre demande"
+msgstr "Your request"
+
+#: page-inscription.php:50
+msgid "Les champs marqués d’un astérisque sont obligatoires."
+msgstr "Fields marked with an asterisk are required."
+
+#: page-inscription.php:52
+msgid "Formulaire d’inscription"
+msgstr "Registration form"
+
+#: page-inscription.php:53
+msgid "Vous vous inscrivez à"
+msgstr "You are registering for"
+
+#: page-inscription.php:57
+msgid "Nom complet *"
+msgstr "Full name *"
+
+#: page-inscription.php:58
+msgid "E-mail *"
+msgstr "Email *"
+
+#: page-inscription.php:60
+msgid "Mode de participation"
+msgstr "Participation mode"
+
+#: page-inscription.php:60
+msgid "Présentiel"
+msgstr "On site"
+
+#: page-inscription.php:60
+msgid "En ligne"
+msgstr "Online"
+
+#: page-inscription.php:61
+msgid "Motivation (facultatif)"
+msgstr "Motivation (optional)"
+
+#: page-inscription.php:85
+msgid "Envoyer ma demande"
+msgstr "Send my request"
+
+#: page-le-forum.php:41
+msgid "Salle plénière du Forum Numérique Congo"
+msgstr "Plenary hall of the Forum Numérique Congo"
+
+#: page-le-forum.php:47
+msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »"
+msgstr "“The Forum Numérique Congo establishes a permanent space for dialogue, cooperation and decision-making around digital matters in Central Africa.”"
+
+#: page-le-forum.php:59
+msgid "Notre mission"
+msgstr "Our mission"
+
+#: page-le-forum.php:60
+msgid "Comprendre."
+msgstr "Understand."
+
+#: page-le-forum.php:60
+msgid "Rassembler."
+msgstr "Bring together."
+
+#: page-le-forum.php:60
+msgid "Décider ensemble."
+msgstr "Decide together."
+
+#: page-le-forum.php:61
+msgid "Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions."
+msgstr "The Forum brings together institutions, companies, researchers and civil society to turn a national ambition into a clear digital trajectory. A major gathering every two years, with continuous work between editions."
+
+#: page-le-forum.php:63
+msgid "Panel de discussion au Forum Numérique Congo"
+msgstr "Discussion panel at the Forum Numérique Congo"
+
+#: page-le-forum.php:69
+msgid "Nos objectifs"
+msgstr "Our objectives"
+
+#: page-le-forum.php:70
+msgid "Ce que le Forum rend possible"
+msgstr "What the Forum makes possible"
+
+#: page-le-forum.php:75
+msgid "Comprendre"
+msgstr "Understand"
+
+#: page-le-forum.php:76
+msgid "Éclairer les enjeux du numérique pour l’Afrique centrale, sans jargon ni importation de modèles."
+msgstr "Shed light on digital issues for Central Africa, without jargon or imported models."
+
+#: page-le-forum.php:79
+msgid "Dialoguer"
+msgstr "Dialogue"
+
+#: page-le-forum.php:80
+msgid "Créer un espace de parole partagé entre décideurs publics, acteurs privés et citoyens."
+msgstr "Create a shared space for dialogue between public decision-makers, private actors and citizens."
+
+#: page-le-forum.php:83
+msgid "Coopérer"
+msgstr "Cooperate"
+
+#: page-le-forum.php:84
+msgid "Faire émerger des coopérations concrètes, régionales et durables."
+msgstr "Foster concrete, regional and lasting cooperation."
+
+#: page-le-forum.php:87
+msgid "Décider"
+msgstr "Decide"
+
+#: page-le-forum.php:88
+msgid "Transformer les échanges en décisions et en engagements traçables."
+msgstr "Turn discussions into decisions and traceable commitments."
+
+#: page-le-forum.php:108
+msgid "Brazzaville, République du Congo"
+msgstr "Brazzaville, Republic of the Congo"
+
+#: page-le-forum.php:111
+msgid "Notre ancrage"
+msgstr "Our roots"
+
+#: page-le-forum.php:112
+msgid "Depuis Brazzaville,"
+msgstr "From Brazzaville,"
+
+#: page-le-forum.php:112
+msgid "au cœur du Bassin du Congo."
+msgstr "at the heart of the Congo Basin."
+
+#: page-le-forum.php:113
+msgid "Une parole ancrée dans son territoire, tournée vers toute l’Afrique centrale."
+msgstr "A voice rooted in its territory, reaching out to all of Central Africa."
+
+#: page-le-forum.php:119
+msgid "Participer au Forum"
+msgstr "Take part in the Forum"
+
+#: page-le-forum.php:120
+msgid "Rejoignez la prochaine édition. L’ouverture des accréditations sera annoncée prochainement."
+msgstr "Join the next edition. Accreditation opening will be announced soon."
+
+#: page-mentions-legales.php:29
+msgid "Éditeur du site : nom de l’organisation éditrice — à confirmer."
+msgstr "Site publisher: name of the publishing organisation — to be confirmed."
+
+#: page-mentions-legales.php:30
+msgid "Directeur de la publication, hébergeur et coordonnées légales : à confirmer et valider avant toute publication réelle."
+msgstr "Publication director, host and legal details: to be confirmed and validated before any real publication."
+
+#: page-mot-du-president.php:28
+msgid "Portrait institutionnel"
+msgstr "Institutional portrait"
+
+#: page-mot-du-president.php:33
+msgid "Le mot du Président"
+msgstr "The President’s address"
+
+#: page-mot-du-president.php:39
+msgid "Nom du Président"
+msgstr "President’s name"
+
+#: page-mot-du-president.php:40
+msgid "Fonction officielle — à valider par la MOA"
+msgstr "Official role — to be validated by the project owner"
+
+#: page-mot-du-president.php:41
+msgid "« La prise de parole institutionnelle apparaîtra ici une fois validée par la MOA. Aucune citation n’est inventée. »"
+msgstr "“The institutional address will appear here once validated by the project owner. No quote is fabricated.”"
+
+#: page-mot-du-president.php:42
+msgid "Retour à Le Forum"
+msgstr "Back to The Forum"
+
+#: page-partenaires.php:28
+msgid "S’associer au Forum, c’est engager l’avenir numérique du Congo."
+msgstr "Partnering with the Forum means shaping the Congo’s digital future."
+
+#: page-partenaires.php:29
+msgid "Le Forum réunit institutions, organisations et entreprises autour d’une même ambition."
+msgstr "The Forum brings together institutions, organisations and companies around a shared ambition."
+
+#: page-partenaires.php:31
+msgid "Poignée de main lors du Forum Numérique Congo"
+msgstr "Handshake at the Forum Numérique Congo"
+
+#: page-partenaires.php:42
+msgid "S’associer"
+msgstr "Partner with us"
+
+#: page-partenaires.php:43
+msgid "Pourquoi devenir partenaire."
+msgstr "Why become a partner."
+
+#: page-partenaires.php:45
+msgid "Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique en Afrique centrale."
+msgstr "Supporting the Forum means taking part in a lasting space for dialogue on digital matters in Central Africa."
+
+#: page-partenaires.php:54
+msgid "Cadre"
+msgstr "Framework"
+
+#: page-partenaires.php:55
+msgid "Types et niveaux de partenariat."
+msgstr "Types and levels of partnership."
+
+#: page-partenaires.php:57
+msgid "Le partenariat distingue l’engagement institutionnel de l’engagement commercial."
+msgstr "The partnership distinguishes institutional commitment from commercial commitment."
+
+#: page-partenaires.php:61
+msgid "Pouvoirs publics et institutions qui portent la légitimité du Forum."
+msgstr "Public authorities and institutions that give the Forum its legitimacy."
+
+#: page-partenaires.php:62
+msgid "Organisateur"
+msgstr "Organiser"
+
+#: page-partenaires.php:62
+msgid "Organisations qui conçoivent et opèrent l’événement."
+msgstr "Organisations that design and run the event."
+
+#: page-partenaires.php:63
+msgid "Soutien"
+msgstr "Support"
+
+#: page-partenaires.php:63
+msgid "Structures qui apportent un appui matériel, académique ou médiatique."
+msgstr "Bodies providing material, academic or media support."
+
+#: page-partenaires.php:64
+msgid "Sponsor"
+msgstr "Sponsor"
+
+#: page-partenaires.php:64
+msgid "Entreprises qui financent le Forum et bénéficient d’une visibilité dédiée."
+msgstr "Companies that fund the Forum and receive dedicated visibility."
+
+#: page-partenaires.php:74
+msgid "Ils nous font confiance"
+msgstr "They trust us"
+
+#: page-partenaires.php:75
+msgid "Partenaires confirmés."
+msgstr "Confirmed partners."
+
+#: page-partenaires.php:129
+msgid "Éditions associées"
+msgstr "Associated editions"
+
+#: page-partenaires.php:146
+msgid "Visiter le site"
+msgstr "Visit the website"
+
+#: page-partenaires.php:157
+msgid "Aucun partenaire confirmé"
+msgstr "No confirmed partner"
+
+#: page-partenaires.php:158
+msgid "Les partenaires apparaîtront ici dès leur confirmation."
+msgstr "Partners will appear here as soon as they are confirmed."
+
+#: page-politique-confidentialite.php:21 page-politique-confidentialite.php:23
+msgid "Politique de confidentialité"
+msgstr "Privacy policy"
+
+#: page-politique-confidentialite.php:30
+msgid "Traitement des données personnelles conforme au cadre applicable — à confirmer."
+msgstr "Processing of personal data in line with the applicable framework — to be confirmed."
+
+#: page-politique-confidentialite.php:31
+msgid "Finalités, durée de conservation et droits des personnes : à confirmer et valider avant toute publication réelle."
+msgstr "Purposes, retention period and data-subject rights: to be confirmed and validated before any real publication."
+
+#: page-politique-confidentialite.php:33
+msgid "Mesure d’audience"
+msgstr "Audience measurement"
+
+#: page-politique-confidentialite.php:34
+msgid "Cette section décrit, à titre d’exemple, une mesure d’audience respectueuse de la vie privée. Ce thème de démonstration n’intègre aucune solution de mesure réelle : à adapter selon l’outil effectivement utilisé avant toute publication."
+msgstr "This section describes, as an example, privacy-respecting audience measurement. This demonstration theme includes no real measurement solution: adapt it to the tool actually used before any publication."
+
+#. translators: %s: date de derniere mise a jour.
+#: page.php:45
+#, php-format
+msgid "Mise à jour : %s"
+msgstr "Updated: %s"
+
+#: single-fnc_edition.php:45 single-fnc_publication.php:83
+#: single-fnc_session.php:94
+msgid "Édition"
+msgstr "Edition"
+
+#: single-fnc_edition.php:124
+msgid "Sessions de cette édition."
+msgstr "Sessions of this edition."
+
+#: single-fnc_edition.php:167
+msgid "Publications liées."
+msgstr "Related publications."
+
+#: single-fnc_intervenant.php:51
+msgid "La biographie sera publiée dès sa validation."
+msgstr "The biography will be published once validated."
+
+#: single-fnc_intervenant.php:55
+msgid "Liens"
+msgstr "Links"
+
+#: single-fnc_intervenant.php:79
+msgid "Profil"
+msgstr "Profile"
+
+#: single-fnc_intervenant.php:97 single-fnc_publication.php:77
+#: single-fnc_session.php:78
+msgid "Type"
+msgstr "Type"
+
+#: single-fnc_intervenant.php:141
+msgid "Participation"
+msgstr "Participation"
+
+#: single-fnc_intervenant.php:142
+msgid "Sessions au programme."
+msgstr "Sessions on the programme."
+
+#: single-fnc_intervenant.php:160
+msgid "En modération"
+msgstr "Moderating"
+
+#: single-fnc_intervenant.php:173
+msgid "Tous les intervenants"
+msgstr "All speakers"
+
+#: single-fnc_publication.php:36
+msgid "Ressource"
+msgstr "Resource"
+
+#: single-fnc_publication.php:63
+msgid "Télécharger le document"
+msgstr "Download the document"
+
+#: single-fnc_publication.php:67
+msgid "Le document sera mis à disposition dès sa validation."
+msgstr "The document will be made available once validated."
+
+#: single-fnc_publication.php:74
+msgid "Références"
+msgstr "Details"
+
+#: single-fnc_publication.php:80
+msgid "Publié le"
+msgstr "Published on"
+
+#: single-fnc_publication.php:87
+msgid "Catégorie"
+msgstr "Category"
+
+#: single-fnc_publication.php:124
+msgid "À lire aussi"
+msgstr "Also worth reading"
+
+#: single-fnc_publication.php:125
+msgid "Autres ressources de cette édition."
+msgstr "Other resources from this edition."
+
+#: single-fnc_publication.php:143
+msgid "Toutes les ressources"
+msgstr "All resources"
+
+#: single-fnc_session.php:40
+msgid "Session"
+msgstr "Session"
+
+#: single-fnc_session.php:75
+msgid "Repères"
+msgstr "At a glance"
+
+#: single-fnc_session.php:82
+msgid "Jour"
+msgstr "Day"
+
+#: single-fnc_session.php:86
+msgid "Horaire"
+msgstr "Time"
+
+#: single-fnc_session.php:90
+msgid "Salle"
+msgstr "Room"
+
+#: single-fnc_session.php:109
+msgid "Qui intervient"
+msgstr "Who takes part"
+
+#: single-fnc_session.php:110
+msgid "Modérateur et intervenants."
+msgstr "Moderator and speakers."
+
+#: single-fnc_session.php:117
+msgid "Modération"
+msgstr "Moderation"
+
+#: single-fnc_session.php:165
+msgid "Pour aller plus loin"
+msgstr "Go further"
+
+#: single-fnc_session.php:166
+msgid "Ressources de cette édition."
+msgstr "Resources from this edition."
+
+#: single-fnc_session.php:184
+msgid "Voir tout le programme"
+msgstr "See the whole programme"

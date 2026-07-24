@@ -340,9 +340,44 @@ Le rapprochement des noms est **insensible à la casse, aux espaces et aux accen
 
 **Vérifié en conditions réelles** : état par défaut (tri alphabétique, 3 drapeaux SVG intégrés) ; ordre éditorial appliqué (Congo remonté en tête, pays non listé rejeté en fin de liste dans l'ordre alphabétique) ; drapeau uploadé rendu en `<img>` pour la France là où les autres restent en SVG intégré ; tolérance de casse confirmée (« congo »/« CAMEROUN » ordonnent les libellés « Congo »/« Cameroun ») ; section Customizer enregistrée (HTTP 200) ; helper utilisé aussi sur la fiche intervenant ; aucune erreur console ni fatal/notice/warning.
 
-## Multilinguisme
+## Multilinguisme (Lot 8)
 
-Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).
+Dépendance ciblée actée à l'ADR-007 (Décision 2 amendée) : **Polylang** (gratuit, GPL), réservé au multilinguisme. Le socle FR/EN est en place et fonctionnel.
+
+### Interface traduite (thème + plugin)
+
+Toutes les chaînes d'interface passent déjà par `__()`/`esc_html_e()`. Une traduction **anglaise (en_GB)** complète est fournie :
+
+| Domaine | Fichiers | Chaînes traduites |
+|---|---|---|
+| Thème (`fnc-wordpress-theme`) | `languages/*.pot/.po/.mo/.l10n.php` | 492 |
+| Plugin (`fnc-content-model`) | `languages/*.pot/.po/.mo/.l10n.php` | 98 (dont les types de session/publication, statuts d'édition, niveaux de partenariat visibles en front) |
+
+L'anglais est en_GB (et non en_US) : WordPress traite en_US comme la langue source « sans traduction », or les chaînes sources du thème sont en **français**. en_GB est donc la locale anglaise fonctionnelle ; les traductions sont d'ailleurs rédigées en anglais britannique.
+
+### Chargement des traductions — contournement documenté
+
+Le chargement passe par `load_textdomain()` ciblant directement le `.mo` par locale (dans `functions.php` et `fnc-content-model.php`), sur les hooks `init` **et** `wp`, plutôt que par `load_theme_textdomain()`. Deux raisons, observées en conditions réelles avec WordPress 6.8 + Polylang :
+
+1. **Timing Polylang** : Polylang ne fixe la langue de la requête frontend qu'**après** `init` (au parsing de la requête). Un chargement uniquement sur `init` figerait le front dans la langue par défaut ; le rechargement sur `wp` resynchronise sur la langue demandée.
+2. **Piège de `load_theme_textdomain`** : cette fonction tente d'abord le dossier global (`wp-content/languages/themes/`) ; sur un fichier absent, cette tentative laisse le domaine dans un état qui empêche la seconde tentative (dossier du thème) d'aboutir. Cibler directement le `.mo` du thème l'évite.
+
+La langue source étant le français (aucun `.mo` fr), on décharge le domaine quand aucune traduction n'existe pour la locale courante, pour revenir aux chaînes sources.
+
+### Version WordPress épinglée
+
+`compose.yaml` épingle **WordPress 6.8** (au lieu de `latest`) : le tag `latest` a livré une pré-version 7.0.x dont le système de traduction (`WP_Translation_Controller`) ne suivait pas la locale par requête, cassant le multilinguisme. La 6.x est représentative des sites réels (le thème cible « 6.4+ »).
+
+### Vérifié en conditions réelles
+
+Polylang installé, deux langues créées (FR=fr_FR par défaut, EN=en_GB), pretty permalinks activés. Routing `/` (FR) et `/en/` (EN) confirmé : interface entièrement traduite en anglais sur `/en/` (héros, navigation, footer, CTA, états), français intact sur `/` (non-régression), badges de type de session traduits côté plugin (« Round table » / « Table ronde »), administration accessible.
+
+### Reste à faire (multilinguisme complet)
+
+- **Sélecteur de langue dynamique** : `fnc_language_switcher()` détecte déjà Polylang mais retombe sur le repli statique FR/EN tant que le contenu n'a pas de traductions assignées (`pll_the_languages()` renvoie alors une liste vide). À finaliser avec la configuration de contenu Polylang.
+- **Chaînes des Réglages FNC (Customizer)** : textes du footer, identité, etc. sont des `theme_mod` uniques ; les rendre bilingues nécessite `pll_register_string()` (module « Traductions des chaînes » de Polylang).
+- **Contenus traduisibles** : déclarer les CPT/taxonomies du plugin comme traduisibles dans Polylang, puis saisir les versions par langue (travail éditorial).
+- **Installation** : Polylang n'est pas versionné (plugin tiers, hors dépôt) ; il doit être installé et activé sur chaque instance.
 
 ## Prochaines étapes
 

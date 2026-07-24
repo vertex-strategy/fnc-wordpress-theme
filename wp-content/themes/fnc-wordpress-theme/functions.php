@@ -40,13 +40,53 @@ require_once get_template_directory() . '/inc/seo.php';
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {
-	load_theme_textdomain( 'fnc-wordpress-theme', get_template_directory() . '/languages' );
-
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'script', 'style' ) );
 	add_theme_support( 'automatic-feed-links' );
+}
+add_action( 'after_setup_theme', 'fnc_theme_setup' );
 
+/**
+ * Chargement des traductions du theme.
+ *
+ * On charge le fichier .mo DIRECTEMENT (load_textdomain) plutot que via
+ * load_theme_textdomain, pour deux raisons observees sur WordPress 6.8 +
+ * Polylang :
+ *
+ *   1. load_theme_textdomain tente d'abord le dossier global
+ *      (wp-content/languages/themes/) ; cette tentative sur un fichier absent
+ *      laisse le domaine dans un etat qui empeche la seconde tentative (dossier
+ *      du theme) d'aboutir. Cibler directement le .mo du theme evite ce piege.
+ *   2. La langue source du theme est le francais, pour laquelle il n'existe
+ *      aucun .mo. On ne charge donc un fichier que s'il existe pour la locale
+ *      courante ; sinon on decharge, pour revenir aux chaines sources
+ *      francaises (et ne pas laisser une traduction anglaise chargee plus tot).
+ *
+ * Double accroche :
+ *   - `init` (priorite 1) couvre l'administration et sert de repli.
+ *   - `wp` couvre le FRONT avec Polylang, qui ne fixe la langue de la requete
+ *     qu'apres `init` ; sans ce second passage, le front resterait fige dans la
+ *     langue par defaut.
+ */
+function fnc_load_textdomain() {
+	$locale = determine_locale();
+	$mofile = get_template_directory() . '/languages/fnc-wordpress-theme-' . $locale . '.mo';
+
+	unload_textdomain( 'fnc-wordpress-theme' );
+	if ( is_readable( $mofile ) ) {
+		load_textdomain( 'fnc-wordpress-theme', $mofile, $locale );
+	}
+}
+add_action( 'init', 'fnc_load_textdomain', 1 );
+add_action( 'wp', 'fnc_load_textdomain' );
+
+/**
+ * Emplacements de menu. Sur `init` (priorite 1, apres le chargement du
+ * textdomain) : les libelles passent par __(), a n'appeler qu'une fois le
+ * domaine charge.
+ */
+function fnc_register_menus() {
 	register_nav_menus(
 		array(
 			'primary' => __( 'Navigation principale', 'fnc-wordpress-theme' ),
@@ -54,7 +94,7 @@ function fnc_theme_setup() {
 		)
 	);
 }
-add_action( 'after_setup_theme', 'fnc_theme_setup' );
+add_action( 'init', 'fnc_register_menus', 1 );
 
 /**
  * Enqueue des styles et scripts du theme.

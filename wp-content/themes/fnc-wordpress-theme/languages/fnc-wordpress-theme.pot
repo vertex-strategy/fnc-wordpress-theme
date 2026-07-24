@@ -1,0 +1,2196 @@
+# Copyright (C) 2026 Vertex Strategy
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: FNC WordPress Theme 0.3.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fnc-wordpress-theme\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-24T07:36:50+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: fnc-wordpress-theme\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "FNC WordPress Theme"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Vertex Strategy"
+msgstr ""
+
+#: archive-fnc_edition.php:28
+msgid "Mémoire"
+msgstr ""
+
+#: archive-fnc_edition.php:29
+msgid "L’histoire du Forum comme actif institutionnel."
+msgstr ""
+
+#: archive-fnc_edition.php:30
+msgid "Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés."
+msgstr ""
+
+#: archive-fnc_edition.php:32
+#: archive-fnc_intervenant.php:31
+#: archive-fnc_publication.php:28
+#: archive-fnc_session.php:28
+#: page-contact.php:46
+#: page-edition-en-cours.php:88
+#: page-informations-pratiques.php:29
+#: page-inscription.php:30
+msgid "Image éditoriale institutionnelle du Forum"
+msgstr ""
+
+#: archive-fnc_edition.php:33
+#: footer.php:59
+#: functions.php:100
+msgid "Éditions"
+msgstr ""
+
+#: archive-fnc_edition.php:53
+#: archive-fnc_edition.php:54
+msgid "Éditions publiées"
+msgstr ""
+
+#: archive-fnc_edition.php:84
+msgid "Statut à confirmer"
+msgstr ""
+
+#: archive-fnc_edition.php:101
+msgid "Voir l’édition"
+msgstr ""
+
+#: archive-fnc_edition.php:110
+msgid "Aucune édition publiée"
+msgstr ""
+
+#: archive-fnc_edition.php:111
+msgid "Les éditions apparaîtront ici dès leur publication."
+msgstr ""
+
+#: archive-fnc_intervenant.php:27
+msgid "Voix"
+msgstr ""
+
+#: archive-fnc_intervenant.php:28
+msgid "Des profils qui donnent du sens aux interventions."
+msgstr ""
+
+#: archive-fnc_intervenant.php:29
+msgid "Profils exemples non officiels, rattachés à sessions et ressources."
+msgstr ""
+
+#: archive-fnc_intervenant.php:32
+#: footer.php:53
+#: inc/customizer.php:405
+msgid "Intervenants"
+msgstr ""
+
+#: archive-fnc_intervenant.php:62
+#: archive-fnc_intervenant.php:63
+msgid "Profils"
+msgstr ""
+
+#: archive-fnc_intervenant.php:69
+#: archive-fnc_intervenant.php:70
+msgid "Pays représentés"
+msgstr ""
+
+#: archive-fnc_intervenant.php:82
+msgid "Filtrer par profil"
+msgstr ""
+
+#: archive-fnc_intervenant.php:83
+#: archive-fnc_publication.php:67
+msgid "Tous"
+msgstr ""
+
+#: archive-fnc_intervenant.php:95
+#: single-fnc_intervenant.php:86
+msgid "Pays"
+msgstr ""
+
+#: archive-fnc_intervenant.php:97
+msgid "Tous les pays"
+msgstr ""
+
+#: archive-fnc_intervenant.php:102
+msgid "Filtrer"
+msgstr ""
+
+#: archive-fnc_intervenant.php:118
+#: single-fnc_intervenant.php:33
+#: single-fnc_session.php:131
+msgid "Intervenant"
+msgstr ""
+
+#: archive-fnc_intervenant.php:139
+msgid "Aucun intervenant publié"
+msgstr ""
+
+#: archive-fnc_intervenant.php:140
+msgid "Les profils apparaîtront ici dès leur publication."
+msgstr ""
+
+#: archive-fnc_publication.php:24
+#: footer.php:57
+#: footer.php:60
+#: functions.php:101
+#: single-fnc_edition.php:166
+msgid "Ressources"
+msgstr ""
+
+#: archive-fnc_publication.php:25
+msgid "La réflexion continue après les sessions."
+msgstr ""
+
+#: archive-fnc_publication.php:26
+msgid "Rapports, communiqués, vidéos et analyses sont structurés sans contenu fictif."
+msgstr ""
+
+#: archive-fnc_publication.php:29
+msgid "Publications"
+msgstr ""
+
+#: archive-fnc_publication.php:58
+msgid "Recherche"
+msgstr ""
+
+#: archive-fnc_publication.php:59
+msgid "Rechercher une publication"
+msgstr ""
+
+#: archive-fnc_publication.php:63
+msgid "Rechercher"
+msgstr ""
+
+#: archive-fnc_publication.php:66
+msgid "Filtrer par type"
+msgstr ""
+
+#: archive-fnc_publication.php:82
+#: single-fnc_edition.php:174
+#: single-fnc_publication.php:132
+#: single-fnc_session.php:173
+msgid "Publication"
+msgstr ""
+
+#: archive-fnc_publication.php:88
+#: single-fnc_publication.php:58
+msgid "Regarder"
+msgstr ""
+
+#: archive-fnc_publication.php:95
+msgid "Aucune publication validée"
+msgstr ""
+
+#: archive-fnc_publication.php:96
+msgid "L’état vide reste sobre, sans faux contenu."
+msgstr ""
+
+#: archive-fnc_session.php:24
+msgid "Agenda"
+msgstr ""
+
+#: archive-fnc_session.php:25
+msgid "Un programme lisible avant, pendant et après."
+msgstr ""
+
+#: archive-fnc_session.php:26
+msgid "Chaque session devient un nœud de navigation vers édition, intervenants et ressources."
+msgstr ""
+
+#: archive-fnc_session.php:29
+#: archive-fnc_session.php:56
+#: footer.php:52
+#: front-page.php:155
+#: single-fnc_edition.php:123
+msgid "Programme"
+msgstr ""
+
+#: archive-fnc_session.php:41
+#: page-edition-en-cours.php:73
+msgid "Jour à confirmer"
+msgstr ""
+
+#: archive-fnc_session.php:57
+msgid "Sessions"
+msgstr ""
+
+#: archive-fnc_session.php:62
+msgid "Journées"
+msgstr ""
+
+#: archive-fnc_session.php:86
+msgid "Modérateur"
+msgstr ""
+
+#: archive-fnc_session.php:89
+#: front-page.php:171
+#: page-edition-en-cours.php:181
+#: single-fnc_edition.php:141
+#: single-fnc_intervenant.php:163
+msgid "Salle à confirmer"
+msgstr ""
+
+#: archive-fnc_session.php:96
+#: page-edition-en-cours.php:187
+msgid "Aucune session publiée"
+msgstr ""
+
+#: archive-fnc_session.php:97
+#: page-edition-en-cours.php:188
+msgid "Les données finales proviennent du CMS."
+msgstr ""
+
+#: footer.php:15
+#: inc/customizer.php:383
+msgid "Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville."
+msgstr ""
+
+#: footer.php:40
+msgid "Réseaux sociaux"
+msgstr ""
+
+#: footer.php:48
+#: functions.php:98
+#: page-mot-du-president.php:31
+msgid "Le Forum"
+msgstr ""
+
+#: footer.php:50
+msgid "Présentation"
+msgstr ""
+
+#: footer.php:51
+#: functions.php:99
+#: page-edition-en-cours.php:84
+#: page-edition-en-cours.php:89
+msgid "Édition en cours"
+msgstr ""
+
+#: footer.php:61
+#: page-informations-pratiques.php:26
+#: page-informations-pratiques.php:30
+msgid "Informations pratiques"
+msgstr ""
+
+#: footer.php:62
+msgid "Dossier presse"
+msgstr ""
+
+#: footer.php:66
+#: footer.php:68
+#: functions.php:103
+#: page-contact.php:42
+#: page-contact.php:47
+msgid "Contact"
+msgstr ""
+
+#: footer.php:69
+#: front-page.php:222
+msgid "Devenir partenaire"
+msgstr ""
+
+#: footer.php:70
+#: header.php:66
+#: page-informations-pratiques.php:80
+msgid "S’inscrire"
+msgstr ""
+
+#: footer.php:81
+#, php-format
+msgid "© %1$s %2$s"
+msgstr ""
+
+#: footer.php:83
+#: page-mentions-legales.php:20
+#: page-mentions-legales.php:22
+msgid "Mentions légales"
+msgstr ""
+
+#: footer.php:84
+msgid "Confidentialité"
+msgstr ""
+
+#: front-page.php:55
+msgid "Dates"
+msgstr ""
+
+#: front-page.php:55
+#: front-page.php:113
+#: front-page.php:161
+#: front-page.php:177
+#: front-page.php:217
+#: page-contact.php:74
+#: page-contact.php:76
+#: page-edition-en-cours.php:252
+#: page-espace-presse.php:86
+#: page-espace-presse.php:131
+#: page-informations-pratiques.php:70
+#: page-inscription.php:69
+#: page-inscription.php:77
+#: page-le-forum.php:120
+#: page-mot-du-president.php:39
+#: single-fnc_intervenant.php:51
+#: single-fnc_publication.php:67
+msgid "À confirmer"
+msgstr ""
+
+#: front-page.php:59
+msgid "Numérique"
+msgstr ""
+
+#: front-page.php:60
+msgid "« L’espace où l’Afrique centrale décide de son avenir numérique. »"
+msgstr ""
+
+#: front-page.php:62
+msgid "Voir le programme"
+msgstr ""
+
+#: front-page.php:63
+#: page-le-forum.php:121
+msgid "Demander une accréditation"
+msgstr ""
+
+#: front-page.php:66
+msgid "Défiler"
+msgstr ""
+
+#: front-page.php:73
+#: page-le-forum.php:45
+msgid "Ce que nous sommes"
+msgstr ""
+
+#: front-page.php:74
+msgid "Pas une conférence."
+msgstr ""
+
+#: front-page.php:74
+msgid "Un espace de décision."
+msgstr ""
+
+#: front-page.php:74
+msgid "Une institution permanente."
+msgstr ""
+
+#: front-page.php:75
+msgid "Découvrir le Forum"
+msgstr ""
+
+#: front-page.php:77
+msgid "Salle plénière du Forum Numérique Congo avant l’ouverture"
+msgstr ""
+
+#: front-page.php:97
+msgid "Portrait d’un participant du Forum Numérique Congo"
+msgstr ""
+
+#: front-page.php:99
+msgid "Les voix"
+msgstr ""
+
+#: front-page.php:113
+msgid "Intervenant·e"
+msgstr ""
+
+#: front-page.php:114
+msgid "Fonction officielle — à valider"
+msgstr ""
+
+#: front-page.php:115
+msgid "Institution — à valider"
+msgstr ""
+
+#: front-page.php:116
+msgid "« La citation de l’intervenant apparaîtra ici une fois sa participation confirmée. »"
+msgstr ""
+
+#: front-page.php:128
+msgid "Le territoire"
+msgstr ""
+
+#: front-page.php:129
+msgid "L’Afrique centrale décide"
+msgstr ""
+
+#: front-page.php:129
+msgid "de son avenir numérique."
+msgstr ""
+
+#: front-page.php:130
+msgid "Depuis Brazzaville. Depuis le Bassin du Congo. Une parole ancrée, pas importée."
+msgstr ""
+
+#: front-page.php:153
+msgid "Pupitre du Forum Numérique Congo sur la scène plénière"
+msgstr ""
+
+#: front-page.php:156
+msgid "Trois jours de travail collectif"
+msgstr ""
+
+#: front-page.php:161
+msgid "Journée d’ouverture · Date"
+msgstr ""
+
+#: front-page.php:177
+msgid "Programme en préparation"
+msgstr ""
+
+#: front-page.php:182
+msgid "Programme complet"
+msgstr ""
+
+#: front-page.php:192
+msgid "La communauté"
+msgstr ""
+
+#: front-page.php:193
+msgid "Ils construisent le Forum avec nous"
+msgstr ""
+
+#: front-page.php:212
+#: front-page.php:213
+msgid "Partenaire · À confirmer"
+msgstr ""
+
+#: front-page.php:237
+msgid "Les éditions"
+msgstr ""
+
+#: front-page.php:238
+msgid "Une histoire qui se construit, édition après édition"
+msgstr ""
+
+#: front-page.php:249
+msgid "Édition · Archive à confirmer"
+msgstr ""
+
+#: front-page.php:253
+msgid "Voir toutes les éditions"
+msgstr ""
+
+#: front-page.php:277
+msgid "La prochaine édition"
+msgstr ""
+
+#: front-page.php:279
+msgid "Le Forum Numérique Congo commence dans"
+msgstr ""
+
+#: front-page.php:281
+#: page-edition-en-cours.php:148
+msgid "jours"
+msgstr ""
+
+#: front-page.php:283
+msgid "Date à confirmer"
+msgstr ""
+
+#: front-page.php:286
+msgid "Demander votre accréditation"
+msgstr ""
+
+#: functions.php:52
+#: header.php:48
+msgid "Navigation principale"
+msgstr ""
+
+#: functions.php:53
+#: header.php:76
+msgid "Navigation mobile"
+msgstr ""
+
+#: functions.php:102
+#: page-partenaires.php:27
+#: page-partenaires.php:32
+msgid "Partenaires"
+msgstr ""
+
+#: functions.php:148
+#: functions.php:169
+msgid "Langue"
+msgstr ""
+
+#: functions.php:207
+#: functions.php:233
+#: inc/blocks.php:619
+#: page-le-forum.php:44
+#: page-mot-du-president.php:31
+msgid "Accueil"
+msgstr ""
+
+#: functions.php:247
+msgid "Poursuivre le parcours."
+msgstr ""
+
+#: functions.php:248
+msgid "Les contenus non confirmés restent masqués ou signalés."
+msgstr ""
+
+#: functions.php:249
+msgid "Contacter l’équipe"
+msgstr ""
+
+#: header.php:20
+msgid "Aller au contenu"
+msgstr ""
+
+#: header.php:23
+#, php-format
+msgid "%s — accueil"
+msgstr ""
+
+#: header.php:42
+msgid "Forum Numérique"
+msgstr ""
+
+#: header.php:42
+msgid "Congo"
+msgstr ""
+
+#: header.php:69
+msgid "Ouvrir le menu"
+msgstr ""
+
+#: inc/blocks.php:42
+msgid "Libellé du bouton"
+msgstr ""
+
+#: inc/blocks.php:43
+msgid "Lien du bouton"
+msgstr ""
+
+#: inc/blocks.php:47
+#: inc/blocks.php:70
+#: inc/blocks.php:81
+#: inc/blocks.php:96
+#: inc/blocks.php:109
+#: inc/blocks.php:134
+#: inc/blocks.php:160
+#: inc/blocks.php:174
+#: inc/blocks.php:185
+#: inc/homepage.php:276
+#: inc/homepage.php:293
+#: inc/homepage.php:307
+#: inc/homepage.php:322
+#: inc/homepage.php:336
+#: inc/homepage.php:349
+msgid "Sur-titre"
+msgstr ""
+
+#: inc/blocks.php:48
+#: inc/blocks.php:110
+#: inc/blocks.php:116
+#: inc/blocks.php:146
+#: inc/blocks.php:161
+#: inc/blocks.php:175
+#: inc/blocks.php:186
+#: inc/blocks.php:208
+#: inc/blocks.php:226
+#: inc/blocks.php:243
+#: inc/blocks.php:267
+#: inc/blocks.php:280
+#: inc/blocks.php:290
+#: inc/blocks.php:309
+#: inc/blocks.php:319
+#: inc/blocks.php:329
+#: inc/blocks.php:347
+#: inc/blocks.php:365
+#: inc/homepage.php:323
+#: inc/homepage.php:337
+#: inc/homepage.php:350
+msgid "Titre"
+msgstr ""
+
+#: inc/blocks.php:49
+#: inc/blocks.php:73
+msgid "Introduction"
+msgstr ""
+
+#: inc/blocks.php:53
+#: inc/blocks.php:351
+msgid "Questions"
+msgstr ""
+
+#: inc/blocks.php:55
+#: inc/blocks.php:353
+msgid "Question"
+msgstr ""
+
+#: inc/blocks.php:56
+#: inc/blocks.php:354
+msgid "Réponse"
+msgstr ""
+
+#: inc/blocks.php:64
+msgid "Ouverture (institutionnel)"
+msgstr ""
+
+#: inc/blocks.php:66
+msgid "Héros pleine hauteur avec image, fil d’Ariane et introduction."
+msgstr ""
+
+#: inc/blocks.php:68
+msgid "Image d’ouverture"
+msgstr ""
+
+#: inc/blocks.php:69
+msgid "Fil d’Ariane (libellé page)"
+msgstr ""
+
+#: inc/blocks.php:71
+#: inc/blocks.php:97
+#: inc/homepage.php:264
+msgid "Titre — ligne 1"
+msgstr ""
+
+#: inc/blocks.php:72
+#: inc/blocks.php:98
+msgid "Titre — ligne 2"
+msgstr ""
+
+#: inc/blocks.php:77
+#: page-mot-du-president.php:31
+#: page-mot-du-president.php:32
+msgid "Mot du Président"
+msgstr ""
+
+#: inc/blocks.php:79
+msgid "Portrait, identité et extrait du mot du Président."
+msgstr ""
+
+#: inc/blocks.php:82
+msgid "Portrait"
+msgstr ""
+
+#: inc/blocks.php:83
+#: inc/blocks.php:296
+#: page-contact.php:62
+msgid "Nom"
+msgstr ""
+
+#: inc/blocks.php:84
+msgid "Fonction"
+msgstr ""
+
+#: inc/blocks.php:85
+msgid "Extrait (affiché sur la page)"
+msgstr ""
+
+#: inc/blocks.php:86
+msgid "Mot complet"
+msgstr ""
+
+#: inc/blocks.php:87
+msgid "Libellé du lien « lire tout »"
+msgstr ""
+
+#: inc/blocks.php:88
+msgid "Lien « lire tout »"
+msgstr ""
+
+#: inc/blocks.php:92
+msgid "Mission (média + texte)"
+msgstr ""
+
+#: inc/blocks.php:94
+msgid "Titre sur trois lignes, texte et image."
+msgstr ""
+
+#: inc/blocks.php:99
+msgid "Titre — ligne 3 (atténuée)"
+msgstr ""
+
+#: inc/blocks.php:100
+#: inc/blocks.php:147
+#: inc/blocks.php:163
+#: inc/blocks.php:187
+#: inc/blocks.php:227
+msgid "Texte"
+msgstr ""
+
+#: inc/blocks.php:101
+#: inc/blocks.php:188
+#: inc/homepage.php:282
+#: inc/homepage.php:321
+msgid "Image"
+msgstr ""
+
+#: inc/blocks.php:105
+msgid "Objectifs (séquence numérotée)"
+msgstr ""
+
+#: inc/blocks.php:107
+msgid "Séquence numérotée ; la numérotation et les couleurs DA sont automatiques."
+msgstr ""
+
+#: inc/blocks.php:114
+#: single-fnc_session.php:60
+msgid "Objectifs"
+msgstr ""
+
+#: inc/blocks.php:117
+#: inc/customizer.php:265
+msgid "Description"
+msgstr ""
+
+#: inc/blocks.php:123
+msgid "FAQ (institutionnel)"
+msgstr ""
+
+#: inc/blocks.php:125
+#: inc/blocks.php:235
+msgid "Questions fréquentes, dépliables."
+msgstr ""
+
+#: inc/blocks.php:129
+msgid "Ancrage (manifeste pleine largeur)"
+msgstr ""
+
+#: inc/blocks.php:131
+msgid "Bande pleine largeur avec image de fond et manifeste."
+msgstr ""
+
+#: inc/blocks.php:133
+msgid "Image pleine largeur"
+msgstr ""
+
+#: inc/blocks.php:135
+#: inc/homepage.php:308
+msgid "Manifeste — début"
+msgstr ""
+
+#: inc/blocks.php:136
+#: inc/homepage.php:309
+msgid "Manifeste — accent"
+msgstr ""
+
+#: inc/blocks.php:137
+#: inc/homepage.php:310
+msgid "Sous-texte"
+msgstr ""
+
+#: inc/blocks.php:141
+msgid "Callout (CTA)"
+msgstr ""
+
+#: inc/blocks.php:143
+msgid "Bandeau d’appel à action sur fond navy."
+msgstr ""
+
+#: inc/blocks.php:155
+msgid "Héros"
+msgstr ""
+
+#: inc/blocks.php:157
+msgid "Héros secondaire avec image de fond et CTA."
+msgstr ""
+
+#: inc/blocks.php:162
+#: inc/customizer.php:264
+msgid "Sous-titre"
+msgstr ""
+
+#: inc/blocks.php:164
+#: inc/homepage.php:187
+#: inc/homepage.php:306
+#: inc/homepage.php:355
+msgid "Image de fond"
+msgstr ""
+
+#: inc/blocks.php:170
+msgid "Texte riche"
+msgstr ""
+
+#: inc/blocks.php:172
+msgid "Bloc de lecture (colonne étroite)."
+msgstr ""
+
+#: inc/blocks.php:176
+#: inc/blocks.php:281
+#: inc/blocks.php:310
+#: inc/blocks.php:320
+#: inc/blocks.php:366
+msgid "Contenu"
+msgstr ""
+
+#: inc/blocks.php:180
+msgid "Média + texte"
+msgstr ""
+
+#: inc/blocks.php:182
+msgid "Texte et image côte à côte, image à droite ou à gauche."
+msgstr ""
+
+#: inc/blocks.php:192
+msgid "Côté de l’image"
+msgstr ""
+
+#: inc/blocks.php:195
+msgid "Droite"
+msgstr ""
+
+#: inc/blocks.php:196
+msgid "Gauche"
+msgstr ""
+
+#: inc/blocks.php:204
+msgid "Chiffres clés"
+msgstr ""
+
+#: inc/blocks.php:206
+msgid "Bande de chiffres clés."
+msgstr ""
+
+#: inc/blocks.php:212
+msgid "Chiffres"
+msgstr ""
+
+#: inc/blocks.php:214
+msgid "Valeur"
+msgstr ""
+
+#: inc/blocks.php:215
+#: inc/blocks.php:249
+#: inc/blocks.php:335
+msgid "Libellé"
+msgstr ""
+
+#: inc/blocks.php:221
+msgid "Appel à action"
+msgstr ""
+
+#: inc/blocks.php:223
+msgid "Bandeau CTA pleine largeur."
+msgstr ""
+
+#: inc/blocks.php:233
+msgid "FAQ"
+msgstr ""
+
+#: inc/blocks.php:239
+msgid "Documents"
+msgstr ""
+
+#: inc/blocks.php:241
+msgid "Liste de fichiers à télécharger."
+msgstr ""
+
+#: inc/blocks.php:247
+msgid "Fichiers"
+msgstr ""
+
+#: inc/blocks.php:250
+msgid "Fichier"
+msgstr ""
+
+#: inc/blocks.php:262
+msgid "Infos pratiques · Lieu & plan d’accès"
+msgstr ""
+
+#: inc/blocks.php:265
+msgid "Adresse, détails d’accès et plan. La carte interactive n’est chargée qu’au clic."
+msgstr ""
+
+#: inc/blocks.php:268
+#: inc/customizer.php:326
+msgid "Adresse"
+msgstr ""
+
+#: inc/blocks.php:269
+msgid "Détails d’accès"
+msgstr ""
+
+#: inc/blocks.php:270
+msgid "Plan (image statique)"
+msgstr ""
+
+#: inc/blocks.php:271
+msgid "URL de carte interactive (optionnel)"
+msgstr ""
+
+#: inc/blocks.php:275
+msgid "Infos pratiques · Transport & accès"
+msgstr ""
+
+#: inc/blocks.php:278
+msgid "Comment rejoindre le lieu."
+msgstr ""
+
+#: inc/blocks.php:285
+msgid "Infos pratiques · Hébergement"
+msgstr ""
+
+#: inc/blocks.php:288
+msgid "Hôtels recommandés."
+msgstr ""
+
+#: inc/blocks.php:294
+msgid "Hôtels recommandés"
+msgstr ""
+
+#: inc/blocks.php:297
+msgid "Précision"
+msgstr ""
+
+#: inc/blocks.php:298
+msgid "Site web (optionnel)"
+msgstr ""
+
+#: inc/blocks.php:304
+msgid "Infos pratiques · Visa & formalités"
+msgstr ""
+
+#: inc/blocks.php:307
+msgid "Formalités d’entrée sur le territoire."
+msgstr ""
+
+#: inc/blocks.php:314
+msgid "Infos pratiques · Badge & accréditation"
+msgstr ""
+
+#: inc/blocks.php:317
+msgid "Retrait du badge et accréditation."
+msgstr ""
+
+#: inc/blocks.php:324
+msgid "Infos pratiques · Contacts utiles"
+msgstr ""
+
+#: inc/blocks.php:327
+msgid "Contacts logistiques de l’édition."
+msgstr ""
+
+#: inc/blocks.php:333
+#: page-espace-presse.php:96
+msgid "Contacts"
+msgstr ""
+
+#: inc/blocks.php:336
+msgid "Valeur (email / téléphone / …)"
+msgstr ""
+
+#: inc/blocks.php:342
+msgid "Infos pratiques · FAQ logistique"
+msgstr ""
+
+#: inc/blocks.php:345
+msgid "Questions fréquentes sur la logistique."
+msgstr ""
+
+#: inc/blocks.php:360
+msgid "Infos pratiques · Accessibilité sur site"
+msgstr ""
+
+#: inc/blocks.php:363
+msgid "Conditions d’accessibilité du lieu."
+msgstr ""
+
+#: inc/blocks.php:428
+msgid "Forum Numérique Congo"
+msgstr ""
+
+#: inc/blocks.php:433
+msgid "FNC · Informations pratiques"
+msgstr ""
+
+#: inc/blocks.php:1007
+msgid "Transport & accès"
+msgstr ""
+
+#: inc/blocks.php:1011
+msgid "Visa & formalités"
+msgstr ""
+
+#: inc/blocks.php:1015
+msgid "Badge & accréditation"
+msgstr ""
+
+#: inc/blocks.php:1019
+msgid "Accessibilité sur site"
+msgstr ""
+
+#: inc/blocks.php:1045
+msgid "Carte du lieu"
+msgstr ""
+
+#: inc/blocks.php:1046
+msgid "Afficher la carte interactive"
+msgstr ""
+
+#: inc/blocks.php:1047
+msgid "La carte n’est chargée qu’à votre demande : aucun contenu tiers n’est appelé avant."
+msgstr ""
+
+#: inc/blocks.php:1051
+msgid "Lieu & plan d’accès"
+msgstr ""
+
+#: inc/blocks.php:1082
+msgid "Hébergement"
+msgstr ""
+
+#: inc/blocks.php:1108
+msgid "Contacts utiles"
+msgstr ""
+
+#: inc/blocks.php:1132
+msgid "FAQ logistique"
+msgstr ""
+
+#: inc/blocks.php:1234
+msgid "Document"
+msgstr ""
+
+#: inc/blocks.php:1237
+msgid "Télécharger"
+msgstr ""
+
+#: inc/blocks.php:1239
+msgid "Fichier à venir"
+msgstr ""
+
+#: inc/customizer.php:246
+msgid "Réglages FNC"
+msgstr ""
+
+#: inc/customizer.php:247
+msgid "Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur."
+msgstr ""
+
+#: inc/customizer.php:256
+msgid "Identité"
+msgstr ""
+
+#: inc/customizer.php:262
+msgid "Nom officiel"
+msgstr ""
+
+#: inc/customizer.php:263
+msgid "Slogan"
+msgstr ""
+
+#: inc/customizer.php:266
+msgid "Présentation courte"
+msgstr ""
+
+#: inc/customizer.php:285
+msgid "Logos & icônes"
+msgstr ""
+
+#: inc/customizer.php:287
+msgid "Le favicon se règle via Réglages généraux → Icône du site (fonction WordPress native)."
+msgstr ""
+
+#: inc/customizer.php:292
+msgid "Logo principal"
+msgstr ""
+
+#: inc/customizer.php:293
+msgid "Logo clair"
+msgstr ""
+
+#: inc/customizer.php:294
+msgid "Logo sombre"
+msgstr ""
+
+#: inc/customizer.php:314
+msgid "Communication"
+msgstr ""
+
+#: inc/customizer.php:320
+msgid "Email de contact"
+msgstr ""
+
+#: inc/customizer.php:323
+msgid "Téléphone"
+msgstr ""
+
+#. translators: %s: nom de la plateforme sociale.
+#: inc/customizer.php:344
+#, php-format
+msgid "URL %s"
+msgstr ""
+
+#: inc/customizer.php:355
+#: inc/customizer.php:364
+msgid "Contacts presse"
+msgstr ""
+
+#: inc/customizer.php:357
+msgid "Un contact par ligne, champs séparés par « | » dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone. Affichés uniquement lorsqu’ils sont renseignés — ne jamais saisir de données fictives."
+msgstr ""
+
+#: inc/customizer.php:375
+msgid "Footer"
+msgstr ""
+
+#: inc/customizer.php:377
+msgid "L’année courante est ajoutée automatiquement à la mention de copyright."
+msgstr ""
+
+#: inc/customizer.php:388
+msgid "Texte du footer"
+msgstr ""
+
+#: inc/customizer.php:394
+msgid "Mention de copyright"
+msgstr ""
+
+#: inc/customizer.php:395
+msgid "Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé."
+msgstr ""
+
+#: inc/customizer.php:407
+msgid "Ordonne la frise « Pays représentés » de la page Intervenants. Un pays par ligne, dans l’ordre voulu, avec un drapeau optionnel : « Pays | URL du drapeau ». Les pays non listés apparaissent ensuite, par ordre alphabétique. Vide → tri alphabétique. Sans URL de drapeau, le drapeau intégré est utilisé si le pays est reconnu."
+msgstr ""
+
+#: inc/customizer.php:414
+msgid "Ordre des pays représentés"
+msgstr ""
+
+#: inc/customizer.php:425
+msgid "SEO par défaut"
+msgstr ""
+
+#: inc/customizer.php:433
+msgid "Titre par défaut"
+msgstr ""
+
+#: inc/customizer.php:434
+#: inc/seo.php:91
+msgid "Recommandé : 50–60 caractères."
+msgstr ""
+
+#: inc/customizer.php:443
+msgid "Description par défaut"
+msgstr ""
+
+#: inc/customizer.php:444
+#: inc/seo.php:97
+msgid "Recommandé : 150–160 caractères."
+msgstr ""
+
+#: inc/customizer.php:455
+msgid "Image OpenGraph par défaut"
+msgstr ""
+
+#: inc/customizer.php:456
+msgid "Visuel de partage social (1200×630 recommandé)."
+msgstr ""
+
+#: inc/customizer.php:466
+msgid "Type de Twitter Card"
+msgstr ""
+
+#: inc/customizer.php:470
+msgid "Grande image"
+msgstr ""
+
+#: inc/customizer.php:471
+msgid "Résumé"
+msgstr ""
+
+#: inc/customizer.php:479
+msgid "Directive robots par défaut"
+msgstr ""
+
+#: inc/customizer.php:480
+msgid "Ex. « index, follow » ou « noindex, nofollow »."
+msgstr ""
+
+#: inc/homepage.php:148
+msgid "Page d’accueil (M1 → M8)"
+msgstr ""
+
+#: inc/homepage.php:149
+msgid "Contenu éditorial des 8 moments. La composition et la direction artistique sont figées : vous administrez les textes, les médias et les libellés de boutons."
+msgstr ""
+
+#: inc/homepage.php:158
+msgid "M1 · Ouverture"
+msgstr ""
+
+#: inc/homepage.php:160
+msgid "Le média de fond peut être une image fixe, une vidéo ou un slider."
+msgstr ""
+
+#: inc/homepage.php:171
+msgid "Type de média de fond"
+msgstr ""
+
+#: inc/homepage.php:175
+msgid "Image fixe"
+msgstr ""
+
+#: inc/homepage.php:176
+msgid "Vidéo"
+msgstr ""
+
+#: inc/homepage.php:177
+msgid "Slider (plusieurs images)"
+msgstr ""
+
+#: inc/homepage.php:204
+msgid "Vidéo (fichier)"
+msgstr ""
+
+#: inc/homepage.php:212
+msgid "Vidéo (URL externe)"
+msgstr ""
+
+#: inc/homepage.php:216
+msgid "Utilisée si aucun fichier n’est choisi. Fichier vidéo direct (.mp4/.webm), pas une page YouTube."
+msgstr ""
+
+#: inc/homepage.php:224
+msgid "Image d’attente (poster)"
+msgstr ""
+
+#: inc/homepage.php:227
+msgid "Affichée avant le chargement de la vidéo, et à la place de la vidéo si l’utilisateur a demandé de réduire les animations."
+msgstr ""
+
+#. translators: %d: numéro de l'image du slider.
+#: inc/homepage.php:242
+#, php-format
+msgid "Image %d du slider"
+msgstr ""
+
+#: inc/homepage.php:251
+msgid "Durée par image (secondes)"
+msgstr ""
+
+#: inc/homepage.php:255
+msgid "Le défilement est automatiquement désactivé si l’utilisateur a demandé de réduire les animations."
+msgstr ""
+
+#: inc/homepage.php:262
+msgid "Lieu (kicker)"
+msgstr ""
+
+#: inc/homepage.php:263
+msgid "Dates (kicker)"
+msgstr ""
+
+#: inc/homepage.php:265
+msgid "Titre — ligne 2 (fine)"
+msgstr ""
+
+#: inc/homepage.php:266
+msgid "Titre — ligne 3"
+msgstr ""
+
+#: inc/homepage.php:267
+msgid "Accroche"
+msgstr ""
+
+#: inc/homepage.php:268
+msgid "CTA principal — libellé"
+msgstr ""
+
+#: inc/homepage.php:269
+msgid "CTA principal — lien"
+msgstr ""
+
+#: inc/homepage.php:270
+msgid "CTA secondaire — libellé"
+msgstr ""
+
+#: inc/homepage.php:271
+msgid "CTA secondaire — lien"
+msgstr ""
+
+#: inc/homepage.php:272
+msgid "Indication de défilement"
+msgstr ""
+
+#: inc/homepage.php:275
+msgid "M2 · Ce que nous sommes"
+msgstr ""
+
+#: inc/homepage.php:277
+msgid "Ligne 1"
+msgstr ""
+
+#: inc/homepage.php:278
+msgid "Ligne 2"
+msgstr ""
+
+#: inc/homepage.php:279
+msgid "Ligne 3 (atténuée)"
+msgstr ""
+
+#: inc/homepage.php:280
+#: inc/homepage.php:325
+#: inc/homepage.php:338
+#: inc/homepage.php:351
+msgid "Lien — libellé"
+msgstr ""
+
+#: inc/homepage.php:281
+msgid "Lien — URL"
+msgstr ""
+
+#: inc/homepage.php:288
+msgid "M3 · Les voix"
+msgstr ""
+
+#: inc/homepage.php:290
+msgid "Les intervenants affichés proviennent des fiches Intervenants publiées. Tant qu’aucune n’existe, un état « à confirmer » est affiché."
+msgstr ""
+
+#: inc/homepage.php:298
+msgid "Nombre de vignettes"
+msgstr ""
+
+#: inc/homepage.php:305
+msgid "M4 · Le territoire"
+msgstr ""
+
+#: inc/homepage.php:316
+msgid "M5 · Programme"
+msgstr ""
+
+#: inc/homepage.php:318
+msgid "Les sessions affichées proviennent de l’édition en cours."
+msgstr ""
+
+#: inc/homepage.php:324
+msgid "Libellé de date"
+msgstr ""
+
+#: inc/homepage.php:331
+msgid "M6 · Partenaires"
+msgstr ""
+
+#: inc/homepage.php:333
+msgid "Les partenaires affichés proviennent des fiches Partenaires publiées."
+msgstr ""
+
+#: inc/homepage.php:344
+msgid "M7 · Archives"
+msgstr ""
+
+#: inc/homepage.php:346
+msgid "Les éditions affichées proviennent des fiches Éditions publiées."
+msgstr ""
+
+#: inc/homepage.php:354
+msgid "M8 · La décision"
+msgstr ""
+
+#: inc/homepage.php:356
+msgid "Label"
+msgstr ""
+
+#: inc/homepage.php:357
+msgid "Titre — avant le compte"
+msgstr ""
+
+#: inc/homepage.php:358
+msgid "Titre — après le compte"
+msgstr ""
+
+#: inc/homepage.php:359
+msgid "CTA — libellé"
+msgstr ""
+
+#: inc/homepage.php:360
+msgid "CTA — lien"
+msgstr ""
+
+#: inc/seo.php:67
+msgid "SEO"
+msgstr ""
+
+#: inc/seo.php:85
+msgid "Laissez vide pour utiliser le titre du contenu et les valeurs par défaut du site (Personnaliser → Réglages FNC → SEO par défaut)."
+msgstr ""
+
+#: inc/seo.php:89
+msgid "Titre SEO"
+msgstr ""
+
+#: inc/seo.php:95
+msgid "Description SEO"
+msgstr ""
+
+#: inc/seo.php:103
+msgid "Demander aux moteurs de ne pas indexer ce contenu (noindex, nofollow)"
+msgstr ""
+
+#: inc/seo.php:108
+msgid "L’image mise en avant de ce contenu sert d’image de partage (OpenGraph) ; à défaut, l’image par défaut du site est utilisée."
+msgstr ""
+
+#. translators: %s: terme recherché.
+#: inc/seo.php:159
+#, php-format
+msgid "Recherche : %s"
+msgstr ""
+
+#: index.php:31
+msgid "Aucun contenu à afficher."
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:25
+msgid "Conditions générales d’utilisation"
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:26
+#: page-declaration-accessibilite.php:28
+#: page-mentions-legales.php:21
+#: page-politique-confidentialite.php:22
+msgid "Mise à jour le à confirmer"
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:27
+msgid "CGU"
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:34
+#: page-conditions-generales-utilisation.php:35
+#: page-declaration-accessibilite.php:36
+#: page-declaration-accessibilite.php:37
+#: page-mentions-legales.php:29
+#: page-mentions-legales.php:30
+#: page-politique-confidentialite.php:30
+#: page-politique-confidentialite.php:31
+#: page-politique-confidentialite.php:34
+msgid "DÉMO"
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:34
+msgid "Conditions d’usage du site — à confirmer et valider avant toute publication réelle."
+msgstr ""
+
+#: page-conditions-generales-utilisation.php:35
+msgid "Page structurelle, à maintenir non publiée tant que le texte n’est pas validé."
+msgstr ""
+
+#: page-contact.php:43
+msgid "Orienter chaque demande vers le bon canal."
+msgstr ""
+
+#: page-contact.php:44
+msgid "Contact général, presse, partenariat et accessibilité restent à confirmer."
+msgstr ""
+
+#: page-contact.php:55
+#: page-contact.php:57
+msgid "Formulaire de contact"
+msgstr ""
+
+#: page-contact.php:56
+msgid "Formulaire"
+msgstr ""
+
+#: page-contact.php:58
+#: page-inscription.php:84
+msgid "Le service d’envoi reste à connecter."
+msgstr ""
+
+#: page-contact.php:63
+#: page-inscription.php:59
+#: single-fnc_intervenant.php:82
+msgid "Organisation"
+msgstr ""
+
+#: page-contact.php:64
+msgid "Email"
+msgstr ""
+
+#: page-contact.php:65
+msgid "Sujet"
+msgstr ""
+
+#: page-contact.php:66
+msgid "Message"
+msgstr ""
+
+#: page-contact.php:78
+msgid "Champ requis."
+msgstr ""
+
+#: page-contact.php:84
+msgid "Les coordonnées officielles restent à confirmer avant publication."
+msgstr ""
+
+#: page-contact.php:85
+msgid "Envoyer"
+msgstr ""
+
+#: page-contact.php:91
+#: page-partenaires.php:61
+msgid "Institutionnel"
+msgstr ""
+
+#: page-contact.php:91
+msgid "Email officiel à confirmer"
+msgstr ""
+
+#: page-contact.php:92
+#: page-espace-presse.php:26
+msgid "Presse"
+msgstr ""
+
+#: page-contact.php:92
+msgid "Contact presse à confirmer"
+msgstr ""
+
+#: page-contact.php:93
+msgid "Accessibilité"
+msgstr ""
+
+#: page-contact.php:93
+msgid "Contact dédié à confirmer"
+msgstr ""
+
+#: page-declaration-accessibilite.php:27
+#: page-declaration-accessibilite.php:29
+msgid "Déclaration d’accessibilité"
+msgstr ""
+
+#: page-declaration-accessibilite.php:36
+msgid "Cette déclaration ne certifie aucune conformité : elle sera rédigée après audit d’accessibilité réel, jamais présentée comme conforme sans validation explicite."
+msgstr ""
+
+#: page-declaration-accessibilite.php:37
+msgid "Référentiel visé, résultats d’audit, contenus non accessibles et voies de recours : à confirmer et valider avant toute publication réelle."
+msgstr ""
+
+#: page-edition-en-cours.php:85
+#: page-inscription.php:43
+msgid "Édition à confirmer"
+msgstr ""
+
+#: page-edition-en-cours.php:86
+msgid "Trois jours de travail collectif. Voici tout ce qu’il faut pour suivre l’édition en préparation."
+msgstr ""
+
+#: page-edition-en-cours.php:99
+msgid "Aucune édition en cours"
+msgstr ""
+
+#: page-edition-en-cours.php:100
+msgid "Créez une édition et marquez-la « en cours » dans son panneau d’administration."
+msgstr ""
+
+#: page-edition-en-cours.php:140
+msgid "sessions"
+msgstr ""
+
+#: page-edition-en-cours.php:144
+msgid "intervenants"
+msgstr ""
+
+#: page-edition-en-cours.php:158
+msgid "Le programme"
+msgstr ""
+
+#: page-edition-en-cours.php:159
+msgid "Un aperçu des prochaines sessions."
+msgstr ""
+
+#: page-edition-en-cours.php:191
+msgid "Voir le programme complet"
+msgstr ""
+
+#: page-edition-en-cours.php:199
+msgid "Les intervenants"
+msgstr ""
+
+#: page-edition-en-cours.php:200
+msgid "Décideurs, experts et acteurs de la société civile."
+msgstr ""
+
+#: page-edition-en-cours.php:219
+msgid "Aucun intervenant rattaché"
+msgstr ""
+
+#: page-edition-en-cours.php:220
+msgid "Rattachez des intervenants aux sessions de cette édition."
+msgstr ""
+
+#: page-edition-en-cours.php:223
+msgid "Voir tous les intervenants"
+msgstr ""
+
+#: page-edition-en-cours.php:237
+#: page-informations-pratiques.php:53
+#: single-fnc_edition.php:93
+msgid "Sur place"
+msgstr ""
+
+#: page-edition-en-cours.php:238
+#: single-fnc_edition.php:94
+msgid "Informations pratiques."
+msgstr ""
+
+#: page-edition-en-cours.php:244
+msgid "Toutes les informations pratiques"
+msgstr ""
+
+#: page-edition-en-cours.php:251
+#: page-inscription.php:31
+msgid "Inscription"
+msgstr ""
+
+#: page-edition-en-cours.php:252
+msgid "L’ouverture des inscriptions sera annoncée prochainement."
+msgstr ""
+
+#: page-espace-presse.php:27
+msgid "Un point d’accès clair pour couvrir le Forum."
+msgstr ""
+
+#: page-espace-presse.php:28
+msgid "L’Espace presse rassemble les ressources publiées et les contacts confirmés."
+msgstr ""
+
+#: page-espace-presse.php:30
+msgid "Documents préparés dans une atmosphère institutionnelle calme"
+msgstr ""
+
+#: page-espace-presse.php:31
+msgid "Espace presse"
+msgstr ""
+
+#: page-espace-presse.php:56
+msgid "Information"
+msgstr ""
+
+#: page-espace-presse.php:57
+msgid "Des ressources vérifiables, pas un dossier de façade."
+msgstr ""
+
+#: page-espace-presse.php:58
+msgid "Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés."
+msgstr ""
+
+#: page-espace-presse.php:66
+msgid "Communiqués"
+msgstr ""
+
+#: page-espace-presse.php:67
+msgid "Ressources presse publiées."
+msgstr ""
+
+#: page-espace-presse.php:74
+msgid "Communiqué"
+msgstr ""
+
+#: page-espace-presse.php:84
+msgid "Aucun communiqué n’est publié pour le moment."
+msgstr ""
+
+#: page-espace-presse.php:85
+msgid "Les premiers communiqués apparaîtront ici dès leur validation officielle."
+msgstr ""
+
+#: page-espace-presse.php:97
+msgid "Contacts presse confirmés."
+msgstr ""
+
+#: page-espace-presse.php:129
+msgid "Les contacts presse ne sont pas encore publiés."
+msgstr ""
+
+#: page-espace-presse.php:130
+msgid "Aucune adresse ni aucun nom ne sont affichés tant qu’ils ne sont pas validés."
+msgstr ""
+
+#: page-espace-presse.php:139
+msgid "Accréditation"
+msgstr ""
+
+#: page-espace-presse.php:140
+msgid "L’accréditation reste un échange direct."
+msgstr ""
+
+#: page-espace-presse.php:141
+msgid "Les journalistes peuvent utiliser la page Contact pour toute demande d’accréditation."
+msgstr ""
+
+#: page-espace-presse.php:142
+msgid "Contacter l’organisation"
+msgstr ""
+
+#: page-informations-pratiques.php:25
+msgid "Préparez votre venue"
+msgstr ""
+
+#: page-informations-pratiques.php:27
+msgid "Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et accessibilité."
+msgstr ""
+
+#: page-informations-pratiques.php:56
+msgid "Seules les rubriques confirmées sont publiées."
+msgstr ""
+
+#: page-informations-pratiques.php:67
+msgid "Informations en cours de finalisation"
+msgstr ""
+
+#: page-informations-pratiques.php:68
+msgid "Les détails pratiques de la prochaine édition seront publiés ici dès leur confirmation."
+msgstr ""
+
+#: page-informations-pratiques.php:78
+msgid "Prêt à participer ?"
+msgstr ""
+
+#: page-informations-pratiques.php:79
+msgid "Rejoignez la prochaine édition du Forum Numérique Congo."
+msgstr ""
+
+#: page-inscription.php:26
+msgid "Participer"
+msgstr ""
+
+#: page-inscription.php:27
+msgid "Demander une inscription."
+msgstr ""
+
+#: page-inscription.php:28
+msgid "Adressez votre demande de participation à la prochaine édition."
+msgstr ""
+
+#: page-inscription.php:49
+msgid "Votre demande"
+msgstr ""
+
+#: page-inscription.php:50
+msgid "Les champs marqués d’un astérisque sont obligatoires."
+msgstr ""
+
+#: page-inscription.php:52
+msgid "Formulaire d’inscription"
+msgstr ""
+
+#: page-inscription.php:53
+msgid "Vous vous inscrivez à"
+msgstr ""
+
+#: page-inscription.php:57
+msgid "Nom complet *"
+msgstr ""
+
+#: page-inscription.php:58
+msgid "E-mail *"
+msgstr ""
+
+#: page-inscription.php:60
+msgid "Mode de participation"
+msgstr ""
+
+#: page-inscription.php:60
+msgid "Présentiel"
+msgstr ""
+
+#: page-inscription.php:60
+msgid "En ligne"
+msgstr ""
+
+#: page-inscription.php:61
+msgid "Motivation (facultatif)"
+msgstr ""
+
+#: page-inscription.php:85
+msgid "Envoyer ma demande"
+msgstr ""
+
+#: page-le-forum.php:41
+msgid "Salle plénière du Forum Numérique Congo"
+msgstr ""
+
+#: page-le-forum.php:47
+msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »"
+msgstr ""
+
+#: page-le-forum.php:59
+msgid "Notre mission"
+msgstr ""
+
+#: page-le-forum.php:60
+msgid "Comprendre."
+msgstr ""
+
+#: page-le-forum.php:60
+msgid "Rassembler."
+msgstr ""
+
+#: page-le-forum.php:60
+msgid "Décider ensemble."
+msgstr ""
+
+#: page-le-forum.php:61
+msgid "Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions."
+msgstr ""
+
+#: page-le-forum.php:63
+msgid "Panel de discussion au Forum Numérique Congo"
+msgstr ""
+
+#: page-le-forum.php:69
+msgid "Nos objectifs"
+msgstr ""
+
+#: page-le-forum.php:70
+msgid "Ce que le Forum rend possible"
+msgstr ""
+
+#: page-le-forum.php:75
+msgid "Comprendre"
+msgstr ""
+
+#: page-le-forum.php:76
+msgid "Éclairer les enjeux du numérique pour l’Afrique centrale, sans jargon ni importation de modèles."
+msgstr ""
+
+#: page-le-forum.php:79
+msgid "Dialoguer"
+msgstr ""
+
+#: page-le-forum.php:80
+msgid "Créer un espace de parole partagé entre décideurs publics, acteurs privés et citoyens."
+msgstr ""
+
+#: page-le-forum.php:83
+msgid "Coopérer"
+msgstr ""
+
+#: page-le-forum.php:84
+msgid "Faire émerger des coopérations concrètes, régionales et durables."
+msgstr ""
+
+#: page-le-forum.php:87
+msgid "Décider"
+msgstr ""
+
+#: page-le-forum.php:88
+msgid "Transformer les échanges en décisions et en engagements traçables."
+msgstr ""
+
+#: page-le-forum.php:108
+msgid "Brazzaville, République du Congo"
+msgstr ""
+
+#: page-le-forum.php:111
+msgid "Notre ancrage"
+msgstr ""
+
+#: page-le-forum.php:112
+msgid "Depuis Brazzaville,"
+msgstr ""
+
+#: page-le-forum.php:112
+msgid "au cœur du Bassin du Congo."
+msgstr ""
+
+#: page-le-forum.php:113
+msgid "Une parole ancrée dans son territoire, tournée vers toute l’Afrique centrale."
+msgstr ""
+
+#: page-le-forum.php:119
+msgid "Participer au Forum"
+msgstr ""
+
+#: page-le-forum.php:120
+msgid "Rejoignez la prochaine édition. L’ouverture des accréditations sera annoncée prochainement."
+msgstr ""
+
+#: page-mentions-legales.php:29
+msgid "Éditeur du site : nom de l’organisation éditrice — à confirmer."
+msgstr ""
+
+#: page-mentions-legales.php:30
+msgid "Directeur de la publication, hébergeur et coordonnées légales : à confirmer et valider avant toute publication réelle."
+msgstr ""
+
+#: page-mot-du-president.php:28
+msgid "Portrait institutionnel"
+msgstr ""
+
+#: page-mot-du-president.php:33
+msgid "Le mot du Président"
+msgstr ""
+
+#: page-mot-du-president.php:39
+msgid "Nom du Président"
+msgstr ""
+
+#: page-mot-du-president.php:40
+msgid "Fonction officielle — à valider par la MOA"
+msgstr ""
+
+#: page-mot-du-president.php:41
+msgid "« La prise de parole institutionnelle apparaîtra ici une fois validée par la MOA. Aucune citation n’est inventée. »"
+msgstr ""
+
+#: page-mot-du-president.php:42
+msgid "Retour à Le Forum"
+msgstr ""
+
+#: page-partenaires.php:28
+msgid "S’associer au Forum, c’est engager l’avenir numérique du Congo."
+msgstr ""
+
+#: page-partenaires.php:29
+msgid "Le Forum réunit institutions, organisations et entreprises autour d’une même ambition."
+msgstr ""
+
+#: page-partenaires.php:31
+msgid "Poignée de main lors du Forum Numérique Congo"
+msgstr ""
+
+#: page-partenaires.php:42
+msgid "S’associer"
+msgstr ""
+
+#: page-partenaires.php:43
+msgid "Pourquoi devenir partenaire."
+msgstr ""
+
+#: page-partenaires.php:45
+msgid "Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique en Afrique centrale."
+msgstr ""
+
+#: page-partenaires.php:54
+msgid "Cadre"
+msgstr ""
+
+#: page-partenaires.php:55
+msgid "Types et niveaux de partenariat."
+msgstr ""
+
+#: page-partenaires.php:57
+msgid "Le partenariat distingue l’engagement institutionnel de l’engagement commercial."
+msgstr ""
+
+#: page-partenaires.php:61
+msgid "Pouvoirs publics et institutions qui portent la légitimité du Forum."
+msgstr ""
+
+#: page-partenaires.php:62
+msgid "Organisateur"
+msgstr ""
+
+#: page-partenaires.php:62
+msgid "Organisations qui conçoivent et opèrent l’événement."
+msgstr ""
+
+#: page-partenaires.php:63
+msgid "Soutien"
+msgstr ""
+
+#: page-partenaires.php:63
+msgid "Structures qui apportent un appui matériel, académique ou médiatique."
+msgstr ""
+
+#: page-partenaires.php:64
+msgid "Sponsor"
+msgstr ""
+
+#: page-partenaires.php:64
+msgid "Entreprises qui financent le Forum et bénéficient d’une visibilité dédiée."
+msgstr ""
+
+#: page-partenaires.php:74
+msgid "Ils nous font confiance"
+msgstr ""
+
+#: page-partenaires.php:75
+msgid "Partenaires confirmés."
+msgstr ""
+
+#: page-partenaires.php:129
+msgid "Éditions associées"
+msgstr ""
+
+#: page-partenaires.php:146
+msgid "Visiter le site"
+msgstr ""
+
+#: page-partenaires.php:157
+msgid "Aucun partenaire confirmé"
+msgstr ""
+
+#: page-partenaires.php:158
+msgid "Les partenaires apparaîtront ici dès leur confirmation."
+msgstr ""
+
+#: page-politique-confidentialite.php:21
+#: page-politique-confidentialite.php:23
+msgid "Politique de confidentialité"
+msgstr ""
+
+#: page-politique-confidentialite.php:30
+msgid "Traitement des données personnelles conforme au cadre applicable — à confirmer."
+msgstr ""
+
+#: page-politique-confidentialite.php:31
+msgid "Finalités, durée de conservation et droits des personnes : à confirmer et valider avant toute publication réelle."
+msgstr ""
+
+#: page-politique-confidentialite.php:33
+msgid "Mesure d’audience"
+msgstr ""
+
+#: page-politique-confidentialite.php:34
+msgid "Cette section décrit, à titre d’exemple, une mesure d’audience respectueuse de la vie privée. Ce thème de démonstration n’intègre aucune solution de mesure réelle : à adapter selon l’outil effectivement utilisé avant toute publication."
+msgstr ""
+
+#. translators: %s: date de derniere mise a jour.
+#: page.php:45
+#, php-format
+msgid "Mise à jour : %s"
+msgstr ""
+
+#: single-fnc_edition.php:45
+#: single-fnc_publication.php:83
+#: single-fnc_session.php:94
+msgid "Édition"
+msgstr ""
+
+#: single-fnc_edition.php:124
+msgid "Sessions de cette édition."
+msgstr ""
+
+#: single-fnc_edition.php:167
+msgid "Publications liées."
+msgstr ""
+
+#: single-fnc_intervenant.php:51
+msgid "La biographie sera publiée dès sa validation."
+msgstr ""
+
+#: single-fnc_intervenant.php:55
+msgid "Liens"
+msgstr ""
+
+#: single-fnc_intervenant.php:79
+msgid "Profil"
+msgstr ""
+
+#: single-fnc_intervenant.php:97
+#: single-fnc_publication.php:77
+#: single-fnc_session.php:78
+msgid "Type"
+msgstr ""
+
+#: single-fnc_intervenant.php:141
+msgid "Participation"
+msgstr ""
+
+#: single-fnc_intervenant.php:142
+msgid "Sessions au programme."
+msgstr ""
+
+#: single-fnc_intervenant.php:160
+msgid "En modération"
+msgstr ""
+
+#: single-fnc_intervenant.php:173
+msgid "Tous les intervenants"
+msgstr ""
+
+#: single-fnc_publication.php:36
+msgid "Ressource"
+msgstr ""
+
+#: single-fnc_publication.php:63
+msgid "Télécharger le document"
+msgstr ""
+
+#: single-fnc_publication.php:67
+msgid "Le document sera mis à disposition dès sa validation."
+msgstr ""
+
+#: single-fnc_publication.php:74
+msgid "Références"
+msgstr ""
+
+#: single-fnc_publication.php:80
+msgid "Publié le"
+msgstr ""
+
+#: single-fnc_publication.php:87
+msgid "Catégorie"
+msgstr ""
+
+#: single-fnc_publication.php:124
+msgid "À lire aussi"
+msgstr ""
+
+#: single-fnc_publication.php:125
+msgid "Autres ressources de cette édition."
+msgstr ""
+
+#: single-fnc_publication.php:143
+msgid "Toutes les ressources"
+msgstr ""
+
+#: single-fnc_session.php:40
+msgid "Session"
+msgstr ""
+
+#: single-fnc_session.php:75
+msgid "Repères"
+msgstr ""
+
+#: single-fnc_session.php:82
+msgid "Jour"
+msgstr ""
+
+#: single-fnc_session.php:86
+msgid "Horaire"
+msgstr ""
+
+#: single-fnc_session.php:90
+msgid "Salle"
+msgstr ""
+
+#: single-fnc_session.php:109
+msgid "Qui intervient"
+msgstr ""
+
+#: single-fnc_session.php:110
+msgid "Modérateur et intervenants."
+msgstr ""
+
+#: single-fnc_session.php:117
+msgid "Modération"
+msgstr ""
+
+#: single-fnc_session.php:165
+msgid "Pour aller plus loin"
+msgstr ""
+
+#: single-fnc_session.php:166
+msgid "Ressources de cette édition."
+msgstr ""
+
+#: single-fnc_session.php:184
+msgid "Voir tout le programme"
+msgstr ""

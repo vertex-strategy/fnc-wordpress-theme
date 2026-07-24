@@ -18,7 +18,11 @@ services:
       - fnc_wp_db:/var/lib/mysql
 
   wordpress:
-    image: docker.io/library/wordpress:latest
+    # Version epinglee (et non « latest ») : le tag latest a livre une
+    # pre-version 7.0.x dont le systeme de traduction (WP_Translation_Controller)
+    # ne suivait pas la locale par requete, cassant le multilinguisme. On fige
+    # une 6.x stable, representative des sites reels (le theme cible « 6.4+ »).
+    image: docker.io/library/wordpress:6.8-php8.3-apache
     depends_on:
       - db
     environment:
@@ -35,7 +39,7 @@ services:
       - ./wp-content/plugins/fnc-content-model:/var/www/html/wp-content/plugins/fnc-content-model
 
   wpcli:
-    image: docker.io/library/wordpress:cli
+    image: docker.io/library/wordpress:cli-php8.3
     depends_on:
       - db
       - wordpress

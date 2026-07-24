@@ -7,12 +7,15 @@
 
 	var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	var nav = document.getElementById('nav');
+	// Pages a bandeau lin (registre C, ex. pages legales) : pas de hero sombre
+	// sous la barre → la nav reste solide en permanence (texte navy lisible).
+	var linenHeader = document.body.classList.contains('linen-header');
 
 	function onScroll() {
 		if (!nav) {
 			return;
 		}
-		if (window.scrollY > window.innerHeight * 0.6) {
+		if (linenHeader || window.scrollY > window.innerHeight * 0.6) {
 			nav.classList.add('solid');
 		} else {
 			nav.classList.remove('solid');

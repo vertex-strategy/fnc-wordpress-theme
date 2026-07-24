@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php wp_body_open(); ?>
 <a class="skip" href="#main"><?php esc_html_e( 'Aller au contenu', 'fnc-wordpress-theme' ); ?></a>
 
-<header class="nav" id="nav">
+<header class="nav<?php echo fnc_has_linen_header() ? ' solid' : ''; ?>" id="nav">
 	<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( '%s — accueil', 'fnc-wordpress-theme' ), fnc_site_name() ) ); ?>">
 		<?php
 		// Logos officiels du Forum Numérique Congo : version claire sur l'en-tête

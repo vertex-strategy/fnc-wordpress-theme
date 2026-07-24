@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.5.1' );
+define( 'FNC_THEME_VERSION', '0.5.2' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -148,9 +148,31 @@ add_action( 'wp_enqueue_scripts', 'fnc_theme_assets' );
  */
 function fnc_body_class_dad( $classes ) {
 	$classes[] = 'dad';
+	if ( fnc_has_linen_header() ) {
+		$classes[] = 'linen-header';
+	}
 	return $classes;
 }
 add_filter( 'body_class', 'fnc_body_class_dad' );
+
+/**
+ * Pages a en-tete SOBRE registre C (bandeau lin, titre navy) : pages legales.
+ * Sur ces pages il n'y a pas de hero photo sombre sous la barre : la nav doit
+ * donc demarrer — et rester — en mode "solide" (fond clair, texte navy),
+ * sinon les liens blancs seraient illisibles sur le lin. Source unique de
+ * verite reutilisee par header.php (classe initiale) et main.js (verrou au
+ * defilement).
+ */
+function fnc_has_linen_header() {
+	return is_page(
+		array(
+			'mentions-legales',
+			'politique-confidentialite',
+			'conditions-generales-utilisation',
+			'declaration-accessibilite',
+		)
+	);
+}
 
 /**
  * URL d'une Page WordPress publiee par son slug, avec repli sur "#" si

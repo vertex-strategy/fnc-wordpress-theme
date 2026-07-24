@@ -170,7 +170,7 @@ while ( have_posts() ) :
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_ed_pubs as $fnc_ep ) : ?>
 							<?php $fnc_ep_type = get_post_meta( $fnc_ep->ID, '_fnc_publication_type', true ); ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<p class="card-kicker"><?php echo esc_html( isset( $fnc_pub_types[ $fnc_ep_type ] ) ? $fnc_pub_types[ $fnc_ep_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_ep ) ); ?>"><?php echo esc_html( get_the_title( $fnc_ep ) ); ?></a></h3>
 								<?php if ( has_excerpt( $fnc_ep ) ) : ?>

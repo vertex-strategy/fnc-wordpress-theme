@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<footer id="footer">
+<footer id="footer" class="dad-footer">
 	<div class="foot-grid">
 		<div class="foot-brand">
 			<b><?php echo esc_html( fnc_site_name() ); ?></b>

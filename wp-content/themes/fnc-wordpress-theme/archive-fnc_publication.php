@@ -78,7 +78,7 @@ $fnc_publications = get_posts(
 						$fnc_media_url = get_post_meta( $fnc_publication->ID, '_fnc_publication_media_url', true );
 						$fnc_is_media  = in_array( $fnc_type, array( 'video', 'interview' ), true );
 						?>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker"><?php echo esc_html( isset( $fnc_publication_types[ $fnc_type ] ) ? $fnc_publication_types[ $fnc_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
 							<h3><a href="<?php echo esc_url( get_permalink( $fnc_publication ) ); ?>"><?php echo esc_html( get_the_title( $fnc_publication ) ); ?></a></h3>
 							<?php if ( has_excerpt( $fnc_publication ) ) : ?>

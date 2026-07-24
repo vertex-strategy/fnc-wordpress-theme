@@ -1,0 +1,190 @@
+/* ==========================================================================
+   FNC — CSS de rattrapage n°2 (familles partiellement couvertes)   [P2]
+   ==========================================================================
+   Source : src/app/globals.css (site Next.js de production).
+   Méthode : diff RÈGLE PAR RÈGLE (sélecteur normalisé, commentaires ignorés)
+   entre globals.css et le style.css du thème. Déclarations extraites, non
+   réécrites. Doublons avec wordpress-catchup.css (P1) déjà écartés.
+   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
+
+   CONTENU — 33 règles absentes du thème :
+     • Couche typographique de base (.dad …)        10 règles
+     • Frise des éditions (.frise*)                 20 règles
+     • Chiffres-clés (.stat-line*)                   3 règles
+
+   ⚠️ PRÉREQUIS POUR LA COUCHE TYPOGRAPHIQUE
+   Les 10 règles « .dad … » ne s'appliqueront QUE si le <body> porte la classe
+   « dad ». Le thème utilise aujourd'hui `<body <?php body_class(); ?>>` sans
+   cette classe. Ajouter dans functions.php :
+
+       add_filter( 'body_class', function ( $classes ) {
+           $classes[] = 'dad';
+           return $classes;
+       } );
+
+   POURQUOI NE PAS SIMPLEMENT DÉ-SCOPER : la règle « .dad p { margin: 0 } »
+   appliquée globalement supprimerait les marges de paragraphe de TOUT le
+   contenu WordPress (the_content, éditeur Gutenberg) — régression garantie.
+   Le site réel neutralise ces marges parce qu'il pose des espacements
+   explicites (mt-*, gap-*) : voir wordpress-tailwind-utilities.css.
+
+   INSTALLATION — après style.css, P1, puis les utilitaires :
+     style.css → wordpress-catchup.css → wordpress-tailwind-utilities.css → CE FICHIER
+   ========================================================================== */
+
+:root {
+  /* Token DA référencé ici et absent du thème. Déjà fourni par
+     wordpress-tailwind-utilities.css — redéclaré pour que CE fichier soit
+     autonome (même valeur, aucun conflit). */
+  --shadow-lifted: 0 18px 40px rgba(38, 34, 78, 0.14);
+}
+
+/* Note : la variable --d (délai de stagger) est utilisée en var(--d, 0ms),
+   avec fallback inline — rien à déclarer. */
+
+/* ========== COUCHE TYPOGRAPHIQUE DE BASE — nécessite body.dad (11) ========== */
+
+/* ============================================================
+   DA-D — Couche composants (portée depuis docs/mockups)
+   Classes sémantiques réutilisées à l'identique dans l'app.
+   ============================================================ */
+
+.dad {
+  font-family: var(--sans);
+  font-size: var(--body);
+  line-height: 1.6;
+  color: var(--texte-corps);
+}
+
+.dad h1,
+.dad h2,
+.dad h3,
+.dad h4 {
+  margin: 0;
+  text-wrap: balance;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dad p {
+  margin: 0;
+}
+
+.dad a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.dad img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Retour à la ligne ÉQUILIBRÉ des titres d'affichage : quand un titre passe sur
+   2–3 lignes en réduisant l'écran, le navigateur répartit les mots équitablement
+   au lieu de laisser un orphelin / des lignes déséquilibrées. Complète les clamp()
+   (on garde une taille lisible ET un cassage propre — plutôt que de rétrécir à
+   l'infini pour tenir sur une ligne). Réservé aux TITRES, jamais au corps de texte.
+   `#m1 h1` (hero home) est exclu : son cassage est déjà calé dans la DA. */
+h2, h3, .opening h1, .frise-title, .split .lines { text-wrap: balance; }
+
+/* M8 — priorité couleur des boutons-liens dans .dad (sur .dad a{color:inherit}) */
+
+.dad a.btn-white { color: var(--navy-deep); }
+
+.dad a.btn-primary { color: #fff; }
+
+.dad a.btn-ghost-light { color: #fff; }
+
+.dad a.btn-ghost-dark { color: var(--navy); }
+
+
+/* ========== FRISE DES ÉDITIONS (19) ========== */
+
+/* La trace continue derrière les nœuds */
+.frise-rail::before {
+  content: '';
+  position: absolute;
+  left: 21px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(var(--jaune), var(--rouge));
+  opacity: 0.3;
+}
+
+.frise-item:first-child .frise-rail::before { top: 34px; }
+
+.frise-item:last-child .frise-rail::before { bottom: calc(100% - 34px); }
+
+.frise-body { border-top: 1px solid var(--border); padding-top: 20px; }
+
+.frise-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--texte-sec);
+  margin: 0;
+}
+
+.frise-badge .frise-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--texte-tert); }
+
+.frise-more .frise-arrow { transition: transform 0.25s var(--ease); }
+
+.frise-more:hover .frise-arrow { transform: translateX(4px); }
+
+/* Jalon « en cours » : panneau navy surélevé (l'édition présente ressort) */
+.frise-item.is-current .frise-body {
+  border-top: none;
+  background: var(--navy-deep);
+  color: #fff;
+  border-radius: 4px;
+  padding: 24px 26px;
+  box-shadow: var(--shadow-lifted);
+  /* Grand cadre bleu → porte le motif empreinte (::before ci-dessous).
+     `overflow:hidden` clippe le filigrane aux angles arrondis du panneau. */
+  position: relative;
+  overflow: hidden;
+}
+
+.frise-item.is-current .frise-badge { color: var(--jaune); }
+
+.frise-item.is-current .frise-badge .frise-dot { background: var(--vert); box-shadow: 0 0 0 3px rgba(59, 160, 74, 0.3); }
+
+.frise-item.is-current .frise-year { color: #fff; }
+
+.frise-item.is-current .frise-title { color: #fff; font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
+
+.frise-item.is-current .frise-theme { color: #eef0ff; }
+
+.frise-item.is-current .frise-meta { color: #c9cbef; }
+
+.frise-item.is-current .frise-meta b { color: #fff; }
+
+.frise-item.is-current .frise-more { color: var(--jaune); }
+
+/* Entrée « frise » : après le glissement de l'item, le nœud éclot sur la trace —
+   repère de timeline nettement visible au scroll (respecte prefers-reduced-motion :
+   sous ce réglage, `js-reveal` n'est jamais posé). */
+body.js-reveal .frise-item.reveal .frise-node {
+  transform: scale(0);
+  transition: transform 0.5s var(--ease);
+  transition-delay: calc(var(--d, 0ms) + 160ms);
+}
+
+body.js-reveal .frise-item.reveal.in .frise-node { transform: scale(1); }
+
+
+/* ========== CHIFFRES-CLÉS (3) ========== */
+
+/* Stat plateau international */
+.stat-line { display: flex; flex-wrap: wrap; gap: 32px; margin: 8px 0 40px; }
+
+.stat-line .stat b { display: block; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--navy); line-height: 1; font-variant-numeric: tabular-nums; }
+
+.stat-line .stat span { font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; color: var(--texte-tert); }
+

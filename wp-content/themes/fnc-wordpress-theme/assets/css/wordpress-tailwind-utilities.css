@@ -1,0 +1,189 @@
+/* ==========================================================================
+   FNC — Couche « utilitaires » pour le thème WordPress  (chantier P4)
+   ==========================================================================
+   Source : bundle CSS compilé du site Next.js de production
+            (/_next/static/chunks/*.css). Déclarations EXTRAITES, non réécrites.
+   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
+
+   POURQUOI
+   Le vrai site style en DEUX couches : (1) les classes sémantiques de
+   globals.css, et (2) des utilitaires Tailwind posés directement dans le
+   markup. Le thème WP n'a porté que la couche (1). Résultat : tous les
+   espacements, rayons, tailles et surtout les COULEURS portés par la couche (2)
+   manquaient. Ce fichier restitue exactement ces 132 utilitaires, relevés sur
+   8 pages réelles (accueil, intervenants, éditions, ressources, contact,
+   partenaires, programme, espace-presse).
+
+   DEUX FAÇONS DE L'UTILISER
+   A. En couche utilitaire (le plus simple, fidélité immédiate) : charger ce
+      fichier et réutiliser les MÊMES noms de classes dans les templates PHP
+      que dans le site réel — le markup se recopie alors quasi tel quel.
+   B. En traduction sémantique : lire ici la déclaration exacte d'un utilitaire
+      et la replier dans la classe sémantique correspondante du thème
+      (ex. « la carte porte .p-6.rounded-md.shadow-card » -> ajouter ces
+      déclarations à .fnc-card).
+
+   DÉPENDANCES
+   - Les variables --navy, --navy-deep, --rouge, --jaune, --linen, --texte-corps,
+     --texte-sec sont DÉJÀ définies dans le thème : rien à faire.
+   - 3 tokens DA manquaient : ils sont ajoutés ci-dessous.
+   - Les variables internes --tw-* n'ont RIEN à déclarer : chaque règle définit
+     la sienne et fournit un fallback inline (vérifié).
+
+   INSTALLATION — charger APRÈS style.css (et après wordpress-catchup.css) :
+     wp_enqueue_style('fnc-utils', get_stylesheet_directory_uri().'/utilities.css',
+                      ['fnc-theme-style'], '0.2.1');
+   ========================================================================== */
+
+:root {
+  /* Tokens DA référencés par les utilitaires et absents du thème. */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --shadow-card: 0 16px 32px rgba(38, 34, 78, 0.06);
+  --shadow-lifted: 0 18px 40px rgba(38, 34, 78, 0.14);
+}
+
+
+/* ---------- COULEURS, FONDS & OMBRES — critiques pour la fidélité (16) ---------- */
+.bg-linen{background-color:var(--linen)}
+.bg-navy-deep{background-color:var(--navy-deep)}
+.bg-transparent{background-color:#0000}
+.bg-white\/10{background-color:#ffffff1a}
+.bg-white\/15{background-color:#ffffff26}
+.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}
+.border-jaune{border-color:var(--jaune)}
+.border-navy-deep{border-color:var(--navy-deep)}
+.shadow-card{--tw-shadow:var(--shadow-card);--tw-shadow-colored:var(--shadow-card);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000), var(--tw-ring-shadow,0 0 #0000), var(--tw-shadow)}
+.text-navy-deep{color:var(--navy-deep)}
+.text-navy{color:var(--navy)}
+.text-rouge{color:var(--rouge)}
+.text-texte-corps{color:var(--texte-corps)}
+.text-texte-sec{color:var(--texte-sec)}
+.text-white\/55{color:#ffffff8c}
+.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}
+
+/* ---------- TYPOGRAPHIE (18) ---------- */
+.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.font-bold{font-weight:700}
+.font-semibold{font-weight:600}
+.leading-6{line-height:1.5rem}
+.leading-7{line-height:1.75rem}
+.leading-8{line-height:2rem}
+.leading-snug{line-height:1.375}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-center{text-align:center}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-sm{font-size:.875rem;line-height:1.25rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-xs{font-size:.75rem;line-height:1rem}
+.tracking-normal{letter-spacing:0}
+.underline-offset-4{text-underline-offset:4px}
+.underline{text-decoration-line:underline}
+.uppercase{text-transform:uppercase}
+
+/* ---------- ESPACEMENT (45) ---------- */
+.gap-10{gap:2.5rem}
+.gap-12{gap:3rem}
+.gap-2{gap:.5rem}
+.gap-3{gap:.75rem}
+.gap-4{gap:1rem}
+.gap-5{gap:1.25rem}
+.gap-6{gap:1.5rem}
+.gap-8{gap:2rem}
+.mb-7{margin-bottom:1.75rem}
+.mb-8{margin-bottom:2rem}
+.ml-2{margin-left:.5rem}
+.ml-4{margin-left:1rem}
+.ml-6{margin-left:1.5rem}
+.ml-8{margin-left:2rem}
+.mt-10{margin-top:2.5rem}
+.mt-12{margin-top:3rem}
+.mt-1{margin-top:.25rem}
+.mt-2{margin-top:.5rem}
+.mt-3{margin-top:.75rem}
+.mt-4{margin-top:1rem}
+.mt-5{margin-top:1.25rem}
+.mt-6{margin-top:1.5rem}
+.mt-7{margin-top:1.75rem}
+.mt-8{margin-top:2rem}
+.mx-auto{margin-left:auto;margin-right:auto}
+.p-5{padding:1.25rem}
+.p-6{padding:1.5rem}
+.p-7{padding:1.75rem}
+.pb-16{padding-bottom:4rem}
+.pb-20{padding-bottom:5rem}
+.pl-4{padding-left:1rem}
+.pl-5{padding-left:1.25rem}
+.pt-16{padding-top:4rem}
+.pt-20{padding-top:5rem}
+.pt-5{padding-top:1.25rem}
+.px-3{padding-left:.75rem;padding-right:.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+.py-12{padding-top:3rem;padding-bottom:3rem}
+.py-16{padding-top:4rem;padding-bottom:4rem}
+.py-1{padding-top:.25rem;padding-bottom:.25rem}
+.py-20{padding-top:5rem;padding-bottom:5rem}
+.py-3{padding-top:.75rem;padding-bottom:.75rem}
+.py-8{padding-top:2rem;padding-bottom:2rem}
+
+/* ---------- TAILLES (22) ---------- */
+.h-10{height:2.5rem}
+.h-12{height:3rem}
+.h-16{height:4rem}
+.h-3{height:.75rem}
+.h-4{height:1rem}
+.h-5{height:1.25rem}
+.max-w-2xl{max-width:42rem}
+.max-w-3xl{max-width:48rem}
+.max-w-6xl{max-width:72rem}
+.max-w-full{max-width:100%}
+.max-w-xl{max-width:36rem}
+.min-h-10{min-height:2.5rem}
+.min-h-11{min-height:2.75rem}
+.min-h-12{min-height:3rem}
+.min-h-14{min-height:3.5rem}
+.min-h-40{min-height:10rem}
+.min-h-9{min-height:2.25rem}
+.min-h-screen{min-height:100vh}
+.w-20{width:5rem}
+.w-28{width:7rem}
+.w-40{width:10rem}
+.w-full{width:100%}
+
+/* ---------- MISE EN PAGE & DIVERS (33) ---------- */
+.absolute{position:absolute}
+.border-dashed{border-style:dashed}
+.border-l-2{border-left-width:2px}
+.border-t{border-top-width:1px}
+.border{border-width:1px}
+.bottom-0{bottom:0}
+.flex-1{flex:1}
+.flex-col{flex-direction:column}
+.flex-wrap{flex-wrap:wrap}
+.flex{display:flex}
+.hidden{display:none}
+.inline-flex{display:inline-flex}
+.inset-x-0{left:0;right:0}
+.items-center{align-items:center}
+.items-stretch{align-items:stretch}
+.justify-between{justify-content:space-between}
+.object-contain{-o-object-fit:contain;object-fit:contain}
+.object-left{-o-object-position:left;object-position:left}
+.opacity-70{opacity:.7}
+.opacity-75{opacity:.75}
+.outline-none{outline-offset:2px;outline:2px solid #0000}
+.overflow-hidden{overflow:hidden}
+.overflow-x-hidden{overflow-x:hidden}
+.place-items-center{place-items:center}
+.pointer-events-none{pointer-events:none}
+.relative{position:relative}
+.rounded-lg,.rounded-md{border-radius:var(--radius-sm)}
+.rounded-sm{border-radius:var(--radius-xs)}
+.rounded{border-radius:var(--radius-xs)}
+.self-start{align-self:flex-start}
+.shrink-0{flex-shrink:0}
+.sr-only{clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}
+.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-duration:.15s;transition-timing-function:cubic-bezier(.4,0,.2,1)}

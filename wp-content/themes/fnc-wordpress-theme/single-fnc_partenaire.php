@@ -75,12 +75,12 @@ while ( have_posts() ) :
 
 					<div>
 						<?php if ( has_post_thumbnail() ) : ?>
-							<div class="card" style="display:grid;place-items:center;min-height:180px;">
+							<div class="card fnc-card" style="display:grid;place-items:center;min-height:180px;">
 								<?php the_post_thumbnail( 'medium', array( 'alt' => esc_attr( get_the_title() ), 'style' => 'max-width:100%;height:auto;' ) ); ?>
 							</div>
 						<?php endif; ?>
 
-						<article class="card" style="margin-top:<?php echo has_post_thumbnail() ? '18px' : '0'; ?>;">
+						<article class="card fnc-card" style="margin-top:<?php echo has_post_thumbnail() ? '18px' : '0'; ?>;">
 							<p class="card-kicker"><?php esc_html_e( 'Engagement', 'fnc-wordpress-theme' ); ?></p>
 							<dl class="pract-contacts" style="margin-top:14px;">
 								<?php if ( $fnc_pa_type ) : ?>
@@ -106,7 +106,7 @@ while ( have_posts() ) :
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_pa_editions as $fnc_ed_id ) : ?>
 							<?php $fnc_niveau = $fnc_pa_niveau_by_ed[ $fnc_ed_id ] ?? ''; ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_ed_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_ed_id ) ); ?></a></h3>
 								<?php if ( $fnc_niveau && isset( $fnc_pa_niveaux[ $fnc_niveau ] ) ) : ?>
 									<p style="margin-top:10px;"><?php fnc_render_badge( $fnc_pa_niveaux[ $fnc_niveau ] ); ?></p>

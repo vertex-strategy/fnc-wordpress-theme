@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.3.0' );
+define( 'FNC_THEME_VERSION', '0.4.0' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -98,12 +98,54 @@ add_action( 'init', 'fnc_register_menus', 1 );
 
 /**
  * Enqueue des styles et scripts du theme.
+ *
+ * Kit de rattrapage de fidelite DA-D : quatre feuilles extraites du CSS de
+ * production du site reel, chargees APRES style.css et dans un ordre STRICT
+ * (la cascade en depend). L'ordre est garanti par une chaine de dependances :
+ * chaque feuille depend de la precedente.
+ *
+ *   style.css (fnc-theme-style)
+ *     -> wordpress-catchup.css            (P1 : familles a zero style)
+ *     -> wordpress-tailwind-utilities.css (P4 : utilitaires + tokens DA)
+ *     -> wordpress-catchup-p2.css         (P2 : familles partielles)
+ *     -> wordpress-catchup-complet.css    (P3 : regles semantiques restantes)
+ *
+ * Ces fichiers sont des extractions fideles de la prod : ils sont charges
+ * tels quels, jamais reecrits (voir /design).
  */
 function fnc_theme_assets() {
-	wp_enqueue_style( 'fnc-theme-style', get_stylesheet_uri(), array(), FNC_THEME_VERSION );
-	wp_enqueue_script( 'fnc-theme-main', get_template_directory_uri() . '/assets/js/main.js', array(), FNC_THEME_VERSION, true );
+	$dir = get_template_directory_uri();
+	$ver = FNC_THEME_VERSION;
+
+	wp_enqueue_style( 'fnc-theme-style', get_stylesheet_uri(), array(), $ver );
+
+	$fnc_catchup = array(
+		'fnc-catchup'            => array( 'assets/css/wordpress-catchup.css', 'fnc-theme-style' ),
+		'fnc-tailwind-utilities' => array( 'assets/css/wordpress-tailwind-utilities.css', 'fnc-catchup' ),
+		'fnc-catchup-p2'         => array( 'assets/css/wordpress-catchup-p2.css', 'fnc-tailwind-utilities' ),
+		'fnc-catchup-complet'    => array( 'assets/css/wordpress-catchup-complet.css', 'fnc-catchup-p2' ),
+	);
+	foreach ( $fnc_catchup as $handle => $conf ) {
+		wp_enqueue_style( $handle, $dir . '/' . $conf[0], array( $conf[1] ), $ver );
+	}
+
+	wp_enqueue_script( 'fnc-theme-main', $dir . '/assets/js/main.js', array(), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'fnc_theme_assets' );
+
+/**
+ * Ajoute la classe `dad` au <body>.
+ *
+ * OBLIGATOIRE pour la DA-D : une partie des regles de typographie de base est
+ * scopee sous `.dad` (ex. `.dad p`, `.dad h1`…). Sans cette classe, ces regles
+ * restent inertes. Le scope `.dad` est deliberement conserve pour ne PAS
+ * imposer ces styles a tout le contenu WordPress/Gutenberg hors DA.
+ */
+function fnc_body_class_dad( $classes ) {
+	$classes[] = 'dad';
+	return $classes;
+}
+add_filter( 'body_class', 'fnc_body_class_dad' );
 
 /**
  * URL d'une Page WordPress publiee par son slug, avec repli sur "#" si
@@ -320,7 +362,7 @@ function fnc_render_cta_band() {
  */
 function fnc_render_card( $title, $body, $kicker = '' ) {
 	?>
-	<article class="card">
+	<article class="card fnc-card">
 		<?php if ( $kicker ) : ?>
 			<p class="card-kicker"><?php echo esc_html( $kicker ); ?></p>
 		<?php endif; ?>

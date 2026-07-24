@@ -71,7 +71,7 @@ while ( have_posts() ) :
 					</div>
 
 					<div>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker"><?php esc_html_e( 'Repères', 'fnc-wordpress-theme' ); ?></p>
 							<dl class="pract-contacts" style="margin-top:14px;">
 								<?php if ( isset( $fnc_types[ $fnc_s_type ] ) ) : ?>
@@ -113,7 +113,7 @@ while ( have_posts() ) :
 
 					<?php if ( $fnc_s_moderator > 0 ) : ?>
 						<div class="grid grid-3" style="margin-bottom:18px;">
-							<article class="card">
+							<article class="card fnc-card">
 								<p class="card-kicker"><?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?></p>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_s_moderator ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_s_moderator ) ); ?></a></h3>
 								<?php $fnc_mod_meta = fnc_speaker_meta_line( $fnc_s_moderator ); ?>
@@ -127,7 +127,7 @@ while ( have_posts() ) :
 					<?php if ( ! empty( $fnc_s_speakers ) ) : ?>
 						<div class="grid grid-3">
 							<?php foreach ( $fnc_s_speakers as $fnc_sp_id ) : ?>
-								<article class="card">
+								<article class="card fnc-card">
 									<p class="card-kicker"><?php esc_html_e( 'Intervenant', 'fnc-wordpress-theme' ); ?></p>
 									<h3><a href="<?php echo esc_url( get_permalink( $fnc_sp_id ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></a></h3>
 									<?php $fnc_sp_meta = fnc_speaker_meta_line( $fnc_sp_id ); ?>
@@ -169,7 +169,7 @@ while ( have_posts() ) :
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_s_resources as $fnc_sr ) : ?>
 							<?php $fnc_sr_type = get_post_meta( $fnc_sr->ID, '_fnc_publication_type', true ); ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<p class="card-kicker"><?php echo esc_html( isset( $fnc_pub_types[ $fnc_sr_type ] ) ? $fnc_pub_types[ $fnc_sr_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_sr ) ); ?>"><?php echo esc_html( get_the_title( $fnc_sr ) ); ?></a></h3>
 							</article>

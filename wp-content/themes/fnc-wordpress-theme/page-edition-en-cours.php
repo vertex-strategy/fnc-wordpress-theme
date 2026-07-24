@@ -134,16 +134,16 @@ fnc_render_hero(
 
 		<section class="section linen">
 			<div class="container">
-				<div class="metric-strip" style="background:var(--linen);border-color:var(--border);">
-					<div class="metric" style="background:#fff;">
+				<div class="stat-line">
+					<div class="stat">
 						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_sessions ) ); ?></b>
 						<span style="color:var(--texte-tert);"><?php esc_html_e( 'sessions', 'fnc-wordpress-theme' ); ?></span>
 					</div>
-					<div class="metric" style="background:#fff;">
+					<div class="stat">
 						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_speaker_ids ) ); ?></b>
 						<span style="color:var(--texte-tert);"><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span>
 					</div>
-					<div class="metric" style="background:#fff;">
+					<div class="stat">
 						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_jours ) ); ?></b>
 						<span style="color:var(--texte-tert);"><?php esc_html_e( 'jours', 'fnc-wordpress-theme' ); ?></span>
 					</div>
@@ -203,7 +203,7 @@ fnc_render_hero(
 				<?php if ( ! empty( $fnc_speaker_ids ) ) : ?>
 					<div class="grid grid-3">
 						<?php foreach ( array_slice( $fnc_speaker_ids, 0, 6 ) as $fnc_speaker_id ) : ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_speaker_id ) ); ?></a></h3>
 								<?php
 								$fnc_excerpt = get_the_excerpt( $fnc_speaker_id );

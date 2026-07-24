@@ -111,7 +111,7 @@ $fnc_countries = fnc_order_countries( array_keys( $fnc_countries ) );
 						$fnc_terms_profil = get_the_terms( get_the_ID(), 'fnc_profil' );
 						$fnc_terms_pays    = get_the_terms( get_the_ID(), 'fnc_pays' );
 						?>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker">
 								<?php
 								echo esc_html(

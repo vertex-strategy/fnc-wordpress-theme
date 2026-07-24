@@ -70,7 +70,7 @@ while ( have_posts() ) :
 					</div>
 
 					<div>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker"><?php esc_html_e( 'Références', 'fnc-wordpress-theme' ); ?></p>
 							<dl class="pract-contacts" style="margin-top:14px;">
 								<?php if ( isset( $fnc_p_types[ $fnc_p_type ] ) ) : ?>
@@ -128,7 +128,7 @@ while ( have_posts() ) :
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_p_related as $fnc_pr ) : ?>
 							<?php $fnc_pr_type = get_post_meta( $fnc_pr->ID, '_fnc_publication_type', true ); ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<p class="card-kicker"><?php echo esc_html( isset( $fnc_p_types[ $fnc_pr_type ] ) ? $fnc_p_types[ $fnc_pr_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_pr ) ); ?>"><?php echo esc_html( get_the_title( $fnc_pr ) ); ?></a></h3>
 							</article>

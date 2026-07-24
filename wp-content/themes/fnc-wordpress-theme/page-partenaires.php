@@ -107,7 +107,7 @@ fnc_render_hero(
 					<h3 style="margin:32px 0 16px;color:var(--navy);"><?php echo esc_html( $fnc_niveau->name ); ?></h3>
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_partners as $fnc_partner ) : ?>
-							<article class="card">
+							<article class="card fnc-card">
 								<?php
 								if ( has_post_thumbnail( $fnc_partner ) ) :
 									?>

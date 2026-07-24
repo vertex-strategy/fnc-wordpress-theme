@@ -70,7 +70,7 @@ $fnc_communiques      = $fnc_communiques_term
 			<?php if ( ! empty( $fnc_communiques ) ) : ?>
 				<div class="grid grid-3">
 					<?php foreach ( $fnc_communiques as $fnc_communique ) : ?>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker"><?php esc_html_e( 'Communiqué', 'fnc-wordpress-theme' ); ?></p>
 							<h3><a href="<?php echo esc_url( get_permalink( $fnc_communique ) ); ?>"><?php echo esc_html( get_the_title( $fnc_communique ) ); ?></a></h3>
 							<?php if ( has_excerpt( $fnc_communique ) ) : ?>
@@ -105,7 +105,7 @@ $fnc_communiques      = $fnc_communiques_term
 				?>
 				<div class="grid grid-3">
 					<?php foreach ( $fnc_press_contacts as $fnc_contact ) : ?>
-						<article class="card">
+						<article class="card fnc-card">
 							<?php if ( $fnc_contact['role'] ) : ?>
 								<p class="card-kicker"><?php echo esc_html( fnc_pll( $fnc_contact['role'] ) ); ?></p>
 							<?php endif; ?>

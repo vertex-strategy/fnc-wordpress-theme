@@ -1,0 +1,385 @@
+/* ==========================================================================
+   FNC — CSS de rattrapage pour le thème WordPress
+   ==========================================================================
+   Source de vérité : src/app/globals.css (site Next.js de production).
+   Blocs extraits automatiquement (analyse d'accolades), non réécrits.
+   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
+
+   POURQUOI CE FICHIER
+   Le thème porte correctement la structure (moments m1→m8), les tokens
+   couleur et les polices (Helvetica Neue / Georgia, aucune webfont parasite).
+   Mais il ne servait que ~45 % de la CSS (33 Ko contre 74 Ko), et quatre
+   familles de composants avaient ZÉRO règle :
+     .dad-footer   footer entier                    (6 règles)
+     .voice*       carrousel « Les voix » (M3)      (28 règles)
+     .spk*         cartes intervenants              (64 règles)
+     .fnc-card     primitive de carte               (2 règles)
+   Ces blocs s'affichaient donc en style navigateur par défaut.
+
+   DÉPENDANCES — VÉRIFIÉES
+   Les 13 variables utilisées ici (--navy, --navy-deep, --marge, --border,
+   --ease, --linen, --noir, --rouge, --vert, --jaune, --texte-corps,
+   --texte-sec, --texte-tert) sont DÉJÀ définies dans le thème. Seul
+   --jaune-deep manquait : il est ajouté ci-dessous.
+
+   INSTALLATION
+   Charger APRÈS la feuille principale du thème (enqueue en dépendance de
+   'fnc-theme-style', ou @import en fin de style.css) pour la cascade.
+
+   NE PAS scoper sous `.dad` : le thème n'utilise pas ce wrapper et ces
+   sélecteurs sont volontairement non scopés.
+   ========================================================================== */
+
+:root {
+  /* Ambre lisible sur fond clair (~4,6:1). Le jaune pur #f5c000 tombe à
+     ~1,7:1 → illisible en texte. À utiliser pour TOUT texte ambre sur fond
+     clair (numéros d'objectifs, etc.) — WCAG 1.4.3 niveau AA. */
+  --jaune-deep: #8f6a08;
+}
+
+/* ---------- FOOTER ---------- */
+.dad-footer {
+  background: linear-gradient(180deg, var(--navy-deep), var(--noir));
+  color: rgba(255, 255, 255, 0.82);
+  padding: clamp(56px, 8vh, 90px) var(--marge) 40px;
+}
+
+/* Motif « empreinte » discret sur TOUTES les surfaces à fond bleu (footer,
+   callout/inscription, section « Les voix » #m3, héros des pages de référence).
+   Un grand filigrane d'empreinte digitale blanche en très faible opacité, calé
+   à droite — évoque la trace/l'empreinte laissée par le Forum, donne de la vie
+   aux fonds navy sans distraire. Purement décoratif (aria/pointer-events off).
+   Le contenu est remonté au-dessus du ::before via z-index. */
+.dad-footer,
+.callout,
+#m3,
+.page-head {
+  position: relative;
+}
+
+.dad-footer > *,
+.callout > *,
+#m3 > *,
+.page-head > *,
+.frise-item.is-current .frise-body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Filigrane empreinte — MOTIF SIGNATURE du template. Dalle unique de trame
+   d'empreintes (`empreinte-motif.svg`, ~16:9, recolorée en blanc) posée en
+   `cover` SANS répétition → aucune couture, aucun damier. Elle habille les grands
+   cadres sombres pleins : footer, #m3, page-head, panneau « édition en cours » de
+   la frise. Discrétion = `opacity`.
+   PAS sur `.callout` : le callout est presque toujours la DERNIÈRE section avant
+   le footer (lui aussi filigrané). Deux dalles `cover` distinctes qui se rejoignent
+   = couture visible / empreintes « superposées ». On garde donc le CTA net, et le
+   footer (base de marque) porte la texture de cette zone basse. */
+.dad-footer::before,
+#m3::before,
+.page-head::before,
+.frise-item.is-current .frise-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url('/images/brand/empreinte-motif.svg') no-repeat center / cover;
+  opacity: 0.016;
+}
+
+/* Contexte sombre (footer) */
+.dad-footer .social-chip { color: #fff; border-color: rgba(255, 255, 255, 0.24); opacity: 0.92; }
+
+.dad-footer .social-chip:hover { border-color: #fff; opacity: 1; background: rgba(255, 255, 255, 0.06); }
+
+/* ---------- CARTES DE CONTENU — élévation au survol (cohérence RC1.3) ----------
+   Interaction uniforme pour toutes les cartes « lin » (éditions, ressources,
+   partenaires, actualités) : élévation à l'ombre + bordure navy, SANS décalage
+   de mise en page (règle « stable interaction states »). prefers-reduced-motion
+   est déjà géré globalement (durées de transition neutralisées). */
+.fnc-card { transition: box-shadow 0.28s var(--ease), border-color 0.28s var(--ease); }
+
+@media (hover: hover) {
+  .fnc-card:hover { border-color: var(--navy-deep); box-shadow: 0 22px 46px rgba(38, 34, 78, 0.13); }
+}
+
+/* Focus clavier des CTA principaux (WCAG 2.4.7). `.btn` et `.link-more` étaient
+   les seuls appels à l'action sans anneau explicite — ils reposaient sur le
+   contour navigateur par défaut, non testé et de contraste incertain sur navy.
+   On applique les DEUX conventions déjà en vigueur dans cette feuille : rouge
+   sur fond clair (comme .spk-chip), jaune sur fond foncé (comme .consent-link).
+   Le rouge par défaut serait invisible sur `.btn-primary` (fond rouge) et faible
+   sur les surfaces navy → bascule jaune pour ces cas. */
+.btn:focus-visible,
+.link-more:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+
+.sess ul.spk-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+
+.sess ul.spk-list li { font-size: .9rem; color: var(--texte-sec); line-height: 1.4; }
+
+.sess ul.spk-list b { color: var(--texte-corps); font-weight: 600; }
+
+.sess ul.spk-list .ctry { color: var(--texte-tert); }
+
+/* Grille intervenants (monogrammes, sans fausses photos — RÈGLE 7) */
+.spk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: clamp(16px, 2vw, 26px); }
+
+.spk { display: grid; grid-template-columns: 60px 1fr; gap: 16px; align-items: start; padding: 22px 4px; border-top: 1px solid var(--border); }
+
+.spk .mono {
+  width: 60px; height: 60px; border-radius: 3px; display: grid; place-items: center;
+  background: var(--navy-deep); color: #fff; font-weight: 700; font-size: 1.05rem; letter-spacing: .02em;
+}
+
+.spk .n { font-size: 1.08rem; color: var(--navy-deep); font-weight: 700; }
+
+.spk .r { font-size: .9rem; color: var(--texte-sec); margin-top: 4px; line-height: 1.45; }
+
+.spk .o { font-size: .86rem; color: var(--texte-tert); margin-top: 4px; }
+
+.spk .c { display: inline-block; margin-top: 8px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); border: 1px solid var(--border); border-radius: 2px; padding: 2px 8px; }
+
+/* ============================================================
+   M8.7b — Carrousel « Les voix » (M3) + placeholder photo
+   ============================================================ */
+@keyframes voiceFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.voice-fade { animation: voiceFade .6s var(--ease); }
+
+/* Fondu enchaîné entre portraits : tous les portraits sont empilés (absolute) et
+   montés en permanence ; l'actif passe à l'opacité 1, les autres à 0. L'ancien
+   s'efface PENDANT que le nouveau apparaît (vrai cross-fade, pas de coupure ni de
+   temps de chargement). Le portrait actif « respire » aussi via un très léger
+   zoom lent, pour ne pas rester figé pendant qu'il est affiché. */
+.voice-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .9s var(--ease); }
+
+.voice-slide.on { opacity: 1; }
+
+.voice-portrait img.voice-slide { transform: scale(1.02); transition: opacity .9s var(--ease), transform 6s linear; }
+
+.voice-portrait img.voice-slide.on { transform: scale(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-slide { transition: opacity .25s linear; }
+  .voice-portrait img.voice-slide,
+  .voice-portrait img.voice-slide.on { transform: none; transition: opacity .25s linear; }
+}
+
+.voice-portrait { position: relative; overflow: hidden; min-height: 46dvh; }
+
+.voice-portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+
+.voice-ph {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.03) 0 2px, transparent 2px 9px),
+    linear-gradient(160deg, #2a2d63, #14163f);
+  color: #fff;
+}
+
+.voice-mono {
+  width: clamp(84px, 12vw, 132px); height: clamp(84px, 12vw, 132px);
+  display: grid; place-items: center; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.4); color: #fff;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; letter-spacing: .02em;
+}
+
+.voice-phlabel { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+
+/* Deux rangées : les pastilles (indicateur de position) sur leur PROPRE rangée
+   pleine largeur, puis la grappe de contrôles (‹ › ⏸) en dessous. Sans ça, avec
+   jusqu'à 12 pastilles (borne éditoriale) elles entraient en compétition d'espace
+   avec les flèches/pause dans la colonne étroite et s'enroulaient en dents de scie. */
+.voice-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; row-gap: 20px; margin-top: 34px; }
+
+.voice-arrow {
+  width: 44px; height: 44px; flex: none; order: 1; display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.35); border-radius: 50%; background: transparent; color: #fff; cursor: pointer;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+
+.voice-arrow:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+
+.voice-arrow svg { width: 18px; height: 18px; }
+
+/* `flex-basis: 100%` → rangée dédiée (ordre 0, avant les contrôles en `order: 1`).
+   `flex-wrap: wrap` reste un filet pour les très petits écrans (le média ≤560px
+   masque au-delà de 7 pastilles). */
+.voice-dots { display: flex; flex-basis: 100%; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+/* Cible tactile ≥44px (le point visuel reste 9px via ::before) — WCAG 2.5.5. */
+.voice-dots button {
+  width: 32px; height: 44px; padding: 0; border: none; background: none; cursor: pointer;
+  display: grid; place-items: center;
+}
+
+.voice-dots button::before {
+  content: ''; width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(255,255,255,.28); transition: transform .3s var(--ease), background .3s var(--ease);
+}
+
+.voice-dots button:hover::before { background: rgba(255,255,255,.5); }
+
+.voice-dots button.on::before { background: var(--jaune); transform: scale(1.25); }
+
+.voice-dots button:focus-visible { outline: 2px solid var(--jaune); outline-offset: -6px; border-radius: 50%; }
+
+/* Bouton Pause/Lecture du défilement auto (WCAG 2.2.2). Même gabarit que les flèches. */
+.voice-play {
+  width: 44px; height: 44px; flex: none; order: 1; display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.35); border-radius: 50%; background: transparent; color: #fff; cursor: pointer;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+
+.voice-play:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+
+.voice-play svg { width: 16px; height: 16px; }
+
+.intervenants-directory .spk-explorer { margin-top: 0; }
+
+/* Placeholder photo — grille Intervenants (cartes-portrait) */
+.spk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: clamp(20px, 2.4vw, 34px); }
+
+/* Aperçu (hub 2027 / détail édition) : grille déterministe → 8 cartes toujours symétriques (4+4). */
+.spk-grid.is-preview { grid-template-columns: repeat(2, 1fr); }
+
+@media (min-width: 900px) { .spk-grid.is-preview { grid-template-columns: repeat(4, 1fr); } }
+
+.spk { display: flex; flex-direction: column; border-top: none; padding: 0; }
+
+.spk .ph {
+  position: relative; width: 100%; aspect-ratio: 3 / 4; border-radius: 4px; overflow: hidden; margin-bottom: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 2px, transparent 2px 9px),
+    linear-gradient(160deg, #2a2d63, #14163f);
+  color: #fff;
+}
+
+.spk .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; }
+
+.spk .ph .m { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.4); font-weight: 700; font-size: 1.25rem; }
+
+.spk .ph .l { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+
+.spk .n { font-size: 1.05rem; color: var(--navy-deep); font-weight: 700; line-height: 1.25; }
+
+.spk .r { font-size: .88rem; color: var(--texte-sec); margin-top: 5px; line-height: 1.4; }
+
+/* `.o` porte l'écart minimal (9px) sous l'organisation. */
+.spk .o { font-size: .84rem; color: var(--texte-tert); margin-top: 4px; margin-bottom: 9px; }
+
+/* `margin-top: auto` ancre le badge pays au BAS de la carte (flex-column). Les cartes
+   d'une rangée étant étirées à hauteur égale par la grille, tous les badges s'alignent
+   sur une même ligne de base — corrige les « dents de scie » dues aux longueurs de
+   rôle/organisation variables (audit maturité M2). Cf. `.pub .date`. */
+.spk .c { display: inline-block; margin-top: auto; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); border: 1px solid var(--border); border-radius: 2px; padding: 2px 8px; align-self: flex-start; }
+
+/* ---------- EXPLORATEUR INTERVENANTS (filtres · RC1.2) ---------- */
+.spk-explorer { margin-top: 30px; }
+
+.spk-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 28px; }
+
+.spk-filters { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.spk-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px;
+  font: inherit; font-size: .82rem; font-weight: 700; letter-spacing: .04em; cursor: pointer;
+  color: var(--navy-deep); background: #fff; border: 1px solid var(--border); border-radius: 2px;
+  transition: color .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+}
+
+.spk-chip:hover { border-color: var(--navy-deep); }
+
+.spk-chip[aria-pressed="true"] { color: #fff; background: var(--navy-deep); border-color: var(--navy-deep); }
+
+.spk-chip-n { font-size: .72rem; font-weight: 600; opacity: .7; font-variant-numeric: tabular-nums; }
+
+.spk-chip:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+
+.spk-country { display: flex; flex-direction: column; gap: 6px; }
+
+.spk-country label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--texte-tert); font-weight: 700; }
+
+.spk-country select {
+  min-height: 44px; padding: 8px 14px; font: inherit; font-size: .88rem; color: var(--navy-deep);
+  background: #fff; border: 1px solid var(--border); border-radius: 2px; cursor: pointer;
+}
+
+.spk-country select:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; border-color: var(--navy-deep); }
+
+.spk-resultbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 22px 0 24px; }
+
+.spk-result { font-size: .9rem; font-weight: 600; color: var(--navy-deep); }
+
+.spk-reset {
+  min-height: 44px; padding: 6px 16px; font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer;
+  color: var(--navy-deep); background: var(--linen); border: 1px solid var(--border); border-radius: 2px;
+  transition: border-color .18s var(--ease);
+}
+
+.spk-reset:hover { border-color: var(--navy-deep); }
+
+.spk-reset:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+
+.spk-empty { padding: 40px 8px; text-align: center; color: var(--texte-sec); font-size: .96rem; }
+
+/* Rendu progressif de la grille (« Voir plus » · lots de 12). */
+.spk-more { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: clamp(28px, 4vh, 44px); }
+
+.spk-morebtn {
+  min-height: 48px; padding: 12px 28px; font: inherit; font-size: .86rem; font-weight: 700;
+  letter-spacing: .04em; cursor: pointer; color: #fff; background: var(--navy-deep);
+  border: 1px solid var(--navy-deep); border-radius: 2px; transition: background .18s var(--ease);
+}
+
+.spk-morebtn:hover { background: var(--navy); }
+
+.spk-morebtn:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+
+.spk-showing { font-size: .82rem; color: var(--texte-sec); font-variant-numeric: tabular-nums; }
+
+/* Badge de profil (donnée existante `kind`) — palette DA-D uniquement. */
+.spk { position: relative; }
+
+.spk .cat {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 2px; color: #fff; background: var(--navy);
+}
+
+.spk .cat-expert { background: var(--vert); }
+
+.spk .cat-host { background: var(--jaune); color: var(--noir); }
+
+.spk .cat-official { background: var(--navy); }
+
+/* Micro-interaction DA-D : léger zoom du portrait au survol (reduced-motion géré globalement). */
+.spk .ph img { transition: transform .5s var(--ease); }
+
+.spk:hover .ph img { transform: scale(1.045); }
+
+@media (max-width: 560px) {
+  .voice-dots button:nth-child(n+8) { display: none; }
+  .spk-toolbar { align-items: stretch; }
+  .spk-country { width: 100%; }
+  .spk-country select { width: 100%; }
+}
+
+/* ── Navigabilité (M9.20 · LOT A) ─────────────────────────────────────────────
+   Les cartes intervenant et titres de session deviennent des liens vers leurs
+   pages de détail. Les ancres héritent du style existant (aucune nouvelle DA) :
+   couleur du texte conservée, soulignement réservé au survol, focus visible. */
+a.spk { text-decoration: none; color: inherit; cursor: pointer; }
+
+a.spk:focus-visible { outline: 2px solid var(--rouge); outline-offset: 4px; }
+
+a.spk:hover .n { text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; }
+
+.s-title-link, .spk-link { color: inherit; text-decoration: none; }
+
+.s-title-link:hover, .spk-link:hover { text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; }
+
+.s-title-link:focus-visible, .spk-link:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+

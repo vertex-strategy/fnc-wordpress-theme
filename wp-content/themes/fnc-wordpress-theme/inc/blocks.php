@@ -937,9 +937,9 @@ function fnc_render_block_stats( $a ) {
 			<?php if ( fnc_attr( $a, 'title' ) ) : ?>
 				<h2><?php echo esc_html( fnc_attr( $a, 'title' ) ); ?></h2>
 			<?php endif; ?>
-			<div class="metric-strip">
+			<div class="stat-line">
 				<?php foreach ( $items as $item ) : ?>
-					<div class="metric">
+					<div class="stat">
 						<b><?php echo esc_html( isset( $item['value'] ) ? $item['value'] : '' ); ?></b>
 						<span><?php echo esc_html( isset( $item['label'] ) ? $item['label'] : '' ); ?></span>
 					</div>
@@ -1230,7 +1230,7 @@ function fnc_render_block_documents( $a ) {
 						continue;
 					}
 					?>
-					<article class="card">
+					<article class="card fnc-card">
 						<p class="card-kicker"><?php esc_html_e( 'Document', 'fnc-wordpress-theme' ); ?></p>
 						<h3><?php echo esc_html( $label ); ?></h3>
 						<?php if ( $file_url ) : ?>

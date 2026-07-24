@@ -75,7 +75,7 @@ while ( have_posts() ) :
 							</figure>
 						<?php endif; ?>
 
-						<article class="card" style="margin-top:<?php echo has_post_thumbnail() ? '18px' : '0'; ?>;">
+						<article class="card fnc-card" style="margin-top:<?php echo has_post_thumbnail() ? '18px' : '0'; ?>;">
 							<p class="card-kicker"><?php esc_html_e( 'Profil', 'fnc-wordpress-theme' ); ?></p>
 							<dl class="pract-contacts" style="margin-top:14px;">
 								<?php if ( $fnc_i_org ) : ?>

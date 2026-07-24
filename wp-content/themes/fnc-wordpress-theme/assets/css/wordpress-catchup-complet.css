@@ -1,0 +1,1293 @@
+/* ==========================================================================
+   FNC — Complément INTÉGRAL de la couche sémantique          [P3 / complet]
+   ==========================================================================
+   Source : src/app/globals.css (site Next.js de production).
+   Méthode : diff par sélecteur normalisé (commentaires ignorés) entre
+   globals.css et l'union { style.css du thème + wordpress-catchup.css (P1)
+   + wordpress-catchup-p2.css (P2) }. Déclarations EXTRAITES, non réécrites.
+   L'ORDRE SOURCE est préservé : la cascade CSS en dépend.
+   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
+
+   CE FICHIER COMPLÈTE LE PAQUET : avec lui, la couche sémantique du thème
+   atteint la parité avec globals.css (234 règles restantes, dont 9 @keyframes
+   et 7 @media).
+
+   FAMILLES COUVERTES
+     .sess                  17
+     .prose-legal           10
+     @keyframes             9
+     @media                 7
+     .route-dip             7
+     .pub                   7
+     .page-head             7
+     .person                6
+     .edition               6
+     .nav                   5
+     .field                 5
+     .day-nav               5
+     .social-chip           4
+     .practical-lodging     4
+     .practical-faq         4
+     .btn-primary           4
+     .agenda-day            4
+     .president-sign        3
+     .practical-contacts    3
+     .pcb-band              3
+     .opening               3
+     .obj                   3
+     .lang                  3
+     .info-block            3
+     .contact-line          3
+     .consent-reopen        3
+     .consent-link          3
+     .consent-decline       3
+     .btn-ghost-light       3
+     .btn                   3
+     .split                 2
+     .social-chip--icon     2
+     .programme-panorama    2
+     .programme-detail      2
+     .practical-map         2
+     .practical-item        2
+     .pcb                   2
+     .intervenants-panorama 2
+     .hero-backdrop         2
+     .consent-text          2
+     .consent-btn           2
+     .consent-accept        2
+     .consent               2
+     .chip                  2
+     .social-row            1
+     .session               1
+     .section-band          1
+     .section               1
+     .rule                  1
+     .pubs                  1
+     .prov-banner           1
+     .president-word        1
+     .practical-title       1
+     .practical-list        1
+     .people                1
+     .page-h3               1
+     .page-h2               1
+     .page-eyebrow          1
+     .nav-links             1
+     .narration             1
+     .mp-utils              1
+     .intervenants-directory 1
+     .hb-trace              1
+     .hb-beams              1
+     .hb-beam-3             1
+     .hb-beam-2             1
+     .hb-beam-1             1
+     .form-actions          1
+     .foot-logo-img         1
+     .foot-logo             1
+     .foot-brand            1
+     .filters               1
+     .empty                 1
+     .editions              1
+     .day-tabs              1
+     .contact-grid          1
+     .contact-block         1
+     .consent-inner         1
+     .consent-actions       1
+     .btn-disabled          1
+     .brand-logo--white     1
+     .brand-logo--color     1
+
+   NUANCE MÉTHODOLOGIQUE — à lire
+   Le diff porte sur l'IDENTITÉ DES SÉLECTEURS, pas sur l'équivalence visuelle.
+   Certaines de ces règles sont peut-être déjà couvertes côté thème sous un
+   AUTRE nom de classe : dans ce cas la règle livrée ici sera simplement
+   inerte (aucun sélecteur correspondant dans le markup). C'est sans risque,
+   mais cela signifie que 231 est un MAJORANT du manque réel.
+
+   FAMILLES POTENTIELLEMENT INUTILES EN WORDPRESS
+   - .route-dip (7 règles) : transition de route propre au App Router Next.js.
+     Aucun équivalent WP — supprimable sans conséquence.
+
+   INSTALLATION — dernier de la chaîne :
+     style.css
+       -> wordpress-catchup.css              (P1 : familles à zéro style)
+       -> wordpress-tailwind-utilities.css   (P4 : couche utilitaire)
+       -> wordpress-catchup-p2.css           (P2 : familles partielles)
+       -> CE FICHIER                          (P3 : tout le reste)
+   Rappel : les règles « .dad … » exigent la classe `dad` sur le <body>
+   (filtre body_class — voir l'en-tête de wordpress-catchup-p2.css).
+   ========================================================================== */
+
+:root {
+  /* Tokens DA référencés par ce fichier, absents du thème et sans
+     fallback inline — valeurs reprises telles quelles de globals.css. */
+  --surface: #f2f2f5;
+  --display-page: clamp(2rem, 4.4vw, 3.9rem);
+  --color-background: #ffffff;
+  --color-foreground: var(--texte-corps);
+}
+
+/* ---------- Base DA-D (dé-encapsulée de @layer base) ----------
+   Les directives @tailwind (build-time) et le wrapper @layer ont été retirés :
+   ils n'ont aucun sens dans une CSS servie telle quelle, et @layer abaisserait
+   la priorité de cascade. Le :root de globals.css n'est PAS repris ici — le
+   thème définit déjà ces tokens, et les 4 manquants sont déclarés en tête.
+   NOTE : la règle `body` ci-dessous impose fond/couleur/police du site réel ;
+   si le thème les gère déjà, elle est redondante (sans risque). */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  /* Police de base DA-D — garantit le sans institutionnel partout, y compris
+     hors `.dad` (header, footer, états fonctionnels). */
+  font-family: var(--sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Réactivité tactile : supprime le délai de 300ms (double-tap zoom) sur les
+   contrôles, sans bloquer le défilement ni le pinch-zoom. Améliore le ressenti
+   « les menus ne répondent pas tout de suite » sur tablette/mobile. */
+a,
+button,
+summary,
+[role='tab'],
+[role='button'],
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+
+.narration {
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+/* Très grands écrans / vidéo-projecteur : au-delà de 1920px, on cesse d'étirer
+   la « marge de dignité » et on centre le contenu (colonne max ~1680px), pour que
+   les sections pleine largeur et le footer ne s'étalent pas d'un bord à l'autre.
+   En deçà de 1921px : comportement inchangé (le clamp plafonne déjà à 120px). */
+@media (min-width: 1921px) {
+  :root { --marge: calc((100vw - 1680px) / 2); }
+}
+
+/* Entrée : on anime le CONTENU de la nav (logo + liens + utilitaires), PAS le
+   conteneur `.nav`. Un transform sur `.nav` en ferait le bloc conteneur du panneau
+   mobile (`position: fixed`) → le panneau ne couvrait plus que la hauteur de la
+   barre au lieu de l'écran (fond qui « disparaît », footer visible dessous, liens
+   qui débordent). En animant les enfants, l'entrée est préservée sans casser le
+   panneau. Le panneau `#mobile-nav` est volontairement exclu. */
+.nav > .brand,
+.nav > .nav-links,
+.nav > .nav-utils {
+  animation: nav-enter .7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes nav-enter { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
+
+.nav-links a:hover::after, .nav-links a[aria-current="page"]::after { width: 100%; }
+
+.lang a, .lang button { background: none; border: none; color: inherit; cursor: pointer; padding: 6px; font: inherit; opacity: .6; transition: opacity .2s var(--ease); }
+
+.lang a[aria-current="true"], .lang button[aria-pressed="true"] { opacity: 1; font-weight: 700; }
+
+.lang a:hover, .lang button:hover { opacity: 1; }
+
+.mp-utils .lang a, .mp-utils .lang button { opacity: .7; min-width: 44px; min-height: 44px; }
+
+/* Menu ouvert : le panneau (z-99) recouvre la barre. On remonte le contenu de la
+   barre (logo + utilitaires, dont le burger qui devient une croix) au-dessus du
+   panneau pour garder une sortie visible et cliquable (modal-escape). */
+.nav > .brand,
+.nav > .nav-utils {
+  position: relative;
+  z-index: 101;
+}
+
+/* ---------- Hero backdrop — prototypes d'ambiance (#m1), entre overlay et texte ---------- */
+.hero-backdrop { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+
+.hero-backdrop .hb-canvas, .hero-backdrop .hb-paths { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* paths — traces « circuit » dont le tiret file (rappel du pcb-band) */
+.hb-trace { fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 9 210; animation: hb-flow 7s linear infinite; }
+
+@keyframes hb-flow { to { stroke-dashoffset: -219; } }
+
+/* beams — faisceaux doux qui respirent */
+.hb-beams .hb-beam { position: absolute; top: -40%; width: 55%; height: 180%; filter: blur(70px); opacity: 0; mix-blend-mode: screen; transform: rotate(16deg); }
+
+.hb-beam-1 { left: -12%; background: radial-gradient(closest-side, rgba(245, 192, 0, 0.5), transparent 70%); animation: hb-beam 12s ease-in-out infinite; }
+
+.hb-beam-2 { left: 28%; background: radial-gradient(closest-side, rgba(59, 160, 74, 0.42), transparent 70%); animation: hb-beam 15s ease-in-out -5s infinite; }
+
+.hb-beam-3 { left: 62%; background: radial-gradient(closest-side, rgba(130, 134, 225, 0.5), transparent 70%); animation: hb-beam 10s ease-in-out -2.5s infinite; }
+
+@keyframes hb-beam { 0%, 100% { opacity: 0; transform: translateX(-8%) rotate(16deg); } 50% { opacity: 0.55; transform: translateX(8%) rotate(16deg); } }
+
+#m2 figure img { object-fit: cover; transition: transform .8s var(--ease); }
+
+/* #m4 est un hero photo sombre : l'eyebrow doit être blanc (comme .page-head /
+   .opening / .territory). Sans cette règle il retombe sur `.eyebrow` = navy et
+   « LE TERRITOIRE » devient illisible sur la photo. */
+#m4 .eyebrow { color: #fff; }
+
+#m5 figure img { object-fit: cover; transition: transform .8s var(--ease); }
+
+#m5 .session { display: grid; grid-template-columns: 104px 1fr auto; gap: 20px; align-items: center; padding: 22px 12px 22px 4px; border-bottom: 1px solid var(--border); transition: background .22s var(--ease), padding-left .22s var(--ease); }
+
+#m5 .session:hover { background: var(--linen); padding-left: 14px; }
+
+#m5 .session .time { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--navy); }
+
+#m5 .session .title { font-weight: 600; }
+
+#m5 .session .room { font-size: .9rem; color: var(--texte-sec); white-space: nowrap; }
+
+#m8 .decision .btn-primary { margin-top: 38px; font-size: 1.05rem; padding: 17px 36px; }
+
+.pcb .line-r { stroke: var(--rouge); stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: dad-trace 2.4s var(--ease) forwards; }
+
+.pcb .line-y { stroke: var(--jaune); stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: dad-trace 2.4s var(--ease) .35s forwards; }
+
+@keyframes dad-node { to { opacity: 1; } }
+
+@keyframes dad-trace { to { stroke-dashoffset: 0; } }
+
+/* ---------- PAGE HEADER (pages intérieures) ---------- */
+.page-head {
+  padding: clamp(120px, 18vh, 200px) var(--marge) clamp(48px, 7vh, 90px);
+  background: linear-gradient(180deg, var(--navy-deep), #12143f);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-head .breadcrumb {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-bottom: 22px;
+}
+
+.page-head .eyebrow {
+  color: #fff;
+}
+
+.page-head .breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.page-head h1 {
+  font-size: var(--display-page);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+
+.page-head .intro {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  max-width: 50ch;
+  margin-top: 18px;
+  opacity: 0.92;
+}
+
+.page-head .pcb-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.pcb-band path {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: dad-trace 2s var(--ease) forwards;
+}
+
+.pcb-band .r {
+  stroke: var(--rouge);
+}
+
+.pcb-band .y {
+  stroke: var(--jaune);
+  animation-delay: 0.3s;
+}
+
+.section.tight {
+  padding-top: clamp(36px, 5vh, 60px);
+}
+
+/* Titres des pages CMS/contenu — SOURCE UNIQUE (convergence bespoke ↔ Tailwind).
+   Les pages Tailwind (Partenaires, Ressources, Espace-presse, Contact, Actualités,
+   Éditions, Inscription) et les composants partagés référencent `.page-h2`/`.page-h3`
+   au lieu de répéter des utilitaires — ce qui avait laissé certains titres dériver
+   en serif. Une seule règle ⇒ la police, le poids et l'échelle ne peuvent plus
+   diverger de la DA (sans, navy, poids fort). Ne PAS remettre `font-serif` ici :
+   le serif de la DA est réservé aux accents en italique (chapôs, citations). */
+.page-h2 {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--navy);
+  font-size: clamp(2.25rem, 3vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.page-h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--navy);
+  font-size: clamp(1.875rem, 2.4vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Eyebrow des pages CMS/contenu — SOURCE UNIQUE (même principe que .page-h2).
+   Fini le `tracking-normal` : on retrouve le tracking « institutionnel » de la DA
+   (cf. .eyebrow). La couleur reste un utilitaire (text-rouge / text-navy), car elle
+   est sémantique selon la section. */
+.page-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* Bande de section pleine largeur — SOURCE UNIQUE. Le fond reste un utilitaire
+   (bg-white / bg-linen) pour piloter l'alternance ; la structure (filets haut/bas,
+   marge, rythme vertical) vit ici. */
+.section-band {
+  border-block: 1px solid var(--border);
+  padding: clamp(56px, 7vh, 80px) var(--marge);
+}
+
+/* ---------- FILTRES ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.chip:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* ---------- INTERVENANTS ---------- */
+.people {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(18px, 2vw, 30px);
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+}
+
+.person .avatar {
+  aspect-ratio: 3 / 4;
+  border-radius: 3px;
+  margin-bottom: 16px;
+  background: repeating-linear-gradient(135deg, #e9e9f2 0 2px, #f4f4fa 2px 10px);
+  display: grid;
+  place-items: center;
+  color: var(--texte-tert);
+}
+
+.person .avatar svg {
+  width: 54px;
+  height: 54px;
+  opacity: 0.5;
+}
+
+.person .name {
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+
+.person .role {
+  font-size: 0.9rem;
+  color: var(--texte-sec);
+  margin-top: 4px;
+}
+
+.person .org {
+  font-size: 0.84rem;
+  color: var(--texte-tert);
+  margin-top: 2px;
+}
+
+/* ---------- PROGRAMME ---------- */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.rule {
+  height: 2px;
+  background: var(--noir);
+  margin-bottom: 4px;
+}
+
+.session .meta {
+  font-size: 0.86rem;
+  color: var(--texte-sec);
+  margin-top: 4px;
+}
+
+/* ---------- ÉDITIONS ---------- */
+.editions {
+  display: flex;
+  flex-direction: column;
+}
+
+.edition {
+  display: grid;
+  grid-template-columns: 220px 1fr auto;
+  gap: 28px;
+  align-items: center;
+  padding: 26px 0;
+  border-top: 1px solid var(--border);
+}
+
+.edition:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.edition .year {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.edition .thumb {
+  height: 96px;
+  border-radius: 3px;
+  filter: grayscale(0.75) contrast(1.08);
+  background: repeating-linear-gradient(90deg, #dcdce6 0 10px, #e8e8f0 10px 20px);
+  display: grid;
+  place-items: center;
+  color: var(--texte-tert);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.edition .detail .theme {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.edition .detail .place {
+  font-size: 0.9rem;
+  color: var(--texte-sec);
+  margin-top: 4px;
+}
+
+/* ---------- PUBLICATIONS ---------- */
+.pubs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.pub {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  transition:
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+.pub:hover {
+  box-shadow: 0 12px 30px rgba(26, 29, 92, 0.1);
+  transform: translateY(-2px);
+}
+
+.pub .cover {
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(150deg, #23265f, #12143a);
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pub .body {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.pub .kind {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rouge);
+  font-weight: 700;
+}
+
+.pub .title {
+  font-size: 1.12rem;
+  color: var(--navy);
+  line-height: 1.25;
+}
+
+.pub .date {
+  font-size: 0.82rem;
+  color: var(--texte-tert);
+  margin-top: auto;
+}
+
+/* ---------- CONTACT / FORMULAIRE ---------- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 5vw, 72px);
+  align-items: start;
+}
+
+.info-block {
+  margin-bottom: 30px;
+}
+
+.info-block h3 {
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.info-block p {
+  color: var(--texte-sec);
+  font-size: 0.96rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+.field .req {
+  color: var(--rouge);
+}
+
+.field input,
+.field textarea,
+.field select {
+  font: inherit;
+  font-size: 1rem;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--texte-corps);
+  min-height: 46px;
+  transition: border-color 0.18s var(--ease);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--navy);
+}
+
+.field .help {
+  font-size: 0.8rem;
+  color: var(--texte-tert);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.btn-primary {
+  background: var(--rouge);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--rouge-deep);
+}
+
+/* CTA conditionnel non cliquable (ex. « Inscriptions à venir ») — RÈGLE 14. */
+.btn-disabled {
+  background: transparent;
+  color: var(--texte-sec);
+  border: 1px solid var(--border);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-ghost-light {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  background: transparent;
+}
+
+.btn-ghost-light:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.empty svg {
+  width: 40px;
+  height: 40px;
+  color: var(--texte-tert);
+  margin-bottom: 14px;
+}
+
+/* Logo FNC (blanc) dans le footer — remplace le wordmark texte. */
+.foot-logo { display: block; width: fit-content; margin-bottom: 22px; }
+
+.foot-logo-img { height: 60px; width: auto; display: block; }
+
+.foot-brand .wordmark b {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+/* ---------- COORDONNÉES & RÉSEAUX (premium · cohérent footer + contact) ---------- */
+.contact-block { display: grid; gap: 4px; margin-top: 16px; }
+
+.contact-line { display: flex; align-items: baseline; gap: 10px; font-size: 0.86rem; line-height: 1.7; }
+
+.contact-line .k {
+  flex: none; min-width: 68px; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-weight: 700; opacity: 0.62;
+}
+
+.contact-line .v { font-weight: 600; }
+
+.social-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+.social-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 14px;
+  font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em; border: 1px solid var(--border);
+  border-radius: 2px; color: var(--navy-deep); background: transparent;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.social-chip svg { width: 16px; height: 16px; flex: none; }
+
+.social-chip:hover { border-color: var(--navy-deep); }
+
+.social-chip:focus-visible { outline: 2px solid var(--rouge); outline-offset: 3px; }
+
+/* Réseaux sociaux du footer : pastilles carrées icône-seule (44×44), côte à côte.
+   Avec leur libellé texte, les chips devenaient larges et s'empilaient une par
+   ligne dans la colonne étroite du footer. Le nom reste accessible via aria-label
+   (voir Footer.tsx). Ne concerne PAS les chips email/téléphone des pages contact
+   et espace-presse, qui gardent leur texte. */
+.social-chip--icon { width: 44px; padding: 0; justify-content: center; }
+
+.social-chip--icon svg { width: 18px; height: 18px; }
+
+/* ---------- MOT DU PRÉSIDENT (bloc instPresident · Le Forum) ---------- */
+.split.president { align-items: center; }
+
+/* `width: 100%` est INDISPENSABLE : avec `justify-self: center`, la figure se
+   dimensionnerait sur son contenu — or son unique enfant est un <Image fill>
+   en position absolue, qui ne contribue pas à la largeur intrinsèque. Sans
+   largeur définie, la figure ferait 0px et la photo disparaîtrait. */
+.split.president figure { aspect-ratio: 3 / 4; width: 100%; max-width: 360px; justify-self: center; box-shadow: var(--shadow-lifted); }
+
+.president-word {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.5;
+  color: var(--navy-deep); margin: 10px 0 22px; max-width: 42ch;
+}
+
+.president-sign { margin: 0 0 20px; }
+
+.president-sign b { display: block; color: var(--navy-deep); font-size: 1.02rem; font-weight: 700; }
+
+.president-sign span { font-size: 0.9rem; color: var(--texte-sec); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .nav-links ul,
+  .nav-utils .cta-accred {
+    display: none;
+  }
+  .burger {
+    display: inline-flex;
+  }
+  #m3 .voix-grid {
+    grid-template-columns: 1fr;
+  }
+  #m3 .portrait {
+    min-height: 46dvh;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .edition {
+    grid-template-columns: 120px 1fr;
+  }
+  .edition .thumb {
+    display: none;
+  }
+  /* Tablette : marque en bandeau pleine largeur, puis 3 colonnes de liens —
+     au lieu de 2 colonnes qui donnaient un footer trop empilé. */
+  .foot-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .foot-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+.btn-primary:hover { box-shadow: 0 14px 30px rgba(204, 34, 34, 0.34); }
+
+.btn-ghost-light:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  transform: translateX(-135%);
+}
+
+.btn:hover::after { transform: translateX(135%); transition: transform 0.8s var(--ease); }
+
+.btn:active { transform: translateY(0) scale(0.97); }
+
+.btn-primary:focus-visible,
+.btn-white:focus-visible,
+.btn-ghost-light:focus-visible,
+#m7 .link-more:focus-visible { outline-color: var(--jaune); }
+
+/* Hero (#m1) — entrée cinématographique en CSS PUR (montée + fondu + flou qui se
+   lève), en cascade. Fiable au chargement, contrairement au reveal JS qui « claque »
+   pour le contenu déjà à l'écran (l'IntersectionObserver se déclenche avant le 1er
+   paint). Le hero est donc EXCLU du reveal JS (voir HomeMotion). */
+#m1 .hero-inner > * { animation: hero-enter 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+#m1 .hero-inner > *:nth-child(1) { animation-delay: 0.15s; }
+
+#m1 .hero-inner > *:nth-child(2) { animation-delay: 0.34s; }
+
+#m1 .hero-inner > *:nth-child(3) { animation-delay: 0.52s; }
+
+#m1 .hero-inner > *:nth-child(4) { animation-delay: 0.68s; }
+
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(46px); filter: blur(16px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Ordre desktop M3 : portrait à droite (le regard entre dans le texte) */
+@media (min-width: 901px) {
+  #m3 .voix-grid { grid-template-columns: 1fr 1.05fr; }
+  #m3 .identity { order: 1; }
+  #m3 .portrait { order: 2; }
+}
+
+@media (max-width: 1024px) and (min-width: 901px) {
+  #m5 figure { position: static; }
+  #m5 .grid { grid-template-columns: .9fr 1.1fr; }
+}
+
+@media (max-width: 900px) {
+  /* Le hero RÉSERVE en bas la place de l'indicateur de défilement (« Défiler » +
+     point animé) au lieu de le masquer : on augmente le padding-bottom pour que les
+     CTA (empilés en pleine largeur sur petit écran) ne descendent plus dans la zone
+     du hint (bottom: 26px). Le point animé reste coupé en prefers-reduced-motion. */
+  #m1 { min-height: 100dvh; padding-bottom: clamp(104px, 15vh, 132px); }
+  .moment { min-height: auto; }
+  #m2 .grid, #m3 .voix-grid, #m5 .grid { grid-template-columns: 1fr; }
+  #m2 figure { aspect-ratio: 16 / 10; }
+  #m3 { min-height: auto; }
+  #m3 .voix-grid { min-height: auto; }
+  #m3 .portrait { aspect-ratio: 4 / 5; }
+  #m5 figure { position: static; aspect-ratio: 16 / 10; }
+  #m8 { min-height: auto; padding-top: clamp(96px, 16vh, 140px); padding-bottom: clamp(96px, 16vh, 140px); }
+}
+
+.opening .media-cover { animation: kenburns 22s var(--ease) forwards; }
+
+.opening .breadcrumb a:hover { text-decoration: underline; }
+
+.opening .pcb-band { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; width: 100%; z-index: 2; pointer-events: none; opacity: .85; }
+
+.obj .row.c-vert .n { color: var(--vert); }
+
+.obj .row.c-jaune .n { color: var(--jaune-deep); }
+
+.obj .row.c-rouge .n { color: var(--rouge); }
+
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .split figure { aspect-ratio: 16 / 10; }
+}
+
+.brand-logo--color { position: absolute; top: 0; left: 0; opacity: 0; }
+
+.brand-logo--white { opacity: 1; }
+
+.nav.solid .brand-logo--white { opacity: 0; }
+
+.nav.solid .brand-logo--color { opacity: 1; }
+
+.nav.solid .brand-logo { height: 40px; }
+
+/* ============================================================
+   M8.7 — Composants Agenda (Programme + Intervenants)
+   ============================================================ */
+.prov-banner {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+  color: var(--navy-deep); background: var(--jaune); padding: 9px 16px; border-radius: 2px;
+}
+
+/* Navigation jours (ancres) */
+.day-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0 8px; }
+
+.day-nav a {
+  display: inline-flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center;
+  border: 1px solid var(--border); border-radius: 3px; padding: 8px 18px; background: #fff;
+  transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+
+.day-nav a:hover { border-color: var(--navy); color: var(--navy); }
+
+.day-nav a b { font-size: .95rem; color: var(--navy-deep); }
+
+.day-nav a span { font-size: .78rem; color: var(--texte-tert); font-variant-numeric: tabular-nums; }
+
+.agenda-day { scroll-margin-top: 96px; padding-top: clamp(40px, 6vh, 72px); }
+
+.agenda-day > h2 { font-size: clamp(1.5rem, 3vw, 2.3rem); color: var(--navy); letter-spacing: -.02em; }
+
+.agenda-day > .day-date { font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--texte-tert); margin: 8px 0 6px; }
+
+.agenda-day > .rule { height: 2px; background: var(--noir); margin-bottom: 4px; }
+
+/* Ligne de session */
+.sess { display: grid; grid-template-columns: 128px 1fr; gap: 24px; padding: 24px 6px; border-bottom: 1px solid var(--border); }
+
+.sess .when { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--navy); font-size: 1.02rem; }
+
+.sess .type {
+  display: inline-block; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 700;
+  padding: 3px 9px; border-radius: 2px; margin-bottom: 10px; border: 1px solid transparent;
+}
+
+.sess .type.t-session { color: var(--navy); border-color: color-mix(in srgb, var(--navy) 30%, transparent); }
+
+.sess .type.t-allocution, .sess .type.t-inaugurale { color: var(--rouge); border-color: color-mix(in srgb, var(--rouge) 30%, transparent); }
+
+.sess .type.t-table-ronde, .sess .type.t-interview { color: #1c7a2c; border-color: color-mix(in srgb, var(--vert) 40%, transparent); }
+
+.sess .type.t-pause, .sess .type.t-logistique { color: var(--texte-tert); border-color: var(--border); }
+
+.sess .type.t-cloture { color: var(--navy-deep); border-color: color-mix(in srgb, var(--navy-deep) 30%, transparent); }
+
+.sess .s-title { font-weight: 600; font-size: 1.08rem; line-height: 1.3; color: var(--texte-corps); }
+
+.sess .s-mod { font-size: .9rem; color: var(--texte-sec); margin-top: 8px; }
+
+.sess .s-mod b { color: var(--navy-deep); font-weight: 600; }
+
+.sess .s-note { font-size: .88rem; color: var(--texte-sec); margin-top: 6px; font-style: italic; }
+
+.sess details { margin-top: 12px; }
+
+.sess summary { cursor: pointer; font-size: .86rem; font-weight: 600; color: var(--navy); list-style: none; display: inline-flex; align-items: center; gap: 8px; min-height: 32px; }
+
+.sess summary::-webkit-details-marker { display: none; }
+
+.sess summary::after { content: "+"; font-weight: 700; }
+
+.sess details[open] summary::after { content: "–"; }
+
+/* Intervenants (page témoin — rythme de sections). L'annuaire formait un seul
+   bloc blanc plat. On le scinde : « panorama » (bande lin, chiffres + pays) puis
+   « annuaire » (blanc), démarcation nette à la bascule lin → blanc.
+   Anti-empilement vertical : la marge basse des drapeaux et la marge haute de
+   l'explorateur (prévues quand tout vivait dans une seule section) ne doivent
+   plus s'additionner aux paddings de section → on resserre l'inter-chapitre. */
+.intervenants-panorama { padding-bottom: clamp(28px, 4vh, 44px); }
+
+.intervenants-panorama .flag-block { margin-bottom: 0; }
+
+.intervenants-directory { border-top: 1px solid var(--border); padding-top: clamp(32px, 4.5vh, 48px); }
+
+/* Programme — même logique de chapitrage : aperçu (bande lin) puis programme
+   détaillé (surface blanche). */
+.programme-panorama { padding-bottom: clamp(28px, 4vh, 44px); }
+
+.programme-panorama .day-nav { margin-bottom: 0; }
+
+.programme-detail { border-top: 1px solid var(--border); padding-top: clamp(32px, 4.5vh, 48px); }
+
+.programme-detail .agenda-day:first-child { margin-top: 0; }
+
+/* ── Informations pratiques (M9.21 · LOT B) ───────────────────────────────────
+   Agrégat de rubriques rattachées à l'Édition. Réutilise .split / .prose-legal /
+   .body ; aucune nouvelle direction artistique. */
+.practical-list { display: grid; gap: clamp(28px, 4vw, 48px); margin-top: 28px; }
+
+.practical-item { border-top: 1px solid var(--border); padding-top: clamp(20px, 3vw, 32px); }
+
+.practical-item:first-child { border-top: none; padding-top: 0; }
+
+.practical-title { font-family: var(--serif); font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 500; color: var(--navy-deep); line-height: 1.2; }
+
+.practical-map { position: relative; aspect-ratio: 4 / 3; width: 100%; overflow: hidden; border-radius: 8px; background: var(--surface); }
+
+.practical-map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.practical-lodging, .practical-contacts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+
+.practical-lodging .lodging-name { font-weight: 700; color: var(--navy-deep); }
+
+.practical-lodging a { color: inherit; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; }
+
+.practical-lodging .lodging-note { color: var(--texte-sec); }
+
+.practical-contacts li { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+
+.practical-contacts .contact-label { font-weight: 700; color: var(--navy-deep); min-width: 12ch; }
+
+.practical-contacts .contact-value a { color: var(--navy-deep); text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; }
+
+.practical-faq { display: grid; gap: 10px; }
+
+.practical-faq details { border: 1px solid var(--border); border-radius: 6px; background: #fff; padding: 14px 18px; }
+
+.practical-faq summary { font-weight: 600; color: var(--navy-deep); cursor: pointer; }
+
+.practical-faq details[open] summary { margin-bottom: 10px; }
+
+/* ── Bandeau de consentement (cookie de mesure) ───────────────────────────────
+   Le bandeau appartient à la DA-D plutôt que de flotter comme un widget tiers :
+   fond `--navy-deep` (même socle que `.callout` et le pied de page) et bande PCB
+   sur l'arête HAUTE, qui le raccorde visuellement à la page. La trace de circuit
+   n'est pas un ornement — c'est le seul motif de la DA qui parle de flux de
+   données, sujet exact du bandeau.
+
+   Les deux actions ont volontairement le même gabarit : refuser doit être aussi
+   simple qu'autoriser (CNIL). Ne pas rendre `.consent-decline` plus discret. */
+.consent {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Sous l'en-tête (100) et le menu mobile plein écran (99), au-dessus du contenu. */
+  z-index: 95;
+  background: var(--navy-deep);
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 -18px 50px rgba(26, 29, 92, 0.3);
+  /* `backwards` et non `both` : après l'entrée, le bandeau retrouve son état
+     naturel (aucune transformation persistante). L'état de repos ne dépend donc
+     pas du remplissage de l'animation — la visibilité d'un contrôle exigé par la
+     loi ne doit tenir qu'au positionnement. */
+  animation: consent-in 0.34s var(--ease) backwards;
+}
+
+.consent .pcb-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 34px;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.consent-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  /* Compact sur mobile : le bandeau recouvre le contenu tant qu'aucun choix n'est
+     fait — il doit rester lisible sans confisquer l'écran (mesuré ~35% en 375×812). */
+  padding: 24px var(--marge) 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.consent-text .eyebrow {
+  color: var(--jaune);
+  margin-bottom: 10px;
+}
+
+.consent-text p {
+  margin: 0;
+  max-width: 64ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.consent-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.88rem;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+}
+
+.consent-link:hover { text-decoration-color: var(--jaune); }
+
+.consent-link:focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
+
+.consent-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.consent-btn {
+  flex: 1 1 0;
+  justify-content: center;
+  min-height: 48px;
+  padding: 13px 22px;
+}
+
+.consent-decline {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.consent-decline:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
+
+.consent-accept {
+  background: var(--jaune);
+  color: var(--navy-deep);
+  border-color: var(--jaune);
+}
+
+.consent-accept:hover { background: #ffd21f; border-color: #ffd21f; }
+
+.consent-btn:focus-visible { outline: 3px solid var(--jaune); outline-offset: 3px; }
+
+.consent-decline:focus-visible { outline-color: #fff; }
+
+@media (min-width: 820px) {
+  .consent-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 44px;
+    padding: 28px var(--marge) 26px;
+  }
+  .consent-actions { flex: 0 0 auto; }
+  .consent-btn { flex: 0 0 auto; min-width: 148px; }
+}
+
+@keyframes consent-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Retrait du consentement — rendu comme les liens légaux voisins (`.foot-bottom`). */
+.consent-reopen {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.consent-reopen:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.consent-reopen:focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
+
+/* ── Transition de page cinématographique — « dip » navy (RouteTransition) ─────
+   Les View Transitions natives ne s'enclenchent pas sur la navigation cliente de
+   l'App Router (le flag `experimental.viewTransition` n'expose que le composant
+   React expérimental, indisponible ici). On produit donc l'enchaînement nous-mêmes,
+   robuste en dev ET en prod : à chaque changement de route, un voile navy fond très
+   brièvement puis se retire — un « fondu au bleu » de cinéma, registre DA. Un filet
+   PCB (rouge/jaune) trace sur le voile comme signature. `pointer-events: none` →
+   ne bloque JAMAIS l'input. Piloté par `RouteTransition` (skip au 1ᵉʳ rendu,
+   coupé en prefers-reduced-motion). */
+.route-dip {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  background: linear-gradient(180deg, var(--navy-deep), #12143f);
+  display: flex;
+  align-items: flex-end;
+}
+
+.route-dip .rd-pcb {
+  width: 100%;
+  height: 60px;
+  opacity: 0;
+}
+
+.route-dip.is-active {
+  animation: route-dip 520ms var(--ease) both;
+}
+
+.route-dip.is-active .rd-pcb {
+  animation: route-dip-pcb 520ms var(--ease) both;
+}
+
+.route-dip .rd-pcb path {
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.route-dip .rd-pcb .r {
+  stroke: var(--rouge);
+}
+
+.route-dip .rd-pcb .y {
+  stroke: var(--jaune);
+}
+
+@keyframes route-dip {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  36% {
+    opacity: 0.94;
+  }
+  60% {
+    opacity: 0.94;
+  }
+  100% {
+    opacity: 0;
+    visibility: visible;
+  }
+}
+
+@keyframes route-dip-pcb {
+  0%,
+  22% {
+    opacity: 0;
+  }
+  48% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── Contenu éditorial riche (.prose-legal) ───────────────────────────────────
+   La classe est appliquée sur 9 surfaces (pages légales, mot du président, bios,
+   descriptions de session/édition) mais n'avait AUCUNE règle : le preflight
+   Tailwind neutralise marges et titres. Conséquences mesurées avant correction :
+   écart de 0px entre deux paragraphes (ils se touchaient), et un <h2> se serait
+   affiché comme du corps de texte.
+
+   Vérifié en base au préalable : le contenu existant ne contient QUE des nœuds
+   `paragraph` (24 sur 5 collections, 2 locales). Les règles de titres, listes et
+   liens ci-dessous sont donc sans effet sur l'existant — elles n'ouvrent la voie
+   qu'au contenu structuré à venir. Seul `p + p` modifie le rendu actuel, et il
+   corrige un défaut avéré.
+   Sélecteurs en descendance et NON en enfant direct (`>`) : le convertisseur
+   Payload enveloppe le contenu dans un <div class="payload-richtext">, si bien
+   que les nœuds sont des petits-enfants de .prose-legal. */
+.prose-legal p + p { margin-top: 1.1em; }
+
+.prose-legal h2 {
+  font-family: var(--serif);
+  font-size: 1.32rem;
+  line-height: 1.25;
+  color: var(--navy);
+  margin-top: 2em;
+  margin-bottom: 0.55em;
+}
+
+.prose-legal h2:first-child { margin-top: 0; }
+
+.prose-legal h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-top: 1.6em;
+  margin-bottom: 0.4em;
+}
+
+.prose-legal ul,
+.prose-legal ol { margin-top: 0.9em; padding-left: 1.35em; }
+
+.prose-legal ul { list-style: disc; }
+
+.prose-legal ol { list-style: decimal; }
+
+.prose-legal li { margin-top: 0.3em; }
+
+.prose-legal a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rouge);
+}
+
+.prose-legal a:hover { color: var(--navy); }
+

@@ -48,7 +48,7 @@ fnc_render_hero(
 						the_post();
 						$fnc_ac_cats = get_the_terms( get_the_ID(), 'fnc_categorie' );
 						?>
-						<article class="card">
+						<article class="card fnc-card">
 							<p class="card-kicker">
 								<?php echo esc_html( get_the_date() ); ?>
 								<?php if ( $fnc_ac_cats && ! is_wp_error( $fnc_ac_cats ) ) : ?>

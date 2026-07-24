@@ -196,7 +196,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 			<?php if ( ! empty( $fnc_home_partners ) ) : ?>
 				<div class="tier t1">
 					<?php foreach ( $fnc_home_partners as $fnc_hp ) : ?>
-						<div class="logo-ph">
+						<a class="logo-ph" href="<?php echo esc_url( get_permalink( $fnc_hp ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_hp ) ); ?>">
 							<?php
 							if ( has_post_thumbnail( $fnc_hp ) ) {
 								echo get_the_post_thumbnail( $fnc_hp, 'medium', array( 'alt' => esc_attr( get_the_title( $fnc_hp ) ) ) );
@@ -204,7 +204,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 								echo esc_html( get_the_title( $fnc_hp ) );
 							}
 							?>
-						</div>
+						</a>
 					<?php endforeach; ?>
 				</div>
 			<?php else : ?>

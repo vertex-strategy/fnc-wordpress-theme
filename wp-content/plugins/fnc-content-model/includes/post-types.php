@@ -90,7 +90,12 @@ function fnc_content_model_register_post_types() {
 				'edit_item'     => __( 'Modifier le partenaire', 'fnc-content-model' ),
 			),
 			'public'       => true,
-			'has_archive'  => true,
+			// Pas d'archive de CPT : la vue liste des partenaires est la Page
+			// « partenaires » (page-partenaires.php), qui partage le meme slug.
+			// Une archive a /partenaires/ entrerait en conflit avec cette Page et
+			// la masquerait. Les fiches restent servies via le rewrite ci-dessous
+			// (/partenaires/{slug}/), rendues par single-fnc_partenaire.php.
+			'has_archive'  => false,
 			'rewrite'      => array( 'slug' => 'partenaires' ),
 			'menu_icon'    => 'dashicons-groups',
 			'supports'     => array( 'title', 'thumbnail', 'excerpt' ),

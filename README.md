@@ -329,6 +329,10 @@ La liste des sessions d'un intervenant s'appuyait d'abord sur une `meta_query` `
 
 Les fiches `single-fnc_partenaire.php` et `single-fnc_actualite.php` complètent la couverture : **partenaire** (logo, type d'engagement, description, site web, éditions associées avec niveau) et **actualité** (contenu éditorial en colonne de lecture, date, catégories/étiquettes). Vérifiées en conditions réelles (HTTP 200, type « Sponsor » + niveau « Principal » sur le partenaire de test, contenu et date sur l'actualité de test, aucune erreur PHP).
 
+Les **logos partenaires sont cliquables** vers leur fiche, sur la page Partenaires (logo + titre de carte) comme sur la page d'accueil (moment M6).
+
+**Conflit de routage corrigé (plugin v0.4.1)** : le CPT `fnc_partenaire` avait `has_archive` **et** le slug `partenaires`, en conflit avec la Page « partenaires » (page-partenaires.php) de même slug — après régénération des permaliens, l'archive du CPT masquait la Page. L'archive est désactivée (`has_archive => false`) : la Page reste la vue liste, les fiches restent servies via le rewrite (`/partenaires/{slug}/`). Aucun code du thème ne référençait l'archive du CPT.
+
 ## Ordre des pays & drapeaux uploadables (Lot 7)
 
 Pendant WordPress du réglage `countryOrder` (onglet « Intervenants » du Global Settings du vrai site). La frise « Pays représentés » de l'annuaire était triée par ordre alphabétique et n'utilisait que les 11 drapeaux SVG intégrés en dur. Elle est désormais éditorialisable via **Personnaliser → Réglages FNC → Intervenants** :

@@ -172,7 +172,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
 #m6 .tiers{display:flex;flex-direction:column;gap:22px;align-items:center;width:100%;}
 #m6 .tier{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;}
 #m6 .logo-ph{border:1px solid var(--border);border-radius:3px;color:var(--texte-tert);display:grid;place-items:center;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;background:#fff;transition:border-color .22s var(--ease),color .22s var(--ease),transform .22s var(--ease);}
+#m6 .logo-ph{text-decoration:none;}
 #m6 .logo-ph:hover{border-color:var(--navy);color:var(--navy);transform:translateY(-2px);}
+#m6 a.logo-ph:focus-visible{outline:2px solid var(--jaune);outline-offset:3px;}
+#m6 .logo-ph img{max-width:82%;max-height:70%;object-fit:contain;}
+
+/* Logo cliquable sur la page Partenaires (carte) */
+.partner-logo{display:block;margin-bottom:16px;}
+.partner-logo img{max-width:100%;height:auto;}
 #m6 .t1 .logo-ph{width:184px;height:76px;}
 #m6 .t2 .logo-ph{width:144px;height:62px;}
 #m6 .link-more{color:var(--navy);margin:40px auto 0;align-self:center;}

@@ -3,7 +3,7 @@
  * Plugin Name: FNC Content Model
  * Plugin URI: https://github.com/vertex-strategy/fnc-wordpress-theme
  * Description: Modele de contenu (custom post types, taxonomies, relations) reflete depuis les collections publiques Payload CMS du site officiel Forum Numerique Congo. Voir ADR-007 (depot forum-numerique-congo). Zero dependance tierce (ADR-007, Decision 2) — hors multilinguisme, assure separement par Polylang ou equivalent (Decision 2, arbitrage bilingue).
- * Version: 0.4.0
+ * Version: 0.4.1
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: Vertex Strategy
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_CONTENT_MODEL_VERSION', '0.4.0' );
+define( 'FNC_CONTENT_MODEL_VERSION', '0.4.1' );
 define( 'FNC_CONTENT_MODEL_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once FNC_CONTENT_MODEL_DIR . 'includes/post-types.php';

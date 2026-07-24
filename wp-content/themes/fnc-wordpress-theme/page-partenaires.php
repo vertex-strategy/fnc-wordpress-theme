@@ -108,7 +108,14 @@ fnc_render_hero(
 					<div class="grid grid-3">
 						<?php foreach ( $fnc_partners as $fnc_partner ) : ?>
 							<article class="card">
-								<h3><?php echo esc_html( get_the_title( $fnc_partner ) ); ?></h3>
+								<?php
+								if ( has_post_thumbnail( $fnc_partner ) ) :
+									?>
+									<a class="partner-logo" href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_partner ) ); ?>">
+										<?php echo get_the_post_thumbnail( $fnc_partner, 'medium', array( 'alt' => esc_attr( get_the_title( $fnc_partner ) ) ) ); ?>
+									</a>
+								<?php endif; ?>
+								<h3><a href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>"><?php echo esc_html( get_the_title( $fnc_partner ) ); ?></a></h3>
 								<?php if ( has_excerpt( $fnc_partner ) ) : ?>
 									<p><?php echo esc_html( get_the_excerpt( $fnc_partner ) ); ?></p>
 								<?php endif; ?>

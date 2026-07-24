@@ -46,6 +46,7 @@ $fnc_profiles       = array(
 	__( 'Presse / média', 'fnc-wordpress-theme' ),
 	__( 'Autre', 'fnc-wordpress-theme' ),
 );
+$fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'inscription' ) : null;
 $fnc_participations = array(
 	__( 'Présentiel', 'fnc-wordpress-theme' ),
 	__( 'En ligne', 'fnc-wordpress-theme' ),
@@ -55,34 +56,34 @@ $fnc_participations = array(
 <main id="main">
 	<section class="section">
 		<div class="container reading">
-			<form class="card form" aria-label="<?php esc_attr_e( 'Formulaire d’inscription', 'fnc-wordpress-theme' ); ?>">
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Formulaire d’inscription', 'fnc-wordpress-theme' ); ?>">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Votre demande', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
 				<?php if ( $fnc_edition_title ) : ?>
 					<p class="help"><?php esc_html_e( 'Vous vous inscrivez à', 'fnc-wordpress-theme' ); ?> <strong><?php echo esc_html( $fnc_edition_title ); ?></strong></p>
 				<?php endif; ?>
 
-				<?php // Pot de miel anti-spam (masque). ?>
-				<div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;">
-					<label><?php esc_html_e( 'Ne pas remplir', 'fnc-wordpress-theme' ); ?><input type="text" name="fnc_hp" tabindex="-1" autocomplete="off" /></label>
-				</div>
+				<?php
+				if ( function_exists( 'fnc_form_fields' ) ) { fnc_form_fields( 'inscription' ); }
+				if ( function_exists( 'fnc_submission_banner' ) ) { echo fnc_submission_banner( 'inscription', $fnc_flash ); } // phpcs:ignore WordPress.Security.EscapeOutput
+				?>
 
 				<div class="form-grid">
 					<div class="field">
 						<label for="fnc-ins-name"><?php esc_html_e( 'Nom complet', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<input id="fnc-ins-name" type="text" required placeholder="<?php esc_attr_e( 'Prénom et nom', 'fnc-wordpress-theme' ); ?>" />
+						<input id="fnc-ins-name" name="fullName" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_flash, 'fullName' ) : '' ); ?>" aria-invalid="<?php echo esc_attr( ( function_exists( 'fnc_field_error' ) && fnc_field_error( $fnc_flash, 'fullName' ) ) ? 'true' : 'false' ); ?>" required placeholder="<?php esc_attr_e( 'Prénom et nom', 'fnc-wordpress-theme' ); ?>" />
 					</div>
 					<div class="field">
 						<label for="fnc-ins-email"><?php esc_html_e( 'E-mail', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<input id="fnc-ins-email" type="email" required placeholder="<?php esc_attr_e( 'nom@organisation.org', 'fnc-wordpress-theme' ); ?>" />
+						<input id="fnc-ins-email" name="email" type="email" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_flash, 'email' ) : '' ); ?>" aria-invalid="<?php echo esc_attr( ( function_exists( 'fnc_field_error' ) && fnc_field_error( $fnc_flash, 'email' ) ) ? 'true' : 'false' ); ?>" required placeholder="<?php esc_attr_e( 'nom@organisation.org', 'fnc-wordpress-theme' ); ?>" />
 					</div>
 					<div class="field">
 						<label for="fnc-ins-org"><?php esc_html_e( 'Organisation', 'fnc-wordpress-theme' ); ?></label>
-						<input id="fnc-ins-org" type="text" placeholder="<?php esc_attr_e( 'Organisation ou institution', 'fnc-wordpress-theme' ); ?>" />
+						<input id="fnc-ins-org" name="organization" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_flash, 'organization' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'Organisation ou institution', 'fnc-wordpress-theme' ); ?>" />
 					</div>
 					<div class="field">
 						<label for="fnc-ins-profile"><?php esc_html_e( 'Profil', 'fnc-wordpress-theme' ); ?></label>
-						<select id="fnc-ins-profile">
+						<select id="fnc-ins-profile" name="profile">
 							<?php foreach ( $fnc_profiles as $fnc_opt ) : ?>
 								<option value="<?php echo esc_attr( $fnc_opt ); ?>"><?php echo esc_html( $fnc_opt ); ?></option>
 							<?php endforeach; ?>
@@ -90,7 +91,7 @@ $fnc_participations = array(
 					</div>
 					<div class="field">
 						<label for="fnc-ins-participation"><?php esc_html_e( 'Mode de participation', 'fnc-wordpress-theme' ); ?></label>
-						<select id="fnc-ins-participation">
+						<select id="fnc-ins-participation" name="participation">
 							<?php foreach ( $fnc_participations as $fnc_opt ) : ?>
 								<option value="<?php echo esc_attr( $fnc_opt ); ?>"><?php echo esc_html( $fnc_opt ); ?></option>
 							<?php endforeach; ?>
@@ -98,11 +99,10 @@ $fnc_participations = array(
 					</div>
 					<div class="field full">
 						<label for="fnc-ins-motivation"><?php esc_html_e( 'Motivation', 'fnc-wordpress-theme' ); ?></label>
-						<textarea id="fnc-ins-motivation" placeholder="<?php esc_attr_e( 'Présentez en quelques lignes votre intérêt (facultatif)', 'fnc-wordpress-theme' ); ?>"></textarea>
+						<textarea id="fnc-ins-motivation" name="motivation" placeholder="<?php esc_attr_e( 'Présentez en quelques lignes votre intérêt (facultatif)', 'fnc-wordpress-theme' ); ?>"></textarea>
 					</div>
 				</div>
 
-				<div class="notice"><?php esc_html_e( 'Le service d’envoi reste à connecter.', 'fnc-wordpress-theme' ); ?></div>
 				<button class="btn btn-red" type="submit"><?php esc_html_e( 'Envoyer ma demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>

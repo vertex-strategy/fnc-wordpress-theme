@@ -87,7 +87,7 @@ while ( have_posts() ) :
 									<dd>
 										<?php foreach ( fnc_split_countries( $fnc_i_country ) as $fnc_c ) : ?>
 											<span class="flag-chip" style="margin-right:10px;">
-												<?php echo fnc_country_flag( $fnc_c ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par le helper. ?>
+												<?php echo fnc_flag_markup( $fnc_c ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par le helper. ?>
 												<span><?php echo esc_html( $fnc_c ); ?></span>
 											</span>
 										<?php endforeach; ?>

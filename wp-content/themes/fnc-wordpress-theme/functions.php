@@ -457,7 +457,7 @@ function fnc_country_flag_svg( $country ) {
  * @param string $country
  * @return string
  */
-function fnc_country_flag( $country ) {
+function fnc_flag_markup( $country ) {
 	$map = function_exists( 'fnc_country_flag_map' ) ? fnc_country_flag_map() : array();
 	$key = function_exists( 'fnc_country_key' ) ? fnc_country_key( $country ) : strtolower( trim( $country ) );
 
@@ -486,7 +486,7 @@ function fnc_split_countries( $country_field ) {
  * Nom du site : nom officiel des Réglages FNC, repli sur le nom WordPress.
  */
 function fnc_site_name() {
-	return fnc_get_setting( 'official_name', get_bloginfo( 'name' ) );
+	return fnc_get_setting( 'officialName', get_bloginfo( 'name' ) );
 }
 
 /*

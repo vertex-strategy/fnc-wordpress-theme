@@ -37,6 +37,7 @@ services:
       - fnc_wp_data:/var/www/html
       - ./wp-content/themes/fnc-wordpress-theme:/var/www/html/wp-content/themes/fnc-wordpress-theme
       - ./wp-content/plugins/fnc-content-model:/var/www/html/wp-content/plugins/fnc-content-model
+      - ./wp-content/plugins/fnc-core:/var/www/html/wp-content/plugins/fnc-core
 
   wpcli:
     image: docker.io/library/wordpress:cli-php8.3
@@ -52,6 +53,7 @@ services:
       - fnc_wp_data:/var/www/html
       - ./wp-content/themes/fnc-wordpress-theme:/var/www/html/wp-content/themes/fnc-wordpress-theme
       - ./wp-content/plugins/fnc-content-model:/var/www/html/wp-content/plugins/fnc-content-model
+      - ./wp-content/plugins/fnc-core:/var/www/html/wp-content/plugins/fnc-core
     entrypoint: ["tail", "-f", "/dev/null"]
 
 volumes:

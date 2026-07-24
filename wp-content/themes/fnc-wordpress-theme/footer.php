@@ -40,8 +40,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( ! empty( $fnc_social ) ) :
 				?>
 				<div class="social-row" aria-label="<?php esc_attr_e( 'Réseaux sociaux', 'fnc-wordpress-theme' ); ?>">
-					<?php foreach ( $fnc_social as $fnc_platform => $fnc_url ) : ?>
-						<a class="social-chip social-chip--icon" href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( sprintf( '%s, %s', fnc_social_label( $fnc_platform ), __( 's’ouvre dans un nouvel onglet', 'fnc-wordpress-theme' ) ) ); ?>">
+					<?php foreach ( $fnc_social as $fnc_s ) :
+							$fnc_platform = isset( $fnc_s['platform'] ) ? $fnc_s['platform'] : 'other';
+							$fnc_url      = isset( $fnc_s['url'] ) ? $fnc_s['url'] : '';
+							$fnc_label    = ( isset( $fnc_s['label'] ) && '' !== $fnc_s['label'] ) ? $fnc_s['label'] : fnc_social_label( $fnc_platform );
+							?>
+						<a class="social-chip social-chip--icon" href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( sprintf( '%s, %s', $fnc_label, __( 's’ouvre dans un nouvel onglet', 'fnc-wordpress-theme' ) ) ); ?>">
 							<?php echo fnc_social_icon( $fnc_platform ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique interne (fnc_social_icon). ?>
 						</a>
 					<?php endforeach; ?>
@@ -86,6 +90,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span>
 			<a href="<?php echo esc_url( fnc_page_url( 'mentions-legales' ) ); ?>"><?php esc_html_e( 'Mentions légales', 'fnc-wordpress-theme' ); ?></a>
 			· <a href="<?php echo esc_url( fnc_page_url( 'politique-confidentialite' ) ); ?>"><?php esc_html_e( 'Confidentialité', 'fnc-wordpress-theme' ); ?></a>
+			<?php
+			// Bouton de reouverture du consentement (FNC Core, Module E) : visible seulement si Matomo actif.
+			if ( function_exists( 'fnc_consent_reopen_button' ) ) { echo ' · ' . fnc_consent_reopen_button(); } // phpcs:ignore WordPress.Security.EscapeOutput
+			?>
 		</span>
 	</div>
 </footer>

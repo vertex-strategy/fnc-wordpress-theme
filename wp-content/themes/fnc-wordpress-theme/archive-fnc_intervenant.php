@@ -50,6 +50,21 @@ foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 $fnc_countries     = fnc_order_countries( array_keys( $fnc_countries ) );
 $fnc_country_count = count( $fnc_countries );
 
+// FNC Core (Module C) fait autorite sur les facettes (total, comptes par profil,
+// pays), scopees aux participants de l'edition en cours. Repli sur le calcul du
+// theme si le plugin est absent.
+$fnc_facet_counts = array();
+if ( function_exists( 'fnc_speaker_facets' ) ) {
+	$fnc_facets = fnc_speaker_facets();
+	if ( (int) $fnc_facets['total'] > 0 ) {
+		$fnc_total_speakers = (int) $fnc_facets['total'];
+		foreach ( $fnc_facets['profils'] as $fnc_pf ) { $fnc_facet_counts[ $fnc_pf['slug'] ] = (int) $fnc_pf['count']; }
+		$fnc_countries = array();
+		foreach ( $fnc_facets['countries'] as $fnc_ct ) { if ( (int) $fnc_ct['count'] > 0 ) { $fnc_countries[] = $fnc_ct['name']; } }
+		$fnc_country_count = count( $fnc_countries );
+	}
+}
+
 // Classe de categorie (.cat-*) derivee du slug de profil, comme le vrai site.
 $fnc_cat_class = static function ( $slug ) {
 	$slug = strtolower( (string) $slug );
@@ -76,7 +91,7 @@ $fnc_cat_class = static function ( $slug ) {
 					<ul class="flag-frise" aria-label="<?php esc_attr_e( 'Pays représentés', 'fnc-wordpress-theme' ); ?>">
 						<?php foreach ( $fnc_countries as $fnc_country ) : ?>
 							<li class="flag-chip">
-								<?php echo fnc_country_flag( $fnc_country ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par fnc_country_flag(). ?>
+								<?php echo fnc_flag_markup( $fnc_country ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par fnc_flag_markup(). ?>
 								<span><?php echo esc_html( $fnc_country ); ?></span>
 							</li>
 						<?php endforeach; ?>
@@ -97,7 +112,7 @@ $fnc_cat_class = static function ( $slug ) {
 							</a>
 							<?php foreach ( $fnc_profils as $fnc_profil ) : ?>
 								<a class="spk-chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_profil' => $fnc_profil->slug, 'fnc_pays' => $fnc_current_pays ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_profil === $fnc_profil->slug ? 'true' : 'false'; ?>">
-									<?php echo esc_html( $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( $fnc_profil->count ) ); ?></span>
+									<?php echo esc_html( $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( isset( $fnc_facet_counts[ $fnc_profil->slug ] ) ? $fnc_facet_counts[ $fnc_profil->slug ] : $fnc_profil->count ) ); ?></span>
 								</a>
 							<?php endforeach; ?>
 						</div>
@@ -145,11 +160,18 @@ $fnc_cat_class = static function ( $slug ) {
 									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( $fnc_sp_profil->name ); ?></span>
 								<?php endif; ?>
 								<div class="ph">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'medium', array( 'alt' => esc_attr( fnc_speaker_display_name( $fnc_sp_id ) ) ) ); ?>
-									<?php else : ?>
-										<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="" aria-hidden="true" />
-									<?php endif; ?>
+									<?php
+									// RÈGLE 7 : fnc_speaker_portrait ne renvoie la photo que si le droit est
+									// « obtenu » et non expire ; sinon on affiche l'illustration neutre (jamais la vraie photo).
+									$fnc_portrait = function_exists( 'fnc_speaker_portrait' )
+										? fnc_speaker_portrait( $fnc_sp_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_sp_id ) ) )
+										: ( has_post_thumbnail() ? get_the_post_thumbnail( $fnc_sp_id, 'medium', array( 'alt' => esc_attr( fnc_speaker_display_name( $fnc_sp_id ) ) ) ) : '' );
+									if ( $fnc_portrait ) {
+										echo $fnc_portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+									} else {
+										printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+									}
+									?>
 								</div>
 								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></div>
 								<?php if ( $fnc_sp_org ) : ?>

@@ -66,6 +66,9 @@ const FNC_META_SPEAKER_ORG            = '_fnc_speaker_org';
 const FNC_META_SPEAKER_COUNTRY        = '_fnc_speaker_country';
 const FNC_META_SPEAKER_PROTOCOL_ORDER = '_fnc_speaker_protocol_order';
 const FNC_META_SPEAKER_LINKS          = '_fnc_speaker_links';
+// RÈGLE 7 — droit à l'image (consommé par FNC Core, Module C : fnc_speaker_portrait).
+const FNC_META_SPEAKER_IMAGE_RIGHT    = '_fnc_speaker_image_right';   // non_verifie|obtenu|refuse|expire
+const FNC_META_SPEAKER_IMAGE_EXPIRES  = '_fnc_speaker_image_expires'; // date (optionnelle)
 
 // --- Partenaires ------------------------------------------------------
 const FNC_META_PARTENAIRE_SITE           = '_fnc_partenaire_site';
@@ -177,6 +180,8 @@ function fnc_content_model_register_meta() {
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_ORG, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_COUNTRY, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_PROTOCOL_ORDER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_RIGHT, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_EXPIRES, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta(
 		'fnc_intervenant',
 		FNC_META_SPEAKER_LINKS,
@@ -468,6 +473,25 @@ function fnc_content_model_render_speaker_meta_box( $post ) {
 
 	echo '<p><label for="fnc_speaker_links"><strong>' . esc_html__( 'Liens (un par ligne, format « Libellé|URL »)', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<textarea id="fnc_speaker_links" name="fnc_speaker_links" rows="3" style="width:100%%;">%s</textarea></p>', esc_textarea( $links ) );
+
+	// RÈGLE 7 — droit à l'image : le portrait n'est publié que si « obtenu » et non expiré.
+	$image_right   = get_post_meta( $post->ID, FNC_META_SPEAKER_IMAGE_RIGHT, true );
+	$image_expires = get_post_meta( $post->ID, FNC_META_SPEAKER_IMAGE_EXPIRES, true );
+	$right_options = array(
+		'non_verifie' => __( 'Non vérifié', 'fnc-content-model' ),
+		'obtenu'      => __( 'Obtenu', 'fnc-content-model' ),
+		'refuse'      => __( 'Refusé', 'fnc-content-model' ),
+		'expire'      => __( 'Expiré', 'fnc-content-model' ),
+	);
+	echo '<hr /><p><label for="fnc_speaker_image_right"><strong>' . esc_html__( 'Droit à l’image (RÈGLE 7)', 'fnc-content-model' ) . '</strong></label><br />';
+	echo '<select id="fnc_speaker_image_right" name="fnc_speaker_image_right" style="width:100%;">';
+	foreach ( $right_options as $val => $lab ) {
+		printf( '<option value="%s"%s>%s</option>', esc_attr( $val ), selected( $image_right ? $image_right : 'non_verifie', $val, false ), esc_html( $lab ) );
+	}
+	echo '</select></p>';
+	echo '<p class="description">' . esc_html__( 'Le portrait n’est affiché publiquement que si le droit est « Obtenu » et non expiré. Par défaut fermé.', 'fnc-content-model' ) . '</p>';
+	echo '<p><label for="fnc_speaker_image_expires"><strong>' . esc_html__( 'Expiration du droit (optionnel)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="date" id="fnc_speaker_image_expires" name="fnc_speaker_image_expires" value="%s" style="width:100%%;" /></p>', esc_attr( $image_expires ) );
 }
 
 function fnc_content_model_render_partenaire_meta_box( $post ) {
@@ -649,6 +673,11 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		update_post_meta( $post_id, FNC_META_SPEAKER_ORG, isset( $_POST['fnc_speaker_org'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_org'] ) ) : '' );
 		update_post_meta( $post_id, FNC_META_SPEAKER_COUNTRY, isset( $_POST['fnc_speaker_country'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_country'] ) ) : '' );
 		update_post_meta( $post_id, FNC_META_SPEAKER_PROTOCOL_ORDER, isset( $_POST['fnc_speaker_protocol_order'] ) ? absint( $_POST['fnc_speaker_protocol_order'] ) : '' );
+
+		$fnc_right_allowed = array( 'non_verifie', 'obtenu', 'refuse', 'expire' );
+		$fnc_right         = isset( $_POST['fnc_speaker_image_right'] ) ? sanitize_key( wp_unslash( $_POST['fnc_speaker_image_right'] ) ) : 'non_verifie';
+		update_post_meta( $post_id, FNC_META_SPEAKER_IMAGE_RIGHT, in_array( $fnc_right, $fnc_right_allowed, true ) ? $fnc_right : 'non_verifie' );
+		update_post_meta( $post_id, FNC_META_SPEAKER_IMAGE_EXPIRES, isset( $_POST['fnc_speaker_image_expires'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_image_expires'] ) ) : '' );
 
 		$links_raw = isset( $_POST['fnc_speaker_links'] ) ? (string) wp_unslash( $_POST['fnc_speaker_links'] ) : '';
 		$links     = array();

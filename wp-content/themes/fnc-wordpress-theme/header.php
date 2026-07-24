@@ -48,7 +48,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="nav-utils">
 		<?php fnc_language_switcher(); ?>
-		<a class="cta" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+		<?php
+		// CTA d'inscription pilote par le drapeau REGISTRATION_ENABLED (FNC Core,
+		// Module F) : ouvert → « S'inscrire » vers /inscription ; ferme (defaut) →
+		// « Decouvrir l'edition » vers l'edition en cours. Meme seam que
+		// fnc_registration_cta() du plugin, en conservant la fleche.
+		$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();
+		$fnc_cta_href = $fnc_reg_open ? fnc_page_url( 'inscription' ) : fnc_page_url( 'edition-en-cours' );
+		$fnc_cta_lbl  = $fnc_reg_open ? __( 'S’inscrire', 'fnc-wordpress-theme' ) : __( 'Découvrir l’édition', 'fnc-wordpress-theme' );
+		?>
+		<a class="cta" href="<?php echo esc_url( $fnc_cta_href ); ?>"><?php echo esc_html( $fnc_cta_lbl ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 		<button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="mobile-panel" aria-label="<?php esc_attr_e( 'Ouvrir le menu', 'fnc-wordpress-theme' ); ?>">

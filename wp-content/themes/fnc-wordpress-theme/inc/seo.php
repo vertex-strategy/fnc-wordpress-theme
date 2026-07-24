@@ -242,7 +242,7 @@ function fnc_head_meta() {
 	$description = fnc_seo_description();
 	$title       = fnc_seo_title();
 	$image       = fnc_seo_image();
-	$twitter     = fnc_get_setting( 'twitter_card', 'summary_large_image' );
+	$twitter     = fnc_get_setting( 'twitterCard', 'summary_large_image' );
 
 	$url = is_singular() ? get_permalink() : home_url( add_query_arg( array() ) );
 	$url = $url ? $url : home_url( '/' );

@@ -32,6 +32,7 @@ fnc_render_hero(
 );
 
 // Champs du formulaire de demande de partenariat (ceux du site reel).
+$fnc_pa_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'partenariat' ) : null;
 $fnc_interest_options = array(
 	__( 'Partenariat institutionnel', 'fnc-wordpress-theme' ),
 	__( 'Sponsoring', 'fnc-wordpress-theme' ),
@@ -185,43 +186,43 @@ $fnc_interest_options = array(
 				<p class="body"><?php esc_html_e( 'Vous représentez une institution ou une entreprise ? Contactez l’organisation pour construire un partenariat adapté.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
-			<form class="card form" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>">
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation.', 'fnc-wordpress-theme' ); ?></p>
 
-				<?php // Pot de miel anti-spam (masque). ?>
-				<div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;">
-					<label><?php esc_html_e( 'Ne pas remplir', 'fnc-wordpress-theme' ); ?><input type="text" name="fnc_hp" tabindex="-1" autocomplete="off" /></label>
-				</div>
+				<?php
+				if ( function_exists( 'fnc_form_fields' ) ) { fnc_form_fields( 'partenariat' ); }
+				if ( function_exists( 'fnc_submission_banner' ) ) { echo fnc_submission_banner( 'partenariat', $fnc_pa_flash ); } // phpcs:ignore WordPress.Security.EscapeOutput
+				?>
 
 				<div class="form-grid">
 					<div class="field">
 						<label for="fnc-pa-fullname"><?php esc_html_e( 'Nom complet', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<input id="fnc-pa-fullname" type="text" required />
+						<input id="fnc-pa-fullname" name="fullName" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'fullName' ) : '' ); ?>" required />
 					</div>
 					<div class="field">
 						<label for="fnc-pa-org"><?php esc_html_e( 'Organisation', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<input id="fnc-pa-org" type="text" required />
+						<input id="fnc-pa-org" name="organization" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'organization' ) : '' ); ?>" required />
 					</div>
 					<div class="field">
 						<label for="fnc-pa-role"><?php esc_html_e( 'Fonction', 'fnc-wordpress-theme' ); ?></label>
-						<input id="fnc-pa-role" type="text" />
+						<input id="fnc-pa-role" name="role" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'role' ) : '' ); ?>" />
 					</div>
 					<div class="field">
 						<label for="fnc-pa-email"><?php esc_html_e( 'Email', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<input id="fnc-pa-email" type="email" required />
+						<input id="fnc-pa-email" name="email" type="email" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'email' ) : '' ); ?>" required />
 					</div>
 					<div class="field">
 						<label for="fnc-pa-phone"><?php esc_html_e( 'Téléphone', 'fnc-wordpress-theme' ); ?></label>
-						<input id="fnc-pa-phone" type="tel" />
+						<input id="fnc-pa-phone" name="phone" type="tel" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'phone' ) : '' ); ?>" />
 					</div>
 					<div class="field">
 						<label for="fnc-pa-country"><?php esc_html_e( 'Pays', 'fnc-wordpress-theme' ); ?></label>
-						<input id="fnc-pa-country" type="text" />
+						<input id="fnc-pa-country" name="country" type="text" value="<?php echo esc_attr( function_exists( 'fnc_old' ) ? fnc_old( $fnc_pa_flash, 'country' ) : '' ); ?>" />
 					</div>
 					<div class="field full">
 						<label for="fnc-pa-interest"><?php esc_html_e( 'Type d’intérêt', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<select id="fnc-pa-interest" required>
+						<select id="fnc-pa-interest" name="interestType" required>
 							<?php foreach ( $fnc_interest_options as $fnc_opt ) : ?>
 								<option value="<?php echo esc_attr( $fnc_opt ); ?>"><?php echo esc_html( $fnc_opt ); ?></option>
 							<?php endforeach; ?>
@@ -229,7 +230,7 @@ $fnc_interest_options = array(
 					</div>
 					<div class="field full">
 						<label for="fnc-pa-message"><?php esc_html_e( 'Message', 'fnc-wordpress-theme' ); ?> <span class="req" aria-hidden="true">*</span></label>
-						<textarea id="fnc-pa-message" required></textarea>
+						<textarea id="fnc-pa-message" name="message" required></textarea>
 					</div>
 				</div>
 

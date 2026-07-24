@@ -31,9 +31,45 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param mixed  $default Valeur de repli si le réglage est vide/absent.
  * @return mixed
  */
-function fnc_get_setting( $key, $default = '' ) {
-	$value = get_theme_mod( 'fnc_' . $key, $default );
-	return ( '' === $value || null === $value ) ? $default : $value;
+/*
+ * Le plugin FNC Core (Module B) fournit la version faisant autorite de
+ * fnc_get_setting() / fnc_social_links() (source unique : option `fnc_settings`,
+ * cles camelCase). Le plugin se chargeant AVANT le theme, sa version gagne ; les
+ * definitions ci-dessous sont guardees et ne servent que de repli si le plugin
+ * est absent (reglages alors vides, sans fatal). Les cles du theme (snake_case)
+ * sont traduites vers le schema du plugin par fnc_map_setting_key().
+ */
+if ( ! function_exists( 'fnc_get_setting' ) ) {
+	function fnc_get_setting( $key, $default = '' ) {
+		$value = get_theme_mod( 'fnc_' . $key, $default );
+		return ( '' === $value || null === $value ) ? $default : $value;
+	}
+}
+
+/**
+ * Traduit une cle de reglage historique du theme (snake_case) vers la cle du
+ * plugin FNC Core (camelCase). Cle inconnue/identique renvoyee telle quelle
+ * (les cles sans equivalent — country_order, press_contacts — restent non
+ * mappees et retombent proprement sur le defaut).
+ *
+ * @param string $key
+ * @return string
+ */
+function fnc_map_setting_key( $key ) {
+	static $map = array(
+		'official_name'           => 'officialName',
+		'short_intro'             => 'shortIntro',
+		'footer_text'             => 'footerText',
+		'footer_copyright'        => 'copyright',
+		'seo_default_title'       => 'seoDefaultTitle',
+		'seo_default_description' => 'seoDefaultDescription',
+		'twitter_card'            => 'twitterCard',
+		'og_default_image'        => 'ogDefaultImage',
+		'logo_principal'          => 'logoPrincipal',
+		'logo_light'              => 'logoLight',
+		'logo_dark'               => 'logoDark',
+	);
+	return isset( $map[ $key ] ) ? $map[ $key ] : $key;
 }
 
 /**
@@ -70,7 +106,7 @@ function fnc_i18n_settings() {
  * @return mixed
  */
 function fnc_get_setting_i18n( $key, $default = '' ) {
-	$value = fnc_get_setting( $key, $default );
+	$value = fnc_get_setting( fnc_map_setting_key( $key ), $default );
 	return fnc_pll( $value );
 }
 
@@ -103,7 +139,7 @@ function fnc_register_pll_strings() {
 	}
 	$group = 'Forum Numérique Congo';
 	foreach ( fnc_i18n_settings() as $key => $conf ) {
-		$value = fnc_get_setting( $key, '' );
+		$value = fnc_get_setting( fnc_map_setting_key( $key ), '' );
 		if ( '' === $value || ! is_string( $value ) ) {
 			continue;
 		}
@@ -130,7 +166,7 @@ add_action( 'init', 'fnc_register_pll_strings' );
  * @return string URL, ou chaîne vide si non défini.
  */
 function fnc_get_setting_image_url( $key, $size = 'full' ) {
-	$attachment_id = (int) fnc_get_setting( $key, 0 );
+	$attachment_id = (int) fnc_get_setting( fnc_map_setting_key( $key ), 0 );
 	if ( $attachment_id <= 0 ) {
 		return '';
 	}
@@ -145,16 +181,21 @@ function fnc_get_setting_image_url( $key, $size = 'full' ) {
  *
  * @return array<string,string>
  */
-function fnc_social_links() {
-	$platforms = array( 'linkedin', 'x', 'facebook', 'instagram', 'youtube' );
-	$links     = array();
-	foreach ( $platforms as $platform ) {
-		$url = fnc_get_setting( 'social_' . $platform, '' );
-		if ( $url ) {
-			$links[ $platform ] = $url;
+if ( ! function_exists( 'fnc_social_links' ) ) {
+	// Repli (plugin FNC Core absent) : meme STRUCTURE que le plugin — une liste
+	// d'entrees [ ['platform','label','url'], … ] — pour que l'iteration du theme
+	// soit identique quelle que soit la source.
+	function fnc_social_links() {
+		$platforms = array( 'linkedin', 'x', 'facebook', 'instagram', 'youtube' );
+		$links     = array();
+		foreach ( $platforms as $platform ) {
+			$url = fnc_get_setting( 'social_' . $platform, '' );
+			if ( $url ) {
+				$links[] = array( 'platform' => $platform, 'label' => '', 'url' => $url );
+			}
 		}
+		return $links;
 	}
-	return $links;
 }
 
 /**

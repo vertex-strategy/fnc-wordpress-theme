@@ -43,6 +43,20 @@ if ( have_posts() ) {
 	ksort( $fnc_sessions_by_day, SORT_NATURAL | SORT_FLAG_CASE );
 }
 
+// FNC Core (Module C) fait autorite sur le regroupement/tri/scoping edition :
+// on prefere ses donnees quand elles existent ; le gabarit garde le rendu.
+if ( function_exists( 'fnc_edition_sessions_by_day' ) ) {
+	$fnc_plugin_days = fnc_edition_sessions_by_day();
+	if ( ! empty( $fnc_plugin_days ) ) {
+		$fnc_sessions_by_day = array();
+		foreach ( $fnc_plugin_days as $fnc_pd ) {
+			/* translators: %s: numero du jour. */
+			$fnc_label = sprintf( __( 'Jour %s', 'fnc-wordpress-theme' ), $fnc_pd['day'] );
+			$fnc_sessions_by_day[ $fnc_label ] = wp_list_pluck( $fnc_pd['sessions'], 'id' );
+		}
+	}
+}
+
 // Statistiques du panorama : intervenants, pays representes, journees.
 $fnc_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
 $fnc_countries   = array();

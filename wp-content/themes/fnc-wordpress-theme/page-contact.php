@@ -51,14 +51,16 @@ $fnc_phone   = fnc_get_setting( 'phone', '' );
 $fnc_address = fnc_get_setting_i18n( 'address', '' );
 $fnc_social  = fnc_social_links();
 
-// Champs du formulaire : ceux du site reel (l'asterisque marque l'obligatoire).
+// Champs du formulaire : name = nom du champ attendu par FNC Core (Module A).
 $fnc_contact_fields = array(
-	array( 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
-	array( 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
-	array( 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true ),
-	array( 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
-	array( 'label' => __( 'Message', 'fnc-wordpress-theme' ), 'type' => 'textarea', 'required' => true ),
+	array( 'name' => 'name', 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
+	array( 'name' => 'organization', 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
+	array( 'name' => 'email', 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true ),
+	array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
+	array( 'name' => 'message', 'label' => __( 'Message', 'fnc-wordpress-theme' ), 'type' => 'textarea', 'required' => true ),
 );
+// Flash de retour (FNC Core Module A) : repopulation + erreurs par champ.
+$fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) : null;
 ?>
 
 <main id="main">
@@ -110,8 +112,11 @@ $fnc_contact_fields = array(
 						<dd>
 							<?php
 							$fnc_links = array();
-							foreach ( $fnc_social as $fnc_platform => $fnc_url ) {
-								$fnc_links[] = '<a href="' . esc_url( $fnc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( fnc_social_label( $fnc_platform ) ) . '</a>';
+							foreach ( $fnc_social as $fnc_s ) {
+									$fnc_platform = isset( $fnc_s['platform'] ) ? $fnc_s['platform'] : 'other';
+									$fnc_url      = isset( $fnc_s['url'] ) ? $fnc_s['url'] : '';
+									$fnc_label    = ( isset( $fnc_s['label'] ) && '' !== $fnc_s['label'] ) ? $fnc_s['label'] : fnc_social_label( $fnc_platform );
+								$fnc_links[] = '<a href="' . esc_url( $fnc_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $fnc_label ) . '</a>';
 							}
 							echo implode( ' · ', $fnc_links ); // phpcs:ignore WordPress.Security.EscapeOutput -- liens echappes ci-dessus.
 							?>
@@ -120,28 +125,32 @@ $fnc_contact_fields = array(
 				</dl>
 			</div>
 
-			<form class="card form" aria-label="<?php esc_attr_e( 'Demande de contact', 'fnc-wordpress-theme' ); ?>">
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de contact', 'fnc-wordpress-theme' ); ?>">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Demande de contact', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Préciser le sujet nous aide à orienter votre demande dès l’ouverture du canal officiel.', 'fnc-wordpress-theme' ); ?></p>
 
-				<?php // Pot de miel anti-spam (masque) : les robots le remplissent, pas les humains. ?>
-				<div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;">
-					<label><?php esc_html_e( 'Ne pas remplir', 'fnc-wordpress-theme' ); ?><input type="text" name="fnc_hp" tabindex="-1" autocomplete="off" /></label>
-				</div>
+				<?php
+				// Champs caches (action/nonce/honeypot) fournis par FNC Core (Module A).
+				if ( function_exists( 'fnc_form_fields' ) ) { fnc_form_fields( 'contact' ); }
+				if ( function_exists( 'fnc_submission_banner' ) ) { echo fnc_submission_banner( 'contact', $fnc_flash ); } // phpcs:ignore WordPress.Security.EscapeOutput
+				?>
 
 				<div class="form-grid">
 					<?php
 					foreach ( $fnc_contact_fields as $fnc_i => $fnc_field ) :
 						$fnc_field_id = 'fnc-contact-field-' . $fnc_i;
+						$fnc_n   = $fnc_field['name'];
+						$fnc_val = function_exists( 'fnc_old' ) ? fnc_old( $fnc_flash, $fnc_n ) : '';
+						$fnc_inv = ( function_exists( 'fnc_field_error' ) && fnc_field_error( $fnc_flash, $fnc_n ) ) ? 'true' : 'false';
 						?>
 						<div class="field <?php echo 'textarea' === $fnc_field['type'] ? 'full' : ''; ?>">
 							<label for="<?php echo esc_attr( $fnc_field_id ); ?>">
 								<?php echo esc_html( $fnc_field['label'] ); ?><?php echo $fnc_field['required'] ? ' <span class="req" aria-hidden="true">*</span>' : ''; ?>
 							</label>
 							<?php if ( 'textarea' === $fnc_field['type'] ) : ?>
-								<textarea id="<?php echo esc_attr( $fnc_field_id ); ?>"<?php echo $fnc_field['required'] ? ' required' : ''; ?>></textarea>
+								<textarea id="<?php echo esc_attr( $fnc_field_id ); ?>" name="<?php echo esc_attr( $fnc_n ); ?>" aria-invalid="<?php echo esc_attr( $fnc_inv ); ?>"<?php echo $fnc_field['required'] ? ' required' : ''; ?>><?php echo esc_textarea( $fnc_val ); ?></textarea>
 							<?php else : ?>
-								<input id="<?php echo esc_attr( $fnc_field_id ); ?>" type="<?php echo esc_attr( $fnc_field['type'] ); ?>"<?php echo $fnc_field['required'] ? ' required' : ''; ?> />
+								<input id="<?php echo esc_attr( $fnc_field_id ); ?>" name="<?php echo esc_attr( $fnc_n ); ?>" type="<?php echo esc_attr( $fnc_field['type'] ); ?>" value="<?php echo esc_attr( $fnc_val ); ?>" aria-invalid="<?php echo esc_attr( $fnc_inv ); ?>"<?php echo $fnc_field['required'] ? ' required' : ''; ?> />
 							<?php endif; ?>
 						</div>
 						<?php

@@ -22,8 +22,8 @@ get_header();
 fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Actualités', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Actualités', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Brèves de la vie du Forum entre les éditions.', 'fnc-wordpress-theme' ),
+		'title'      => __( 'La vie du Forum, entre deux éditions.', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Les temps forts, annonces et rendez-vous de l\'institution, au fil de l\'eau.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-fleuve.png',
 		'image_alt'  => __( 'Actualités du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Actualités', 'fnc-wordpress-theme' ),

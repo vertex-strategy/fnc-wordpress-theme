@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.4.2' );
+define( 'FNC_THEME_VERSION', '0.4.4' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -183,7 +183,7 @@ function fnc_archive_url( $post_type ) {
 function fnc_default_menu_items() {
 	return array(
 		array( fnc_page_url( 'le-forum' ), __( 'Le Forum', 'fnc-wordpress-theme' ) ),
-		array( fnc_page_url( 'edition-en-cours' ), __( 'Édition en cours', 'fnc-wordpress-theme' ) ),
+		array( fnc_page_url( 'edition-en-cours' ), __( 'Édition 2027', 'fnc-wordpress-theme' ) ),
 		array( fnc_archive_url( 'fnc_edition' ), __( 'Éditions', 'fnc-wordpress-theme' ) ),
 		array( fnc_archive_url( 'fnc_publication' ), __( 'Ressources', 'fnc-wordpress-theme' ) ),
 		array( fnc_page_url( 'partenaires' ), __( 'Partenaires', 'fnc-wordpress-theme' ) ),

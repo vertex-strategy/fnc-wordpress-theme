@@ -25,9 +25,9 @@ get_header();
 
 fnc_render_hero(
 	array(
-		'eyebrow'    => __( 'Mémoire', 'fnc-wordpress-theme' ),
-		'title'      => __( 'L’histoire du Forum comme actif institutionnel.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés.', 'fnc-wordpress-theme' ),
+		'eyebrow'    => __( 'Éditions', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Chaque édition laisse une trace.', 'fnc-wordpress-theme' ),
+		'lead'       => __( 'Rendez-vous après rendez-vous, le Forum construit une mémoire commune du numérique en Afrique centrale. Retrouvez ici les éditions passées, celle en cours et celles à venir.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
 		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Éditions', 'fnc-wordpress-theme' ),
@@ -50,9 +50,25 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Éditions publiées', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Éditions publiées', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php esc_html_e( 'Archives', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'Une histoire qui s’écrit, édition après édition.', 'fnc-wordpress-theme' ); ?></h2>
 				</div>
+				<div>
+					<p><?php esc_html_e( 'Chaque édition est un chapitre : ce qui s’y est dit, décidé, engagé. Vous y retrouvez ce qui est déjà documenté, ce qui se prépare, et ce qui reste à confirmer.', 'fnc-wordpress-theme' ); ?></p>
+					<p class="frise-note" style="margin-top:14px;"><?php esc_html_e( 'Dates, lieux, thèmes et ressources sont publiés à mesure qu’ils sont confirmés.', 'fnc-wordpress-theme' ); ?></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section linen">
+		<div class="container">
+			<div class="section-head">
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'La liste', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'Les éditions publiées', 'fnc-wordpress-theme' ); ?></h2>
+				</div>
+				<p><?php esc_html_e( 'Filtrez par moment : l’édition en cours, celles à venir, celles déjà passées.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
 			<?php if ( ! empty( $fnc_editions ) ) : ?>
@@ -114,7 +130,21 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		</div>
 	</section>
 
-	<?php fnc_render_cta_band(); ?>
+	<section class="section">
+		<div class="container">
+			<div class="section-head">
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'Suite', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'De l’édition à la ressource.', 'fnc-wordpress-theme' ); ?></h2>
+				</div>
+				<p><?php esc_html_e( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
+			</div>
+			<div class="toolbar" style="gap:28px;margin-top:8px;">
+				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>"><?php esc_html_e( 'Voir les publications', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+			</div>
+		</div>
+	</section>
 </main>
 
 <?php get_footer(); ?>

@@ -53,7 +53,6 @@ msgstr "Announcements, reports and information published once validated."
 #: archive-fnc_intervenant.php:31
 #: archive-fnc_publication.php:28
 #: archive-fnc_session.php:28
-#: page-contact.php:46
 #: page-edition-en-cours.php:88
 #: page-informations-pratiques.php:29
 #: page-inscription.php:30
@@ -90,15 +89,15 @@ msgstr "News will appear here as soon as it is published."
 #: front-page.php:161
 #: front-page.php:177
 #: front-page.php:217
-#: page-contact.php:74
-#: page-contact.php:76
-#: page-edition-en-cours.php:252
+#: page-contact.php:89
+#: page-contact.php:97
+#: page-contact.php:105
+#: page-edition-en-cours.php:238
 #: page-espace-presse.php:86
 #: page-espace-presse.php:131
 #: page-informations-pratiques.php:70
 #: page-inscription.php:69
 #: page-inscription.php:77
-#: page-le-forum.php:120
 #: page-mot-du-president.php:39
 #: single-fnc_intervenant.php:51
 #: single-fnc_publication.php:67
@@ -106,41 +105,25 @@ msgid "À confirmer"
 msgstr "To be confirmed"
 
 #: archive-fnc_edition.php:28
-msgid "Mémoire"
-msgstr "Memory"
-
-#: archive-fnc_edition.php:29
-msgid "L’histoire du Forum comme actif institutionnel."
-msgstr "The Forum’s history as an institutional asset."
-
-#: archive-fnc_edition.php:30
-msgid "Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés."
-msgstr "Each edition connects its review, resources, gallery and partners once that content is validated."
-
 #: archive-fnc_edition.php:33
 #: footer.php:63
 #: functions.php:187
 msgid "Éditions"
 msgstr "Editions"
 
-#: archive-fnc_edition.php:53
-#: archive-fnc_edition.php:54
-msgid "Éditions publiées"
-msgstr "Published editions"
-
-#: archive-fnc_edition.php:84
+#: archive-fnc_edition.php:100
 msgid "Statut à confirmer"
 msgstr "Status to be confirmed"
 
-#: archive-fnc_edition.php:101
+#: archive-fnc_edition.php:117
 msgid "Voir l’édition"
 msgstr "View the edition"
 
-#: archive-fnc_edition.php:110
+#: archive-fnc_edition.php:126
 msgid "Aucune édition publiée"
 msgstr "No published edition"
 
-#: archive-fnc_edition.php:111
+#: archive-fnc_edition.php:127
 msgid "Les éditions apparaîtront ici dès leur publication."
 msgstr "Editions will appear here as soon as they are published."
 
@@ -177,11 +160,12 @@ msgid "Filtrer par profil"
 msgstr "Filter by profile"
 
 #: archive-fnc_intervenant.php:83
-#: archive-fnc_publication.php:67
+#: archive-fnc_publication.php:90
 msgid "Tous"
 msgstr "All"
 
 #: archive-fnc_intervenant.php:95
+#: page-partenaires.php:219
 #: single-fnc_intervenant.php:86
 msgid "Pays"
 msgstr "Country"
@@ -216,51 +200,43 @@ msgstr "Profiles will appear here as soon as they are published."
 msgid "Ressources"
 msgstr "Resources"
 
-#: archive-fnc_publication.php:25
-msgid "La réflexion continue après les sessions."
-msgstr "Reflection continues after the sessions."
-
-#: archive-fnc_publication.php:26
-msgid "Rapports, communiqués, vidéos et analyses sont structurés sans contenu fictif."
-msgstr "Reports, press releases, videos and analyses are structured without fictional content."
-
 #: archive-fnc_publication.php:29
 msgid "Publications"
 msgstr "Publications"
 
-#: archive-fnc_publication.php:58
+#: archive-fnc_publication.php:81
 msgid "Recherche"
 msgstr "Search"
 
-#: archive-fnc_publication.php:59
+#: archive-fnc_publication.php:82
 msgid "Rechercher une publication"
 msgstr "Search for a publication"
 
-#: archive-fnc_publication.php:63
+#: archive-fnc_publication.php:86
 msgid "Rechercher"
 msgstr "Search"
 
-#: archive-fnc_publication.php:66
+#: archive-fnc_publication.php:89
 msgid "Filtrer par type"
 msgstr "Filter by type"
 
-#: archive-fnc_publication.php:82
+#: archive-fnc_publication.php:105
 #: single-fnc_edition.php:174
 #: single-fnc_publication.php:132
 #: single-fnc_session.php:173
 msgid "Publication"
 msgstr "Publication"
 
-#: archive-fnc_publication.php:88
+#: archive-fnc_publication.php:111
 #: single-fnc_publication.php:58
 msgid "Regarder"
 msgstr "Watch"
 
-#: archive-fnc_publication.php:95
+#: archive-fnc_publication.php:118
 msgid "Aucune publication validée"
 msgstr "No validated publication"
 
-#: archive-fnc_publication.php:96
+#: archive-fnc_publication.php:119
 msgid "L’état vide reste sobre, sans faux contenu."
 msgstr "The empty state stays understated, with no fake content."
 
@@ -339,7 +315,6 @@ msgid "Présentation"
 msgstr "Overview"
 
 #: footer.php:55
-#: functions.php:186
 #: page-edition-en-cours.php:84
 #: page-edition-en-cours.php:89
 msgid "Édition en cours"
@@ -358,8 +333,8 @@ msgstr "Press kit"
 #: footer.php:70
 #: footer.php:72
 #: functions.php:190
-#: page-contact.php:42
-#: page-contact.php:47
+#: page-contact.php:39
+#: page-contact.php:44
 msgid "Contact"
 msgstr "Contact"
 
@@ -371,7 +346,6 @@ msgstr "Become a partner"
 #: footer.php:74
 #: header.php:51
 #: page-informations-pratiques.php:80
-#: page-le-forum.php:121
 msgid "S’inscrire"
 msgstr "Register"
 
@@ -552,8 +526,8 @@ msgid "Navigation mobile"
 msgstr "Mobile navigation"
 
 #: functions.php:189
-#: page-partenaires.php:27
-#: page-partenaires.php:32
+#: page-partenaires.php:25
+#: page-partenaires.php:30
 msgid "Partenaires"
 msgstr "Partners"
 
@@ -709,11 +683,12 @@ msgstr "Portrait"
 
 #: inc/blocks.php:83
 #: inc/blocks.php:296
-#: page-contact.php:62
+#: page-contact.php:56
 msgid "Nom"
 msgstr "Name"
 
 #: inc/blocks.php:84
+#: page-partenaires.php:207
 msgid "Fonction"
 msgstr "Role"
 
@@ -941,6 +916,7 @@ msgstr "Address, directions and map. The interactive map only loads on click."
 #: inc/blocks.php:268
 #: inc/customizer.php:51
 #: inc/customizer.php:440
+#: page-contact.php:100
 msgid "Adresse"
 msgstr "Address"
 
@@ -1170,6 +1146,8 @@ msgid "Email de contact"
 msgstr "Contact email"
 
 #: inc/customizer.php:437
+#: page-contact.php:92
+#: page-partenaires.php:215
 msgid "Téléphone"
 msgstr "Phone"
 
@@ -1528,83 +1506,38 @@ msgstr "Site terms of use — to be confirmed and validated before any real publ
 msgid "Page structurelle, à maintenir non publiée tant que le texte n’est pas validé."
 msgstr "Structural page, to be kept unpublished until the text is validated."
 
-#: page-contact.php:43
-msgid "Orienter chaque demande vers le bon canal."
-msgstr "Directing each request to the right channel."
-
-#: page-contact.php:44
-msgid "Contact général, presse, partenariat et accessibilité restent à confirmer."
-msgstr "General, press, partnership and accessibility contacts remain to be confirmed."
-
-#: page-contact.php:55
-#: page-contact.php:57
-msgid "Formulaire de contact"
-msgstr "Contact form"
-
-#: page-contact.php:56
-msgid "Formulaire"
-msgstr "Form"
-
-#: page-contact.php:58
 #: page-inscription.php:84
 msgid "Le service d’envoi reste à connecter."
 msgstr "The sending service is still to be connected."
 
-#: page-contact.php:63
+#: page-contact.php:57
 #: page-inscription.php:59
+#: page-partenaires.php:203
 #: single-fnc_intervenant.php:82
 msgid "Organisation"
 msgstr "Organisation"
 
-#: page-contact.php:64
+#: page-contact.php:58
+#: page-partenaires.php:211
 msgid "Email"
 msgstr "Email"
 
-#: page-contact.php:65
+#: page-contact.php:59
 msgid "Sujet"
 msgstr "Subject"
 
-#: page-contact.php:66
+#: page-contact.php:60
+#: page-partenaires.php:231
 msgid "Message"
 msgstr "Message"
 
-#: page-contact.php:78
-msgid "Champ requis."
-msgstr "Required field."
-
-#: page-contact.php:84
-msgid "Les coordonnées officielles restent à confirmer avant publication."
-msgstr "Official contact details remain to be confirmed before publication."
-
-#: page-contact.php:85
-msgid "Envoyer"
-msgstr "Send"
-
-#: page-contact.php:91
-#: page-partenaires.php:61
+#: page-partenaires.php:68
 msgid "Institutionnel"
 msgstr "Institutional"
 
-#: page-contact.php:91
-msgid "Email officiel à confirmer"
-msgstr "Official email to be confirmed"
-
-#: page-contact.php:92
 #: page-espace-presse.php:26
 msgid "Presse"
 msgstr "Press"
-
-#: page-contact.php:92
-msgid "Contact presse à confirmer"
-msgstr "Press contact to be confirmed"
-
-#: page-contact.php:93
-msgid "Accessibilité"
-msgstr "Accessibility"
-
-#: page-contact.php:93
-msgid "Contact dédié à confirmer"
-msgstr "Dedicated contact to be confirmed"
 
 #: page-declaration-accessibilite.php:27
 #: page-declaration-accessibilite.php:29
@@ -1676,27 +1609,21 @@ msgstr "Link speakers to the sessions of this edition."
 msgid "Voir tous les intervenants"
 msgstr "See all speakers"
 
-#: page-edition-en-cours.php:237
 #: page-informations-pratiques.php:53
 #: single-fnc_edition.php:93
 msgid "Sur place"
 msgstr "On site"
 
-#: page-edition-en-cours.php:238
 #: single-fnc_edition.php:94
 msgid "Informations pratiques."
 msgstr "Practical information."
 
-#: page-edition-en-cours.php:244
-msgid "Toutes les informations pratiques"
-msgstr "All practical information"
-
-#: page-edition-en-cours.php:251
+#: page-edition-en-cours.php:237
 #: page-inscription.php:31
 msgid "Inscription"
 msgstr "Registration"
 
-#: page-edition-en-cours.php:252
+#: page-edition-en-cours.php:238
 msgid "L’ouverture des inscriptions sera annoncée prochainement."
 msgstr "Registration opening will be announced soon."
 
@@ -1772,6 +1699,8 @@ msgstr "Accreditation remains a direct exchange."
 msgid "Les journalistes peuvent utiliser la page Contact pour toute demande d’accréditation."
 msgstr "Journalists can use the Contact page for any accreditation request."
 
+#: archive-fnc_edition.php:144
+#: archive-fnc_publication.php:136
 #: page-espace-presse.php:142
 msgid "Contacter l’organisation"
 msgstr "Contact the organisation"
@@ -1868,97 +1797,93 @@ msgstr "Plenary hall of the Forum Numérique Congo"
 msgid "« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »"
 msgstr "“The Forum Numérique Congo establishes a permanent space for dialogue, cooperation and decision-making around digital matters in Central Africa.”"
 
-#: page-le-forum.php:59
+#: page-le-forum.php:72
 msgid "Notre mission"
 msgstr "Our mission"
 
-#: page-le-forum.php:60
+#: page-le-forum.php:73
 msgid "Comprendre."
 msgstr "Understand."
 
-#: page-le-forum.php:60
+#: page-le-forum.php:73
 msgid "Rassembler."
 msgstr "Bring together."
 
-#: page-le-forum.php:60
+#: page-le-forum.php:73
 msgid "Décider ensemble."
 msgstr "Decide together."
 
-#: page-le-forum.php:61
+#: page-le-forum.php:74
 msgid "Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions."
 msgstr "The Forum brings together institutions, companies, researchers and civil society to turn a national ambition into a clear digital trajectory. A major gathering every two years, with continuous work between editions."
 
-#: page-le-forum.php:63
+#: page-le-forum.php:76
 msgid "Panel de discussion au Forum Numérique Congo"
 msgstr "Discussion panel at the Forum Numérique Congo"
 
-#: page-le-forum.php:69
+#: page-le-forum.php:82
 msgid "Nos objectifs"
 msgstr "Our objectives"
 
-#: page-le-forum.php:70
+#: page-le-forum.php:83
 msgid "Ce que le Forum rend possible"
 msgstr "What the Forum makes possible"
 
-#: page-le-forum.php:75
+#: page-le-forum.php:88
 msgid "Comprendre"
 msgstr "Understand"
 
-#: page-le-forum.php:76
+#: page-le-forum.php:89
 msgid "Éclairer les enjeux du numérique pour l’Afrique centrale, sans jargon ni importation de modèles."
 msgstr "Shed light on digital issues for Central Africa, without jargon or imported models."
 
-#: page-le-forum.php:79
+#: page-le-forum.php:92
 msgid "Dialoguer"
 msgstr "Dialogue"
 
-#: page-le-forum.php:80
+#: page-le-forum.php:93
 msgid "Créer un espace de parole partagé entre décideurs publics, acteurs privés et citoyens."
 msgstr "Create a shared space for dialogue between public decision-makers, private actors and citizens."
 
-#: page-le-forum.php:83
+#: page-le-forum.php:96
 msgid "Coopérer"
 msgstr "Cooperate"
 
-#: page-le-forum.php:84
+#: page-le-forum.php:97
 msgid "Faire émerger des coopérations concrètes, régionales et durables."
 msgstr "Foster concrete, regional and lasting cooperation."
 
-#: page-le-forum.php:87
+#: page-le-forum.php:100
 msgid "Décider"
 msgstr "Decide"
 
-#: page-le-forum.php:88
+#: page-le-forum.php:101
 msgid "Transformer les échanges en décisions et en engagements traçables."
 msgstr "Turn discussions into decisions and traceable commitments."
 
-#: page-le-forum.php:108
+#: page-le-forum.php:121
 msgid "Brazzaville, République du Congo"
 msgstr "Brazzaville, Republic of the Congo"
 
-#: page-le-forum.php:111
+#: page-le-forum.php:124
 msgid "Notre ancrage"
 msgstr "Our roots"
 
-#: page-le-forum.php:112
+#: page-le-forum.php:125
 msgid "Depuis Brazzaville,"
 msgstr "From Brazzaville,"
 
-#: page-le-forum.php:112
+#: page-le-forum.php:125
 msgid "au cœur du Bassin du Congo."
 msgstr "at the heart of the Congo Basin."
 
-#: page-le-forum.php:113
+#: page-le-forum.php:126
 msgid "Une parole ancrée dans son territoire, tournée vers toute l’Afrique centrale."
 msgstr "A voice rooted in its territory, reaching out to all of Central Africa."
 
-#: page-le-forum.php:119
+#: page-le-forum.php:132
 msgid "Participer au Forum"
 msgstr "Take part in the Forum"
-
-#: page-le-forum.php:120
-msgid "Rejoignez la prochaine édition. L’ouverture des accréditations sera annoncée prochainement."
-msgstr "Join the next edition. Accreditation opening will be announced soon."
 
 #: page-mentions-legales.php:29
 msgid "Éditeur du site : nom de l’organisation éditrice — à confirmer."
@@ -1972,6 +1897,7 @@ msgstr "Publication director, host and legal details: to be confirmed and valida
 msgid "Portrait institutionnel"
 msgstr "Institutional portrait"
 
+#: page-le-forum.php:59
 #: page-mot-du-president.php:33
 msgid "Le mot du Président"
 msgstr "The President’s address"
@@ -1992,92 +1918,80 @@ msgstr "“The institutional address will appear here once validated by the proj
 msgid "Retour à Le Forum"
 msgstr "Back to The Forum"
 
-#: page-partenaires.php:28
+#: page-partenaires.php:26
 msgid "S’associer au Forum, c’est engager l’avenir numérique du Congo."
 msgstr "Partnering with the Forum means shaping the Congo’s digital future."
 
 #: page-partenaires.php:29
-msgid "Le Forum réunit institutions, organisations et entreprises autour d’une même ambition."
-msgstr "The Forum brings together institutions, organisations and companies around a shared ambition."
-
-#: page-partenaires.php:31
 msgid "Poignée de main lors du Forum Numérique Congo"
 msgstr "Handshake at the Forum Numérique Congo"
 
-#: page-partenaires.php:42
+#: page-partenaires.php:49
 msgid "S’associer"
 msgstr "Partner with us"
 
-#: page-partenaires.php:43
+#: page-partenaires.php:50
 msgid "Pourquoi devenir partenaire."
 msgstr "Why become a partner."
 
-#: page-partenaires.php:45
-msgid "Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique en Afrique centrale."
-msgstr "Supporting the Forum means taking part in a lasting space for dialogue on digital matters in Central Africa."
-
-#: page-partenaires.php:54
+#: page-partenaires.php:61
 msgid "Cadre"
 msgstr "Framework"
 
-#: page-partenaires.php:55
+#: page-partenaires.php:62
 msgid "Types et niveaux de partenariat."
 msgstr "Types and levels of partnership."
 
-#: page-partenaires.php:57
-msgid "Le partenariat distingue l’engagement institutionnel de l’engagement commercial."
-msgstr "The partnership distinguishes institutional commitment from commercial commitment."
-
-#: page-partenaires.php:61
+#: page-partenaires.php:68
 msgid "Pouvoirs publics et institutions qui portent la légitimité du Forum."
 msgstr "Public authorities and institutions that give the Forum its legitimacy."
 
-#: page-partenaires.php:62
+#: page-partenaires.php:69
 msgid "Organisateur"
 msgstr "Organiser"
 
-#: page-partenaires.php:62
+#: page-partenaires.php:69
 msgid "Organisations qui conçoivent et opèrent l’événement."
 msgstr "Organisations that design and run the event."
 
-#: page-partenaires.php:63
+#: page-partenaires.php:70
 msgid "Soutien"
 msgstr "Support"
 
-#: page-partenaires.php:63
+#: page-partenaires.php:70
 msgid "Structures qui apportent un appui matériel, académique ou médiatique."
 msgstr "Bodies providing material, academic or media support."
 
-#: page-partenaires.php:64
+#: page-partenaires.php:71
 msgid "Sponsor"
 msgstr "Sponsor"
 
-#: page-partenaires.php:64
+#: page-partenaires.php:71
 msgid "Entreprises qui financent le Forum et bénéficient d’une visibilité dédiée."
 msgstr "Companies that fund the Forum and receive dedicated visibility."
 
-#: page-partenaires.php:74
+#: page-partenaires.php:81
 msgid "Ils nous font confiance"
 msgstr "They trust us"
 
-#: page-partenaires.php:75
+#: page-partenaires.php:82
 msgid "Partenaires confirmés."
 msgstr "Confirmed partners."
 
-#: page-partenaires.php:136
+#: page-partenaires.php:144
 msgid "Éditions associées"
 msgstr "Associated editions"
 
-#: page-partenaires.php:153
+#: page-partenaires.php:161
 #: single-fnc_partenaire.php:69
 msgid "Visiter le site"
 msgstr "Visit the website"
 
-#: page-partenaires.php:164
+#: page-partenaires.php:172
 msgid "Aucun partenaire confirmé"
 msgstr "No confirmed partner"
 
-#: page-partenaires.php:165
+#: page-partenaires.php:173
 msgid "Les partenaires apparaîtront ici dès leur confirmation."
 msgstr "Partners will appear here as soon as they are confirmed."
 
@@ -2267,37 +2181,316 @@ msgstr "opens in a new tab"
 
 #: front-page.php:63
 #: front-page.php:286
+#: page-le-forum.php:134
 msgid "Réserver votre place"
 msgstr "Reserve your seat"
 
 #: assets/js/blocks.js:86
 msgid "Remplacer"
-msgstr ""
+msgstr "Replace"
 
 #: assets/js/blocks.js:86
 msgid "Choisir…"
-msgstr ""
+msgstr "Choose…"
 
 #: assets/js/blocks.js:98
 msgid "Retirer"
-msgstr ""
+msgstr "Remove"
 
 #: assets/js/blocks.js:182
 msgid "Monter"
-msgstr ""
+msgstr "Move up"
 
 #: assets/js/blocks.js:194
 msgid "Descendre"
-msgstr ""
+msgstr "Move down"
 
 #: assets/js/blocks.js:206
 msgid "Supprimer"
-msgstr ""
+msgstr "Delete"
 
 #: assets/js/blocks.js:227
 msgid "Ajouter"
-msgstr ""
+msgstr "Add"
 
 #: assets/js/blocks.js:268
 msgid "Les sauts de ligne créent des paragraphes."
-msgstr ""
+msgstr "Line breaks create paragraphs."
+
+#: archive-fnc_edition.php:29
+msgid "Chaque édition laisse une trace."
+msgstr "Every edition leaves a trace."
+
+#: archive-fnc_edition.php:30
+msgid "Rendez-vous après rendez-vous, le Forum construit une mémoire commune du numérique en Afrique centrale. Retrouvez ici les éditions passées, celle en cours et celles à venir."
+msgstr "Gathering after gathering, the Forum builds a shared memory of digital in Central Africa. Find past editions here, the current one, and those to come."
+
+#: archive-fnc_edition.php:53
+msgid "Archives"
+msgstr "Archives"
+
+#: archive-fnc_edition.php:54
+msgid "Une histoire qui s’écrit, édition après édition."
+msgstr "A story written edition after edition."
+
+#: archive-fnc_edition.php:57
+msgid "Chaque édition est un chapitre : ce qui s’y est dit, décidé, engagé. Vous y retrouvez ce qui est déjà documenté, ce qui se prépare, et ce qui reste à confirmer."
+msgstr "Each edition is a chapter: what was said, decided, committed to. You will find what is already documented, what is in preparation, and what remains to be confirmed."
+
+#: archive-fnc_edition.php:58
+msgid "Dates, lieux, thèmes et ressources sont publiés à mesure qu’ils sont confirmés."
+msgstr "Dates, locations, themes and resources are published as they are confirmed."
+
+#: archive-fnc_edition.php:68
+msgid "La liste"
+msgstr "The list"
+
+#: archive-fnc_edition.php:69
+msgid "Les éditions publiées"
+msgstr "Published editions"
+
+#: archive-fnc_edition.php:71
+msgid "Filtrez par moment : l’édition en cours, celles à venir, celles déjà passées."
+msgstr "Filter by moment: the current edition, the ones to come, the ones already past."
+
+#: archive-fnc_edition.php:137
+#: archive-fnc_publication.php:129
+msgid "Suite"
+msgstr "Next"
+
+#: archive-fnc_edition.php:138
+msgid "De l’édition à la ressource."
+msgstr "From edition to resource."
+
+#: archive-fnc_edition.php:140
+msgid "Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle."
+msgstr "Each edition produces useful traces: publications, proceedings, releases. Keep reading, or write to us for an official resource."
+
+#: archive-fnc_edition.php:143
+msgid "Voir les publications"
+msgstr "View publications"
+
+#: archive-fnc_publication.php:25
+msgid "Une bibliothèque pour prolonger le dialogue."
+msgstr "A library to extend the dialogue."
+
+#: archive-fnc_publication.php:26
+msgid "Rapports, actes, communiqués : les traces écrites du Forum se rassemblent ici, à mesure qu’elles sont validées."
+msgstr "Reports, proceedings, press releases: the Forum written record gathers here, as each item is validated."
+
+#: archive-fnc_publication.php:59
+msgid "Lecture"
+msgstr "Reading"
+
+#: archive-fnc_publication.php:60
+msgid "Lire, comprendre, prolonger."
+msgstr "Read, understand, extend."
+
+#: archive-fnc_publication.php:63
+msgid "Une bibliothèque claire et sobre : les ressources disponibles d’un côté, les parutions à venir de l’autre. Chaque document publié engage le Forum."
+msgstr "A clear, quiet library: available resources on one side, upcoming releases on the other. Every published document commits the Forum."
+
+#: archive-fnc_publication.php:64
+msgid "Auteurs, dates et fichiers apparaissent dès qu’ils sont confirmés."
+msgstr "Authors, dates and files appear as soon as they are confirmed."
+
+#: archive-fnc_publication.php:74
+msgid "Bibliothèque"
+msgstr "Library"
+
+#: archive-fnc_publication.php:75
+msgid "Rechercher, filtrer, consulter."
+msgstr "Search, filter, consult."
+
+#: archive-fnc_publication.php:77
+msgid "Retrouvez une ressource par mot-clé ou par type de document."
+msgstr "Find a resource by keyword or by document type."
+
+#: archive-fnc_publication.php:130
+msgid "Lire les traces, puis comprendre le cadre."
+msgstr "Read the traces, then understand the frame."
+
+#: archive-fnc_publication.php:132
+msgid "Les publications nourrissent le dialogue public. Découvrez le rôle du Forum, ou écrivez-nous pour une ressource officielle."
+msgstr "Publications feed public dialogue. Discover the role of the Forum, or write to us for an official resource."
+
+#: archive-fnc_publication.php:135
+msgid "Comprendre le Forum"
+msgstr "Understand the Forum"
+
+#: functions.php:186
+msgid "Édition 2027"
+msgstr "2027 Edition"
+
+#: page-contact.php:40
+msgid "Une porte d’entrée claire, pour chaque demande."
+msgstr "A clear entry point, for every request."
+
+#: page-contact.php:41
+msgid "Partenariat, presse, intervention ou simple question : dites-nous ce qui vous amène, nous orientons votre demande vers le bon interlocuteur."
+msgstr "Partnership, press, a talk or a simple question: tell us what brings you, we route your request to the right contact."
+
+#: page-contact.php:43
+#: page-contact.php:73
+msgid "Prise de parole au Forum Numérique Congo"
+msgstr "Speaking at the Forum Numérique Congo"
+
+#: page-contact.php:69
+msgid "Orientation"
+msgstr "Orientation"
+
+#: page-contact.php:70
+msgid "Vous orienter,"
+msgstr "Guiding you,"
+
+#: page-contact.php:70
+msgid "sans rien promettre"
+msgstr "without making"
+
+#: page-contact.php:70
+msgid "à la légère."
+msgstr "light promises."
+
+#: page-contact.php:71
+msgid "Un bon contact inspire confiance avant de demander quoi que ce soit. Vous trouverez ici les coordonnées officielles et un formulaire pour préciser votre demande — nous l’orientons vers le bon interlocuteur."
+msgstr "A good point of contact inspires trust before asking anything. Here you will find the official details and a form to specify your request — we route it to the right contact."
+
+#: page-contact.php:81
+msgid "Coordonnées"
+msgstr "Contact details"
+
+#: page-contact.php:82
+msgid "Chaque emplacement attend son information validée. Rien n’est complété au hasard."
+msgstr "Each slot is waiting for its validated information. Nothing is filled in at random."
+
+#: page-contact.php:84
+msgid "E-mail"
+msgstr "Email"
+
+#: page-contact.php:109
+msgid "Réseaux"
+msgstr "Channels"
+
+#: page-contact.php:123
+#: page-contact.php:124
+msgid "Demande de contact"
+msgstr "Contact request"
+
+#: page-contact.php:125
+msgid "Préciser le sujet nous aide à orienter votre demande dès l’ouverture du canal officiel."
+msgstr "A precise subject helps us route your request as soon as the official channel opens."
+
+#: page-contact.php:129
+#: page-partenaires.php:194
+msgid "Ne pas remplir"
+msgstr "Do not fill in"
+
+#: page-contact.php:152
+msgid "Les champs marqués d’un astérisque sont obligatoires. Vos informations ne sont transmises à personne tant que le canal officiel n’est pas ouvert."
+msgstr "Fields marked with an asterisk are required. Your information is not shared with anyone while the official channel is not yet open."
+
+#: page-contact.php:153
+#: page-partenaires.php:237
+msgid "Envoyer la demande"
+msgstr "Send request"
+
+#: page-le-forum.php:46
+msgid "Une institution,"
+msgstr "An institution,"
+
+#: page-le-forum.php:46
+msgid "pas un évènement."
+msgstr "not an event."
+
+#: page-le-forum.php:60
+msgid "Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais."
+msgstr "The Forum Numérique Congo sets up a permanent space for dialogue, cooperation and decision around digital matters in Central Africa. Between editions, we turn a national ambition into a concrete trajectory, serving the Congolese people."
+
+#: page-le-forum.php:61
+msgid "Eugène Rufin BOUYA"
+msgstr "Eugène Rufin BOUYA"
+
+#: page-le-forum.php:61
+msgid "Président du Forum Numérique Congo"
+msgstr "President of the Forum Numérique Congo"
+
+#: page-le-forum.php:62
+msgid "Lire le mot complet"
+msgstr "Read the full message"
+
+#: page-le-forum.php:64
+msgid "Eugène Rufin BOUYA, Président du Forum Numérique Congo"
+msgstr "Eugène Rufin BOUYA, President of the Forum Numérique Congo"
+
+#: page-le-forum.php:133
+msgid "Rejoignez la prochaine édition, du 25 au 27 mars 2027, à l’Hôtel Hilton de Brazzaville."
+msgstr "Join the next edition, 25–27 March 2027, at the Hilton Hotel in Brazzaville."
+
+#: page-partenaires.php:27
+msgid "Le Forum réunit institutions, organisations et entreprises autour d’une même ambition. Découvrez pourquoi et comment s’y associer."
+msgstr "The Forum brings together institutions, organisations and companies around a shared ambition. Discover why and how to partner with it."
+
+#: page-partenaires.php:36
+msgid "Partenariat institutionnel"
+msgstr "Institutional partnership"
+
+#: page-partenaires.php:37
+msgid "Sponsoring"
+msgstr "Sponsorship"
+
+#: page-partenaires.php:38
+msgid "Soutien média"
+msgstr "Media support"
+
+#: page-partenaires.php:39
+msgid "Coopération technique"
+msgstr "Technical cooperation"
+
+#: page-partenaires.php:40
+msgid "Autre"
+msgstr "Other"
+
+#: page-partenaires.php:52
+msgid "Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique. Chaque partenaire renforce la crédibilité collective de la démarche et gagne en visibilité auprès des décideurs."
+msgstr "Supporting the Forum means joining a lasting space for dialogue on digital matters. Each partner strengthens the collective credibility of the initiative and gains visibility among decision-makers."
+
+#: page-partenaires.php:64
+msgid "Le partenariat distingue clairement l’engagement institutionnel de l’engagement commercial."
+msgstr "Partnership clearly distinguishes institutional commitment from commercial commitment."
+
+#: page-partenaires.php:84
+msgid "Les organisations associées au Forum, regroupées par nature d’engagement."
+msgstr "The organisations associated with the Forum, grouped by nature of commitment."
+
+#: page-partenaires.php:183
+msgid "Échanger"
+msgstr "Get in touch"
+
+#: page-partenaires.php:184
+msgid "Discutons d’un partenariat."
+msgstr "Let’s discuss a partnership."
+
+#: page-partenaires.php:185
+msgid "Vous représentez une institution ou une entreprise ? Contactez l’organisation pour construire un partenariat adapté."
+msgstr "Do you represent an institution or a company? Contact the organisation to build a tailored partnership."
+
+#: page-partenaires.php:188
+#: page-partenaires.php:189
+msgid "Demande de partenariat"
+msgstr "Partnership request"
+
+#: page-partenaires.php:190
+msgid "Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation."
+msgstr "Your request is stored before any acknowledgement is attempted. Detailed terms remain to be confirmed by the organisation."
+
+#: page-partenaires.php:199
+msgid "Nom complet"
+msgstr "Full name"
+
+#: page-partenaires.php:223
+msgid "Type d’intérêt"
+msgstr "Type of interest"
+
+#: page-partenaires.php:236
+msgid "Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé."
+msgstr "Fields marked with an asterisk are required. No level, amount or benefit is presumed."

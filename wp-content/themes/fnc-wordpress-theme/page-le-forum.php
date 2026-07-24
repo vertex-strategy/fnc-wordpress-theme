@@ -43,7 +43,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 		<div class="inner">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php the_title(); ?></p>
 			<span class="eyebrow"><?php esc_html_e( 'Ce que nous sommes', 'fnc-wordpress-theme' ); ?></span>
-			<h1><?php the_title(); ?></h1>
+			<h1><?php esc_html_e( 'Une institution,', 'fnc-wordpress-theme' ); ?><br><?php esc_html_e( 'pas un évènement.', 'fnc-wordpress-theme' ); ?></h1>
 			<p class="intro"><?php esc_html_e( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »', 'fnc-wordpress-theme' ); ?></p>
 		</div>
 		<svg class="pcb" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
@@ -51,6 +51,19 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 			<path class="y" d="M0 20 H300 l24 20 H900 l18 -14 H1200"/>
 		</svg>
 	</header>
+
+	<!-- Le mot du président -->
+	<section class="section">
+		<div class="split president">
+			<div>
+				<span class="eyebrow"><?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></span>
+				<p class="president-word"><?php esc_html_e( 'Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais.', 'fnc-wordpress-theme' ); ?></p>
+				<p class="president-sign"><b><?php esc_html_e( 'Eugène Rufin BOUYA', 'fnc-wordpress-theme' ); ?></b><span><?php esc_html_e( 'Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?></span></p>
+				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'le-forum/mot-du-president' ) ); ?>"><?php esc_html_e( 'Lire le mot complet', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+			</div>
+			<figure class="president-photo"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+		</div>
+	</section>
 
 	<!-- Notre mission -->
 	<section class="section">
@@ -117,8 +130,8 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	<!-- Callout -->
 	<section class="callout">
 		<h2><?php esc_html_e( 'Participer au Forum', 'fnc-wordpress-theme' ); ?></h2>
-		<p><?php esc_html_e( 'Rejoignez la prochaine édition. L’ouverture des accréditations sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+		<p><?php esc_html_e( 'Rejoignez la prochaine édition, du 25 au 27 mars 2027, à l’Hôtel Hilton de Brazzaville.', 'fnc-wordpress-theme' ); ?></p>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'Réserver votre place', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 	</section>

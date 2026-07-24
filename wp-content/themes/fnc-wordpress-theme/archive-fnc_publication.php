@@ -22,8 +22,8 @@ get_header();
 fnc_render_hero(
 	array(
 		'eyebrow'    => __( 'Ressources', 'fnc-wordpress-theme' ),
-		'title'      => __( 'La réflexion continue après les sessions.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Rapports, communiqués, vidéos et analyses sont structurés sans contenu fictif.', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Une bibliothèque pour prolonger le dialogue.', 'fnc-wordpress-theme' ),
+		'lead'       => __( 'Rapports, actes, communiqués : les traces écrites du Forum se rassemblent ici, à mesure qu’elles sont validées.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
 		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Publications', 'fnc-wordpress-theme' ),
@@ -54,6 +54,29 @@ $fnc_publications = get_posts(
 <main id="main">
 	<section class="section">
 		<div class="container">
+			<div class="section-head">
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'Lecture', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'Lire, comprendre, prolonger.', 'fnc-wordpress-theme' ); ?></h2>
+				</div>
+				<div>
+					<p><?php esc_html_e( 'Une bibliothèque claire et sobre : les ressources disponibles d’un côté, les parutions à venir de l’autre. Chaque document publié engage le Forum.', 'fnc-wordpress-theme' ); ?></p>
+					<p class="frise-note" style="margin-top:14px;"><?php esc_html_e( 'Auteurs, dates et fichiers apparaissent dès qu’ils sont confirmés.', 'fnc-wordpress-theme' ); ?></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section linen">
+		<div class="container">
+			<div class="section-head">
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'Bibliothèque', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'Rechercher, filtrer, consulter.', 'fnc-wordpress-theme' ); ?></h2>
+				</div>
+				<p><?php esc_html_e( 'Retrouvez une ressource par mot-clé ou par type de document.', 'fnc-wordpress-theme' ); ?></p>
+			</div>
+
 			<form class="field" method="get" action="<?php echo esc_url( $fnc_archive_url ); ?>" role="search" style="max-width:420px;margin-bottom:20px;">
 				<label for="fnc-publication-search"><?php esc_html_e( 'Recherche', 'fnc-wordpress-theme' ); ?></label>
 				<input id="fnc-publication-search" type="search" name="s" value="<?php echo esc_attr( $fnc_search_query ); ?>" placeholder="<?php esc_attr_e( 'Rechercher une publication', 'fnc-wordpress-theme' ); ?>" />
@@ -99,7 +122,21 @@ $fnc_publications = get_posts(
 		</div>
 	</section>
 
-	<?php fnc_render_cta_band(); ?>
+	<section class="section">
+		<div class="container">
+			<div class="section-head">
+				<div>
+					<p class="eyebrow"><?php esc_html_e( 'Suite', 'fnc-wordpress-theme' ); ?></p>
+					<h2><?php esc_html_e( 'Lire les traces, puis comprendre le cadre.', 'fnc-wordpress-theme' ); ?></h2>
+				</div>
+				<p><?php esc_html_e( 'Les publications nourrissent le dialogue public. Découvrez le rôle du Forum, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
+			</div>
+			<div class="toolbar" style="gap:28px;margin-top:8px;">
+				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Comprendre le Forum', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+			</div>
+		</div>
+	</section>
 </main>
 
 <?php get_footer(); ?>

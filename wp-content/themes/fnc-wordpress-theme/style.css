@@ -3,7 +3,7 @@ Theme Name: FNC WordPress Theme
 Theme URI: https://github.com/vertex-strategy/fnc-wordpress-theme
 Author: Vertex Strategy
 Description: Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload.
-Version: 0.4.2
+Version: 0.4.4
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -412,8 +412,9 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
 .field.full{grid-column:1/-1;}
 .field label{display:block;margin-bottom:7px;color:var(--navy);font-weight:760;}
-.field input,.field textarea{width:100%;min-height:52px;border:1px solid var(--border);border-radius:3px;background:#fff;padding:13px 14px;color:var(--texte-corps);}
+.field input,.field textarea,.field select{width:100%;min-height:52px;border:1px solid var(--border);border-radius:3px;background:#fff;padding:13px 14px;color:var(--texte-corps);font:inherit;}
 .field textarea{min-height:138px;resize:vertical;}
+.form .req{color:var(--rouge);font-weight:700;}
 .help{display:block;margin-top:6px;color:var(--texte-tert);font-size:.86rem;}
 .notice{padding:16px;border-left:3px solid var(--jaune);background:#fff9dd;color:var(--texte-sec);}
 

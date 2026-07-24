@@ -225,27 +225,13 @@ fnc_render_hero(
 		</section>
 
 		<?php
-		// Informations pratiques de l'edition (Lot 4) : agregat rattache a
-		// l'edition, masque tant qu'aucune rubrique n'est renseignee.
-		$fnc_ec_pratique = fnc_render_practical_info( $fnc_edition );
-		if ( '' !== trim( $fnc_ec_pratique ) ) :
-			?>
-			<section class="section">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Sur place', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Informations pratiques.', 'fnc-wordpress-theme' ); ?></h2>
-						</div>
-					</div>
-					<div class="pract-grid">
-						<?php echo $fnc_ec_pratique; // phpcs:ignore WordPress.Security.EscapeOutput -- markup produit par les renderers de blocs, deja echappe. ?>
-					</div>
-					<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'informations-pratiques' ) ); ?>" style="margin-top:24px;"><?php esc_html_e( 'Toutes les informations pratiques', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
-				</div>
-			</section>
-		<?php endif; ?>
-
+		/*
+		 * Informations pratiques : sur le site reel, elles vivent sur leur page
+		 * dediee (/infos-pratiques), pas sur l'edition en cours. La page Edition
+		 * se termine donc sur l'appel a l'inscription — les infos pratiques
+		 * restent accessibles via la navigation et le pied de page.
+		 */
+		?>
 		<section class="section">
 			<div class="container reading">
 				<h2><?php esc_html_e( 'Inscription', 'fnc-wordpress-theme' ); ?></h2>
@@ -253,8 +239,6 @@ fnc_render_hero(
 			</div>
 		</section>
 	<?php endif; ?>
-
-	<?php fnc_render_cta_band(); ?>
 </main>
 
 <?php get_footer(); ?>

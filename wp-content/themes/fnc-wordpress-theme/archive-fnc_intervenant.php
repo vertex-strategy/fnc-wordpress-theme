@@ -49,8 +49,9 @@ foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 		$fnc_countries[ $fnc_country ] = true;
 	}
 }
-$fnc_countries = array_keys( $fnc_countries );
-sort( $fnc_countries );
+// Ordre editorial des pays (Reglages FNC > Intervenants) ; repli tri
+// alphabetique. Meme logique que countryOrder du vrai site.
+$fnc_countries = fnc_order_countries( array_keys( $fnc_countries ) );
 ?>
 
 <main id="main">
@@ -69,7 +70,7 @@ sort( $fnc_countries );
 					<ul class="flag-frise" aria-label="<?php esc_attr_e( 'Pays représentés', 'fnc-wordpress-theme' ); ?>">
 						<?php foreach ( $fnc_countries as $fnc_country ) : ?>
 							<li class="flag-chip">
-								<?php echo fnc_country_flag_svg( $fnc_country ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit par fnc_country_flag_svg(), valeurs deja echappees. ?>
+								<?php echo fnc_country_flag( $fnc_country ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par fnc_country_flag(). ?>
 								<span><?php echo esc_html( $fnc_country ); ?></span>
 							</li>
 						<?php endforeach; ?>

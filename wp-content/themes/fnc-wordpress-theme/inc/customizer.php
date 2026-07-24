@@ -129,6 +129,101 @@ function fnc_parse_press_contacts( $raw = null ) {
 }
 
 /**
+ * Clé de comparaison d'un nom de pays : insensible à la casse, aux espaces et
+ * aux accents (même tolérance que le vrai site : « Congo » ≡ « congo »).
+ *
+ * @param string $name
+ * @return string
+ */
+function fnc_country_key( $name ) {
+	return remove_accents( mb_strtolower( trim( (string) $name ) ) );
+}
+
+/**
+ * Analyse le réglage « Ordre des pays » (une ligne par pays, format
+ * « Pays | URL du drapeau », la partie drapeau étant optionnelle). L'ordre de
+ * saisie est conservé.
+ *
+ * @param string|null $raw
+ * @return array<int,array{name:string,flag:string}>
+ */
+function fnc_parse_country_order( $raw = null ) {
+	if ( null === $raw ) {
+		$raw = fnc_get_setting( 'country_order', '' );
+	}
+	$entries = array();
+	if ( ! $raw ) {
+		return $entries;
+	}
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $raw ) as $line ) {
+		$line = trim( $line );
+		if ( '' === $line ) {
+			continue;
+		}
+		$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+		if ( '' === $parts[0] ) {
+			continue;
+		}
+		$entries[] = array(
+			'name' => $parts[0],
+			'flag' => isset( $parts[1] ) ? esc_url_raw( $parts[1] ) : '',
+		);
+	}
+	return $entries;
+}
+
+/**
+ * Table drapeau par pays (clé normalisée → URL), issue du réglage d'ordre.
+ *
+ * @return array<string,string>
+ */
+function fnc_country_flag_map() {
+	$map = array();
+	foreach ( fnc_parse_country_order() as $entry ) {
+		if ( $entry['flag'] ) {
+			$map[ fnc_country_key( $entry['name'] ) ] = $entry['flag'];
+		}
+	}
+	return $map;
+}
+
+/**
+ * Réordonne une liste de pays selon l'ordre éditorial : d'abord les pays
+ * listés dans le réglage (dans l'ordre de saisie, s'ils sont présents), puis
+ * les pays restants par ordre alphabétique. Réglage vide → tri alphabétique.
+ *
+ * @param array<int,string> $countries Pays effectivement présents.
+ * @return array<int,string>
+ */
+function fnc_order_countries( array $countries ) {
+	$order = fnc_parse_country_order();
+	if ( empty( $order ) ) {
+		sort( $countries );
+		return $countries;
+	}
+
+	// Index des pays présents par clé normalisée (garde le libellé d'origine).
+	$present = array();
+	foreach ( $countries as $country ) {
+		$present[ fnc_country_key( $country ) ] = $country;
+	}
+
+	$ordered = array();
+	foreach ( $order as $entry ) {
+		$key = fnc_country_key( $entry['name'] );
+		if ( isset( $present[ $key ] ) ) {
+			$ordered[] = $present[ $key ];
+			unset( $present[ $key ] );
+		}
+	}
+
+	$remaining = array_values( $present );
+	sort( $remaining );
+
+	return array_merge( $ordered, $remaining );
+}
+
+/**
  * Sanitize d'un <select> restreint à une liste de valeurs autorisées.
  */
 function fnc_sanitize_choice( $value, $setting ) {
@@ -300,6 +395,26 @@ function fnc_customize_register( $wp_customize ) {
 			'description' => __( 'Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé.', 'fnc-wordpress-theme' ),
 			'section'     => 'fnc_footer',
 			'type'        => 'text',
+		)
+	);
+
+	/* -------------------------------------------------- Intervenants */
+	$wp_customize->add_section(
+		'fnc_speakers',
+		array(
+			'title'       => __( 'Intervenants', 'fnc-wordpress-theme' ),
+			'panel'       => 'fnc_settings',
+			'description' => __( 'Ordonne la frise « Pays représentés » de la page Intervenants. Un pays par ligne, dans l’ordre voulu, avec un drapeau optionnel : « Pays | URL du drapeau ». Les pays non listés apparaissent ensuite, par ordre alphabétique. Vide → tri alphabétique. Sans URL de drapeau, le drapeau intégré est utilisé si le pays est reconnu.', 'fnc-wordpress-theme' ),
+		)
+	);
+	$wp_customize->add_setting( 'fnc_country_order', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_country_order',
+		array(
+			'label'       => __( 'Ordre des pays représentés', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_speakers',
+			'type'        => 'textarea',
+			'input_attrs' => array( 'placeholder' => "Congo\nFrance | https://…/drapeau-fr.svg\nCameroun", 'rows' => 6 ),
 		)
 	);
 

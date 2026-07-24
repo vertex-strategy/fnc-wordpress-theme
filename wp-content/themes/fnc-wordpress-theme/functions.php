@@ -340,6 +340,29 @@ function fnc_country_flag_svg( $country ) {
 }
 
 /**
+ * Drapeau d'un pays : drapeau uploadé (via l'ordre éditorial des Réglages FNC)
+ * prioritaire, repli sur le drapeau SVG intégré. Même logique que le composant
+ * CountryFlag.tsx du vrai site (source éditoriale prioritaire, repli SVG). Sans
+ * l'un ni l'autre, retourne une chaîne vide (seul le nom du pays s'affiche).
+ *
+ * @param string $country
+ * @return string
+ */
+function fnc_country_flag( $country ) {
+	$map = function_exists( 'fnc_country_flag_map' ) ? fnc_country_flag_map() : array();
+	$key = function_exists( 'fnc_country_key' ) ? fnc_country_key( $country ) : strtolower( trim( $country ) );
+
+	if ( ! empty( $map[ $key ] ) ) {
+		return sprintf(
+			'<img class="flag-svg" src="%s" alt="%s" width="28" height="19" loading="lazy" />',
+			esc_url( $map[ $key ] ),
+			esc_attr( $country )
+		);
+	}
+	return fnc_country_flag_svg( $country );
+}
+
+/**
  * Decoupe le champ texte libre `_fnc_speaker_country` (ex. "France / États-Unis")
  * en une liste de pays, meme convention que le site officiel (SpeakersExplorer.tsx).
  */

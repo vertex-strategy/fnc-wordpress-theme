@@ -35,7 +35,7 @@ while ( have_posts() ) :
 	$fnc_s_objectifs = is_array( $fnc_s_objectifs ) ? array_filter( $fnc_s_objectifs ) : array();
 	$fnc_types       = fnc_content_model_session_types();
 
-	fnc_render_hero(
+	fnc_render_pagehead(
 		array(
 			'eyebrow'    => isset( $fnc_types[ $fnc_s_type ] ) ? $fnc_types[ $fnc_s_type ] : __( 'Session', 'fnc-wordpress-theme' ),
 			'title'      => get_the_title(),

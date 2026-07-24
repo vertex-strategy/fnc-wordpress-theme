@@ -40,7 +40,7 @@ while ( have_posts() ) :
 	$fnc_pa_editions = is_array( $fnc_pa_editions ) ? $fnc_pa_editions : array();
 	$fnc_pa_niveaux  = fnc_content_model_partner_niveaux();
 
-	fnc_render_hero(
+	fnc_render_pagehead(
 		array(
 			'eyebrow'    => $fnc_pa_type ? $fnc_pa_type : __( 'Partenaire', 'fnc-wordpress-theme' ),
 			'title'      => get_the_title(),

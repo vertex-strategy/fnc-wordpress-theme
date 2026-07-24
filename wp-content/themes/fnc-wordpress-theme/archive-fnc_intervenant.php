@@ -20,13 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Intervenants', 'fnc-wordpress-theme' ),
 		'title'      => __( 'Les voix du Forum', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Décideurs, chercheurs, entrepreneurs et acteurs de la société civile qui font avancer la réflexion sur le numérique en Afrique centrale.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',
-		'image_alt'  => __( 'Portrait d’un intervenant du Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Décideurs, chercheurs, entrepreneurs et acteurs de la société civile qui font avancer la réflexion sur le numérique en Afrique centrale.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/intervenants.png',
+		'image_alt'  => __( 'Intervenants du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Intervenants', 'fnc-wordpress-theme' ),
 	)
 );

@@ -16,13 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Presse', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Un point d’accès clair pour couvrir le Forum.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'L’Espace presse rassemble uniquement les ressources publiées et les contacts confirmés, afin de faciliter un traitement médiatique fiable.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
-		'image_alt'  => __( 'Documents préparés dans une atmosphère institutionnelle calme', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Espace presse', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Ressources presse, communiqués et contacts confirmés.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/les-publications.png',
+		'image_alt'  => __( 'Espace presse du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Espace presse', 'fnc-wordpress-theme' ),
 	)
 );

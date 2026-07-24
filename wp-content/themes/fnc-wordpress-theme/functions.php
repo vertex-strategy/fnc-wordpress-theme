@@ -330,6 +330,105 @@ function fnc_render_hero( array $args ) {
 }
 
 /**
+ * Héros registre A — .opening : photo plein cadre + Ken Burns + PCB animé.
+ * Pages listing/section et détail d'édition (internal-pages-hero-spec.md §1/§3).
+ * Image = image à la une (pages/fiches) SINON l'image par défaut de la route
+ * passée en 'image'. Le filet PCB anime vient du partial unique hero-pcb.php.
+ *
+ * @param array $args eyebrow, title, intro|lead, image (defaut route), image_alt,
+ *                    breadcrumb (partie après « Accueil · », peut contenir un lien).
+ */
+function fnc_render_opening_hero( array $args ) {
+	$args  = wp_parse_args(
+		$args,
+		array( 'eyebrow' => '', 'title' => '', 'lead' => '', 'intro' => '', 'image' => '', 'image_alt' => '', 'breadcrumb' => '' )
+	);
+	$intro = $args['intro'] ? $args['intro'] : $args['lead'];
+	$image = ( is_singular() && has_post_thumbnail() ) ? get_the_post_thumbnail_url( null, 'full' ) : $args['image'];
+	?>
+	<header class="opening">
+		<img class="media-cover" src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $args['image_alt'] ); ?>" />
+		<div class="ov" aria-hidden="true"></div>
+		<div class="inner">
+			<?php if ( $args['breadcrumb'] ) : ?>
+				<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo wp_kses_post( $args['breadcrumb'] ); ?></p>
+			<?php endif; ?>
+			<?php if ( $args['eyebrow'] ) : ?><span class="eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></span><?php endif; ?>
+			<h1><?php echo esc_html( $args['title'] ); ?></h1>
+			<?php if ( $intro ) : ?><p class="intro"><?php echo esc_html( $intro ); ?></p><?php endif; ?>
+		</div>
+		<?php get_template_part( 'hero-pcb' ); ?>
+	</header>
+	<?php
+}
+
+/**
+ * Héros registre B — .page-head : dégradé navy-deep, sans photo, PCB animé.
+ * Fiches détail (intervenant, session, ressource). Voir spec §4. L'eyebrow est
+ * optionnel (absent sur la fiche intervenant).
+ *
+ * @param array $args eyebrow, title, intro|lead, breadcrumb.
+ */
+function fnc_render_pagehead( array $args ) {
+	$args  = wp_parse_args(
+		$args,
+		array( 'eyebrow' => '', 'title' => '', 'lead' => '', 'intro' => '', 'breadcrumb' => '' )
+	);
+	$intro = $args['intro'] ? $args['intro'] : $args['lead'];
+	?>
+	<header class="page-head">
+		<?php if ( $args['breadcrumb'] ) : ?>
+			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo wp_kses_post( $args['breadcrumb'] ); ?></p>
+		<?php endif; ?>
+		<?php if ( $args['eyebrow'] ) : ?><span class="eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></span><?php endif; ?>
+		<h1><?php echo esc_html( $args['title'] ); ?></h1>
+		<?php if ( $intro ) : ?><p class="intro"><?php echo esc_html( $intro ); ?></p><?php endif; ?>
+		<?php get_template_part( 'hero-pcb' ); ?>
+	</header>
+	<?php
+}
+
+/**
+ * En-tete sobre — registre C (§5 internal-pages-hero-spec) : bandeau lin,
+ * pas de photo, titre navy, filet PCB STATIQUE (traits stroke inline, non
+ * animes, a la difference du filet anime des registres A/B). Utilise par
+ * le-forum et contact ; les pages legales gardent fnc_render_legal_header.
+ */
+function fnc_render_pageheader( $args ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'eyebrow'    => '',
+			'title'      => '',
+			'intro'      => '',
+			'lead'       => '',
+			'breadcrumb' => '',
+		)
+	);
+	$intro = '' !== $args['intro'] ? $args['intro'] : $args['lead'];
+	?>
+	<header class="section" style="padding-top:calc(clamp(64px,9vh,118px) + 60px);position:relative;">
+		<div class="container reading">
+			<?php if ( '' !== $args['breadcrumb'] ) : ?>
+				<p class="breadcrumb" style="color:var(--texte-tert);"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo wp_kses_post( $args['breadcrumb'] ); ?></p>
+			<?php endif; ?>
+			<?php if ( '' !== $args['eyebrow'] ) : ?>
+				<p class="eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></p>
+			<?php endif; ?>
+			<h1 style="font-size:var(--h2);color:var(--navy);"><?php echo esc_html( $args['title'] ); ?></h1>
+			<?php if ( '' !== $intro ) : ?>
+				<p class="intro" style="color:var(--texte-sec);"><?php echo esc_html( $intro ); ?></p>
+			<?php endif; ?>
+			<svg class="pcb pcb--static" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:30px;margin-top:32px;overflow:visible;">
+				<path d="M0 40 H420 l20 -20 H820 l20 20 H1200" fill="none" stroke="var(--rouge)" stroke-width="1.5"/>
+				<path d="M0 20 H300 l24 20 H900 l18 -14 H1200" fill="none" stroke="var(--jaune)" stroke-width="1.5"/>
+			</svg>
+		</div>
+	</header>
+	<?php
+}
+
+/**
  * Bloc d'en-tete sobre pour les pages legales (mentions, confidentialite,
  * CGU), aligne sur le site officiel reel : pas de photo, juste un fil
  * d'ariane, une date de mise a jour et un titre — a la difference du
@@ -342,6 +441,10 @@ function fnc_render_legal_header( $title, $updated_label, $breadcrumb ) {
 			<p class="breadcrumb" style="color:var(--texte-tert);"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo esc_html( $breadcrumb ); ?></p>
 			<p class="eyebrow"><?php echo esc_html( $updated_label ); ?></p>
 			<h1 style="font-size:var(--h2);color:var(--navy);"><?php echo esc_html( $title ); ?></h1>
+			<svg class="pcb pcb--static" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:30px;margin-top:32px;overflow:visible;">
+				<path d="M0 40 H420 l20 -20 H820 l20 20 H1200" fill="none" stroke="var(--rouge)" stroke-width="1.5"/>
+				<path d="M0 20 H300 l24 20 H900 l18 -14 H1200" fill="none" stroke="var(--jaune)" stroke-width="1.5"/>
+			</svg>
 		</div>
 	</header>
 	<?php

@@ -23,13 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Éditions', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Chaque édition laisse une trace.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Rendez-vous après rendez-vous, le Forum construit une mémoire commune du numérique en Afrique centrale. Retrouvez ici les éditions passées, celle en cours et celles à venir.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Éditions', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Archives officielles et éditions publiées du Forum Numérique Congo.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/editions.png',
+		'image_alt'  => __( 'Éditions du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Éditions', 'fnc-wordpress-theme' ),
 	)
 );

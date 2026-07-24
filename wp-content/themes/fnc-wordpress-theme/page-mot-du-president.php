@@ -20,7 +20,7 @@ get_header();
 
 <main id="main">
 	<header class="opening" style="min-height:56vh;">
-		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="" aria-hidden="true" />
+		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-pupitre.png' ); ?>" alt="" aria-hidden="true" />
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <a href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?></a> · <?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></p>
@@ -28,6 +28,7 @@ get_header();
 			<h1><?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></h1>
 			<p class="intro"><?php esc_html_e( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais. »', 'fnc-wordpress-theme' ); ?></p>
 		</div>
+		<?php get_template_part( 'hero-pcb' ); ?>
 	</header>
 
 	<section class="section president-block">

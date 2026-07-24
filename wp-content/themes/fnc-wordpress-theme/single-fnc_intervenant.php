@@ -28,9 +28,9 @@ while ( have_posts() ) :
 	$fnc_i_profils = get_the_terms( $fnc_i_id, 'fnc_profil' );
 	$fnc_i_name    = fnc_speaker_display_name( $fnc_i_id );
 
-	fnc_render_hero(
+	fnc_render_pagehead(
 		array(
-			'eyebrow'    => ( $fnc_i_profils && ! is_wp_error( $fnc_i_profils ) ) ? $fnc_i_profils[0]->name : __( 'Intervenant', 'fnc-wordpress-theme' ),
+			'eyebrow'    => '', // spec §4 : la fiche intervenant n'a pas d'eyebrow dans le hero.
 			'title'      => $fnc_i_name,
 			'lead'       => trim( implode( ' · ', array_filter( array( $fnc_i_org, $fnc_i_country ) ) ) ),
 			'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',

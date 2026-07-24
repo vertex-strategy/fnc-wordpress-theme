@@ -31,7 +31,7 @@ while ( have_posts() ) :
 	$fnc_p_tags   = get_the_terms( $fnc_p_id, 'fnc_tag' );
 	$fnc_is_media = in_array( $fnc_p_type, array( 'video', 'interview' ), true );
 
-	fnc_render_hero(
+	fnc_render_pagehead(
 		array(
 			'eyebrow'    => isset( $fnc_p_types[ $fnc_p_type ] ) ? $fnc_p_types[ $fnc_p_type ] : __( 'Ressource', 'fnc-wordpress-theme' ),
 			'title'      => get_the_title(),

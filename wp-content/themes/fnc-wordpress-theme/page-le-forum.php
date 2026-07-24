@@ -37,20 +37,16 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 ?>
 
 <main id="main">
-	<header class="opening">
-		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/la-salle.png' ); ?>" alt="<?php esc_attr_e( 'Salle plénière du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" />
-		<div class="ov" aria-hidden="true"></div>
-		<div class="inner">
-			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php the_title(); ?></p>
-			<span class="eyebrow"><?php esc_html_e( 'Ce que nous sommes', 'fnc-wordpress-theme' ); ?></span>
-			<h1><?php esc_html_e( 'Une institution,', 'fnc-wordpress-theme' ); ?><br><?php esc_html_e( 'pas un évènement.', 'fnc-wordpress-theme' ); ?></h1>
-			<p class="intro"><?php esc_html_e( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »', 'fnc-wordpress-theme' ); ?></p>
-		</div>
-		<svg class="pcb" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
-			<path class="r" d="M0 40 H420 l20 -20 H820 l20 20 H1200"/>
-			<path class="y" d="M0 20 H300 l24 20 H900 l18 -14 H1200"/>
-		</svg>
-	</header>
+	<?php
+	fnc_render_pageheader(
+		array(
+			'eyebrow'    => __( 'Ce que nous sommes', 'fnc-wordpress-theme' ),
+			'title'      => __( 'Le Forum', 'fnc-wordpress-theme' ),
+			'intro'      => __( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »', 'fnc-wordpress-theme' ),
+			'breadcrumb' => __( 'Le Forum', 'fnc-wordpress-theme' ),
+		)
+	);
+	?>
 
 	<!-- Le mot du président -->
 	<section class="section">

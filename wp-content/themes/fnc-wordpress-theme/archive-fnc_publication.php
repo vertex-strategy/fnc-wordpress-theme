@@ -19,14 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Ressources', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Une bibliothèque pour prolonger le dialogue.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Rapports, actes, communiqués : les traces écrites du Forum se rassemblent ici, à mesure qu’elles sont validées.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
-		'breadcrumb' => __( 'Publications', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Ressources', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Ressources éditoriales, communiqués et documents officiels du Forum Numérique Congo.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/les-publications.png',
+		'image_alt'  => __( 'Ressources du Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'breadcrumb' => __( 'Ressources', 'fnc-wordpress-theme' ),
 	)
 );
 

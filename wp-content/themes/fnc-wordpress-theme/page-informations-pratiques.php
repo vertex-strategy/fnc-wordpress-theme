@@ -20,13 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Préparez votre venue', 'fnc-wordpress-theme' ),
 		'title'      => __( 'Informations pratiques', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles.', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-badge.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'image_alt'  => __( 'Informations pratiques du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Informations pratiques', 'fnc-wordpress-theme' ),
 	)
 );

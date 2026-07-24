@@ -79,13 +79,13 @@ if ( $fnc_edition ) {
 	$fnc_speaker_ids = array_unique( $fnc_speaker_ids );
 }
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Édition en cours', 'fnc-wordpress-theme' ),
-		'title'      => $fnc_edition ? get_the_title( $fnc_edition ) : __( 'Édition à confirmer', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Trois jours de travail collectif. Voici tout ce qu’il faut pour suivre l’édition en préparation.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Édition 2027 — Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Tout pour participer à l’édition en cours du Forum Numérique Congo.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/edition-en-cours.jpeg',
+		'image_alt'  => __( 'Édition 2027 du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 	)
 );

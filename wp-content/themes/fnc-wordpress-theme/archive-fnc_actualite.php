@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Actualités', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Les temps forts du Forum, au fil de l’eau.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Annonces, comptes rendus et informations publiés lorsqu’ils sont validés.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Actualités', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Brèves de la vie du Forum entre les éditions.', 'fnc-wordpress-theme' ),
+		'image'      => get_template_directory_uri() . '/assets/images/le-fleuve.png',
+		'image_alt'  => __( 'Actualités du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Actualités', 'fnc-wordpress-theme' ),
 	)
 );

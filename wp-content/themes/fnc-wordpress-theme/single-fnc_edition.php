@@ -40,7 +40,7 @@ while ( have_posts() ) :
 		}
 	}
 
-	fnc_render_hero(
+	fnc_render_opening_hero(
 		array(
 			'eyebrow'    => $fnc_ed_year ? $fnc_ed_year : __( 'Édition', 'fnc-wordpress-theme' ),
 			'title'      => get_the_title(),

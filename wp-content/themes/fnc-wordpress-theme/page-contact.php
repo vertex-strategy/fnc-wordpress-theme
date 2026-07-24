@@ -34,13 +34,10 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	return;
 }
 
-fnc_render_hero(
+fnc_render_pageheader(
 	array(
-		'eyebrow'    => __( 'Contact', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Une porte d’entrée claire, pour chaque demande.', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Contact', 'fnc-wordpress-theme' ),
 		'lead'       => __( 'Partenariat, presse, intervention ou simple question : dites-nous ce qui vous amène, nous orientons votre demande vers le bon interlocuteur.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-pupitre.png',
-		'image_alt'  => __( 'Prise de parole au Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Contact', 'fnc-wordpress-theme' ),
 	)
 );

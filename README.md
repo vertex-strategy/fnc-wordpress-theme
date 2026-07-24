@@ -327,7 +327,7 @@ La liste des sessions d'un intervenant s'appuyait d'abord sur une `meta_query` `
 
 **Vérifié en conditions réelles** : les trois fiches rendues sur des contenus de test ; distinction modérateur/intervenant confirmée sur deux fiches (mention « En modération » présente sur la session modérée, absente sur celle où la personne est simple intervenante) ; le correctif valide justement le cas où l'identifiant était stocké en chaîne ; pays multiples décomposés en deux drapeaux ; action de ressource testée dans ses deux variantes (Télécharger avec fichier, Regarder pour une vidéo, avec `target="_blank"` et `rel="noopener noreferrer"`) ; masquage vérifié sur les données absentes ; aucune erreur console ni fatal/notice/warning.
 
-**Reste connu** : `fnc_partenaire` et `fnc_actualite` n'ont pas encore de fiche individuelle. Ces deux types ne sont liés depuis aucun gabarit aujourd'hui (les partenaires s'affichent en logos non cliquables), l'impact est donc nul en navigation — mais leurs URLs restent publiques.
+Les fiches `single-fnc_partenaire.php` et `single-fnc_actualite.php` complètent la couverture : **partenaire** (logo, type d'engagement, description, site web, éditions associées avec niveau) et **actualité** (contenu éditorial en colonne de lecture, date, catégories/étiquettes). Vérifiées en conditions réelles (HTTP 200, type « Sponsor » + niveau « Principal » sur le partenaire de test, contenu et date sur l'actualité de test, aucune erreur PHP).
 
 ## Ordre des pays & drapeaux uploadables (Lot 7)
 
@@ -420,4 +420,4 @@ Réconciliation avec les surfaces administrables du vrai site (sept lots, tous l
 
 Reste :
 - **Multilinguisme** (Polylang ou équivalent GPL) — dépendance ciblée actée à l'ADR-007, non encore intégrée.
-- **Dette connue** : `fnc_partenaire` et `fnc_actualite` n'ont pas de fiche individuelle (aucun lien vers eux aujourd'hui, mais leurs URLs restent publiques) ; le champ fichier des ressources et les drapeaux de pays sont des champs URL (téléversement via la Médiathèque puis copie de l'adresse) plutôt que des sélecteurs de média, par choix « zéro dépendance / zéro JS d'administration ».
+- **Dette connue** : le champ fichier des ressources et les drapeaux de pays sont des champs URL (téléversement via la Médiathèque puis copie de l'adresse) plutôt que des sélecteurs de média, par choix « zéro dépendance / zéro JS d'administration » ; la traduction éditoriale du contenu de démonstration reste à saisir (la brique technique est en place).

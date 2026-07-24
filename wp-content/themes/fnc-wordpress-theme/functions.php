@@ -341,7 +341,7 @@ function fnc_render_hero( array $args ) {
 function fnc_render_opening_hero( array $args ) {
 	$args  = wp_parse_args(
 		$args,
-		array( 'eyebrow' => '', 'title' => '', 'lead' => '', 'intro' => '', 'image' => '', 'image_alt' => '', 'breadcrumb' => '' )
+		array( 'eyebrow' => '', 'title' => '', 'title_b' => '', 'lead' => '', 'intro' => '', 'image' => '', 'image_alt' => '', 'breadcrumb' => '' )
 	);
 	$intro = $args['intro'] ? $args['intro'] : $args['lead'];
 	$image = ( is_singular() && has_post_thumbnail() ) ? get_the_post_thumbnail_url( null, 'full' ) : $args['image'];
@@ -354,7 +354,7 @@ function fnc_render_opening_hero( array $args ) {
 				<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo wp_kses_post( $args['breadcrumb'] ); ?></p>
 			<?php endif; ?>
 			<?php if ( $args['eyebrow'] ) : ?><span class="eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></span><?php endif; ?>
-			<h1><?php echo esc_html( $args['title'] ); ?></h1>
+			<h1><?php echo esc_html( $args['title'] ); if ( $args['title_b'] ) { echo '<br />' . esc_html( $args['title_b'] ); } ?></h1>
 			<?php if ( $intro ) : ?><p class="intro"><?php echo esc_html( $intro ); ?></p><?php endif; ?>
 		</div>
 		<?php get_template_part( 'hero-pcb' ); ?>

@@ -2,7 +2,7 @@
 
 Thème WordPress + plugin de contenu, dérivés de la maquette statique `docs/mockups/homepage-v2` du dépôt [`forum-numerique-congo`](https://github.com/vertex-strategy/forum-numerique-congo).
 
-**Statut : étapes 2 et 3 du plan de mise en œuvre implémentées** (thème + plugin scaffoldés). L'étape 4 (branchement thème ↔ plugin) reste à faire.
+**Statut : parité fonctionnelle atteinte avec les surfaces administrables du vrai site.** Le thème et le plugin sont branchés (étape 4 terminée), et les sept lots d'administrabilité sont livrés : réglages globaux (Customizer), composition de pages par blocs, page d'accueil éditable (héros image/vidéo/slider), informations pratiques rattachées à l'édition, SEO par page, fiches individuelles des contenus, et ordre des pays + drapeaux uploadables. Multilinguisme (Polylang) non encore intégré. Détail de chaque lot dans les sections dédiées ci-dessous.
 
 ## Positionnement
 
@@ -329,14 +329,38 @@ La liste des sessions d'un intervenant s'appuyait d'abord sur une `meta_query` `
 
 **Reste connu** : `fnc_partenaire` et `fnc_actualite` n'ont pas encore de fiche individuelle. Ces deux types ne sont liés depuis aucun gabarit aujourd'hui (les partenaires s'affichent en logos non cliquables), l'impact est donc nul en navigation — mais leurs URLs restent publiques.
 
+## Ordre des pays & drapeaux uploadables (Lot 7)
+
+Pendant WordPress du réglage `countryOrder` (onglet « Intervenants » du Global Settings du vrai site). La frise « Pays représentés » de l'annuaire était triée par ordre alphabétique et n'utilisait que les 11 drapeaux SVG intégrés en dur. Elle est désormais éditorialisable via **Personnaliser → Réglages FNC → Intervenants** :
+
+- **Ordre** : un pays par ligne, dans l'ordre voulu. Les pays effectivement présents et listés apparaissent d'abord dans cet ordre, puis les pays restants par ordre alphabétique. Réglage vide → tri alphabétique (comportement historique).
+- **Drapeau uploadable** : chaque ligne accepte une URL de drapeau après un `|` (« Congo | https://…/drapeau.svg »). Le drapeau uploadé est prioritaire, avec repli sur le SVG intégré si le pays est reconnu, sinon seul le nom s'affiche — **exactement la logique du composant `CountryFlag.tsx`** du vrai site (source éditoriale prioritaire, repli SVG). Champ URL plutôt que sélecteur de média, cohérent avec le reste du thème (zéro dépendance, pas de JS d'administration).
+
+Le rapprochement des noms est **insensible à la casse, aux espaces et aux accents** (même tolérance que le vrai site) : « congo » dans le réglage ordonne bien le pays affiché « Congo ». Le nouveau helper `fnc_country_flag()` remplace les appels directs à `fnc_country_flag_svg()` dans l'annuaire et la fiche intervenant.
+
+**Vérifié en conditions réelles** : état par défaut (tri alphabétique, 3 drapeaux SVG intégrés) ; ordre éditorial appliqué (Congo remonté en tête, pays non listé rejeté en fin de liste dans l'ordre alphabétique) ; drapeau uploadé rendu en `<img>` pour la France là où les autres restent en SVG intégré ; tolérance de casse confirmée (« congo »/« CAMEROUN » ordonnent les libellés « Congo »/« Cameroun ») ; section Customizer enregistrée (HTTP 200) ; helper utilisé aussi sur la fiche intervenant ; aucune erreur console ni fatal/notice/warning.
+
 ## Multilinguisme
 
 Non encore intégré dans ce scaffold. Décision actée (ADR-007, Décision 2 amendée) : Polylang (ou équivalent gratuit/GPL) sera ajouté comme dépendance ciblée, réservée exclusivement au multilinguisme — à confirmer précisément lors du branchement thème ↔ plugin (étape 4).
 
 ## Prochaines étapes
 
-Voir le plan de mise en œuvre de l'ADR-007 :
+Plan de mise en œuvre de l'ADR-007 :
 1. ~~Créer le dépôt~~ (fait)
-2. ~~Scaffolder la structure thème~~ (fait — page d'accueil uniquement, seule page committée/validée dans `homepage-v2` à ce jour)
-3. ~~Scaffolder le plugin~~ (fait — CPTs, taxonomies, relations en meta ; Polylang non encore intégré)
-4. Brancher le thème sur les données du plugin — **amorcé** : `archive-fnc_edition.php` et `archive-fnc_publication.php` interrogent déjà les vraies données ; reste à faire pour `front-page.php` (éditions/sessions/intervenants sur l'accueil) et à intégrer Polylang
+2. ~~Scaffolder la structure thème~~ (fait)
+3. ~~Scaffolder le plugin~~ (fait — CPTs, taxonomies, relations en meta)
+4. ~~Brancher le thème sur les données du plugin~~ (fait — tous les gabarits interrogent les vraies données)
+
+Réconciliation avec les surfaces administrables du vrai site (sept lots, tous livrés) :
+1. ~~Réglages globaux (Customizer)~~
+2. ~~Composition de pages par blocs Gutenberg~~
+3. ~~Page d'accueil éditable (héros image/vidéo/slider)~~
+4. ~~Informations pratiques rattachées à l'édition~~
+5. ~~SEO par page~~
+6. ~~Fiches individuelles des contenus~~
+7. ~~Ordre des pays + drapeaux uploadables~~
+
+Reste :
+- **Multilinguisme** (Polylang ou équivalent GPL) — dépendance ciblée actée à l'ADR-007, non encore intégrée.
+- **Dette connue** : `fnc_partenaire` et `fnc_actualite` n'ont pas de fiche individuelle (aucun lien vers eux aujourd'hui, mais leurs URLs restent publiques) ; le champ fichier des ressources et les drapeaux de pays sont des champs URL (téléversement via la Médiathèque puis copie de l'adresse) plutôt que des sélecteurs de média, par choix « zéro dépendance / zéro JS d'administration ».

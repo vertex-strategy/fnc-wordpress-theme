@@ -20,6 +20,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+/*
+ * Composition par blocs : des que l'editorial compose cette page avec des
+ * blocs FNC, ce gabarit s'efface au profit du contenu compose (editable et
+ * reagenceable) ; sinon il conserve son contenu de demonstration (comportement
+ * inchange). Meme convention que page.php et page-le-forum.php.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
+
 fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Partenaires', 'fnc-wordpress-theme' ),

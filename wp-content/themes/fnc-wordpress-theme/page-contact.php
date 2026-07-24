@@ -36,9 +36,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 
 fnc_render_pageheader(
 	array(
-		'title'      => __( 'Contact', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Partenariat, presse, intervention ou simple question : dites-nous ce qui vous amène, nous orientons votre demande vers le bon interlocuteur.', 'fnc-wordpress-theme' ),
-		'breadcrumb' => __( 'Contact', 'fnc-wordpress-theme' ),
+		'title' => __( 'Contact', 'fnc-wordpress-theme' ),
 	)
 );
 

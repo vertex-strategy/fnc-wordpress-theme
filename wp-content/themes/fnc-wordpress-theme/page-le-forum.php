@@ -40,10 +40,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	<?php
 	fnc_render_pageheader(
 		array(
-			'eyebrow'    => __( 'Ce que nous sommes', 'fnc-wordpress-theme' ),
-			'title'      => __( 'Le Forum', 'fnc-wordpress-theme' ),
-			'intro'      => __( '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »', 'fnc-wordpress-theme' ),
-			'breadcrumb' => __( 'Le Forum', 'fnc-wordpress-theme' ),
+			'title' => __( 'Le Forum', 'fnc-wordpress-theme' ),
 		)
 	);
 	?>

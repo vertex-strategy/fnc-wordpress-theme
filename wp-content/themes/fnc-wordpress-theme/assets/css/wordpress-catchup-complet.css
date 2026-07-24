@@ -268,6 +268,55 @@ textarea {
 @keyframes dad-trace { to { stroke-dashoffset: 0; } }
 
 /* ---------- PAGE HEADER (pages intérieures) ---------- */
+/* Hero .opening : hauteur alignee sur le site reel (54dvh au lieu de 78vh) —
+   les heros etaient trop hauts. Charge apres style.css, donc l'emporte. */
+.opening {
+  min-height: 54dvh;
+  padding: clamp(116px, 14vh, 156px) var(--marge) clamp(40px, 5vh, 64px);
+}
+
+/* Registre C — en-tete sobre (calque PageHeader.tsx du site reel) : bandeau
+   lin, titre navy, filet PCB STATIQUE en pied. Pas de photo, pas d'eyebrow,
+   pas de fil d'ariane : uniquement le titre (et, en repli legal, une meta). */
+.page-header {
+  position: relative;
+  overflow: hidden;
+  background: var(--linen);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(56px, 8vh, 80px) var(--marge);
+}
+.page-header .container {
+  position: relative;
+  z-index: 2;
+}
+.page-header h1 {
+  max-width: 56rem;
+  font-size: var(--display-page);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--navy-deep);
+}
+.page-header .lead {
+  margin-top: 20px;
+  max-width: 42rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--texte-sec);
+}
+.page-header .pcb-static {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46px;
+  width: 100%;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
 .page-head {
   padding: clamp(120px, 18vh, 200px) var(--marge) clamp(48px, 7vh, 90px);
   background: linear-gradient(180deg, var(--navy-deep), #12143f);

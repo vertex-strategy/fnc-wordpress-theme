@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.5.0' );
+define( 'FNC_THEME_VERSION', '0.5.1' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -398,56 +398,49 @@ function fnc_render_pageheader( $args ) {
 	$args = wp_parse_args(
 		$args,
 		array(
-			'eyebrow'    => '',
-			'title'      => '',
-			'intro'      => '',
-			'lead'       => '',
-			'breadcrumb' => '',
+			'title'       => '',
+			'description' => '',
+			'intro'       => '',
+			'lead'        => '',
 		)
 	);
-	$intro = '' !== $args['intro'] ? $args['intro'] : $args['lead'];
+	$desc = '';
+	foreach ( array( 'description', 'intro', 'lead' ) as $fnc_k ) {
+		if ( '' !== $args[ $fnc_k ] ) {
+			$desc = $args[ $fnc_k ];
+			break;
+		}
+	}
 	?>
-	<header class="section" style="padding-top:calc(clamp(64px,9vh,118px) + 60px);position:relative;">
-		<div class="container reading">
-			<?php if ( '' !== $args['breadcrumb'] ) : ?>
-				<p class="breadcrumb" style="color:var(--texte-tert);"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo wp_kses_post( $args['breadcrumb'] ); ?></p>
+	<header class="page-header">
+		<div class="container">
+			<h1><?php echo esc_html( $args['title'] ); ?></h1>
+			<?php if ( '' !== $desc ) : ?>
+				<p class="lead"><?php echo esc_html( $desc ); ?></p>
 			<?php endif; ?>
-			<?php if ( '' !== $args['eyebrow'] ) : ?>
-				<p class="eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></p>
-			<?php endif; ?>
-			<h1 style="font-size:var(--h2);color:var(--navy);"><?php echo esc_html( $args['title'] ); ?></h1>
-			<?php if ( '' !== $intro ) : ?>
-				<p class="intro" style="color:var(--texte-sec);"><?php echo esc_html( $intro ); ?></p>
-			<?php endif; ?>
-			<svg class="pcb pcb--static" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:30px;margin-top:32px;overflow:visible;">
-				<path d="M0 40 H420 l20 -20 H820 l20 20 H1200" fill="none" stroke="var(--rouge)" stroke-width="1.5"/>
-				<path d="M0 20 H300 l24 20 H900 l18 -14 H1200" fill="none" stroke="var(--jaune)" stroke-width="1.5"/>
-			</svg>
 		</div>
+		<svg class="pcb-static" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+			<path d="M0 40 H420 l20 -20 H820 l20 20 H1200" fill="none" stroke="var(--rouge)" stroke-width="2"/>
+			<path d="M0 20 H300 l24 20 H900 l18 -14 H1200" fill="none" stroke="var(--jaune)" stroke-width="2"/>
+		</svg>
 	</header>
 	<?php
 }
 
 /**
  * Bloc d'en-tete sobre pour les pages legales (mentions, confidentialite,
- * CGU), aligne sur le site officiel reel : pas de photo, juste un fil
- * d'ariane, une date de mise a jour et un titre — a la difference du
- * bloc "hero" utilise par les autres pages interieures.
+ * CGU) : meme registre C que le-forum/contact (PageHeader du site reel),
+ * mais avec la date de mise a jour affichee en meta sous le titre.
+ * $breadcrumb est conserve pour compatibilite d'appel mais n'est plus rendu
+ * (le PageHeader reel n'affiche pas de fil d'ariane).
  */
-function fnc_render_legal_header( $title, $updated_label, $breadcrumb ) {
-	?>
-	<header class="section" style="padding-top:calc(clamp(64px,9vh,118px) + 60px);">
-		<div class="container reading">
-			<p class="breadcrumb" style="color:var(--texte-tert);"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <?php echo esc_html( $breadcrumb ); ?></p>
-			<p class="eyebrow"><?php echo esc_html( $updated_label ); ?></p>
-			<h1 style="font-size:var(--h2);color:var(--navy);"><?php echo esc_html( $title ); ?></h1>
-			<svg class="pcb pcb--static" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:30px;margin-top:32px;overflow:visible;">
-				<path d="M0 40 H420 l20 -20 H820 l20 20 H1200" fill="none" stroke="var(--rouge)" stroke-width="1.5"/>
-				<path d="M0 20 H300 l24 20 H900 l18 -14 H1200" fill="none" stroke="var(--jaune)" stroke-width="1.5"/>
-			</svg>
-		</div>
-	</header>
-	<?php
+function fnc_render_legal_header( $title, $updated_label, $breadcrumb = '' ) {
+	fnc_render_pageheader(
+		array(
+			'title'       => $title,
+			'description' => $updated_label,
+		)
+	);
 }
 
 /**

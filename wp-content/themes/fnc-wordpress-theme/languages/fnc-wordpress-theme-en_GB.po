@@ -51,7 +51,6 @@ msgstr "Announcements, reports and information published once validated."
 #: archive-fnc_actualite.php:28
 #: archive-fnc_edition.php:32
 #: archive-fnc_publication.php:28
-#: archive-fnc_session.php:28
 #: page-edition-en-cours.php:88
 #: page-informations-pratiques.php:29
 #: page-inscription.php:30
@@ -84,6 +83,7 @@ msgstr "News will appear here as soon as it is published."
 
 #: archive-fnc_actualite.php:82
 #: archive-fnc_intervenant.php:179
+#: archive-fnc_session.php:126
 #: front-page.php:55
 #: front-page.php:113
 #: front-page.php:161
@@ -215,44 +215,19 @@ msgstr "No validated publication"
 msgid "L’état vide reste sobre, sans faux contenu."
 msgstr "The empty state stays understated, with no fake content."
 
-#: archive-fnc_session.php:24
-msgid "Agenda"
-msgstr "Agenda"
-
-#: archive-fnc_session.php:25
-msgid "Un programme lisible avant, pendant et après."
-msgstr "A programme that reads clearly before, during and after."
-
-#: archive-fnc_session.php:26
-msgid "Chaque session devient un nœud de navigation vers édition, intervenants et ressources."
-msgstr "Each session becomes a navigation node to its edition, speakers and resources."
-
-#: archive-fnc_session.php:29
-#: archive-fnc_session.php:56
+#: archive-fnc_session.php:22
+#: archive-fnc_session.php:27
 #: footer.php:56
 #: front-page.php:155
 #: single-fnc_edition.php:123
 msgid "Programme"
 msgstr "Programme"
 
-#: archive-fnc_session.php:41
+#: archive-fnc_session.php:37
 #: page-edition-en-cours.php:73
 msgid "Jour à confirmer"
 msgstr "Day to be confirmed"
 
-#: archive-fnc_session.php:57
-msgid "Sessions"
-msgstr "Sessions"
-
-#: archive-fnc_session.php:62
-msgid "Journées"
-msgstr "Days"
-
-#: archive-fnc_session.php:86
-msgid "Modérateur"
-msgstr "Moderator"
-
-#: archive-fnc_session.php:89
 #: front-page.php:171
 #: page-edition-en-cours.php:181
 #: single-fnc_edition.php:141
@@ -260,12 +235,11 @@ msgstr "Moderator"
 msgid "Salle à confirmer"
 msgstr "Room to be confirmed"
 
-#: archive-fnc_session.php:96
+#: archive-fnc_session.php:117
 #: page-edition-en-cours.php:187
 msgid "Aucune session publiée"
 msgstr "No published session"
 
-#: archive-fnc_session.php:97
 #: page-edition-en-cours.php:188
 msgid "Les données finales proviennent du CMS."
 msgstr "The final data comes from the CMS."
@@ -424,6 +398,7 @@ msgstr "its digital future."
 msgid "Depuis Brazzaville. Depuis le Bassin du Congo. Une parole ancrée, pas importée."
 msgstr "From Brazzaville. From the Congo Basin. A voice rooted here, not imported."
 
+#: archive-fnc_session.php:26
 #: front-page.php:153
 msgid "Pupitre du Forum Numérique Congo sur la scène plénière"
 msgstr "Lectern of the Forum Numérique Congo on the plenary stage"
@@ -481,6 +456,7 @@ msgstr "The next edition"
 msgid "Le Forum Numérique Congo commence dans"
 msgstr "The Forum Numérique Congo starts in"
 
+#: archive-fnc_session.php:73
 #: front-page.php:281
 #: page-edition-en-cours.php:148
 msgid "jours"
@@ -1549,6 +1525,7 @@ msgid "sessions"
 msgstr "sessions"
 
 #: archive-fnc_intervenant.php:69
+#: archive-fnc_session.php:71
 #: page-edition-en-cours.php:144
 msgid "intervenants"
 msgstr "speakers"
@@ -2135,6 +2112,7 @@ msgstr "Who takes part"
 msgid "Modérateur et intervenants."
 msgstr "Moderator and speakers."
 
+#: archive-fnc_session.php:104
 #: single-fnc_session.php:117
 msgid "Modération"
 msgstr "Moderation"
@@ -2155,6 +2133,7 @@ msgstr "See the whole programme"
 msgid "s’ouvre dans un nouvel onglet"
 msgstr "opens in a new tab"
 
+#: archive-fnc_session.php:127
 #: front-page.php:63
 #: front-page.php:286
 #: page-le-forum.php:134
@@ -2484,10 +2463,12 @@ msgid "Portrait d’un intervenant du Forum Numérique Congo"
 msgstr "Portrait of a Forum Numérique Congo speaker"
 
 #: archive-fnc_intervenant.php:66
+#: archive-fnc_session.php:69
 msgid "Programme provisoire"
 msgstr "Provisional programme"
 
 #: archive-fnc_intervenant.php:70
+#: archive-fnc_session.php:72
 msgid "pays représentés"
 msgstr "countries represented"
 
@@ -2518,3 +2499,23 @@ msgstr "Would you like to contribute to the programme? Speaker applications will
 #: archive-fnc_intervenant.php:180
 msgid "Nous contacter"
 msgstr "Contact us"
+
+#: archive-fnc_session.php:23
+msgid "Deux jours de dialogue"
+msgstr "Two days of dialogue"
+
+#: archive-fnc_session.php:24
+msgid "Sessions plénières, tables rondes et ateliers. Le programme détaillé sera publié après validation des intervenants et des horaires."
+msgstr "Plenary sessions, panels and workshops. The detailed programme will be published once speakers and schedules are confirmed."
+
+#: archive-fnc_session.php:118
+msgid "Le programme détaillé sera publié après validation des intervenants et des horaires."
+msgstr "The detailed programme will be published once speakers and schedules are confirmed."
+
+#: archive-fnc_session.php:125
+msgid "Réservez votre place"
+msgstr "Reserve your seat"
+
+#: archive-fnc_session.php:126
+msgid "L’accès aux sessions se fait sur inscription. L’ouverture des inscriptions sera annoncée prochainement."
+msgstr "Access to sessions is by registration. Registration opening will be announced soon."

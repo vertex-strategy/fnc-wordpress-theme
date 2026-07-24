@@ -1,16 +1,14 @@
 <?php
 /**
- * Archive du custom post type "fnc_session".
+ * Archive du custom post type "fnc_session" — le Programme.
  *
- * Porte docs/mockups/homepage-v2/programme.html a l'origine (contenu
- * genere par site.js: programmePage()). Regroupement par jour avec
- * ancres de navigation, aligne sur le site officiel reel
- * (localhost:3000/fr/programme), suite a l'amendement de la Decision 1
- * de l'ADR-007 : la maquette seule ne montrait qu'une liste plate de
- * sessions d'exemple, alors que le site officiel structure deja son
- * agenda par journee. Contenu de demonstration reste fictif — jamais
- * les vraies identites de responsables publics visibles sur le site
- * officiel.
+ * Alignee sur la page reelle localhost:3000/fr/programme : heros « Deux jours de
+ * dialogue », panorama (badge « Programme provisoire » + statistiques
+ * intervenants / pays / jours), puis l'agenda groupe par journee
+ * (.programme-detail > .agenda-day > .sess), et le callout « Réservez votre
+ * place ». Le regroupement se fait sur _fnc_session_jour, dans l'ordre de la
+ * requete principale. Contenu de demonstration (jamais les vraies identites du
+ * site officiel).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,86 +19,115 @@ get_header();
 
 fnc_render_hero(
 	array(
-		'eyebrow'    => __( 'Agenda', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Un programme lisible avant, pendant et après.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Chaque session devient un nœud de navigation vers édition, intervenants et ressources.', 'fnc-wordpress-theme' ),
+		'eyebrow'    => __( 'Programme', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Deux jours de dialogue', 'fnc-wordpress-theme' ),
+		'lead'       => __( 'Sessions plénières, tables rondes et ateliers. Le programme détaillé sera publié après validation des intervenants et des horaires.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-pupitre.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'image_alt'  => __( 'Pupitre du Forum Numérique Congo sur la scène plénière', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Programme', 'fnc-wordpress-theme' ),
 	)
 );
 
-// Regroupement par jour (post meta _fnc_session_jour), en conservant
-// l'ordre de premiere apparition (generalement l'ordre chronologique
-// des sessions dans la boucle principale).
+// Regroupement des sessions par journee (ordre de premiere apparition).
 $fnc_sessions_by_day = array();
 if ( have_posts() ) {
 	while ( have_posts() ) {
 		the_post();
 		$fnc_jour = get_post_meta( get_the_ID(), '_fnc_session_jour', true );
 		$fnc_jour = $fnc_jour ? $fnc_jour : __( 'Jour à confirmer', 'fnc-wordpress-theme' );
-		if ( ! isset( $fnc_sessions_by_day[ $fnc_jour ] ) ) {
-			$fnc_sessions_by_day[ $fnc_jour ] = array();
-		}
 		$fnc_sessions_by_day[ $fnc_jour ][] = get_the_ID();
 	}
 	wp_reset_postdata();
+	// Journees dans l'ordre (« Jour 1 » avant « Jour 2 »…), la requete principale
+	// ne garantissant pas l'ordre chronologique entre journees.
+	ksort( $fnc_sessions_by_day, SORT_NATURAL | SORT_FLAG_CASE );
 }
+
+// Statistiques du panorama : intervenants, pays representes, journees.
+$fnc_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
+$fnc_countries   = array();
+foreach ( $fnc_speaker_ids as $fnc_sid ) {
+	foreach ( fnc_split_countries( get_post_meta( $fnc_sid, '_fnc_speaker_country', true ) ) as $fnc_c ) {
+		$fnc_countries[ $fnc_c ] = true;
+	}
+}
+$fnc_stat_speakers = count( $fnc_speaker_ids );
+$fnc_stat_pays     = count( $fnc_countries );
+$fnc_stat_jours    = count( $fnc_sessions_by_day );
+
+$fnc_session_types = fnc_content_model_session_types();
+// Types stylables par le kit (.type.t-*) ; « debat » retombe sur t-session.
+$fnc_type_class = static function ( $slug ) {
+	$known = array( 'allocution', 'inaugurale', 'interview', 'table-ronde', 'session', 'pause', 'logistique', 'cloture' );
+	return in_array( $slug, $known, true ) ? 't-' . $slug : 't-session';
+};
 ?>
 
 <main id="main">
-	<section class="section linen">
+	<section class="section linen programme-panorama">
 		<div class="container">
-			<div class="section-head">
-				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Programme', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Sessions', 'fnc-wordpress-theme' ); ?></h2>
-				</div>
+			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+			<div class="stat-line">
+				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>
+				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_pays ) ); ?></b><span><?php esc_html_e( 'pays représentés', 'fnc-wordpress-theme' ); ?></span></div>
+				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_jours ) ); ?></b><span><?php esc_html_e( 'jours', 'fnc-wordpress-theme' ); ?></span></div>
 			</div>
+		</div>
+	</section>
 
+	<section class="section programme-detail">
+		<div class="container">
 			<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
-				<nav class="toolbar" aria-label="<?php esc_attr_e( 'Journées', 'fnc-wordpress-theme' ); ?>">
-					<?php foreach ( array_keys( $fnc_sessions_by_day ) as $fnc_i => $fnc_jour_label ) : ?>
-						<a class="chip" href="#fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_jour_label ) ); ?>" aria-pressed="<?php echo 0 === $fnc_i ? 'true' : 'false'; ?>"><?php echo esc_html( $fnc_jour_label ); ?></a>
-					<?php endforeach; ?>
-				</nav>
-
-				<?php $fnc_session_types = fnc_content_model_session_types(); ?>
+				<?php $fnc_day_index = 0; ?>
 				<?php foreach ( $fnc_sessions_by_day as $fnc_jour_label => $fnc_session_ids ) : ?>
-					<h3 id="fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_jour_label ) ); ?>" style="margin:36px 0 18px;color:var(--navy);"><?php echo esc_html( $fnc_jour_label ); ?></h3>
-					<div class="agenda">
+					<?php $fnc_day_index++; ?>
+					<div class="agenda-day" id="fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_jour_label ) ); ?>">
+						<h2><?php echo esc_html( $fnc_jour_label ); ?></h2>
+						<div class="rule" aria-hidden="true"></div>
 						<?php foreach ( $fnc_session_ids as $fnc_session_id ) : ?>
 							<?php
-							$fnc_type       = get_post_meta( $fnc_session_id, '_fnc_session_type', true );
-							$fnc_no_badge   = in_array( $fnc_type, array( 'pause', 'logistique' ), true );
-							$fnc_moderator  = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
+							$fnc_type      = get_post_meta( $fnc_session_id, '_fnc_session_type', true );
+							$fnc_time      = get_post_meta( $fnc_session_id, '_fnc_session_time', true );
+							$fnc_room      = get_post_meta( $fnc_session_id, '_fnc_session_room', true );
+							$fnc_moderator = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
 							?>
-							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>">
-								<span class="time"><?php echo esc_html( get_post_meta( $fnc_session_id, '_fnc_session_time', true ) ?: '—' ); ?></span>
-								<span>
-									<strong><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></strong>
-									<?php if ( $fnc_type && ! $fnc_no_badge && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
-										<?php fnc_render_badge( $fnc_session_types[ $fnc_type ] ); ?>
+							<div class="sess">
+								<div class="when"><?php echo esc_html( $fnc_time ? $fnc_time : '—' ); ?></div>
+								<div>
+									<?php if ( $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
+										<span class="type <?php echo esc_attr( $fnc_type_class( $fnc_type ) ); ?>"><?php echo esc_html( $fnc_session_types[ $fnc_type ] ); ?></span>
 									<?php endif; ?>
-									<?php if ( $fnc_moderator > 0 ) : ?>
-										<span class="person-meta"><?php esc_html_e( 'Modérateur', 'fnc-wordpress-theme' ); ?> : <?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?></span>
+									<div class="s-title"><a href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a></div>
+									<?php if ( $fnc_moderator > 0 || $fnc_room ) : ?>
+										<div class="s-mod">
+											<?php if ( $fnc_moderator > 0 ) : ?>
+												<?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?> : <?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?>
+											<?php endif; ?>
+											<?php if ( $fnc_moderator > 0 && $fnc_room ) : ?> · <?php endif; ?>
+											<?php echo esc_html( $fnc_room ); ?>
+										</div>
 									<?php endif; ?>
-								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session_id, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
-							</a>
+								</div>
+							</div>
 						<?php endforeach; ?>
 					</div>
 				<?php endforeach; ?>
 			<?php else : ?>
 				<div class="empty" role="status">
 					<h3><?php esc_html_e( 'Aucune session publiée', 'fnc-wordpress-theme' ); ?></h3>
-					<p><?php esc_html_e( 'Les données finales proviennent du CMS.', 'fnc-wordpress-theme' ); ?></p>
+					<p><?php esc_html_e( 'Le programme détaillé sera publié après validation des intervenants et des horaires.', 'fnc-wordpress-theme' ); ?></p>
 				</div>
 			<?php endif; ?>
 		</div>
 	</section>
 
-	<?php fnc_render_cta_band(); ?>
+	<section class="callout">
+		<h2><?php esc_html_e( 'Réservez votre place', 'fnc-wordpress-theme' ); ?></h2>
+		<p><?php esc_html_e( 'L’accès aux sessions se fait sur inscription. L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'Réserver votre place', 'fnc-wordpress-theme' ); ?>
+			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+		</a>
+	</section>
 </main>
 
 <?php get_footer(); ?>

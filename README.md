@@ -333,6 +333,8 @@ Les **logos partenaires sont cliquables** vers leur fiche, sur la page Partenair
 
 **Conflit de routage corrigé (plugin v0.4.1)** : le CPT `fnc_partenaire` avait `has_archive` **et** le slug `partenaires`, en conflit avec la Page « partenaires » (page-partenaires.php) de même slug — après régénération des permaliens, l'archive du CPT masquait la Page. L'archive est désactivée (`has_archive => false`) : la Page reste la vue liste, les fiches restent servies via le rewrite (`/partenaires/{slug}/`). Aucun code du thème ne référençait l'archive du CPT.
 
+Une **vérification systématique des slugs** a confirmé que `partenaires` était le seul conflit Page ↔ archive de CPT (aucune autre Page ne partage le slug d'un CPT, aucune collision entre CPT). Elle a aussi révélé que `fnc_actualite` avait une archive sans gabarit dédié : `archive-fnc_actualite.php` est ajouté (hero, cartes date/titre/catégorie/extrait liées à la fiche, pagination, état vide honnête), complétant les archives des 6 CPT. Les nouvelles chaînes d'interface (archive actualités et fiches single partenaire/actualité) sont incluses dans les traductions.
+
 ## Ordre des pays & drapeaux uploadables (Lot 7)
 
 Pendant WordPress du réglage `countryOrder` (onglet « Intervenants » du Global Settings du vrai site). La frise « Pays représentés » de l'annuaire était triée par ordre alphabétique et n'utilisait que les 11 drapeaux SVG intégrés en dur. Elle est désormais éditorialisable via **Personnaliser → Réglages FNC → Intervenants** :
@@ -354,7 +356,7 @@ Toutes les chaînes d'interface passent déjà par `__()`/`esc_html_e()`. Une tr
 
 | Domaine | Fichiers | Chaînes traduites |
 |---|---|---|
-| Thème (`fnc-wordpress-theme`) | `languages/*.pot/.po/.mo/.l10n.php` | 492 |
+| Thème (`fnc-wordpress-theme`) | `languages/*.pot/.po/.mo/.l10n.php` | 509 |
 | Plugin (`fnc-content-model`) | `languages/*.pot/.po/.mo/.l10n.php` | 98 (dont les types de session/publication, statuts d'édition, niveaux de partenariat visibles en front) |
 
 L'anglais est en_GB (et non en_US) : WordPress traite en_US comme la langue source « sans traduction », or les chaînes sources du thème sont en **français**. en_GB est donc la locale anglaise fonctionnelle ; les traductions sont d'ailleurs rédigées en anglais britannique.

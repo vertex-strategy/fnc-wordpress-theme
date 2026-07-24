@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-24T07:36:50+00:00\n"
+"POT-Creation-Date: 2026-07-24T09:24:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fnc-wordpress-theme\n"
@@ -34,6 +34,77 @@ msgstr ""
 msgid "Vertex Strategy"
 msgstr ""
 
+#: archive-fnc_actualite.php:24
+#: archive-fnc_actualite.php:29
+#: archive-fnc_actualite.php:39
+msgid "Actualités"
+msgstr ""
+
+#: archive-fnc_actualite.php:25
+msgid "Les temps forts du Forum, au fil de l’eau."
+msgstr ""
+
+#: archive-fnc_actualite.php:26
+msgid "Annonces, comptes rendus et informations publiés lorsqu’ils sont validés."
+msgstr ""
+
+#: archive-fnc_actualite.php:28
+#: archive-fnc_edition.php:32
+#: archive-fnc_intervenant.php:31
+#: archive-fnc_publication.php:28
+#: archive-fnc_session.php:28
+#: page-contact.php:46
+#: page-edition-en-cours.php:88
+#: page-informations-pratiques.php:29
+#: page-inscription.php:30
+msgid "Image éditoriale institutionnelle du Forum"
+msgstr ""
+
+#: archive-fnc_actualite.php:40
+msgid "Dernières publications."
+msgstr ""
+
+#: archive-fnc_actualite.php:62
+msgid "Lire"
+msgstr ""
+
+#: archive-fnc_actualite.php:73
+msgid "Précédent"
+msgstr ""
+
+#: archive-fnc_actualite.php:74
+msgid "Suivant"
+msgstr ""
+
+#: archive-fnc_actualite.php:80
+msgid "Aucune actualité publiée"
+msgstr ""
+
+#: archive-fnc_actualite.php:81
+msgid "Les actualités apparaîtront ici dès leur publication."
+msgstr ""
+
+#: archive-fnc_actualite.php:82
+#: front-page.php:55
+#: front-page.php:113
+#: front-page.php:161
+#: front-page.php:177
+#: front-page.php:217
+#: page-contact.php:74
+#: page-contact.php:76
+#: page-edition-en-cours.php:252
+#: page-espace-presse.php:86
+#: page-espace-presse.php:131
+#: page-informations-pratiques.php:70
+#: page-inscription.php:69
+#: page-inscription.php:77
+#: page-le-forum.php:120
+#: page-mot-du-president.php:39
+#: single-fnc_intervenant.php:51
+#: single-fnc_publication.php:67
+msgid "À confirmer"
+msgstr ""
+
 #: archive-fnc_edition.php:28
 msgid "Mémoire"
 msgstr ""
@@ -46,20 +117,9 @@ msgstr ""
 msgid "Chaque édition relie bilan, ressources, galerie et partenaires si ces contenus sont validés."
 msgstr ""
 
-#: archive-fnc_edition.php:32
-#: archive-fnc_intervenant.php:31
-#: archive-fnc_publication.php:28
-#: archive-fnc_session.php:28
-#: page-contact.php:46
-#: page-edition-en-cours.php:88
-#: page-informations-pratiques.php:29
-#: page-inscription.php:30
-msgid "Image éditoriale institutionnelle du Forum"
-msgstr ""
-
 #: archive-fnc_edition.php:33
 #: footer.php:59
-#: functions.php:100
+#: functions.php:140
 msgid "Éditions"
 msgstr ""
 
@@ -98,7 +158,7 @@ msgstr ""
 
 #: archive-fnc_intervenant.php:32
 #: footer.php:53
-#: inc/customizer.php:405
+#: inc/customizer.php:491
 msgid "Intervenants"
 msgstr ""
 
@@ -151,7 +211,7 @@ msgstr ""
 #: archive-fnc_publication.php:24
 #: footer.php:57
 #: footer.php:60
-#: functions.php:101
+#: functions.php:141
 #: single-fnc_edition.php:166
 msgid "Ressources"
 msgstr ""
@@ -260,7 +320,7 @@ msgid "Les données finales proviennent du CMS."
 msgstr ""
 
 #: footer.php:15
-#: inc/customizer.php:383
+#: inc/customizer.php:469
 msgid "Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville."
 msgstr ""
 
@@ -269,7 +329,7 @@ msgid "Réseaux sociaux"
 msgstr ""
 
 #: footer.php:48
-#: functions.php:98
+#: functions.php:138
 #: page-mot-du-president.php:31
 msgid "Le Forum"
 msgstr ""
@@ -279,7 +339,7 @@ msgid "Présentation"
 msgstr ""
 
 #: footer.php:51
-#: functions.php:99
+#: functions.php:139
 #: page-edition-en-cours.php:84
 #: page-edition-en-cours.php:89
 msgid "Édition en cours"
@@ -297,7 +357,7 @@ msgstr ""
 
 #: footer.php:66
 #: footer.php:68
-#: functions.php:103
+#: functions.php:143
 #: page-contact.php:42
 #: page-contact.php:47
 msgid "Contact"
@@ -331,26 +391,6 @@ msgstr ""
 
 #: front-page.php:55
 msgid "Dates"
-msgstr ""
-
-#: front-page.php:55
-#: front-page.php:113
-#: front-page.php:161
-#: front-page.php:177
-#: front-page.php:217
-#: page-contact.php:74
-#: page-contact.php:76
-#: page-edition-en-cours.php:252
-#: page-espace-presse.php:86
-#: page-espace-presse.php:131
-#: page-informations-pratiques.php:70
-#: page-inscription.php:69
-#: page-inscription.php:77
-#: page-le-forum.php:120
-#: page-mot-du-president.php:39
-#: single-fnc_intervenant.php:51
-#: single-fnc_publication.php:67
-msgid "À confirmer"
 msgstr ""
 
 #: front-page.php:59
@@ -509,44 +549,44 @@ msgstr ""
 msgid "Demander votre accréditation"
 msgstr ""
 
-#: functions.php:52
+#: functions.php:92
 #: header.php:48
 msgid "Navigation principale"
 msgstr ""
 
-#: functions.php:53
+#: functions.php:93
 #: header.php:76
 msgid "Navigation mobile"
 msgstr ""
 
-#: functions.php:102
+#: functions.php:142
 #: page-partenaires.php:27
 #: page-partenaires.php:32
 msgid "Partenaires"
 msgstr ""
 
-#: functions.php:148
-#: functions.php:169
+#: functions.php:208
+#: functions.php:231
 msgid "Langue"
 msgstr ""
 
-#: functions.php:207
-#: functions.php:233
+#: functions.php:269
+#: functions.php:295
 #: inc/blocks.php:619
 #: page-le-forum.php:44
 #: page-mot-du-president.php:31
 msgid "Accueil"
 msgstr ""
 
-#: functions.php:247
+#: functions.php:309
 msgid "Poursuivre le parcours."
 msgstr ""
 
-#: functions.php:248
+#: functions.php:310
 msgid "Les contenus non confirmés restent masqués ou signalés."
 msgstr ""
 
-#: functions.php:249
+#: functions.php:311
 msgid "Contacter l’équipe"
 msgstr ""
 
@@ -749,7 +789,8 @@ msgid "Objectifs"
 msgstr ""
 
 #: inc/blocks.php:117
-#: inc/customizer.php:265
+#: inc/customizer.php:49
+#: inc/customizer.php:351
 msgid "Description"
 msgstr ""
 
@@ -806,7 +847,8 @@ msgid "Héros secondaire avec image de fond et CTA."
 msgstr ""
 
 #: inc/blocks.php:162
-#: inc/customizer.php:264
+#: inc/customizer.php:48
+#: inc/customizer.php:350
 msgid "Sous-titre"
 msgstr ""
 
@@ -912,7 +954,8 @@ msgid "Adresse, détails d’accès et plan. La carte interactive n’est charg�
 msgstr ""
 
 #: inc/blocks.php:268
-#: inc/customizer.php:326
+#: inc/customizer.php:51
+#: inc/customizer.php:412
 msgid "Adresse"
 msgstr ""
 
@@ -1069,152 +1112,164 @@ msgstr ""
 msgid "Fichier à venir"
 msgstr ""
 
-#: inc/customizer.php:246
-msgid "Réglages FNC"
-msgstr ""
-
-#: inc/customizer.php:247
-msgid "Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur."
-msgstr ""
-
-#: inc/customizer.php:256
-msgid "Identité"
-msgstr ""
-
-#: inc/customizer.php:262
-msgid "Nom officiel"
-msgstr ""
-
-#: inc/customizer.php:263
+#: inc/customizer.php:47
+#: inc/customizer.php:349
 msgid "Slogan"
 msgstr ""
 
-#: inc/customizer.php:266
+#: inc/customizer.php:50
+#: inc/customizer.php:352
 msgid "Présentation courte"
 msgstr ""
 
-#: inc/customizer.php:285
+#: inc/customizer.php:52
+#: inc/customizer.php:474
+msgid "Texte du footer"
+msgstr ""
+
+#: inc/customizer.php:53
+#: inc/customizer.php:480
+msgid "Mention de copyright"
+msgstr ""
+
+#: inc/customizer.php:54
+msgid "Titre SEO par défaut"
+msgstr ""
+
+#: inc/customizer.php:55
+msgid "Description SEO par défaut"
+msgstr ""
+
+#: inc/customizer.php:332
+msgid "Réglages FNC"
+msgstr ""
+
+#: inc/customizer.php:333
+msgid "Identité, logos, coordonnées, footer et valeurs SEO par défaut du portail. Administrable sans développeur."
+msgstr ""
+
+#: inc/customizer.php:342
+msgid "Identité"
+msgstr ""
+
+#: inc/customizer.php:348
+msgid "Nom officiel"
+msgstr ""
+
+#: inc/customizer.php:371
 msgid "Logos & icônes"
 msgstr ""
 
-#: inc/customizer.php:287
+#: inc/customizer.php:373
 msgid "Le favicon se règle via Réglages généraux → Icône du site (fonction WordPress native)."
 msgstr ""
 
-#: inc/customizer.php:292
+#: inc/customizer.php:378
 msgid "Logo principal"
 msgstr ""
 
-#: inc/customizer.php:293
+#: inc/customizer.php:379
 msgid "Logo clair"
 msgstr ""
 
-#: inc/customizer.php:294
+#: inc/customizer.php:380
 msgid "Logo sombre"
 msgstr ""
 
-#: inc/customizer.php:314
+#: inc/customizer.php:400
 msgid "Communication"
 msgstr ""
 
-#: inc/customizer.php:320
+#: inc/customizer.php:406
 msgid "Email de contact"
 msgstr ""
 
-#: inc/customizer.php:323
+#: inc/customizer.php:409
 msgid "Téléphone"
 msgstr ""
 
 #. translators: %s: nom de la plateforme sociale.
-#: inc/customizer.php:344
+#: inc/customizer.php:430
 #, php-format
 msgid "URL %s"
 msgstr ""
 
-#: inc/customizer.php:355
-#: inc/customizer.php:364
+#: inc/customizer.php:441
+#: inc/customizer.php:450
 msgid "Contacts presse"
 msgstr ""
 
-#: inc/customizer.php:357
+#: inc/customizer.php:443
 msgid "Un contact par ligne, champs séparés par « | » dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone. Affichés uniquement lorsqu’ils sont renseignés — ne jamais saisir de données fictives."
 msgstr ""
 
-#: inc/customizer.php:375
+#: inc/customizer.php:461
 msgid "Footer"
 msgstr ""
 
-#: inc/customizer.php:377
+#: inc/customizer.php:463
 msgid "L’année courante est ajoutée automatiquement à la mention de copyright."
 msgstr ""
 
-#: inc/customizer.php:388
-msgid "Texte du footer"
-msgstr ""
-
-#: inc/customizer.php:394
-msgid "Mention de copyright"
-msgstr ""
-
-#: inc/customizer.php:395
+#: inc/customizer.php:481
 msgid "Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé."
 msgstr ""
 
-#: inc/customizer.php:407
+#: inc/customizer.php:493
 msgid "Ordonne la frise « Pays représentés » de la page Intervenants. Un pays par ligne, dans l’ordre voulu, avec un drapeau optionnel : « Pays | URL du drapeau ». Les pays non listés apparaissent ensuite, par ordre alphabétique. Vide → tri alphabétique. Sans URL de drapeau, le drapeau intégré est utilisé si le pays est reconnu."
 msgstr ""
 
-#: inc/customizer.php:414
+#: inc/customizer.php:500
 msgid "Ordre des pays représentés"
 msgstr ""
 
-#: inc/customizer.php:425
+#: inc/customizer.php:511
 msgid "SEO par défaut"
 msgstr ""
 
-#: inc/customizer.php:433
+#: inc/customizer.php:519
 msgid "Titre par défaut"
 msgstr ""
 
-#: inc/customizer.php:434
+#: inc/customizer.php:520
 #: inc/seo.php:91
 msgid "Recommandé : 50–60 caractères."
 msgstr ""
 
-#: inc/customizer.php:443
+#: inc/customizer.php:529
 msgid "Description par défaut"
 msgstr ""
 
-#: inc/customizer.php:444
+#: inc/customizer.php:530
 #: inc/seo.php:97
 msgid "Recommandé : 150–160 caractères."
 msgstr ""
 
-#: inc/customizer.php:455
+#: inc/customizer.php:541
 msgid "Image OpenGraph par défaut"
 msgstr ""
 
-#: inc/customizer.php:456
+#: inc/customizer.php:542
 msgid "Visuel de partage social (1200×630 recommandé)."
 msgstr ""
 
-#: inc/customizer.php:466
+#: inc/customizer.php:552
 msgid "Type de Twitter Card"
 msgstr ""
 
-#: inc/customizer.php:470
+#: inc/customizer.php:556
 msgid "Grande image"
 msgstr ""
 
-#: inc/customizer.php:471
+#: inc/customizer.php:557
 msgid "Résumé"
 msgstr ""
 
-#: inc/customizer.php:479
+#: inc/customizer.php:565
 msgid "Directive robots par défaut"
 msgstr ""
 
-#: inc/customizer.php:480
+#: inc/customizer.php:566
 msgid "Ex. « index, follow » ou « noindex, nofollow »."
 msgstr ""
 
@@ -2024,19 +2079,20 @@ msgstr ""
 msgid "Partenaires confirmés."
 msgstr ""
 
-#: page-partenaires.php:129
+#: page-partenaires.php:136
 msgid "Éditions associées"
 msgstr ""
 
-#: page-partenaires.php:146
+#: page-partenaires.php:153
+#: single-fnc_partenaire.php:69
 msgid "Visiter le site"
 msgstr ""
 
-#: page-partenaires.php:157
+#: page-partenaires.php:164
 msgid "Aucun partenaire confirmé"
 msgstr ""
 
-#: page-partenaires.php:158
+#: page-partenaires.php:165
 msgid "Les partenaires apparaîtront ici dès leur confirmation."
 msgstr ""
 
@@ -2067,6 +2123,10 @@ msgstr ""
 msgid "Mise à jour : %s"
 msgstr ""
 
+#: single-fnc_actualite.php:66
+msgid "Toutes les actualités"
+msgstr ""
+
 #: single-fnc_edition.php:45
 #: single-fnc_publication.php:83
 #: single-fnc_session.php:94
@@ -2094,6 +2154,7 @@ msgid "Profil"
 msgstr ""
 
 #: single-fnc_intervenant.php:97
+#: single-fnc_partenaire.php:87
 #: single-fnc_publication.php:77
 #: single-fnc_session.php:78
 msgid "Type"
@@ -2113,6 +2174,26 @@ msgstr ""
 
 #: single-fnc_intervenant.php:173
 msgid "Tous les intervenants"
+msgstr ""
+
+#: single-fnc_partenaire.php:45
+msgid "Partenaire"
+msgstr ""
+
+#: single-fnc_partenaire.php:84
+msgid "Engagement"
+msgstr ""
+
+#: single-fnc_partenaire.php:102
+msgid "Engagements"
+msgstr ""
+
+#: single-fnc_partenaire.php:103
+msgid "Éditions associées."
+msgstr ""
+
+#: single-fnc_partenaire.php:123
+msgid "Tous les partenaires"
 msgstr ""
 
 #: single-fnc_publication.php:36

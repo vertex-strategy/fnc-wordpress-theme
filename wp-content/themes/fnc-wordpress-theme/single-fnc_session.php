@@ -2,14 +2,13 @@
 /**
  * Fiche d'une session (single-fnc_session.php).
  *
- * Comble un manque : les liens du programme (archive des sessions, page
- * Edition en cours, fiche d'edition) retombaient sur index.php, qui n'affiche
- * qu'un extrait — la fiche etait donc quasi vide.
+ * Structure alignee sur le site reel (/programme/[slug]) : hero .page-head
+ * (type + jour/horaire/salle), puis un ARTICLE en colonne unique sur fond lin :
+ * ligne meta -> Description (.prose-legal) -> Objectifs -> Intervenants
+ * (.spk-grid : moderateur + intervenants) -> Tags -> Ressources.
  *
- * Une session est une vue de son edition (invariant du vrai site) : on affiche
- * son rattachement, son type, son horaire, sa salle, son moderateur et ses
- * intervenants — en distinguant bien moderateur et intervenants, comme le
- * fait le vrai site. Chaque element est masque si la donnee n'existe pas.
+ * Une session est une vue de son edition (invariant du vrai site). Chaque bloc
+ * est masque si la donnee n'existe pas.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,6 +16,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
+
+/**
+ * Rendu d'une carte .spk (grille d'intervenants), portrait soumis a la RÈGLE 7.
+ */
+if ( ! function_exists( 'fnc_render_spk_card' ) ) {
+	function fnc_render_spk_card( $speaker_id, $kicker = '' ) {
+		$org = get_post_meta( $speaker_id, '_fnc_speaker_org', true );
+		$country = get_post_meta( $speaker_id, '_fnc_speaker_country', true );
+		?>
+		<a class="spk" href="<?php echo esc_url( get_permalink( $speaker_id ) ); ?>">
+			<?php if ( $kicker ) : ?><span class="cat"><?php echo esc_html( $kicker ); ?></span><?php endif; ?>
+			<div class="ph">
+				<?php
+				$portrait = function_exists( 'fnc_speaker_portrait' )
+					? fnc_speaker_portrait( $speaker_id, 'medium', array( 'alt' => fnc_speaker_display_name( $speaker_id ) ) )
+					: '';
+				if ( $portrait ) {
+					echo $portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+				} else {
+					printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+				}
+				?>
+			</div>
+			<div class="n"><?php echo esc_html( fnc_speaker_display_name( $speaker_id ) ); ?></div>
+			<?php if ( $org ) : ?><div class="r"><?php echo esc_html( $org ); ?></div><?php endif; ?>
+			<?php if ( $country ) : ?><span class="c"><?php echo esc_html( $country ); ?></span><?php endif; ?>
+		</a>
+		<?php
+	}
+}
 
 while ( have_posts() ) :
 	the_post();
@@ -33,6 +62,7 @@ while ( have_posts() ) :
 	$fnc_s_speakers  = is_array( $fnc_s_speakers ) ? array_map( 'intval', $fnc_s_speakers ) : array();
 	$fnc_s_objectifs = get_post_meta( $fnc_s_id, '_fnc_session_objectives', true );
 	$fnc_s_objectifs = is_array( $fnc_s_objectifs ) ? array_filter( $fnc_s_objectifs ) : array();
+	$fnc_s_tags      = get_the_terms( $fnc_s_id, 'fnc_tag' );
 	$fnc_types       = fnc_content_model_session_types();
 
 	fnc_render_pagehead(
@@ -48,140 +78,110 @@ while ( have_posts() ) :
 	?>
 
 	<main id="main">
-		<section class="section">
-			<div class="container">
-				<div class="split">
-					<div>
-						<?php if ( get_the_content() ) : ?>
-							<div class="reading"><?php the_content(); ?></div>
-						<?php endif; ?>
-
-						<?php if ( ! empty( $fnc_s_objectifs ) ) : ?>
-							<h2 style="font-size:1.4rem;margin-top:32px;"><?php esc_html_e( 'Objectifs', 'fnc-wordpress-theme' ); ?></h2>
-							<ul class="pract-list" style="margin-top:14px;">
-								<?php foreach ( $fnc_s_objectifs as $fnc_obj ) : ?>
-									<li><?php echo esc_html( $fnc_obj ); ?></li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-
-						<?php if ( $fnc_s_note ) : ?>
-							<p class="frise-note" style="margin-top:24px;"><?php echo esc_html( $fnc_s_note ); ?></p>
-						<?php endif; ?>
-					</div>
-
-					<div>
-						<article class="card fnc-card">
-							<p class="card-kicker"><?php esc_html_e( 'Repères', 'fnc-wordpress-theme' ); ?></p>
-							<dl class="pract-contacts" style="margin-top:14px;">
-								<?php if ( isset( $fnc_types[ $fnc_s_type ] ) ) : ?>
-									<dt><?php esc_html_e( 'Type', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( $fnc_types[ $fnc_s_type ] ); ?></dd>
-								<?php endif; ?>
-								<?php if ( $fnc_s_jour ) : ?>
-									<dt><?php esc_html_e( 'Jour', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( $fnc_s_jour ); ?></dd>
-								<?php endif; ?>
-								<?php if ( $fnc_s_time ) : ?>
-									<dt><?php esc_html_e( 'Horaire', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( $fnc_s_time ); ?></dd>
-								<?php endif; ?>
-								<?php if ( $fnc_s_room ) : ?>
-									<dt><?php esc_html_e( 'Salle', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( $fnc_s_room ); ?></dd>
-								<?php endif; ?>
-								<?php if ( $fnc_s_edition > 0 ) : ?>
-									<dt><?php esc_html_e( 'Édition', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><a href="<?php echo esc_url( get_permalink( $fnc_s_edition ) ); ?>"><?php echo esc_html( get_the_title( $fnc_s_edition ) ); ?></a></dd>
-								<?php endif; ?>
-							</dl>
-						</article>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<?php if ( $fnc_s_moderator > 0 || ! empty( $fnc_s_speakers ) ) : ?>
-			<section class="section linen">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Qui intervient', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Modérateur et intervenants.', 'fnc-wordpress-theme' ); ?></h2>
-						</div>
-					</div>
-
-					<?php if ( $fnc_s_moderator > 0 ) : ?>
-						<div class="grid grid-3" style="margin-bottom:18px;">
-							<article class="card fnc-card">
-								<p class="card-kicker"><?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?></p>
-								<h3><a href="<?php echo esc_url( get_permalink( $fnc_s_moderator ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_s_moderator ) ); ?></a></h3>
-								<?php $fnc_mod_meta = fnc_speaker_meta_line( $fnc_s_moderator ); ?>
-								<?php if ( $fnc_mod_meta ) : ?>
-									<span class="person-meta"><?php echo esc_html( $fnc_mod_meta ); ?></span>
-								<?php endif; ?>
-							</article>
-						</div>
-					<?php endif; ?>
-
-					<?php if ( ! empty( $fnc_s_speakers ) ) : ?>
-						<div class="grid grid-3">
-							<?php foreach ( $fnc_s_speakers as $fnc_sp_id ) : ?>
-								<article class="card fnc-card">
-									<p class="card-kicker"><?php esc_html_e( 'Intervenant', 'fnc-wordpress-theme' ); ?></p>
-									<h3><a href="<?php echo esc_url( get_permalink( $fnc_sp_id ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></a></h3>
-									<?php $fnc_sp_meta = fnc_speaker_meta_line( $fnc_sp_id ); ?>
-									<?php if ( $fnc_sp_meta ) : ?>
-										<span class="person-meta"><?php echo esc_html( $fnc_sp_meta ); ?></span>
-									<?php endif; ?>
-								</article>
-							<?php endforeach; ?>
-						</div>
-					<?php endif; ?>
-				</div>
-			</section>
-		<?php endif; ?>
-
-		<?php
-		// Ressources rattachees a la meme edition (le modele ne lie pas les
-		// ressources a une session : on propose donc celles de l'edition).
-		$fnc_s_resources = $fnc_s_edition > 0
-			? get_posts(
-				array(
-					'post_type'      => 'fnc_publication',
-					'posts_per_page' => 3,
-					'meta_key'       => '_fnc_publication_edition',
-					'meta_value'     => $fnc_s_edition,
-				)
-			)
-			: array();
-		if ( ! empty( $fnc_s_resources ) ) :
-			$fnc_pub_types = fnc_content_model_publication_types();
-			?>
-			<section class="section">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Pour aller plus loin', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Ressources de cette édition.', 'fnc-wordpress-theme' ); ?></h2>
-						</div>
-					</div>
-					<div class="grid grid-3">
-						<?php foreach ( $fnc_s_resources as $fnc_sr ) : ?>
-							<?php $fnc_sr_type = get_post_meta( $fnc_sr->ID, '_fnc_publication_type', true ); ?>
-							<article class="card fnc-card">
-								<p class="card-kicker"><?php echo esc_html( isset( $fnc_pub_types[ $fnc_sr_type ] ) ? $fnc_pub_types[ $fnc_sr_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
-								<h3><a href="<?php echo esc_url( get_permalink( $fnc_sr ) ); ?>"><?php echo esc_html( get_the_title( $fnc_sr ) ); ?></a></h3>
-							</article>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</section>
-		<?php endif; ?>
-
 		<section class="section linen">
-			<div class="container">
-				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>"><?php esc_html_e( 'Voir tout le programme', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+			<div class="container reading">
+
+				<div class="session-meta" style="display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.9rem;color:var(--texte-sec);">
+					<?php if ( isset( $fnc_types[ $fnc_s_type ] ) ) : ?><span><?php echo esc_html( $fnc_types[ $fnc_s_type ] ); ?></span><?php endif; ?>
+					<?php if ( $fnc_s_jour ) : ?><span><?php echo esc_html( $fnc_s_jour ); ?></span><?php endif; ?>
+					<?php if ( $fnc_s_time ) : ?><span><?php echo esc_html( $fnc_s_time ); ?></span><?php endif; ?>
+					<?php if ( $fnc_s_room ) : ?><span><?php echo esc_html( $fnc_s_room ); ?></span><?php endif; ?>
+					<?php if ( $fnc_s_edition > 0 ) : ?>
+						<span><?php esc_html_e( 'Édition', 'fnc-wordpress-theme' ); ?> · <a href="<?php echo esc_url( get_permalink( $fnc_s_edition ) ); ?>" style="font-weight:600;color:var(--navy-deep);text-decoration:underline;text-underline-offset:4px;"><?php echo esc_html( get_the_title( $fnc_s_edition ) ); ?></a></span>
+					<?php endif; ?>
+				</div>
+				<?php if ( $fnc_s_note ) : ?>
+					<p style="margin-top:10px;font-size:.9rem;font-style:italic;color:var(--texte-sec);"><?php echo esc_html( $fnc_s_note ); ?></p>
+				<?php endif; ?>
+
+				<div class="person-detail__block">
+					<p class="page-eyebrow text-navy"><?php esc_html_e( 'Description', 'fnc-wordpress-theme' ); ?></p>
+					<?php if ( trim( get_the_content() ) ) : ?>
+						<div class="prose-legal" style="margin-top:16px;max-width:42rem;"><?php the_content(); ?></div>
+					<?php else : ?>
+						<p class="help" style="margin-top:16px;"><?php esc_html_e( 'Le descriptif sera publié dès sa validation.', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
+					<?php endif; ?>
+				</div>
+
+				<?php if ( ! empty( $fnc_s_objectifs ) ) : ?>
+					<div class="person-detail__block">
+						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Objectifs', 'fnc-wordpress-theme' ); ?></p>
+						<ol style="margin-top:16px;max-width:42rem;list-style:none;padding:0;display:grid;gap:12px;">
+							<?php foreach ( $fnc_s_objectifs as $fnc_oi => $fnc_obj ) : ?>
+								<li style="display:flex;gap:16px;line-height:1.7;">
+									<span aria-hidden="true" style="font-family:var(--serif);font-weight:500;color:var(--rouge);"><?php echo esc_html( ( $fnc_oi + 1 ) . '.' ); ?></span>
+									<span><?php echo esc_html( $fnc_obj ); ?></span>
+								</li>
+							<?php endforeach; ?>
+						</ol>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( $fnc_s_moderator > 0 || ! empty( $fnc_s_speakers ) ) : ?>
+					<div class="person-detail__block">
+						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Intervenants', 'fnc-wordpress-theme' ); ?></p>
+						<?php if ( $fnc_s_moderator > 0 ) : ?>
+							<p style="margin-top:12px;font-size:.9rem;color:var(--texte-sec);">
+								<?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?> ·
+								<a href="<?php echo esc_url( get_permalink( $fnc_s_moderator ) ); ?>" style="font-weight:600;color:var(--navy-deep);text-decoration:underline;text-underline-offset:4px;"><?php echo esc_html( fnc_speaker_display_name( $fnc_s_moderator ) ); ?></a>
+							</p>
+						<?php endif; ?>
+						<?php if ( ! empty( $fnc_s_speakers ) ) : ?>
+							<div class="spk-grid" style="margin-top:20px;">
+								<?php foreach ( $fnc_s_speakers as $fnc_sp_id ) : ?>
+									<?php fnc_render_spk_card( $fnc_sp_id ); ?>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( $fnc_s_tags && ! is_wp_error( $fnc_s_tags ) ) : ?>
+					<div class="person-detail__block">
+						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Tags', 'fnc-wordpress-theme' ); ?></p>
+						<ul style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;">
+							<?php foreach ( $fnc_s_tags as $fnc_tag ) : ?>
+								<li><span class="badge"><?php echo esc_html( $fnc_tag->name ); ?></span></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
+				<?php
+				// Ressources rattachees a la meme edition (le modele ne lie pas les
+				// ressources a une session : on propose donc celles de l'edition).
+				$fnc_s_resources = $fnc_s_edition > 0
+					? get_posts(
+						array(
+							'post_type'      => 'fnc_publication',
+							'posts_per_page' => 3,
+							'meta_key'       => '_fnc_publication_edition',
+							'meta_value'     => $fnc_s_edition,
+						)
+					)
+					: array();
+				if ( ! empty( $fnc_s_resources ) ) :
+					$fnc_pub_types = fnc_content_model_publication_types();
+					?>
+					<div class="person-detail__block">
+						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></p>
+						<ul style="margin-top:16px;list-style:none;padding:0;border-top:1px solid var(--border);">
+							<?php foreach ( $fnc_s_resources as $fnc_sr ) : ?>
+								<?php $fnc_sr_type = get_post_meta( $fnc_sr->ID, '_fnc_publication_type', true ); ?>
+								<li style="border-bottom:1px solid var(--border);padding:16px 0;">
+									<a href="<?php echo esc_url( get_permalink( $fnc_sr ) ); ?>">
+										<span class="page-eyebrow text-rouge"><?php echo esc_html( isset( $fnc_pub_types[ $fnc_sr_type ] ) ? $fnc_pub_types[ $fnc_sr_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></span>
+										<span style="display:block;margin-top:4px;font-family:var(--serif);font-size:1.1rem;color:var(--navy-deep);"><?php echo esc_html( get_the_title( $fnc_sr ) ); ?></span>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
+				<div style="margin-top:48px;">
+					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>"><?php esc_html_e( 'Voir tout le programme', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+				</div>
 			</div>
 		</section>
 	</main>

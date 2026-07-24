@@ -2,12 +2,12 @@
 /**
  * Fiche d'un intervenant (single-fnc_intervenant.php).
  *
- * Comble un manque : les liens de l'annuaire et de la page Edition en cours
- * retombaient sur index.php, qui n'affiche qu'un extrait.
+ * Structure alignee sur le site reel (/intervenants/[slug]) : hero .page-head,
+ * puis une grille 2 colonnes [0.42fr 1fr] sur fond lin :
+ *   - aside sticky (gauche) : portrait (RÈGLE 7) ou monogramme + profil + liens ;
+ *   - article (droite)      : biographie (.prose-legal) + sessions de la personne.
  *
- * Reprend les champs du modele reconcilie : civilite, organisation, pays
- * (texte libre pouvant cumuler plusieurs pays), profil, liens externes. Les
- * sessions ou la personne intervient sont retrouvees depuis les relations
+ * Les sessions ou la personne intervient sont retrouvees depuis les relations
  * (intervenant OU moderateur), sans champ supplementaire a saisir.
  */
 
@@ -28,6 +28,28 @@ while ( have_posts() ) :
 	$fnc_i_profils = get_the_terms( $fnc_i_id, 'fnc_profil' );
 	$fnc_i_name    = fnc_speaker_display_name( $fnc_i_id );
 
+	/*
+	 * Sessions ou la personne intervient (comme intervenant OU moderateur).
+	 * Filtrage en PHP plutot qu'en meta_query LIKE : la liste d'intervenants est
+	 * un tableau serialise dont les ID peuvent etre stockes en entiers ou en
+	 * chaines ; un LIKE raterait certains cas et pourrait matcher un indice.
+	 */
+	$fnc_i_sessions = array_values(
+		array_filter(
+			get_posts( array( 'post_type' => 'fnc_session', 'posts_per_page' => -1 ) ),
+			static function ( $session ) use ( $fnc_i_id ) {
+				if ( (int) get_post_meta( $session->ID, '_fnc_session_moderator', true ) === $fnc_i_id ) {
+					return true;
+				}
+				$speakers = get_post_meta( $session->ID, '_fnc_session_speakers', true );
+				if ( ! is_array( $speakers ) ) {
+					return false;
+				}
+				return in_array( $fnc_i_id, array_map( 'intval', $speakers ), true );
+			}
+		)
+	);
+
 	fnc_render_pagehead(
 		array(
 			'eyebrow'    => '', // spec §4 : la fiche intervenant n'a pas d'eyebrow dans le hero.
@@ -41,136 +63,123 @@ while ( have_posts() ) :
 	?>
 
 	<main id="main">
-		<section class="section">
+		<section class="section linen">
 			<div class="container">
-				<div class="split">
-					<div>
-						<?php if ( get_the_content() ) : ?>
-							<div class="reading"><?php the_content(); ?></div>
-						<?php else : ?>
-							<p class="help"><?php esc_html_e( 'La biographie sera publiée dès sa validation.', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-						<?php endif; ?>
+				<div class="person-detail">
+
+					<aside class="person-detail__aside">
+						<div class="person-detail__portrait">
+							<?php
+							// RÈGLE 7 : fnc_speaker_portrait ne renvoie la photo que si le droit est
+							// « obtenu » et non expire ; sinon monogramme (jamais la vraie photo).
+							$fnc_portrait = function_exists( 'fnc_speaker_portrait' )
+								? fnc_speaker_portrait( $fnc_i_id, 'large', array( 'alt' => $fnc_i_name ) )
+								: '';
+							if ( $fnc_portrait ) {
+								echo $fnc_portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+							} else {
+								$fnc_initials = '';
+								foreach ( preg_split( '/\s+/', trim( wp_strip_all_tags( $fnc_i_name ) ) ) as $fnc_word ) {
+									if ( '' !== $fnc_word ) {
+										$fnc_initials .= function_exists( 'mb_substr' ) ? mb_strtoupper( mb_substr( $fnc_word, 0, 1 ) ) : strtoupper( substr( $fnc_word, 0, 1 ) );
+									}
+									if ( strlen( $fnc_initials ) >= 2 ) {
+										break;
+									}
+								}
+								?>
+								<span>
+									<span class="person-detail__mono" aria-hidden="true"><?php echo esc_html( $fnc_initials ); ?></span>
+									<span class="person-detail__pending"><?php esc_html_e( 'Photo à venir', 'fnc-wordpress-theme' ); ?></span>
+								</span>
+								<?php
+							}
+							?>
+						</div>
+
+						<div class="person-detail__meta">
+							<?php if ( $fnc_i_profils && ! is_wp_error( $fnc_i_profils ) ) : ?>
+								<p class="page-eyebrow text-rouge"><?php echo esc_html( $fnc_i_profils[0]->name ); ?></p>
+							<?php endif; ?>
+							<?php if ( $fnc_i_org ) : ?>
+								<p class="person-detail__org"><?php echo esc_html( $fnc_i_org ); ?></p>
+							<?php endif; ?>
+							<?php if ( $fnc_i_country ) : ?>
+								<p class="person-detail__country">
+									<?php foreach ( fnc_split_countries( $fnc_i_country ) as $fnc_c ) : ?>
+										<span class="flag-chip" style="margin-right:8px;">
+											<?php echo fnc_flag_markup( $fnc_c ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par le helper. ?>
+											<span><?php echo esc_html( $fnc_c ); ?></span>
+										</span>
+									<?php endforeach; ?>
+								</p>
+							<?php endif; ?>
+						</div>
 
 						<?php if ( ! empty( $fnc_i_links ) ) : ?>
-							<h2 style="font-size:1.3rem;margin-top:32px;"><?php esc_html_e( 'Liens', 'fnc-wordpress-theme' ); ?></h2>
-							<ul class="pract-list" style="margin-top:12px;">
-								<?php foreach ( $fnc_i_links as $fnc_link ) : ?>
-									<?php
-									$fnc_link_url   = isset( $fnc_link['url'] ) ? $fnc_link['url'] : '';
-									$fnc_link_label = isset( $fnc_link['label'] ) && $fnc_link['label'] ? $fnc_link['label'] : $fnc_link_url;
-									if ( ! $fnc_link_url ) {
-										continue;
-									}
-									?>
-									<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $fnc_link_label ); ?></a></li>
-								<?php endforeach; ?>
-							</ul>
+							<div class="person-detail__links">
+								<p class="page-eyebrow text-navy"><?php esc_html_e( 'Liens', 'fnc-wordpress-theme' ); ?></p>
+								<ul>
+									<?php foreach ( $fnc_i_links as $fnc_link ) : ?>
+										<?php
+										$fnc_link_url   = isset( $fnc_link['url'] ) ? $fnc_link['url'] : '';
+										$fnc_link_label = isset( $fnc_link['label'] ) && $fnc_link['label'] ? $fnc_link['label'] : $fnc_link_url;
+										if ( ! $fnc_link_url ) {
+											continue;
+										}
+										?>
+										<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $fnc_link_label ); ?></a></li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
 						<?php endif; ?>
-					</div>
+					</aside>
 
-					<div>
-						<?php if ( has_post_thumbnail() ) : ?>
-							<figure class="president-block" style="margin:0;">
-								<?php the_post_thumbnail( 'large', array( 'style' => 'width:100%;border-radius:5px;' ) ); ?>
-							</figure>
-						<?php endif; ?>
-
-						<article class="card fnc-card" style="margin-top:<?php echo has_post_thumbnail() ? '18px' : '0'; ?>;">
-							<p class="card-kicker"><?php esc_html_e( 'Profil', 'fnc-wordpress-theme' ); ?></p>
-							<dl class="pract-contacts" style="margin-top:14px;">
-								<?php if ( $fnc_i_org ) : ?>
-									<dt><?php esc_html_e( 'Organisation', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( $fnc_i_org ); ?></dd>
-								<?php endif; ?>
-								<?php if ( $fnc_i_country ) : ?>
-									<dt><?php esc_html_e( 'Pays', 'fnc-wordpress-theme' ); ?></dt>
-									<dd>
-										<?php foreach ( fnc_split_countries( $fnc_i_country ) as $fnc_c ) : ?>
-											<span class="flag-chip" style="margin-right:10px;">
-												<?php echo fnc_flag_markup( $fnc_c ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par le helper. ?>
-												<span><?php echo esc_html( $fnc_c ); ?></span>
-											</span>
-										<?php endforeach; ?>
-									</dd>
-								<?php endif; ?>
-								<?php if ( $fnc_i_profils && ! is_wp_error( $fnc_i_profils ) ) : ?>
-									<dt><?php esc_html_e( 'Type', 'fnc-wordpress-theme' ); ?></dt>
-									<dd><?php echo esc_html( implode( ', ', wp_list_pluck( $fnc_i_profils, 'name' ) ) ); ?></dd>
-								<?php endif; ?>
-							</dl>
-						</article>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<?php
-		/*
-		 * Sessions ou la personne intervient (comme intervenant OU moderateur).
-		 *
-		 * Filtrage en PHP plutot qu'en meta_query LIKE : la liste d'intervenants
-		 * est un tableau serialise dont les ID peuvent etre stockes en entiers
-		 * ou en chaines selon la voie d'ecriture (formulaire d'administration,
-		 * import, wp-cli). Un LIKE sur « i:12; » raterait « s:2:"12"; » — et
-		 * pourrait en plus matcher un INDICE de tableau plutot qu'une valeur.
-		 * Le volume reste faible sur une vitrine, la comparaison souple ici est
-		 * a la fois plus sure et plus lisible.
-		 */
-		$fnc_i_sessions = array_values(
-			array_filter(
-				get_posts( array( 'post_type' => 'fnc_session', 'posts_per_page' => -1 ) ),
-				static function ( $session ) use ( $fnc_i_id ) {
-					if ( (int) get_post_meta( $session->ID, '_fnc_session_moderator', true ) === $fnc_i_id ) {
-						return true;
-					}
-					$speakers = get_post_meta( $session->ID, '_fnc_session_speakers', true );
-					if ( ! is_array( $speakers ) ) {
-						return false;
-					}
-					return in_array( $fnc_i_id, array_map( 'intval', $speakers ), true );
-				}
-			)
-		);
-		if ( ! empty( $fnc_i_sessions ) ) :
-			$fnc_types = fnc_content_model_session_types();
-			?>
-			<section class="section linen">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Participation', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Sessions au programme.', 'fnc-wordpress-theme' ); ?></h2>
+					<article>
+						<div class="person-detail__block">
+							<p class="page-eyebrow text-navy"><?php esc_html_e( 'Biographie', 'fnc-wordpress-theme' ); ?></p>
+							<?php if ( trim( get_the_content() ) ) : ?>
+								<div class="prose-legal" style="margin-top:16px;"><?php the_content(); ?></div>
+							<?php else : ?>
+								<p class="help" style="margin-top:16px;"><?php esc_html_e( 'La biographie sera publiée dès sa validation.', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
+							<?php endif; ?>
 						</div>
-					</div>
-					<div class="agenda">
-						<?php foreach ( $fnc_i_sessions as $fnc_is ) : ?>
-							<?php
-							$fnc_is_type = get_post_meta( $fnc_is->ID, '_fnc_session_type', true );
-							$fnc_is_hide = in_array( $fnc_is_type, array( 'pause', 'logistique' ), true );
-							$fnc_is_mod  = (int) get_post_meta( $fnc_is->ID, '_fnc_session_moderator', true ) === $fnc_i_id;
-							?>
-							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_is ) ); ?>">
-								<span class="time"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
-								<span>
-									<strong><?php echo esc_html( get_the_title( $fnc_is ) ); ?></strong>
-									<?php if ( $fnc_is_type && ! $fnc_is_hide && isset( $fnc_types[ $fnc_is_type ] ) ) : ?>
-										<?php fnc_render_badge( $fnc_types[ $fnc_is_type ] ); ?>
-									<?php endif; ?>
-									<?php if ( $fnc_is_mod ) : ?>
-										<span class="person-meta"><?php esc_html_e( 'En modération', 'fnc-wordpress-theme' ); ?></span>
-									<?php endif; ?>
-								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
-							</a>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</section>
-		<?php endif; ?>
 
-		<section class="section">
-			<div class="container">
-				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>"><?php esc_html_e( 'Tous les intervenants', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+						<?php if ( ! empty( $fnc_i_sessions ) ) : ?>
+							<?php $fnc_types = fnc_content_model_session_types(); ?>
+							<div class="person-detail__block">
+								<p class="page-eyebrow text-navy"><?php esc_html_e( 'Sessions', 'fnc-wordpress-theme' ); ?></p>
+								<div class="agenda" style="margin-top:16px;">
+									<?php foreach ( $fnc_i_sessions as $fnc_is ) : ?>
+										<?php
+										$fnc_is_type = get_post_meta( $fnc_is->ID, '_fnc_session_type', true );
+										$fnc_is_hide = in_array( $fnc_is_type, array( 'pause', 'logistique' ), true );
+										$fnc_is_mod  = (int) get_post_meta( $fnc_is->ID, '_fnc_session_moderator', true ) === $fnc_i_id;
+										?>
+										<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_is ) ); ?>">
+											<span class="time"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
+											<span>
+												<strong><?php echo esc_html( get_the_title( $fnc_is ) ); ?></strong>
+												<?php if ( $fnc_is_type && ! $fnc_is_hide && isset( $fnc_types[ $fnc_is_type ] ) ) : ?>
+													<?php fnc_render_badge( $fnc_types[ $fnc_is_type ] ); ?>
+												<?php endif; ?>
+												<?php if ( $fnc_is_mod ) : ?>
+													<span class="person-meta"><?php esc_html_e( 'En modération', 'fnc-wordpress-theme' ); ?></span>
+												<?php endif; ?>
+											</span>
+											<span class="room"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+										</a>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						<?php endif; ?>
+					</article>
+
+				</div>
+
+				<div style="margin-top:48px;">
+					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>"><?php esc_html_e( 'Tous les intervenants', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+				</div>
 			</div>
 		</section>
 	</main>

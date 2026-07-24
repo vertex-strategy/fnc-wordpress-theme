@@ -1,19 +1,17 @@
 <?php
 /**
- * Archive du custom post type "fnc_intervenant".
+ * Archive du custom post type "fnc_intervenant" — « Les voix du Forum ».
  *
- * Porte docs/mockups/homepage-v2/intervenants.html a l'origine (contenu
- * genere par site.js: speakersPage()). Structure des filtres (profil,
- * pays) alignee sur le site officiel reel (localhost:3000/fr/intervenants),
- * suite a l'amendement de la Decision 1 de l'ADR-007 : la maquette seule
- * ne proposait aucun filtre, alors que le site officiel en implemente
- * deja (profil + pays, avec drapeaux). Contenu de demonstration reste
- * fictif — jamais les vraies identites de responsables publics visibles
- * sur le site officiel.
+ * Alignee sur la page reelle localhost:3000/fr/intervenants : heros « Les voix
+ * du Forum », panorama (badge « Programme provisoire » + statistiques + frise
+ * des pays representes), puis l'explorateur d'intervenants (.spk-explorer) avec
+ * filtres par profil (compteurs) et par pays, et la grille de cartes .spk.
+ * Se termine sur le callout « Proposer une intervention ».
  *
- * Filtrage par requete GET native WordPress (tax_query via query vars
- * publics `fnc_profil`/`fnc_pays`), sans JavaScript de soumission
- * automatique — degradation gracieuse, coherent avec le reste du theme.
+ * Le filtrage passe par les query vars natifs des taxonomies (fnc_profil /
+ * fnc_pays) — degradation gracieuse sans JavaScript. Les compteurs sont
+ * calcules cote serveur. Contenu de demonstration (jamais les vraies identites
+ * du site officiel).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,11 +22,11 @@ get_header();
 
 fnc_render_hero(
 	array(
-		'eyebrow'    => __( 'Voix', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Des profils qui donnent du sens aux interventions.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Profils exemples non officiels, rattachés à sessions et ressources.', 'fnc-wordpress-theme' ),
+		'eyebrow'    => __( 'Intervenants', 'fnc-wordpress-theme' ),
+		'title'      => __( 'Les voix du Forum', 'fnc-wordpress-theme' ),
+		'lead'       => __( 'Décideurs, chercheurs, entrepreneurs et acteurs de la société civile qui font avancer la réflexion sur le numérique en Afrique centrale.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'image_alt'  => __( 'Portrait d’un intervenant du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Intervenants', 'fnc-wordpress-theme' ),
 	)
 );
@@ -39,29 +37,37 @@ $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
 $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' => false ) );
 
-// Frise "pays representes" (passe gabarits) : derivee du champ texte libre
-// _fnc_speaker_country (peut cumuler plusieurs pays separes par "/"),
-// distinct de la taxonomie fnc_pays utilisee ci-dessous pour le filtre.
+// Panorama : total d'intervenants et frise des pays representes (champ texte
+// libre _fnc_speaker_country, pouvant cumuler plusieurs pays separes par « / »).
 $fnc_all_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
+$fnc_total_speakers  = count( $fnc_all_speaker_ids );
 $fnc_countries       = array();
 foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 	foreach ( fnc_split_countries( get_post_meta( $fnc_speaker_id, '_fnc_speaker_country', true ) ) as $fnc_country ) {
 		$fnc_countries[ $fnc_country ] = true;
 	}
 }
-// Ordre editorial des pays (Reglages FNC > Intervenants) ; repli tri
-// alphabetique. Meme logique que countryOrder du vrai site.
-$fnc_countries = fnc_order_countries( array_keys( $fnc_countries ) );
+$fnc_countries     = fnc_order_countries( array_keys( $fnc_countries ) );
+$fnc_country_count = count( $fnc_countries );
+
+// Classe de categorie (.cat-*) derivee du slug de profil, comme le vrai site.
+$fnc_cat_class = static function ( $slug ) {
+	$slug = strtolower( (string) $slug );
+	if ( false !== strpos( $slug, 'off' ) ) { return 'cat-official'; }
+	if ( false !== strpos( $slug, 'exp' ) ) { return 'cat-expert'; }
+	if ( false !== strpos( $slug, 'hot' ) || false !== strpos( $slug, 'host' ) ) { return 'cat-host'; }
+	return 'cat-official';
+};
 ?>
 
 <main id="main">
-	<section class="section">
+	<section class="section linen intervenants-panorama">
 		<div class="container">
-			<div class="section-head">
-				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Profils', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Profils', 'fnc-wordpress-theme' ); ?></h2>
-				</div>
+			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+
+			<div class="stat-line">
+				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_total_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>
+				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_country_count ) ); ?></b><span><?php esc_html_e( 'pays représentés', 'fnc-wordpress-theme' ); ?></span></div>
 			</div>
 
 			<?php if ( ! empty( $fnc_countries ) ) : ?>
@@ -77,73 +83,104 @@ $fnc_countries = fnc_order_countries( array_keys( $fnc_countries ) );
 					</ul>
 				</div>
 			<?php endif; ?>
-
-			<?php if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) : ?>
-				<div class="toolbar" role="toolbar" aria-label="<?php esc_attr_e( 'Filtrer par profil', 'fnc-wordpress-theme' ); ?>">
-					<a class="chip" href="<?php echo esc_url( $fnc_current_pays ? add_query_arg( 'fnc_pays', $fnc_current_pays, $fnc_archive_url ) : $fnc_archive_url ); ?>" aria-pressed="<?php echo $fnc_current_profil ? 'false' : 'true'; ?>"><?php esc_html_e( 'Tous', 'fnc-wordpress-theme' ); ?></a>
-					<?php foreach ( $fnc_profils as $fnc_profil ) : ?>
-						<a class="chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_profil' => $fnc_profil->slug, 'fnc_pays' => $fnc_current_pays ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_profil === $fnc_profil->slug ? 'true' : 'false'; ?>"><?php echo esc_html( $fnc_profil->name ); ?></a>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
-
-			<?php if ( ! is_wp_error( $fnc_pays_terms ) && ! empty( $fnc_pays_terms ) ) : ?>
-				<form class="field" method="get" action="<?php echo esc_url( $fnc_archive_url ); ?>" style="max-width:280px;margin-bottom:28px;">
-					<?php if ( $fnc_current_profil ) : ?>
-						<input type="hidden" name="fnc_profil" value="<?php echo esc_attr( $fnc_current_profil ); ?>" />
-					<?php endif; ?>
-					<label for="fnc-pays-select"><?php esc_html_e( 'Pays', 'fnc-wordpress-theme' ); ?></label>
-					<select id="fnc-pays-select" name="fnc_pays">
-						<option value=""><?php esc_html_e( 'Tous les pays', 'fnc-wordpress-theme' ); ?></option>
-						<?php foreach ( $fnc_pays_terms as $fnc_pays_term ) : ?>
-							<option value="<?php echo esc_attr( $fnc_pays_term->slug ); ?>" <?php selected( $fnc_current_pays, $fnc_pays_term->slug ); ?>><?php echo esc_html( $fnc_pays_term->name ); ?></option>
-						<?php endforeach; ?>
-					</select>
-					<button class="btn btn-soft" type="submit" style="margin-top:10px;"><?php esc_html_e( 'Filtrer', 'fnc-wordpress-theme' ); ?></button>
-				</form>
-			<?php endif; ?>
-
-			<?php if ( have_posts() ) : ?>
-				<div class="grid grid-3">
-					<?php
-					while ( have_posts() ) :
-						the_post();
-						$fnc_terms_profil = get_the_terms( get_the_ID(), 'fnc_profil' );
-						$fnc_terms_pays    = get_the_terms( get_the_ID(), 'fnc_pays' );
-						?>
-						<article class="card fnc-card">
-							<p class="card-kicker">
-								<?php
-								echo esc_html(
-									( $fnc_terms_profil && ! is_wp_error( $fnc_terms_profil ) ? $fnc_terms_profil[0]->name : __( 'Intervenant', 'fnc-wordpress-theme' ) )
-									. ( $fnc_terms_pays && ! is_wp_error( $fnc_terms_pays ) ? ' · ' . $fnc_terms_pays[0]->name : '' )
-								);
-								?>
-							</p>
-							<h3><a href="<?php the_permalink(); ?>"><?php echo esc_html( fnc_speaker_display_name( get_the_ID() ) ); ?></a></h3>
-							<?php $fnc_speaker_meta = fnc_speaker_meta_line( get_the_ID() ); ?>
-							<?php if ( $fnc_speaker_meta ) : ?>
-								<span class="person-meta"><?php echo esc_html( $fnc_speaker_meta ); ?></span>
-							<?php endif; ?>
-							<?php if ( has_excerpt() ) : ?>
-								<p><?php the_excerpt(); ?></p>
-							<?php endif; ?>
-						</article>
-						<?php
-					endwhile;
-					?>
-				</div>
-				<?php wp_reset_postdata(); ?>
-			<?php else : ?>
-				<div class="empty" role="status">
-					<h3><?php esc_html_e( 'Aucun intervenant publié', 'fnc-wordpress-theme' ); ?></h3>
-					<p><?php esc_html_e( 'Les profils apparaîtront ici dès leur publication.', 'fnc-wordpress-theme' ); ?></p>
-				</div>
-			<?php endif; ?>
 		</div>
 	</section>
 
-	<?php fnc_render_cta_band(); ?>
+	<section class="section intervenants-directory">
+		<div class="container">
+			<div class="spk-explorer">
+				<div class="spk-toolbar">
+					<?php if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) : ?>
+						<div class="spk-filters" role="group" aria-label="<?php esc_attr_e( 'Filtrer par profil', 'fnc-wordpress-theme' ); ?>">
+							<a class="spk-chip" href="<?php echo esc_url( $fnc_current_pays ? add_query_arg( 'fnc_pays', $fnc_current_pays, $fnc_archive_url ) : $fnc_archive_url ); ?>" aria-pressed="<?php echo $fnc_current_profil ? 'false' : 'true'; ?>">
+								<?php esc_html_e( 'Tous', 'fnc-wordpress-theme' ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( $fnc_total_speakers ) ); ?></span>
+							</a>
+							<?php foreach ( $fnc_profils as $fnc_profil ) : ?>
+								<a class="spk-chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_profil' => $fnc_profil->slug, 'fnc_pays' => $fnc_current_pays ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_profil === $fnc_profil->slug ? 'true' : 'false'; ?>">
+									<?php echo esc_html( $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( $fnc_profil->count ) ); ?></span>
+								</a>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+
+					<?php if ( ! is_wp_error( $fnc_pays_terms ) && ! empty( $fnc_pays_terms ) ) : ?>
+						<form class="spk-country" method="get" action="<?php echo esc_url( $fnc_archive_url ); ?>">
+							<?php if ( $fnc_current_profil ) : ?>
+								<input type="hidden" name="fnc_profil" value="<?php echo esc_attr( $fnc_current_profil ); ?>" />
+							<?php endif; ?>
+							<label for="fnc-pays-select"><?php esc_html_e( 'Pays', 'fnc-wordpress-theme' ); ?></label>
+							<select id="fnc-pays-select" name="fnc_pays" onchange="this.form.submit()">
+								<option value=""><?php esc_html_e( 'Tous les pays', 'fnc-wordpress-theme' ); ?></option>
+								<?php foreach ( $fnc_pays_terms as $fnc_pays_term ) : ?>
+									<option value="<?php echo esc_attr( $fnc_pays_term->slug ); ?>" <?php selected( $fnc_current_pays, $fnc_pays_term->slug ); ?>><?php echo esc_html( $fnc_pays_term->name ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<noscript><button class="btn btn-soft" type="submit"><?php esc_html_e( 'Filtrer', 'fnc-wordpress-theme' ); ?></button></noscript>
+						</form>
+					<?php endif; ?>
+				</div>
+
+				<?php if ( have_posts() ) : ?>
+					<div class="spk-resultbar">
+						<p class="spk-result" aria-live="polite">
+							<?php
+							/* translators: %s: nombre d'intervenants. */
+							printf( esc_html( _n( '%s intervenant', '%s intervenants', $wp_query->post_count, 'fnc-wordpress-theme' ) ), esc_html( number_format_i18n( $wp_query->post_count ) ) );
+							?>
+						</p>
+					</div>
+
+					<div class="spk-grid">
+						<?php
+						while ( have_posts() ) :
+							the_post();
+							$fnc_sp_id      = get_the_ID();
+							$fnc_sp_profils = get_the_terms( $fnc_sp_id, 'fnc_profil' );
+							$fnc_sp_profil  = ( $fnc_sp_profils && ! is_wp_error( $fnc_sp_profils ) ) ? $fnc_sp_profils[0] : null;
+							$fnc_sp_org     = get_post_meta( $fnc_sp_id, '_fnc_speaker_org', true );
+							$fnc_sp_country = get_post_meta( $fnc_sp_id, '_fnc_speaker_country', true );
+							?>
+							<a class="spk" href="<?php the_permalink(); ?>">
+								<?php if ( $fnc_sp_profil ) : ?>
+									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( $fnc_sp_profil->name ); ?></span>
+								<?php endif; ?>
+								<div class="ph">
+									<?php if ( has_post_thumbnail() ) : ?>
+										<?php the_post_thumbnail( 'medium', array( 'alt' => esc_attr( fnc_speaker_display_name( $fnc_sp_id ) ) ) ); ?>
+									<?php else : ?>
+										<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="" aria-hidden="true" />
+									<?php endif; ?>
+								</div>
+								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></div>
+								<?php if ( $fnc_sp_org ) : ?>
+									<div class="r"><?php echo esc_html( $fnc_sp_org ); ?></div>
+								<?php endif; ?>
+								<?php if ( $fnc_sp_country ) : ?>
+									<span class="c"><?php echo esc_html( $fnc_sp_country ); ?></span>
+								<?php endif; ?>
+							</a>
+							<?php
+						endwhile;
+						?>
+					</div>
+					<?php wp_reset_postdata(); ?>
+				<?php else : ?>
+					<div class="empty" role="status">
+						<h3><?php esc_html_e( 'Aucun intervenant ne correspond', 'fnc-wordpress-theme' ); ?></h3>
+						<p><?php esc_html_e( 'Modifiez le filtre pour poursuivre, ou revenez à la liste complète.', 'fnc-wordpress-theme' ); ?></p>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</section>
+
+	<section class="callout">
+		<h2><?php esc_html_e( 'Proposer une intervention', 'fnc-wordpress-theme' ); ?></h2>
+		<p><?php esc_html_e( 'Vous souhaitez contribuer au programme ? Les candidatures d’intervenants seront ouvertes prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
+		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Nous contacter', 'fnc-wordpress-theme' ); ?>
+			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+		</a>
+	</section>
 </main>
 
 <?php get_footer(); ?>

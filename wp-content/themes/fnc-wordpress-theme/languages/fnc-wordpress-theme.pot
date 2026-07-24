@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: FNC WordPress Theme 0.4.4\n"
+"Project-Id-Version: FNC WordPress Theme 0.4.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fnc-wordpress-theme\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-24T11:44:49+00:00\n"
+"POT-Creation-Date: 2026-07-24T12:31:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fnc-wordpress-theme\n"
@@ -50,7 +50,6 @@ msgstr ""
 
 #: archive-fnc_actualite.php:28
 #: archive-fnc_edition.php:32
-#: archive-fnc_intervenant.php:31
 #: archive-fnc_publication.php:28
 #: archive-fnc_session.php:28
 #: page-edition-en-cours.php:88
@@ -84,6 +83,7 @@ msgid "Les actualités apparaîtront ici dès leur publication."
 msgstr ""
 
 #: archive-fnc_actualite.php:82
+#: archive-fnc_intervenant.php:179
 #: front-page.php:55
 #: front-page.php:113
 #: front-page.php:161
@@ -186,69 +186,92 @@ msgstr ""
 msgid "Contacter l’organisation"
 msgstr ""
 
-#: archive-fnc_intervenant.php:27
-msgid "Voix"
-msgstr ""
-
-#: archive-fnc_intervenant.php:28
-msgid "Des profils qui donnent du sens aux interventions."
-msgstr ""
-
-#: archive-fnc_intervenant.php:29
-msgid "Profils exemples non officiels, rattachés à sessions et ressources."
-msgstr ""
-
-#: archive-fnc_intervenant.php:32
+#: archive-fnc_intervenant.php:25
+#: archive-fnc_intervenant.php:30
 #: footer.php:57
 #: inc/customizer.php:519
 msgid "Intervenants"
 msgstr ""
 
-#: archive-fnc_intervenant.php:62
-#: archive-fnc_intervenant.php:63
-msgid "Profils"
+#: archive-fnc_intervenant.php:26
+msgid "Les voix du Forum"
+msgstr ""
+
+#: archive-fnc_intervenant.php:27
+msgid "Décideurs, chercheurs, entrepreneurs et acteurs de la société civile qui font avancer la réflexion sur le numérique en Afrique centrale."
+msgstr ""
+
+#: archive-fnc_intervenant.php:29
+msgid "Portrait d’un intervenant du Forum Numérique Congo"
+msgstr ""
+
+#: archive-fnc_intervenant.php:66
+msgid "Programme provisoire"
 msgstr ""
 
 #: archive-fnc_intervenant.php:69
+#: page-edition-en-cours.php:144
+msgid "intervenants"
+msgstr ""
+
 #: archive-fnc_intervenant.php:70
+msgid "pays représentés"
+msgstr ""
+
+#: archive-fnc_intervenant.php:75
+#: archive-fnc_intervenant.php:76
 msgid "Pays représentés"
 msgstr ""
 
-#: archive-fnc_intervenant.php:82
+#: archive-fnc_intervenant.php:94
 msgid "Filtrer par profil"
 msgstr ""
 
-#: archive-fnc_intervenant.php:83
+#: archive-fnc_intervenant.php:96
 #: archive-fnc_publication.php:90
 msgid "Tous"
 msgstr ""
 
-#: archive-fnc_intervenant.php:95
+#: archive-fnc_intervenant.php:111
 #: page-partenaires.php:219
 #: single-fnc_intervenant.php:86
 msgid "Pays"
 msgstr ""
 
-#: archive-fnc_intervenant.php:97
+#: archive-fnc_intervenant.php:113
 msgid "Tous les pays"
 msgstr ""
 
-#: archive-fnc_intervenant.php:102
+#: archive-fnc_intervenant.php:118
 msgid "Filtrer"
 msgstr ""
 
-#: archive-fnc_intervenant.php:118
-#: single-fnc_intervenant.php:33
-#: single-fnc_session.php:131
-msgid "Intervenant"
+#. translators: %s: nombre d'intervenants.
+#: archive-fnc_intervenant.php:128
+#, php-format
+msgid "%s intervenant"
+msgid_plural "%s intervenants"
+msgstr[0] ""
+msgstr[1] ""
+
+#: archive-fnc_intervenant.php:169
+msgid "Aucun intervenant ne correspond"
 msgstr ""
 
-#: archive-fnc_intervenant.php:139
-msgid "Aucun intervenant publié"
+#: archive-fnc_intervenant.php:170
+msgid "Modifiez le filtre pour poursuivre, ou revenez à la liste complète."
 msgstr ""
 
-#: archive-fnc_intervenant.php:140
-msgid "Les profils apparaîtront ici dès leur publication."
+#: archive-fnc_intervenant.php:178
+msgid "Proposer une intervention"
+msgstr ""
+
+#: archive-fnc_intervenant.php:179
+msgid "Vous souhaitez contribuer au programme ? Les candidatures d’intervenants seront ouvertes prochainement."
+msgstr ""
+
+#: archive-fnc_intervenant.php:180
+msgid "Nous contacter"
 msgstr ""
 
 #: archive-fnc_publication.php:24
@@ -1754,10 +1777,6 @@ msgstr ""
 msgid "sessions"
 msgstr ""
 
-#: page-edition-en-cours.php:144
-msgid "intervenants"
-msgstr ""
-
 #: page-edition-en-cours.php:158
 msgid "Le programme"
 msgstr ""
@@ -2326,6 +2345,11 @@ msgstr ""
 
 #: single-fnc_edition.php:167
 msgid "Publications liées."
+msgstr ""
+
+#: single-fnc_intervenant.php:33
+#: single-fnc_session.php:131
+msgid "Intervenant"
 msgstr ""
 
 #: single-fnc_intervenant.php:51

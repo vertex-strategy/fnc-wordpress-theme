@@ -159,7 +159,7 @@ function fnc_seo_title() {
 		return sprintf( __( 'Recherche : %s', 'fnc-wordpress-theme' ), get_search_query() );
 	}
 
-	$default = fnc_get_setting( 'seo_default_title', '' );
+	$default = fnc_get_setting_i18n( 'seo_default_title', '' );
 	return $default ? $default : fnc_site_name();
 }
 
@@ -180,8 +180,8 @@ function fnc_seo_description() {
 			return wp_strip_all_tags( $excerpt );
 		}
 	}
-	$default = fnc_get_setting( 'seo_default_description', '' );
-	return $default ? $default : fnc_get_setting( 'description', '' );
+	$default = fnc_get_setting_i18n( 'seo_default_description', '' );
+	return $default ? $default : fnc_get_setting_i18n( 'description', '' );
 }
 
 /**

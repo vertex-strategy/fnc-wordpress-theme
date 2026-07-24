@@ -37,6 +37,92 @@ function fnc_get_setting( $key, $default = '' ) {
 }
 
 /**
+ * Champs de réglages localisables (equivalents des champs `localized` du Global
+ * Settings de Payload). Cle => [libelle, multiligne].
+ *
+ * @return array<string,array{0:string,1:bool}>
+ */
+function fnc_i18n_settings() {
+	return array(
+		'slogan'                  => array( __( 'Slogan', 'fnc-wordpress-theme' ), false ),
+		'subtitle'                => array( __( 'Sous-titre', 'fnc-wordpress-theme' ), false ),
+		'description'             => array( __( 'Description', 'fnc-wordpress-theme' ), true ),
+		'short_intro'             => array( __( 'Présentation courte', 'fnc-wordpress-theme' ), true ),
+		'address'                 => array( __( 'Adresse', 'fnc-wordpress-theme' ), true ),
+		'footer_text'             => array( __( 'Texte du footer', 'fnc-wordpress-theme' ), true ),
+		'footer_copyright'        => array( __( 'Mention de copyright', 'fnc-wordpress-theme' ), false ),
+		'seo_default_title'       => array( __( 'Titre SEO par défaut', 'fnc-wordpress-theme' ), false ),
+		'seo_default_description' => array( __( 'Description SEO par défaut', 'fnc-wordpress-theme' ), true ),
+	);
+}
+
+/**
+ * Lecture d'un réglage global TRADUIT selon la langue courante (Polylang).
+ *
+ * Les réglages du Customizer sont des valeurs uniques (un seul theme_mod, pas
+ * une valeur par langue). Pour les champs de contenu localisables, on passe la
+ * valeur par le module « Traductions des chaînes » de Polylang (pll__), qui
+ * renvoie la version dans la langue courante si elle a été saisie, sinon la
+ * valeur source. Sans Polylang, se comporte comme fnc_get_setting().
+ *
+ * @param string $key
+ * @param mixed  $default
+ * @return mixed
+ */
+function fnc_get_setting_i18n( $key, $default = '' ) {
+	$value = fnc_get_setting( $key, $default );
+	return fnc_pll( $value );
+}
+
+/**
+ * Traduit une chaîne via le module « Traductions des chaînes » de Polylang,
+ * si actif et si la chaîne a ete enregistree (pll_register_string) puis
+ * traduite. Sans Polylang, renvoie la chaîne inchangee.
+ *
+ * @param mixed $string
+ * @return mixed
+ */
+function fnc_pll( $string ) {
+	if ( '' !== $string && is_string( $string ) && function_exists( 'pll__' ) ) {
+		return pll__( $string );
+	}
+	return $string;
+}
+
+/**
+ * Enregistre les réglages localisables comme chaînes traduisibles Polylang.
+ *
+ * Chaque valeur reellement renseignee devient traduisible dans l'admin
+ * (Langues → Traductions des chaînes, groupe « Forum Numérique Congo »). Sans
+ * Polylang, ne fait rien. Appele sur `init` (front et admin) pour que la page
+ * de traduction liste les chaînes et que pll__ puisse les resoudre.
+ */
+function fnc_register_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+	$group = 'Forum Numérique Congo';
+	foreach ( fnc_i18n_settings() as $key => $conf ) {
+		$value = fnc_get_setting( $key, '' );
+		if ( '' === $value || ! is_string( $value ) ) {
+			continue;
+		}
+		pll_register_string( 'fnc_' . $key, $value, $group, $conf[1] );
+	}
+
+	// Contacts presse : chaque valeur textuelle (role, organisation) peut varier
+	// par langue. On enregistre les valeurs non vides, ligne par ligne.
+	foreach ( fnc_parse_press_contacts() as $index => $contact ) {
+		foreach ( array( 'role', 'organization' ) as $field ) {
+			if ( ! empty( $contact[ $field ] ) ) {
+				pll_register_string( 'fnc_press_' . $index . '_' . $field, $contact[ $field ], $group, false );
+			}
+		}
+	}
+}
+add_action( 'init', 'fnc_register_pll_strings' );
+
+/**
  * URL d'un média enregistré comme ID de pièce jointe (logos, image OG).
  *
  * @param string $key  Clé du réglage (ex. « logo_principal »).

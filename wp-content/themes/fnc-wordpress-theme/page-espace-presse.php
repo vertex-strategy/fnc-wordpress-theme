@@ -107,13 +107,13 @@ $fnc_communiques      = $fnc_communiques_term
 					<?php foreach ( $fnc_press_contacts as $fnc_contact ) : ?>
 						<article class="card">
 							<?php if ( $fnc_contact['role'] ) : ?>
-								<p class="card-kicker"><?php echo esc_html( $fnc_contact['role'] ); ?></p>
+								<p class="card-kicker"><?php echo esc_html( fnc_pll( $fnc_contact['role'] ) ); ?></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['name'] ) : ?>
 								<h3><?php echo esc_html( $fnc_contact['name'] ); ?></h3>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['organization'] ) : ?>
-								<p><?php echo esc_html( $fnc_contact['organization'] ); ?></p>
+								<p><?php echo esc_html( fnc_pll( $fnc_contact['organization'] ) ); ?></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['email'] ) : ?>
 								<p style="margin-top:10px;"><a class="link-more" href="mailto:<?php echo esc_attr( antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>

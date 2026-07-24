@@ -376,10 +376,20 @@ Polylang installé, deux langues créées (FR=fr_FR par défaut, EN=en_GB), pret
 
 `fnc_language_switcher()` (header desktop + panneau mobile) génère des liens réels vers chaque langue Polylang. Il s'appuie sur l'API de bas niveau (`PLL()->model->get_languages_list()`, `PLL()->links->get_translation_url()`, repli `pll_home_url()`) plutôt que sur `pll_the_languages()`, qui renvoie une liste vide sur les vues sans traduction assignée (l'accueil-liste, notamment). Chaque lien pointe vers la **traduction de la page courante** quand elle existe, sinon vers l'accueil de la langue ; la langue active porte `aria-current="true"` (stylée par le CSS existant) et chaque lien porte `hreflang`. Repli statique FR/EN conservé si Polylang est absent. Vérifié en conditions réelles : liens corrects sur l'accueil et sur une fiche, bascule effective au clic, marquage de la langue courante.
 
+### Chaînes des Réglages FNC (Customizer) traduisibles
+
+Les réglages du Customizer sont des valeurs **uniques** (un seul `theme_mod`, pas une valeur par langue). Les champs de **contenu localisables** (équivalents des champs `localized` du Global Settings de Payload) sont rendus bilingues via le module « Traductions des chaînes » de Polylang :
+
+- `fnc_register_pll_strings()` (`inc/customizer.php`, hook `init`) enregistre chaque valeur renseignée comme chaîne traduisible, dans le groupe **« Forum Numérique Congo »** (Langues → Traductions des chaînes). Champs couverts : slogan, sous-titre, description, présentation courte, adresse, texte et copyright du footer, titre et description SEO par défaut — plus les rôles/organisations des **contacts presse** (répéteur).
+- À l'affichage, `fnc_get_setting_i18n()` et le helper `fnc_pll()` passent la valeur par `pll__()` : version dans la langue courante si saisie, sinon valeur source. Sans Polylang, comportement identique à `fnc_get_setting()`.
+
+Câblé : footer (texte, adresse, copyright), métadonnées SEO (`inc/seo.php` : titre et description par défaut, description d'identité), et contacts presse (`page-espace-presse.php`).
+
+**Vérifié en conditions réelles** : traductions anglaises saisies (via `PLL_MO`) pour le texte du footer, le SEO par défaut et un contact presse ; rendu confirmé — `/en/` affiche « A permanent institution reflecting… », « Forum Numérique Congo — example », « Media relations » ; `/` conserve les sources françaises ; 6 chaînes renseignées listées dans l'admin Polylang ; aucune erreur PHP.
+
 ### Reste à faire (multilinguisme complet)
 
-- **Chaînes des Réglages FNC (Customizer)** : textes du footer, identité, etc. sont des `theme_mod` uniques ; les rendre bilingues nécessite `pll_register_string()` (module « Traductions des chaînes » de Polylang).
-- **Contenus traduisibles** : déclarer les CPT/taxonomies du plugin comme traduisibles dans Polylang, puis saisir les versions par langue (travail éditorial).
+- **Contenus traduisibles** : déclarer les CPT/taxonomies du plugin comme traduisibles dans Polylang, puis saisir les versions par langue (travail éditorial). C'est le dernier volet — l'interface, le SEO, le sélecteur et les réglages de contenu sont désormais bilingues.
 - **Installation** : Polylang n'est pas versionné (plugin tiers, hors dépôt) ; il doit être installé et activé sur chaque instance.
 
 ## Prochaines étapes

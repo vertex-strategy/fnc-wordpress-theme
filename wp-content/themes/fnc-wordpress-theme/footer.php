@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="foot-grid">
 		<div class="foot-brand">
 			<b><?php echo esc_html( fnc_site_name() ); ?></b>
-			<p><?php echo esc_html( fnc_get_setting( 'footer_text', __( 'Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville.', 'fnc-wordpress-theme' ) ) ); ?></p>
+			<p><?php echo esc_html( fnc_get_setting_i18n( 'footer_text', __( 'Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville.', 'fnc-wordpress-theme' ) ) ); ?></p>
 			<?php
 			// Coordonnées : affichées uniquement si renseignées dans les Réglages
 			// FNC (RÈGLE 4 — aucune coordonnée fictive).
 			$fnc_email   = fnc_get_setting( 'email', '' );
 			$fnc_phone   = fnc_get_setting( 'phone', '' );
-			$fnc_address = fnc_get_setting( 'address', '' );
+			$fnc_address = fnc_get_setting_i18n( 'address', '' );
 			if ( $fnc_address || $fnc_email || $fnc_phone ) :
 				?>
 				<ul class="foot-contact">
@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		// Copyright éditable (Réglages FNC → Footer) ; l'année est ajoutée
 		// automatiquement. Vide → nom officiel du site.
-		$fnc_copyright_name = fnc_get_setting( 'footer_copyright', '' );
+		$fnc_copyright_name = fnc_get_setting_i18n( 'footer_copyright', '' );
 		$fnc_copyright_name = $fnc_copyright_name ? $fnc_copyright_name : fnc_site_name();
 		?>
 		<span><?php printf( esc_html__( '© %1$s %2$s', 'fnc-wordpress-theme' ), esc_html( gmdate( 'Y' ) ), esc_html( $fnc_copyright_name ) ); ?></span>

@@ -387,10 +387,19 @@ Câblé : footer (texte, adresse, copyright), métadonnées SEO (`inc/seo.php` :
 
 **Vérifié en conditions réelles** : traductions anglaises saisies (via `PLL_MO`) pour le texte du footer, le SEO par défaut et un contact presse ; rendu confirmé — `/en/` affiche « A permanent institution reflecting… », « Forum Numérique Congo — example », « Media relations » ; `/` conserve les sources françaises ; 6 chaînes renseignées listées dans l'admin Polylang ; aucune erreur PHP.
 
-### Reste à faire (multilinguisme complet)
+### Contenus traduisibles (CPT & taxonomies)
 
-- **Contenus traduisibles** : déclarer les CPT/taxonomies du plugin comme traduisibles dans Polylang, puis saisir les versions par langue (travail éditorial). C'est le dernier volet — l'interface, le SEO, le sélecteur et les réglages de contenu sont désormais bilingues.
-- **Installation** : Polylang n'est pas versionné (plugin tiers, hors dépôt) ; il doit être installé et activé sur chaque instance.
+Les custom post types et taxonomies du plugin sont déclarés traduisibles **par code** (`includes/polylang.php`, plugin v0.4.0), via les filtres `pll_get_post_types` / `pll_get_taxonomies` — plutôt que par la configuration de l'administration. La déclaration est ainsi **versionnée** et s'applique dès que Polylang est actif, sans étape manuelle ; sans Polylang, les filtres ne sont jamais appelés (aucun effet, aucune dépendance).
+
+Sont traduisibles : les 6 CPT (éditions, sessions, intervenants, partenaires, publications, actualités) et les 5 taxonomies (catégories, étiquettes, profils, pays, types de partenaire). Chaque contenu porte alors une langue et peut avoir des traductions ; le sélecteur de langue relie automatiquement les versions entre elles.
+
+**Vérifié en conditions réelles** : les 6 CPT et 5 taxonomies confirmés traduisibles (`pll_is_translated_post_type`/`_taxonomy`) ; contenus et termes existants assignés au français ; une **traduction anglaise d'édition** créée et liée — la fiche `/en/editions/…` affiche le contenu anglais (thème, lieu, dates localisées, badge « CURRENT ») et l'interface anglaise ; le sélecteur relie les deux fiches dans les deux sens (FR ↔ EN, sur la même entité, pas seulement l'accueil) ; les archives filtrent par langue (`/editions/` ne liste que le FR, `/en/editions/` que le EN) ; aucune erreur PHP.
+
+> **Note d'exploitation** : après avoir rendu des CPT traduisibles, régénérer les permaliens (Réglages → Permaliens, ou `wp rewrite flush`) pour que Polylang ajoute les règles de réécriture des URLs traduites (`/en/…`) — sans quoi les fiches traduites renvoient une 404.
+
+### Installation
+
+Polylang n'est pas versionné (plugin tiers, hors dépôt) : il doit être installé et activé sur chaque instance, puis les deux langues créées (FR par défaut, EN=en_GB) et la langue par défaut assignée aux contenus existants.
 
 ## Prochaines étapes
 

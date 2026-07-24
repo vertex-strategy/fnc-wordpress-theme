@@ -168,33 +168,55 @@ function fnc_default_mobile_menu() {
 }
 
 /**
+ * URL de la version d'une page dans une langue Polylang donnee.
+ *
+ * Utilise la traduction reelle de la page courante quand elle existe, avec
+ * repli sur l'accueil de la langue. `pll_the_languages()` renvoie une liste
+ * vide sur les vues sans traduction assignee (ex. l'accueil-liste), d'ou le
+ * recours a l'API de bas niveau, plus fiable.
+ *
+ * @param object $lang Objet langue Polylang.
+ * @return string
+ */
+function fnc_pll_language_url( $lang ) {
+	$pll = function_exists( 'PLL' ) ? PLL() : null;
+	if ( $pll && isset( $pll->links ) && method_exists( $pll->links, 'get_translation_url' ) ) {
+		$url = $pll->links->get_translation_url( $lang );
+		if ( $url ) {
+			return $url;
+		}
+	}
+	if ( function_exists( 'pll_home_url' ) ) {
+		return pll_home_url( $lang->slug );
+	}
+	return home_url( '/' );
+}
+
+/**
  * Selecteur de langue.
  *
  * Si Polylang est actif (ADR-007, Decision 2 — dependance ciblee acceptee
- * uniquement pour le multilinguisme), affiche les langues reellement
- * configurees. Sinon, degrade gracieusement vers le rendu statique FR/EN
- * de la maquette source (pas de contenu invente, pas de lien casse).
+ * uniquement pour le multilinguisme), affiche des liens vers chaque langue
+ * configuree (traduction de la page courante, repli sur l'accueil). Sinon,
+ * degrade gracieusement vers un rendu statique FR/EN (pas de lien casse).
  */
 function fnc_language_switcher() {
-	if ( function_exists( 'pll_the_languages' ) ) {
-		$languages = pll_the_languages(
-			array(
-				'raw'               => true,
-				'hide_if_no_translation' => 0,
-			)
-		);
-
-		if ( ! empty( $languages ) ) {
+	if ( function_exists( 'PLL' ) && PLL() && function_exists( 'pll_current_language' ) ) {
+		$langs = PLL()->model->get_languages_list();
+		if ( ! empty( $langs ) ) {
+			$current = pll_current_language( 'slug' );
 			echo '<div class="lang" role="group" aria-label="' . esc_attr__( 'Langue', 'fnc-wordpress-theme' ) . '">';
-			$count = count( $languages );
+			$count = count( $langs );
 			$i     = 0;
-			foreach ( $languages as $lang ) {
+			foreach ( $langs as $lang ) {
 				++$i;
+				$is_current = ( $lang->slug === $current );
 				printf(
-					'<a href="%s" aria-current="%s">%s</a>',
-					esc_url( $lang['url'] ),
-					$lang['current_lang'] ? 'true' : 'false',
-					esc_html( strtoupper( $lang['slug'] ) )
+					'<a href="%1$s" lang="%2$s" hreflang="%2$s" aria-current="%3$s">%4$s</a>',
+					esc_url( fnc_pll_language_url( $lang ) ),
+					esc_attr( $lang->slug ),
+					$is_current ? 'true' : 'false',
+					esc_html( strtoupper( $lang->slug ) )
 				);
 				if ( $i < $count ) {
 					echo '<span class="sep" aria-hidden="true">·</span>';
@@ -205,7 +227,7 @@ function fnc_language_switcher() {
 		}
 	}
 
-	// Repli statique — decoratif tant que Polylang n'est pas configure.
+	// Repli statique — decoratif tant que Polylang n'est pas actif.
 	echo '<div class="lang" role="group" aria-label="' . esc_attr__( 'Langue', 'fnc-wordpress-theme' ) . '">';
 	echo '<button aria-pressed="true">FR</button><span class="sep" aria-hidden="true">·</span><button aria-pressed="false">EN</button>';
 	echo '</div>';

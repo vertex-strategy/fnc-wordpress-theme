@@ -372,9 +372,12 @@ La langue source étant le français (aucun `.mo` fr), on décharge le domaine q
 
 Polylang installé, deux langues créées (FR=fr_FR par défaut, EN=en_GB), pretty permalinks activés. Routing `/` (FR) et `/en/` (EN) confirmé : interface entièrement traduite en anglais sur `/en/` (héros, navigation, footer, CTA, états), français intact sur `/` (non-régression), badges de type de session traduits côté plugin (« Round table » / « Table ronde »), administration accessible.
 
+### Sélecteur de langue
+
+`fnc_language_switcher()` (header desktop + panneau mobile) génère des liens réels vers chaque langue Polylang. Il s'appuie sur l'API de bas niveau (`PLL()->model->get_languages_list()`, `PLL()->links->get_translation_url()`, repli `pll_home_url()`) plutôt que sur `pll_the_languages()`, qui renvoie une liste vide sur les vues sans traduction assignée (l'accueil-liste, notamment). Chaque lien pointe vers la **traduction de la page courante** quand elle existe, sinon vers l'accueil de la langue ; la langue active porte `aria-current="true"` (stylée par le CSS existant) et chaque lien porte `hreflang`. Repli statique FR/EN conservé si Polylang est absent. Vérifié en conditions réelles : liens corrects sur l'accueil et sur une fiche, bascule effective au clic, marquage de la langue courante.
+
 ### Reste à faire (multilinguisme complet)
 
-- **Sélecteur de langue dynamique** : `fnc_language_switcher()` détecte déjà Polylang mais retombe sur le repli statique FR/EN tant que le contenu n'a pas de traductions assignées (`pll_the_languages()` renvoie alors une liste vide). À finaliser avec la configuration de contenu Polylang.
 - **Chaînes des Réglages FNC (Customizer)** : textes du footer, identité, etc. sont des `theme_mod` uniques ; les rendre bilingues nécessite `pll_register_string()` (module « Traductions des chaînes » de Polylang).
 - **Contenus traduisibles** : déclarer les CPT/taxonomies du plugin comme traduisibles dans Polylang, puis saisir les versions par langue (travail éditorial).
 - **Installation** : Polylang n'est pas versionné (plugin tiers, hors dépôt) ; il doit être installé et activé sur chaque instance.

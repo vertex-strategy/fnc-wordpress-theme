@@ -43,6 +43,12 @@ require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/forms.php';
 
 /**
+ * Heros editables (Customizer) des pages a liste dynamique : hero administrable,
+ * liste generee automatiquement. Voir inc/hero-settings.php.
+ */
+require_once get_template_directory() . '/inc/hero-settings.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

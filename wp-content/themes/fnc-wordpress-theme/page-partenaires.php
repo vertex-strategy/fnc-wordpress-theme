@@ -39,10 +39,10 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Partenaires', 'fnc-wordpress-theme' ),
-		'title'      => __( 'S\'associer au Forum, c\'est engager l\'avenir numérique du Congo.', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Le Forum réunit institutions, organisations et entreprises autour d\'une même ambition. Découvrez pourquoi et comment s\'y associer.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
+		'eyebrow'    => fnc_hero( 'partenaires', 'eyebrow' ),
+		'title'      => fnc_hero( 'partenaires', 'title' ),
+		'intro'      => fnc_hero( 'partenaires', 'intro' ),
+		'image'      => fnc_hero_image_url( 'partenaires' ),
 		'image_alt'  => __( 'Partenaires du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Partenaires', 'fnc-wordpress-theme' ),
 	)

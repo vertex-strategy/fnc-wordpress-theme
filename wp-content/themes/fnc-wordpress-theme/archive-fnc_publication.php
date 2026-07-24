@@ -21,10 +21,10 @@ get_header();
 
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Ressources', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Une bibliothèque pour prolonger le dialogue.', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Rapports, actes, communiqués : les traces écrites du Forum se rassemblent ici, à mesure qu’elles sont validées.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/les-publications.png',
+		'eyebrow'    => fnc_hero( 'ressources', 'eyebrow' ),
+		'title'      => fnc_hero( 'ressources', 'title' ),
+		'intro'      => fnc_hero( 'ressources', 'intro' ),
+		'image'      => fnc_hero_image_url( 'ressources' ),
 		'image_alt'  => __( 'Ressources du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Ressources', 'fnc-wordpress-theme' ),
 	)

@@ -25,10 +25,10 @@ get_header();
 
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Éditions', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Chaque édition laisse une trace.', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Rendez-vous après rendez-vous, le Forum construit une mémoire commune du numérique en Afrique centrale. Retrouvez ici les éditions passées, celle en cours et celles à venir.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/editions.png',
+		'eyebrow'    => fnc_hero( 'editions', 'eyebrow' ),
+		'title'      => fnc_hero( 'editions', 'title' ),
+		'intro'      => fnc_hero( 'editions', 'intro' ),
+		'image'      => fnc_hero_image_url( 'editions' ),
 		'image_alt'  => __( 'Éditions du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Éditions', 'fnc-wordpress-theme' ),
 	)

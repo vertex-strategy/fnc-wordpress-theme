@@ -19,10 +19,10 @@ get_header();
 
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Programme', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Deux jours de dialogue', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Sessions plénières, tables rondes et ateliers. Le programme détaillé sera publié après validation des intervenants et des horaires.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/programme.png',
+		'eyebrow'    => fnc_hero( 'programme', 'eyebrow' ),
+		'title'      => fnc_hero( 'programme', 'title' ),
+		'intro'      => fnc_hero( 'programme', 'intro' ),
+		'image'      => fnc_hero_image_url( 'programme' ),
 		'image_alt'  => __( 'Programme du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Programme', 'fnc-wordpress-theme' ),
 	)

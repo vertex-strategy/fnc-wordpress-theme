@@ -62,6 +62,19 @@ function fnc_theme_setup() {
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'script', 'style' ) );
 	add_theme_support( 'automatic-feed-links' );
+
+	// Styles du thème injectés dans l'éditeur de blocs : les blocs dynamiques
+	// (ServerSideRender) s'affichent avec la vraie DA dans le canevas, pour une
+	// édition WYSIWYG plutôt qu'un simple formulaire.
+	add_editor_style(
+		array(
+			'style.css',
+			'assets/css/wordpress-catchup.css',
+			'assets/css/wordpress-tailwind-utilities.css',
+			'assets/css/wordpress-catchup-p2.css',
+			'assets/css/wordpress-catchup-complet.css',
+		)
+	);
 }
 add_action( 'after_setup_theme', 'fnc_theme_setup' );
 

@@ -511,7 +511,7 @@ function fnc_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'fnc-blocks',
 		get_template_directory_uri() . '/assets/js/blocks.js',
-		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'wp-data' ),
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'wp-data', 'wp-server-side-render' ),
 		FNC_THEME_VERSION,
 		true
 	);

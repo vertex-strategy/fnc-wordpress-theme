@@ -15,6 +15,19 @@
 	margin: 0 0 8px;
 }
 
+/* Apercu WYSIWYG (ServerSideRender) : la vraie section s'affiche dans le
+   canevas — pas de chrome de formulaire autour (les champs sont dans le
+   panneau lateral). */
+.fnc-block--preview {
+	border: 0;
+	background: none;
+	padding: 0;
+	margin: 0;
+}
+.fnc-block--preview .components-placeholder {
+	min-height: 80px;
+}
+
 .fnc-block__header {
 	display: flex;
 	flex-direction: column;

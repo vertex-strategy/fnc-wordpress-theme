@@ -624,6 +624,26 @@ function fnc_speaker_display_name( $speaker_id ) {
 }
 
 /**
+ * Initiales (monogramme) d'un intervenant : premiere lettre du prenom + du nom.
+ * Sert de repli quand aucune photo n'est affichable (droit a l'image) — jamais
+ * un faux visage generique, comme le site du Forum.
+ *
+ * @return string 1 ou 2 lettres majuscules.
+ */
+function fnc_speaker_initials( $speaker_id ) {
+	$name  = wp_strip_all_tags( (string) get_the_title( $speaker_id ) );
+	$words = array_values( array_filter( preg_split( '/\s+/u', trim( $name ) ), static function ( $w ) {
+		return '' !== $w && preg_match( '/\p{L}/u', $w );
+	} ) );
+	if ( empty( $words ) ) {
+		return '·';
+	}
+	$first = mb_strtoupper( mb_substr( $words[0], 0, 1 ) );
+	$last  = count( $words ) > 1 ? mb_strtoupper( mb_substr( end( $words ), 0, 1 ) ) : '';
+	return $first . $last;
+}
+
+/**
  * Ligne "organisation · pays" d'un intervenant, sans separateur superflu si
  * l'un des deux champs est vide.
  */

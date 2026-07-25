@@ -166,7 +166,12 @@ $fnc_cat_class = static function ( $slug ) {
 									if ( $fnc_portrait ) {
 										echo $fnc_portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
 									} else {
-										printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+										// Repli monogramme (initiales) — jamais un faux visage generique, comme le site du Forum.
+										printf(
+											'<span class="m" aria-hidden="true">%s</span><span class="l">%s</span>',
+											esc_html( fnc_speaker_initials( $fnc_sp_id ) ),
+											esc_html__( 'Photo à venir', 'fnc-wordpress-theme' )
+										);
 									}
 									?>
 								</div>

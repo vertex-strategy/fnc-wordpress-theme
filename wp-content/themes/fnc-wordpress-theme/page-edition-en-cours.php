@@ -223,7 +223,7 @@ fnc_render_opening_hero(
 									if ( $fnc_pv ) {
 										echo $fnc_pv; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
 									} else {
-										printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+										printf( '<span class="m" aria-hidden="true">%s</span><span class="l">%s</span>', esc_html( fnc_speaker_initials( $fnc_speaker_id ) ), esc_html__( 'Photo à venir', 'fnc-wordpress-theme' ) );
 									}
 									?>
 								</div>

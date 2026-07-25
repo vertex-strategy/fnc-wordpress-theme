@@ -55,6 +55,12 @@ require_once get_template_directory() . '/inc/hero-settings.php';
 require_once get_template_directory() . '/inc/section-titles.php';
 
 /**
+ * Guide d'edition (widget du tableau de bord) : « par ou editer quoi », avec
+ * liens directs — contre la fragmentation. Voir inc/admin-guide.php.
+ */
+require_once get_template_directory() . '/inc/admin-guide.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

@@ -33,7 +33,36 @@
 }
 
 /* --------------------------------------------------------------------------
-   2) Garde-fous DA génériques (sûrs) — au cas où le thème les aurait perdus.
+   2) Callout (bande CTA pré-footer) — le PARAGRAPHE doit être CENTRÉ.
+   Mesuré (ex. /edition-en-cours/) : `.callout` est `text-align:center` mais le <p>
+   a `max-width:~421px` + `margin:0` → le bloc reste collé à GAUCHE (−320px du centre),
+   donc le texte paraît aligné à gauche sous un titre centré. Ré-assère le centrage du bloc.
+   Vérifié en direct : décalage −320px → 0.
+   -------------------------------------------------------------------------- */
+.callout p,
+.callout .intro,
+.callout .lead {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* --------------------------------------------------------------------------
+   C2) Carrousel — contrôles sur UNE seule rangée [‹ · pastilles · › · lecture].
+   Mesuré : .voice-controls{flex-wrap:wrap} + .voice-dots{flex-basis:100%} + des
+   boutons de pastille larges (~44px) → les pastilles passent sur une ligne à
+   part et les fleches+lecture s'entassent dessous. On force une rangee unique,
+   dans l'ordre du DOM (prev · pastilles · next · lecture), avec de PETITES
+   pastilles (point visuel 9px, zone de clic via padding).
+   -------------------------------------------------------------------------- */
+.voice-controls { flex-wrap: nowrap !important; }
+.voice-controls .voice-arrow,
+.voice-controls .voice-play,
+.voice-controls .voice-dots { order: 0 !important; }
+.voice-dots { flex-basis: auto !important; flex-wrap: nowrap !important; }
+.voice-dots button { width: 22px !important; }
+
+/* --------------------------------------------------------------------------
+   3) Garde-fous DA génériques (sûrs) — au cas où le thème les aurait perdus.
    Le serif de la DA ne sert QU'AUX accents en italique (jamais aux titres) ;
    le vert et le jaune ne sont JAMAIS des couleurs de texte (illisibles).
    Ces règles ne changent rien si la DA est déjà respectée ; elles rattrapent

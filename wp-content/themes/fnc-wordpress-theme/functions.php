@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.5' );
+define( 'FNC_THEME_VERSION', '1.0.6' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -293,10 +293,37 @@ function fnc_default_menu_items() {
  * Menu de repli pour l'emplacement "primary", tant qu'aucun menu
  * WordPress n'est configure dans l'administration (Apparence > Menus).
  */
+/**
+ * Vrai si l'URL d'un item de menu correspond a la page courante (ou a sa
+ * section) — pour surligner l'entree active, comme le site du Forum. Compare
+ * les chemins en ignorant le prefixe de langue (Polylang).
+ *
+ * @param string $href URL de l'item.
+ * @return bool
+ */
+function fnc_menu_is_active( $href ) {
+	$req  = isset( $GLOBALS['wp']->request ) ? $GLOBALS['wp']->request : '';
+	$cur  = trim( (string) wp_parse_url( home_url( $req ), PHP_URL_PATH ), '/' );
+	$item = trim( (string) wp_parse_url( $href, PHP_URL_PATH ), '/' );
+	$cur  = preg_replace( '#^[a-z]{2}/#', '', $cur );
+	$item = preg_replace( '#^[a-z]{2}/#', '', $item );
+	if ( '' === $item ) {
+		return is_front_page();
+	}
+	return $cur === $item || 0 === strpos( $cur, $item . '/' );
+}
+
 function fnc_default_primary_menu() {
 	echo '<ul>';
 	foreach ( fnc_default_menu_items() as $fnc_item ) {
-		printf( '<li><a href="%s">%s</a></li>', esc_url( $fnc_item[0] ), esc_html( $fnc_item[1] ) );
+		$fnc_active = fnc_menu_is_active( $fnc_item[0] );
+		printf(
+			'<li%s><a href="%s"%s>%s</a></li>',
+			$fnc_active ? ' class="current-menu-item"' : '',
+			esc_url( $fnc_item[0] ),
+			$fnc_active ? ' aria-current="page"' : '',
+			esc_html( $fnc_item[1] )
+		);
 	}
 	echo '</ul>';
 }
@@ -308,7 +335,13 @@ function fnc_default_primary_menu() {
  */
 function fnc_default_mobile_menu() {
 	foreach ( fnc_default_menu_items() as $fnc_item ) {
-		printf( '<a href="%s">%s</a>', esc_url( $fnc_item[0] ), esc_html( $fnc_item[1] ) );
+		$fnc_active = fnc_menu_is_active( $fnc_item[0] );
+		printf(
+			'<a href="%s"%s>%s</a>',
+			esc_url( $fnc_item[0] ),
+			$fnc_active ? ' aria-current="page"' : '',
+			esc_html( $fnc_item[1] )
+		);
 	}
 }
 
@@ -363,7 +396,7 @@ function fnc_language_switcher() {
 					esc_html( strtoupper( $lang->slug ) )
 				);
 				if ( $i < $count ) {
-					echo '<span class="sep" aria-hidden="true">·</span>';
+					echo '<span class="sep" aria-hidden="true">|</span>';
 				}
 			}
 			echo '</div>';
@@ -373,7 +406,7 @@ function fnc_language_switcher() {
 
 	// Repli statique — decoratif tant que Polylang n'est pas actif.
 	echo '<div class="lang" role="group" aria-label="' . esc_attr__( 'Langue', 'fnc-wordpress-theme' ) . '">';
-	echo '<button aria-pressed="true">FR</button><span class="sep" aria-hidden="true">·</span><button aria-pressed="false">EN</button>';
+	echo '<button aria-pressed="true">FR</button><span class="sep" aria-hidden="true">|</span><button aria-pressed="false">EN</button>';
 	echo '</div>';
 }
 

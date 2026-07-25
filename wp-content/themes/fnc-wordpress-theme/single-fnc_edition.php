@@ -41,7 +41,7 @@ while ( have_posts() ) :
 			'eyebrow'    => $fnc_ed_year ? $fnc_ed_year : __( 'Édition', 'fnc-wordpress-theme' ),
 			'title'      => get_the_title(),
 			'lead'       => $fnc_ed_theme,
-			'image'      => has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_ed_id, 'full' ) : get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
+			'image'      => has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_ed_id, 'full' ) : get_template_directory_uri() . '/assets/images/le-programme.png',
 			'image_alt'  => '',
 			'breadcrumb' => get_the_title(),
 		)

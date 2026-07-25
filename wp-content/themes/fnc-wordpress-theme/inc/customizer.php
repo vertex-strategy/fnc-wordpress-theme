@@ -1,21 +1,11 @@
 <?php
 /**
- * Réglages globaux du site — WordPress Customizer.
+ * Forum Numérique Congo — réglages d’apparence (identité, coordonnées, réseaux).
  *
- * Pendant WordPress natif du Global « Réglages du site » de Payload
- * (forum-numerique-congo/src/payload/globals/Settings.ts). Porte l'identité,
- * les logos, les coordonnées, les réseaux sociaux, les contacts presse, le
- * footer et les valeurs SEO/OpenGraph par défaut du portail — administrables
- * sans développeur, dans Apparence → Personnaliser → « Réglages FNC ».
- *
- * Architecture validée par le Décideur (Customizer + blocs Gutenberg custom,
- * zéro dépendance tierce — conforme ADR-007, Decision 2). Ce fichier ne couvre
- * que les réglages globaux (Lot 1) ; la composition de pages par blocs suivra
- * dans un lot dédié.
- *
- * Frontière DA (même principe que côté Payload) : ces réglages portent le
- * CONTENU (textes, fichiers, liens), jamais la mise en forme ni la structure,
- * qui restent dans le code du thème.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return mixed
  */
 /*
- * Le plugin FNC Core (Module B) fournit la version faisant autorite de
+ * Le plugin FNC Core (réglages du site) fournit la version faisant autorite de
  * fnc_get_setting() / fnc_social_links() (source unique : option `fnc_settings`,
  * cles camelCase). Le plugin se chargeant AVANT le theme, sa version gagne ; les
  * definitions ci-dessous sont guardees et ne servent que de repli si le plugin
@@ -74,7 +64,7 @@ function fnc_map_setting_key( $key ) {
 
 /**
  * Champs de réglages localisables (equivalents des champs `localized` du Global
- * Settings de Payload). Cle => [libelle, multiligne].
+ * les réglages de référence). Cle => [libelle, multiligne].
  *
  * @return array<string,array{0:string,1:bool}>
  */
@@ -177,7 +167,7 @@ function fnc_get_setting_image_url( $key, $size = 'full' ) {
 /**
  * Réseaux sociaux renseignés, sous forme [plateforme => url].
  * N'inclut que les plateformes dont l'URL est réellement saisie (RÈGLE 4 :
- * aucun lien fictif). Ordre stable, aligné sur l'énumération Payload.
+ * aucun lien fictif). Ordre stable, aligné sur l’énumération de référence.
  *
  * @return array<string,string>
  */
@@ -217,7 +207,7 @@ function fnc_social_label( $platform ) {
 
 /**
  * Icône SVG inline d'une plateforme sociale — port fidèle du composant
- * SocialIcon du site réel (src/components/layout/Footer.tsx). Chaque icône fait
+ * SocialIcon du site du Forum (le site du Forum Chaque icône fait
  * 16×16 dans un viewBox 0 0 24 24, en currentColor (le CSS .social-chip du kit
  * gère la couleur selon le contexte). Repli neutre (maillon) si la plateforme
  * n'est pas reconnue. Retourne du markup SVG destiné à être échappé au sortir.
@@ -285,7 +275,7 @@ function fnc_parse_press_contacts( $raw = null ) {
 
 /**
  * Clé de comparaison d'un nom de pays : insensible à la casse, aux espaces et
- * aux accents (même tolérance que le vrai site : « Congo » ≡ « congo »).
+ * aux accents (même tolérance que le site du Forum : « Congo » ≡ « congo »).
  *
  * @param string $name
  * @return string

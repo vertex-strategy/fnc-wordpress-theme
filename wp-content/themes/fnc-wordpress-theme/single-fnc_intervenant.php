@@ -1,14 +1,11 @@
 <?php
 /**
- * Fiche d'un intervenant (single-fnc_intervenant.php).
+ * Forum Numérique Congo — fiche détaillée d’un intervenant.
  *
- * Structure alignee sur le site reel (/intervenants/[slug]) : hero .page-head,
- * puis une grille 2 colonnes [0.42fr 1fr] sur fond lin :
- *   - aside sticky (gauche) : portrait (RÈGLE 7) ou monogramme + profil + liens ;
- *   - article (droite)      : biographie (.prose-legal) + sessions de la personne.
- *
- * Les sessions ou la personne intervient sont retrouvees depuis les relations
- * (intervenant OU moderateur), sans champ supplementaire a saisir.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -70,7 +67,7 @@ while ( have_posts() ) :
 					<aside class="person-detail__aside">
 						<div class="person-detail__portrait">
 							<?php
-							// RÈGLE 7 : fnc_speaker_portrait ne renvoie la photo que si le droit est
+							// la règle du droit à l’image : fnc_speaker_portrait ne renvoie la photo que si le droit est
 							// « obtenu » et non expire ; sinon monogramme (jamais la vraie photo).
 							$fnc_portrait = function_exists( 'fnc_speaker_portrait' )
 								? fnc_speaker_portrait( $fnc_i_id, 'large', array( 'alt' => $fnc_i_name ) )

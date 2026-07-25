@@ -1,20 +1,22 @@
 /*
-Theme Name: FNC WordPress Theme
-Theme URI: https://github.com/vertex-strategy/fnc-wordpress-theme
-Author: Vertex Strategy
-Description: Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload.
-Version: 0.5.3
+Theme Name: Forum Numérique Congo
+Theme URI: https://www.grinso.io
+Author: Grinso & Associés
+Author URI: https://www.grinso.io
+Description: Template institutionnel bilingue du Forum Numérique Congo.
+Version: 1.0.0
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+         Développé par Vanel NGOYO ADOUMA, Lead développeur.
 */
 
 /* ============================================================
-   FORUM NUMERIQUE CONGO — HOMEPAGE V2 (portage WordPress)
-   Source : docs/mockups/homepage-v2/index.html (forum-numerique-congo)
-   DA-D · ART-01 · 8 moments (R9) · 1 CTA rouge (R3) · A confirmer (R4)
+   FORUM NUMÉRIQUE CONGO — FEUILLE DE STYLE PRINCIPALE
+   Charte : DA-D · ART-01 · page d'accueil en 8 temps · 1 seul CTA rouge
    ============================================================ */
 :root{
   --navy:#2D3180; --navy-deep:#1A1D5C; --vert:#3BA04A; --rouge:#CC2222;
@@ -289,9 +291,8 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 
 /* ============================================================
    PAGES INTERIEURES (ex. Le Forum)
-   Source : docs/mockups/homepage-v2/interior/le-forum.html
-   Gabarit generique pour les pages WordPress natives (page-*.php),
-   distinct des 8 moments de la page d'accueil.
+   Gabarit generique des pages WordPress natives (page-*.php),
+   distinct des 8 temps de la page d'accueil.
    ============================================================ */
 .opening{position:relative;min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(120px,20vh,200px) var(--marge) clamp(48px,7vh,88px);color:#fff;overflow:hidden;}
 .opening img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:kb 22s var(--ease) forwards;}
@@ -356,11 +357,9 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 
 /* ============================================================
    COMPOSANTS PARTAGES (contact, archives editions/publications, etc.)
-   Source : docs/mockups/homepage-v2/site.css (systeme unifie couvrant
-   les pages generees par site.js). Memes tokens de couleur que
-   l'accueil/Le Forum (--navy = --navy, --gold = --jaune, etc.),
-   nommage de classes conserve a l'identique de la source pour rester
-   fidele au rendu qu'un navigateur produirait a partir de site.js.
+   Systeme unifie couvrant les pages de contenu. Memes tokens de couleur
+   que l'accueil et Le Forum (--navy, --gold = --jaune, etc.), nommage de
+   classes coherent avec la charte du Forum.
    ============================================================ */
 .hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;padding:145px var(--marge) clamp(64px,9vh,112px);color:#fff;overflow:hidden;background:#111;}
 .hero.secondary{min-height:62vh;align-items:center;padding:132px var(--marge) 78px;background:var(--navy-deep);}

@@ -1,121 +1,11 @@
-/* ==========================================================================
-   FNC — Complément INTÉGRAL de la couche sémantique          [P3 / complet]
-   ==========================================================================
-   Source : src/app/globals.css (site Next.js de production).
-   Méthode : diff par sélecteur normalisé (commentaires ignorés) entre
-   globals.css et l'union { style.css du thème + wordpress-catchup.css (P1)
-   + wordpress-catchup-p2.css (P2) }. Déclarations EXTRAITES, non réécrites.
-   L'ORDRE SOURCE est préservé : la cascade CSS en dépend.
-   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
-
-   CE FICHIER COMPLÈTE LE PAQUET : avec lui, la couche sémantique du thème
-   atteint la parité avec globals.css (234 règles restantes, dont 9 @keyframes
-   et 7 @media).
-
-   FAMILLES COUVERTES
-     .sess                  17
-     .prose-legal           10
-     @keyframes             9
-     @media                 7
-     .route-dip             7
-     .pub                   7
-     .page-head             7
-     .person                6
-     .edition               6
-     .nav                   5
-     .field                 5
-     .day-nav               5
-     .social-chip           4
-     .practical-lodging     4
-     .practical-faq         4
-     .btn-primary           4
-     .agenda-day            4
-     .president-sign        3
-     .practical-contacts    3
-     .pcb-band              3
-     .opening               3
-     .obj                   3
-     .lang                  3
-     .info-block            3
-     .contact-line          3
-     .consent-reopen        3
-     .consent-link          3
-     .consent-decline       3
-     .btn-ghost-light       3
-     .btn                   3
-     .split                 2
-     .social-chip--icon     2
-     .programme-panorama    2
-     .programme-detail      2
-     .practical-map         2
-     .practical-item        2
-     .pcb                   2
-     .intervenants-panorama 2
-     .hero-backdrop         2
-     .consent-text          2
-     .consent-btn           2
-     .consent-accept        2
-     .consent               2
-     .chip                  2
-     .social-row            1
-     .session               1
-     .section-band          1
-     .section               1
-     .rule                  1
-     .pubs                  1
-     .prov-banner           1
-     .president-word        1
-     .practical-title       1
-     .practical-list        1
-     .people                1
-     .page-h3               1
-     .page-h2               1
-     .page-eyebrow          1
-     .nav-links             1
-     .narration             1
-     .mp-utils              1
-     .intervenants-directory 1
-     .hb-trace              1
-     .hb-beams              1
-     .hb-beam-3             1
-     .hb-beam-2             1
-     .hb-beam-1             1
-     .form-actions          1
-     .foot-logo-img         1
-     .foot-logo             1
-     .foot-brand            1
-     .filters               1
-     .empty                 1
-     .editions              1
-     .day-tabs              1
-     .contact-grid          1
-     .contact-block         1
-     .consent-inner         1
-     .consent-actions       1
-     .btn-disabled          1
-     .brand-logo--white     1
-     .brand-logo--color     1
-
-   NUANCE MÉTHODOLOGIQUE — à lire
-   Le diff porte sur l'IDENTITÉ DES SÉLECTEURS, pas sur l'équivalence visuelle.
-   Certaines de ces règles sont peut-être déjà couvertes côté thème sous un
-   AUTRE nom de classe : dans ce cas la règle livrée ici sera simplement
-   inerte (aucun sélecteur correspondant dans le markup). C'est sans risque,
-   mais cela signifie que 231 est un MAJORANT du manque réel.
-
-   FAMILLES POTENTIELLEMENT INUTILES EN WORDPRESS
-   - .route-dip (7 règles) : transition de route propre au App Router Next.js.
-     Aucun équivalent WP — supprimable sans conséquence.
-
-   INSTALLATION — dernier de la chaîne :
-     style.css
-       -> wordpress-catchup.css              (P1 : familles à zéro style)
-       -> wordpress-tailwind-utilities.css   (P4 : couche utilitaire)
-       -> wordpress-catchup-p2.css           (P2 : familles partielles)
-       -> CE FICHIER                          (P3 : tout le reste)
-   Rappel : les règles « .dad … » exigent la classe `dad` sur le <body>
-   (filtre body_class — voir l'en-tête de wordpress-catchup-p2.css).
-   ========================================================================== */
+/*
+ * Forum Numérique Congo — feuille de style — composants de la charte.
+ *
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
+ */
 
 :root {
   /* Tokens DA référencés par ce fichier, absents du thème et sans
@@ -131,7 +21,7 @@
    ils n'ont aucun sens dans une CSS servie telle quelle, et @layer abaisserait
    la priorité de cascade. Le :root de globals.css n'est PAS repris ici — le
    thème définit déjà ces tokens, et les 4 manquants sont déclarés en tête.
-   NOTE : la règle `body` ci-dessous impose fond/couleur/police du site réel ;
+   NOTE : la règle `body` ci-dessous impose fond/couleur/police du site du Forum ;
    si le thème les gère déjà, elle est redondante (sans risque). */
 html {
   -webkit-text-size-adjust: 100%;
@@ -268,14 +158,14 @@ textarea {
 @keyframes dad-trace { to { stroke-dashoffset: 0; } }
 
 /* ---------- PAGE HEADER (pages intérieures) ---------- */
-/* Hero .opening : hauteur alignee sur le site reel (54dvh au lieu de 78vh) —
+/* Hero .opening : hauteur alignee sur le site du Forum (54dvh au lieu de 78vh) —
    les heros etaient trop hauts. Charge apres style.css, donc l'emporte. */
 .opening {
   min-height: 54dvh;
   padding: clamp(116px, 14vh, 156px) var(--marge) clamp(40px, 5vh, 64px);
 }
 
-/* Registre C — en-tete sobre (calque PageHeader.tsx du site reel) : bandeau
+/* Registre C — en-tete sobre (calque le site du Forum du site du Forum) : bandeau
    lin, titre navy, filet PCB STATIQUE en pied. Pas de photo, pas d'eyebrow,
    pas de fil d'ariane : uniquement le titre (et, en repli legal, une meta). */
 .page-header {
@@ -813,7 +703,7 @@ textarea {
 /* Réseaux sociaux du footer : pastilles carrées icône-seule (44×44), côte à côte.
    Avec leur libellé texte, les chips devenaient larges et s'empilaient une par
    ligne dans la colonne étroite du footer. Le nom reste accessible via aria-label
-   (voir Footer.tsx). Ne concerne PAS les chips email/téléphone des pages contact
+   (voir le pied de page). Ne concerne PAS les chips email/téléphone des pages contact
    et espace-presse, qui gardent leur texte. */
 .social-chip--icon { width: 44px; padding: 0; justify-content: center; }
 
@@ -1335,7 +1225,7 @@ textarea {
    qu'au contenu structuré à venir. Seul `p + p` modifie le rendu actuel, et il
    corrige un défaut avéré.
    Sélecteurs en descendance et NON en enfant direct (`>`) : le convertisseur
-   Payload enveloppe le contenu dans un <div class="payload-richtext">, si bien
+   Le contenu riche est enveloppé dans un conteneur intermédiaire, si bien
    que les nœuds sont des petits-enfants de .prose-legal. */
 .prose-legal p + p { margin-top: 1.1em; }
 

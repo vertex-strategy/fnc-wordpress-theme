@@ -1,7 +1,11 @@
 <?php
 /**
- * Pied de page du theme.
- * Porte le footer de docs/mockups/homepage-v2/index.html (ADR-007).
+ * Forum Numérique Congo — pied de page (liens, réseaux, mentions, réouverture du consentement).
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -91,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="<?php echo esc_url( fnc_page_url( 'mentions-legales' ) ); ?>"><?php esc_html_e( 'Mentions légales', 'fnc-wordpress-theme' ); ?></a>
 			· <a href="<?php echo esc_url( fnc_page_url( 'politique-confidentialite' ) ); ?>"><?php esc_html_e( 'Confidentialité', 'fnc-wordpress-theme' ); ?></a>
 			<?php
-			// Bouton de reouverture du consentement (FNC Core, Module E) : visible seulement si Matomo actif.
+			// Bouton de reouverture du consentement (FNC Core, le consentement) : visible seulement si Matomo actif.
 			if ( function_exists( 'fnc_consent_reopen_button' ) ) { echo ' · ' . fnc_consent_reopen_button(); } // phpcs:ignore WordPress.Security.EscapeOutput
 			?>
 		</span>

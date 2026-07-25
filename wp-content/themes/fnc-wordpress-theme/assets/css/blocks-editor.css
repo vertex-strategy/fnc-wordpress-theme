@@ -1,9 +1,10 @@
-/**
- * Styles de l'éditeur pour les blocs éditoriaux du thème (Lot 2).
+/*
+ * Forum Numérique Congo — styles de l’éditeur de blocs.
  *
- * Ces styles ne concernent QUE l'interface d'édition (back-office) : le rendu
- * public est produit en PHP avec le markup DA figé du thème. On cherche ici la
- * lisibilité du formulaire, pas la fidélité visuelle au front.
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
  */
 
 .fnc-block {

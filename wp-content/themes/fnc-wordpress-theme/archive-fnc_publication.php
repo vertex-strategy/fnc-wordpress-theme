@@ -1,16 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_publication".
+ * Forum Numérique Congo — ressources (liste des publications).
  *
- * Porte docs/mockups/homepage-v2/publications.html a l'origine (contenu
- * genere par site.js: publicationsPage()). Recherche + filtre alignes sur
- * le site officiel reel (localhost:3000/fr/ressources).
- *
- * Passe gabarits (reconciliation du modele de contenu) : le filtre
- * principal utilise desormais le champ dedie `_fnc_publication_type` (8
- * valeurs), comme sur la vraie page /ressources — pas la taxonomie
- * fnc_categorie, qui reste une classification interne distincte (le vrai
- * schema Payload separe deja `type` et `category`, voir Publications.ts).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

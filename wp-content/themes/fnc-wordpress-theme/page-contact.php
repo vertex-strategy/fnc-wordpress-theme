@@ -1,15 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Contact".
+ * Forum Numérique Congo — gabarit de la page « Contact ».
  *
- * Aligne sur la page Contact reelle (localhost:3000/fr/contact) : heros, section
- * "Orientation" (split editorial + photo), puis un bloc en deux colonnes
- * "Coordonnees" + formulaire "Demande de contact".
- *
- * Le formulaire reste non fonctionnel (pas de handler d'envoi) : fidele a la
- * posture du site reel tant que le canal officiel n'est pas ouvert. Les
- * coordonnees proviennent des Reglages FNC (aucune donnee inventee) et ne
- * s'affichent que si elles sont renseignees.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,10 +17,10 @@ get_header();
 /*
  * Lot 2 — composition par blocs. Des que l'editorial compose cette page avec
  * des blocs FNC, ce gabarit s'efface ; sinon il porte le contenu institutionnel
- * aligne sur le site reel.
+ * aligne sur le site du Forum.
  */
 /*
- * Lot 3 — Module G (ACF Flexible Content). Sections ACF « institutionnel »
+ * Lot 3 — l’édition des pages (ACF Flexible Content). Sections ACF « institutionnel »
  * prioritaires sur le contenu de demonstration. Voir inc/page-sections.php.
  */
 if ( function_exists( 'fnc_render_page_sections' ) ) {
@@ -65,7 +61,7 @@ $fnc_phone   = fnc_get_setting( 'phone', '' );
 $fnc_address = fnc_get_setting_i18n( 'address', '' );
 $fnc_social  = fnc_social_links();
 
-// Champs du formulaire : name = nom du champ attendu par FNC Core (Module A).
+// Champs du formulaire : name = nom du champ attendu par FNC Core (réception des formulaires).
 $fnc_contact_fields = array(
 	array( 'name' => 'name', 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
 	array( 'name' => 'organization', 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
@@ -73,7 +69,7 @@ $fnc_contact_fields = array(
 	array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
 	array( 'name' => 'message', 'label' => __( 'Message', 'fnc-wordpress-theme' ), 'type' => 'textarea', 'required' => true ),
 );
-// Flash de retour (FNC Core Module A) : repopulation + erreurs par champ.
+// Flash de retour (FNC Core la réception des formulaires) : repopulation + erreurs par champ.
 $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) : null;
 ?>
 
@@ -144,7 +140,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 				<p class="help"><?php esc_html_e( 'Préciser le sujet nous aide à orienter votre demande dès l’ouverture du canal officiel.', 'fnc-wordpress-theme' ); ?></p>
 
 				<?php
-				// Champs caches (action/nonce/honeypot) fournis par FNC Core (Module A).
+				// Champs caches (action/nonce/honeypot) fournis par FNC Core (réception des formulaires).
 				if ( function_exists( 'fnc_form_fields' ) ) { fnc_form_fields( 'contact' ); }
 				if ( function_exists( 'fnc_submission_banner' ) ) { echo fnc_submission_banner( 'contact', $fnc_flash ); } // phpcs:ignore WordPress.Security.EscapeOutput
 				?>

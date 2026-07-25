@@ -1,34 +1,11 @@
-/* ==========================================================================
-   FNC — CSS de rattrapage pour le thème WordPress
-   ==========================================================================
-   Source de vérité : src/app/globals.css (site Next.js de production).
-   Blocs extraits automatiquement (analyse d'accolades), non réécrits.
-   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
-
-   POURQUOI CE FICHIER
-   Le thème porte correctement la structure (moments m1→m8), les tokens
-   couleur et les polices (Helvetica Neue / Georgia, aucune webfont parasite).
-   Mais il ne servait que ~45 % de la CSS (33 Ko contre 74 Ko), et quatre
-   familles de composants avaient ZÉRO règle :
-     .dad-footer   footer entier                    (6 règles)
-     .voice*       carrousel « Les voix » (M3)      (28 règles)
-     .spk*         cartes intervenants              (64 règles)
-     .fnc-card     primitive de carte               (2 règles)
-   Ces blocs s'affichaient donc en style navigateur par défaut.
-
-   DÉPENDANCES — VÉRIFIÉES
-   Les 13 variables utilisées ici (--navy, --navy-deep, --marge, --border,
-   --ease, --linen, --noir, --rouge, --vert, --jaune, --texte-corps,
-   --texte-sec, --texte-tert) sont DÉJÀ définies dans le thème. Seul
-   --jaune-deep manquait : il est ajouté ci-dessous.
-
-   INSTALLATION
-   Charger APRÈS la feuille principale du thème (enqueue en dépendance de
-   'fnc-theme-style', ou @import en fin de style.css) pour la cascade.
-
-   NE PAS scoper sous `.dad` : le thème n'utilise pas ce wrapper et ces
-   sélecteurs sont volontairement non scopés.
-   ========================================================================== */
+/*
+ * Forum Numérique Congo — feuille de style — socle de la charte.
+ *
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
+ */
 
 :root {
   /* Ambre lisible sur fond clair (~4,6:1). Le jaune pur #f5c000 tombe à
@@ -122,7 +99,7 @@
 
 .sess ul.spk-list .ctry { color: var(--texte-tert); }
 
-/* Grille intervenants (monogrammes, sans fausses photos — RÈGLE 7) */
+/* Grille intervenants (monogrammes, sans fausses photos — la règle du droit à l’image) */
 .spk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: clamp(16px, 2vw, 26px); }
 
 .spk { display: grid; grid-template-columns: 60px 1fr; gap: 16px; align-items: start; padding: 22px 4px; border-top: 1px solid var(--border); }

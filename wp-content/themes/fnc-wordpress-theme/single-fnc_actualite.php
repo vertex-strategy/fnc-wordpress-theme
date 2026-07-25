@@ -1,18 +1,11 @@
 <?php
 /**
- * Fiche d'une actualite (single-fnc_actualite.php).
+ * Forum Numérique Congo — fiche détaillée d’une actualité.
  *
- * Complete la couverture des gabarits single : le CPT fnc_actualite avait une
- * URL publique mais aucun gabarit dedie, retombant sur index.php (extrait seul).
- *
- * Le CPT ne porte que les champs natifs (titre, contenu, image, extrait) et les
- * taxonomies partagees (categories, etiquettes). La fiche affiche le contenu
- * editorial en colonne de lecture, avec la date et les classifications. Chaque
- * element est masque si la donnee n'existe pas.
- *
- * Rappel (voir modele de contenu) : la route publique des actualites du vrai
- * site est desactivee par defaut (NEWS_ENABLED) ; ce gabarit reste disponible
- * si des actualites sont publiees dans cette instance.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

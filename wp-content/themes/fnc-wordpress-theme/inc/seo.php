@@ -1,23 +1,11 @@
 <?php
 /**
- * SEO par document + rendu des métadonnées (Lot 5).
+ * Forum Numérique Congo — référencement (balises et données structurées).
  *
- * Pendant WordPress natif des `seoFields` de Payload (groupe `seo` avec titre
- * et description, étalé dans les collections du vrai site) et de la logique de
- * `generateMetadata()` : chaque document peut surcharger le titre et la
- * description, sinon on retombe sur le titre du document, puis sur les valeurs
- * par défaut du site (onglet « SEO par défaut » des Réglages FNC, Lot 1).
- *
- * Choix d'implémentation : ces champs vivent dans le THÈME et non dans le
- * plugin de modèle de contenu, alors que le vrai site les porte dans ses
- * collections. Raison : c'est le thème qui produit les balises, et le besoin
- * couvre uniformément les Pages/articles WordPress natifs *et* les contenus du
- * plugin — garder toute la cascade (document → défaut global) au même endroit
- * la rend beaucoup plus simple à raisonner.
- *
- * L'image de partage par document suit la convention WordPress : l'image mise
- * en avant sert d'`og:image`, avec repli sur l'image OpenGraph par défaut. Pas
- * de champ média supplémentaire à saisir.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -136,7 +124,7 @@ add_action( 'save_post', 'fnc_seo_save_meta', 10, 2 );
 
 /**
  * Titre SEO résolu : SEO du document → titre du document → titre par défaut
- * du site → nom du site. Même cascade que `generateMetadata()` du vrai site.
+ * du site → nom du site. Même cascade que `generateMetadata()` du site du Forum.
  *
  * @return string
  */

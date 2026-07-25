@@ -1,14 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Mot du président".
+ * Forum Numérique Congo — gabarit de la page « Le mot du Président ».
  *
- * Aligne sur la page reelle localhost:3000/fr/le-forum/mot-du-president : heros
- * « Le mot du Président » (avec l'exergue), puis le message en deux colonnes
- * (portrait + identite a gauche, texte a droite) et un callout « Rejoignez le
- * Forum ». Le nom et le message sont ceux du teaser deja porte par la page
- * « Le Forum » (page-le-forum.php) — coherence entre les deux surfaces. Le
- * portrait reste l'illustration embarquee tant que la vraie photo n'est pas
- * fournie.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +21,7 @@ get_header();
  * inchange). Meme convention que page.php et page-le-forum.php.
  */
 /*
- * Lot 3 — Module G (ACF Flexible Content). Sections ACF « institutionnel »
+ * Lot 3 — l’édition des pages (ACF Flexible Content). Sections ACF « institutionnel »
  * prioritaires sur le contenu de demonstration. Voir inc/page-sections.php.
  */
 if ( function_exists( 'fnc_render_page_sections' ) ) {

@@ -1,14 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_session" — le Programme.
+ * Forum Numérique Congo — programme (liste des sessions).
  *
- * Alignee sur la page reelle localhost:3000/fr/programme : heros « Deux jours de
- * dialogue », panorama (badge « Programme provisoire » + statistiques
- * intervenants / pays / jours), puis l'agenda groupe par journee
- * (.programme-detail > .agenda-day > .sess), et le callout « Réservez votre
- * place ». Le regroupement se fait sur _fnc_session_jour, dans l'ordre de la
- * requete principale. Contenu de demonstration (jamais les vraies identites du
- * site officiel).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +41,7 @@ if ( have_posts() ) {
 	ksort( $fnc_sessions_by_day, SORT_NATURAL | SORT_FLAG_CASE );
 }
 
-// FNC Core (Module C) fait autorite sur le regroupement/tri/scoping edition :
+// FNC Core (données du site) fait autorite sur le regroupement/tri/scoping edition :
 // on prefere ses donnees quand elles existent ; le gabarit garde le rendu.
 if ( function_exists( 'fnc_edition_sessions_by_day' ) ) {
 	$fnc_plugin_days = fnc_edition_sessions_by_day();

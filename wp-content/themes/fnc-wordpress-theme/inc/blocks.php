@@ -1,27 +1,11 @@
 <?php
 /**
- * Blocs éditoriaux — composition de pages (Lot 2).
+ * Forum Numérique Congo — blocs éditoriaux : palette, composition des pages et rendu.
  *
- * Pendant WordPress natif des palettes de blocs Payload :
- *   - institutionalSections.ts → blocs « fnc/inst-* » (Le Forum, Contact…)
- *   - pageSections.ts          → blocs « fnc/* » génériques (page composable)
- *
- * Principe repris à l'identique du vrai site : **la DA reste dans le code**.
- * Chaque bloc est un bloc dynamique (rendu serveur via `render_callback`) qui
- * produit le markup DA figé du thème ; l'éditeur n'administre que le contenu,
- * les médias et les CTA — jamais la mise en forme ni la structure.
- *
- * Implémentation « pilotée par schéma » : les champs de chaque bloc sont
- * déclarés une seule fois ci-dessous, puis (a) convertis en attributs de bloc,
- * (b) rendus en PHP, (c) transmis au script d'édition générique
- * (assets/js/blocks.js) qui construit l'interface. Cela évite d'écrire 14
- * composants d'édition distincts et respecte le « zéro dépendance tierce »
- * (ADR-007, Décision 2) — aucun build JS, aucun plugin de champs.
- *
- * Frontière assumée : les champs « richtext » sont des zones de texte simples
- * rendues avec `wpautop()`. Le vrai site utilise un éditeur riche Lexical ;
- * répliquer un éditeur riche multi-champs sans build JS n'apporterait pas assez
- * pour la complexité induite sur un produit vitrine.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -254,7 +238,7 @@ function fnc_block_schemas() {
 		),
 
 		/* ---------------- Informations pratiques (rattachees a l'Edition) ----------------
-		 * Miroir de practicalInfo.ts : agregat de rubriques porte par l'objet
+		 * Miroir de les informations pratiques : agregat de rubriques porte par l'objet
 		 * pivot Edition. Chaque rubrique est optionnelle et masquee si vide.
 		 * A composer dans le contenu d'une fiche Edition, pas d'une Page.
 		 */
@@ -552,9 +536,9 @@ function fnc_enqueue_block_editor_assets() {
 	);
 
 	// Schémas transmis au JS : une seule source de vérité (ce fichier).
-	$payload = array();
+	$block_schemas = array();
 	foreach ( fnc_block_schemas() as $slug => $schema ) {
-		$payload[ 'fnc/' . $slug ] = array(
+		$block_schemas[ 'fnc/' . $slug ] = array(
 			'title'       => $schema['title'],
 			'icon'        => $schema['icon'],
 			'category'    => isset( $schema['category'] ) ? $schema['category'] : 'fnc',
@@ -565,7 +549,7 @@ function fnc_enqueue_block_editor_assets() {
 	}
 	wp_add_inline_script(
 		'fnc-blocks',
-		'window.fncBlockSchemas = ' . wp_json_encode( $payload ) . ';',
+		'window.fncBlockSchemas = ' . wp_json_encode( $block_schemas ) . ';',
 		'before'
 	);
 
@@ -826,7 +810,7 @@ function fnc_render_block_inst_callout( $a ) {
 	return (string) ob_get_clean();
 }
 
-/** Bloc formulaire : rend le formulaire Module A du type choisi. */
+/** Bloc formulaire : rend le formulaire la réception des formulaires du type choisi. */
 function fnc_render_block_form( $a ) {
 	$type  = fnc_attr( $a, 'formType', 'contact' );
 	$linen = '1' === (string) fnc_attr( $a, 'linen', '0' );
@@ -1166,7 +1150,7 @@ function fnc_render_block_pract_venue( $a ) {
 		printf( '<img class="pract-map-image" src="%s" alt="" loading="lazy" />', esc_url( $map_image ) );
 	}
 	if ( $map_url ) {
-		// Privacy-first (comme le vrai site) : aucune requête vers le service
+		// Privacy-first (comme sur le site du Forum) : aucune requête vers le service
 		// tiers avant un clic explicite de l'utilisateur.
 		printf(
 			'<div class="pract-map" data-map-url="%1$s" data-map-title="%2$s"><button type="button" class="btn btn-soft pract-map-load">%3$s</button><p class="help">%4$s</p></div>',
@@ -1265,7 +1249,7 @@ function fnc_render_block_pract_faq( $a ) {
  * Rend l'agrégat « informations pratiques » d'une édition.
  *
  * Les rubriques sont composées dans le contenu de la fiche Édition (objet
- * pivot, comme sur le vrai site) : on extrait ici les seuls blocs
+ * pivot, comme sur le site du Forum) : on extrait ici les seuls blocs
  * `fnc/pract-*` pour les rendre, en ignorant le reste du contenu. Chaque
  * rubrique vide s'auto-masque (son renderer retourne une chaîne vide).
  *

@@ -1,15 +1,11 @@
 <?php
 /**
- * Fiche d'une ressource / publication (single-fnc_publication.php).
+ * Forum Numérique Congo — fiche détaillée d’une publication.
  *
- * Structure alignee sur le site reel (/ressources/[slug]) : hero .page-head,
- * puis un ARTICLE centre (carte blanche max-w-3xl) sur fond lin : contenu +
- * action (Regarder / Telecharger) puis blocs lies (Edition, autres ressources),
- * chacun separe par un filet et un page-eyebrow.
- *
- * Distingue le TYPE (rapport, video, communique…) de la CATEGORIE thematique,
- * comme le vrai site. L'action depend du type : « Regarder » pour une video/
- * interview, « Telecharger » si un fichier est renseigne, sinon etat d'attente.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

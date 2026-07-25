@@ -1,17 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Informations pratiques".
+ * Forum Numérique Congo — gabarit de la page « Informations pratiques ».
  *
- * Structure alignee sur le site officiel reel
- * (localhost:3000/fr/infos-pratiques), suite a l'amendement de la
- * Decision 1 de l'ADR-007.
- *
- * Lot 4 : les informations pratiques ne sont ni un texte libre ni une
- * collection autonome, mais un AGREGAT DE RUBRIQUES rattache a l'objet
- * pivot Edition (meme modelisation que le vrai site, practicalInfo.ts).
- * Cette page rend donc les rubriques de l'edition en cours ; chaque
- * rubrique est optionnelle et masquee si vide. Tant qu'aucune n'est
- * renseignee, l'etat d'attente sobre du site reel est conserve.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

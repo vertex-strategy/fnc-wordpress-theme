@@ -1,15 +1,11 @@
 <?php
 /**
- * Fiche d'une edition (single-fnc_edition.php).
+ * Forum Numérique Congo — fiche détaillée d’une édition.
  *
- * Comble un manque : sans ce gabarit, les liens « Voir l'edition » (frise des
- * editions, archives de la page d'accueil, partenaires) retombaient sur
- * index.php, qui n'affiche qu'un extrait — la fiche etait donc quasi vide.
- *
- * Affiche l'identite de l'edition (annee, statut, theme, dates, lieu), son
- * contenu editorial, ses informations pratiques (Lot 4 : agregat rattache a
- * l'edition), puis les contenus qui s'y rattachent (sessions, ressources).
- * Chaque section est masquee si la donnee correspondante n'existe pas.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

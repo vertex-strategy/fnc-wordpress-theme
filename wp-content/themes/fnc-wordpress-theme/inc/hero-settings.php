@@ -1,16 +1,11 @@
 <?php
 /**
- * Heros editables des pages a LISTE dynamique (archives + pages a mur).
+ * Forum Numérique Congo — héros des pages : contenu et image éditables.
  *
- * Ces pages ne peuvent pas etre composees entierement en blocs sans perdre leur
- * liste generee (annuaires, mur de partenaires, ressources presse, rubriques
- * d'edition). Approche « hero editable + liste auto » : le hero (sur-titre,
- * titre, intro, image) devient administrable via le Customizer
- * (Apparence -> Personnaliser -> « Héros des pages »), la liste reste dynamique.
- *
- * Valeur = surcharge editoriale (theme_mod) SINON la valeur par defaut du
- * registre (identique au rendu actuel : aucun changement tant qu'on ne touche
- * a rien).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -218,9 +213,9 @@ function fnc_hero_customize_register( $wp_customize ) {
 add_action( 'customize_register', 'fnc_hero_customize_register' );
 
 /**
- * Pont Module G (FNC Core) <-> heros editables du Customizer.
+ * Pont l’édition des pages (FNC Core) <-> heros editables du Customizer.
  *
- * Module G expose l'accesseur fnc_page_hero() qui applique : override ACF ->
+ * l’édition des pages expose l'accesseur fnc_page_hero() qui applique : override ACF ->
  * defaut de route. On branche ici ses DEFAUTS (image/sur-titre/titre) sur les
  * valeurs editables du Customizer (fnc_hero). Resultat via fnc_page_hero() :
  * ACF (si installe) -> Customizer (editable sans ACF) -> defaut de route.
@@ -242,9 +237,9 @@ add_filter( 'fnc_page_hero_defaults', 'fnc_bridge_hero_defaults', 10, 3 );
 
 /**
  * Hero resolu d'une route, pour les gabarits de liste. Passe par l'accesseur
- * Module G fnc_page_hero() (donc override ACF puis Customizer via le pont), et
- * complete l'intro — que Module G ne porte pas par defaut — avec la valeur
- * editable du Customizer. Degrade proprement si Module G est absent.
+ * l’édition des pages fnc_page_hero() (donc override ACF puis Customizer via le pont), et
+ * complete l'intro — que l’édition des pages ne porte pas par defaut — avec la valeur
+ * editable du Customizer. Degrade proprement si l’édition des pages est absent.
  *
  * @param string $route Slug de route (ex. « intervenants »).
  * @return array{image:string,eyebrow:string,title:string,intro:string}
@@ -254,7 +249,7 @@ function fnc_route_hero( $route ) {
 		$page = function_exists( 'fnc_page_for_route' ) ? fnc_page_for_route( $route ) : null;
 		$h    = fnc_page_hero( $page ? $page->ID : 0, $route );
 	} else {
-		// Module G absent : on lit directement la couche Customizer.
+		// l’édition des pages absent : on lit directement la couche Customizer.
 		$h = array(
 			'image'   => fnc_hero_image_url( $route ),
 			'eyebrow' => fnc_hero( $route, 'eyebrow' ),

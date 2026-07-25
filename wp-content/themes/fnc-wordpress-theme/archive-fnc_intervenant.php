@@ -1,17 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_intervenant" — « Les voix du Forum ».
+ * Forum Numérique Congo — liste des intervenants.
  *
- * Alignee sur la page reelle localhost:3000/fr/intervenants : heros « Les voix
- * du Forum », panorama (badge « Programme provisoire » + statistiques + frise
- * des pays representes), puis l'explorateur d'intervenants (.spk-explorer) avec
- * filtres par profil (compteurs) et par pays, et la grille de cartes .spk.
- * Se termine sur le callout « Proposer une intervention ».
- *
- * Le filtrage passe par les query vars natifs des taxonomies (fnc_profil /
- * fnc_pays) — degradation gracieuse sans JavaScript. Les compteurs sont
- * calcules cote serveur. Contenu de demonstration (jamais les vraies identites
- * du site officiel).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,7 +45,7 @@ foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 $fnc_countries     = fnc_order_countries( array_keys( $fnc_countries ) );
 $fnc_country_count = count( $fnc_countries );
 
-// FNC Core (Module C) fait autorite sur les facettes (total, comptes par profil,
+// FNC Core (données du site) fait autorite sur les facettes (total, comptes par profil,
 // pays), scopees aux participants de l'edition en cours. Repli sur le calcul du
 // theme si le plugin est absent.
 $fnc_facet_counts = array();
@@ -66,7 +60,7 @@ if ( function_exists( 'fnc_speaker_facets' ) ) {
 	}
 }
 
-// Classe de categorie (.cat-*) derivee du slug de profil, comme le vrai site.
+// Classe de categorie (.cat-*) derivee du slug de profil, comme sur le site du Forum.
 $fnc_cat_class = static function ( $slug ) {
 	$slug = strtolower( (string) $slug );
 	if ( false !== strpos( $slug, 'off' ) ) { return 'cat-official'; }
@@ -162,7 +156,7 @@ $fnc_cat_class = static function ( $slug ) {
 								<?php endif; ?>
 								<div class="ph">
 									<?php
-									// RÈGLE 7 : fnc_speaker_portrait ne renvoie la photo que si le droit est
+									// la règle du droit à l’image : fnc_speaker_portrait ne renvoie la photo que si le droit est
 									// « obtenu » et non expire ; sinon on affiche l'illustration neutre (jamais la vraie photo).
 									$fnc_portrait = function_exists( 'fnc_speaker_portrait' )
 										? fnc_speaker_portrait( $fnc_sp_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_sp_id ) ) )

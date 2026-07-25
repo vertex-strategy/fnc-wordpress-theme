@@ -1,13 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Espace presse" (Dossier presse).
+ * Forum Numérique Congo — gabarit de la page « Espace presse ».
  *
- * Aligne sur la page reelle localhost:3000/fr/espace-presse : heros, section
- * « Information », communiques (Ressources filtrees par la categorie
- * « Communiques »), contacts presse (issus des Reglages FNC), et
- * « Accreditation » -> page Contact. Les communiques sont un type de Ressource,
- * pas une collection separee (comme le vrai site). Les contacts et communiques
- * restent en etat d'attente sobre tant qu'ils ne sont pas renseignes.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

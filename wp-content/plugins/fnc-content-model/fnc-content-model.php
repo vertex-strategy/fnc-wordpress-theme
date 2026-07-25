@@ -1,15 +1,21 @@
 <?php
 /**
  * Plugin Name: FNC Content Model
- * Plugin URI: https://github.com/vertex-strategy/fnc-wordpress-theme
- * Description: Modele de contenu (custom post types, taxonomies, relations) reflete depuis les collections publiques Payload CMS du site officiel Forum Numerique Congo. Voir ADR-007 (depot forum-numerique-congo). Zero dependance tierce (ADR-007, Decision 2) — hors multilinguisme, assure separement par Polylang ou equivalent (Decision 2, arbitrage bilingue).
- * Version: 0.4.1
+ * Plugin URI: https://www.grinso.io
+ * Description: Modèle de contenu du Forum Numérique Congo (types de contenu, taxonomies
+ *              et relations : éditions, intervenants, sessions, publications, partenaires,
+ *              actualités). Survit à un changement de thème. Sans dépendance tierce, hors
+ *              multilinguisme assuré séparément par Polylang.
+ * Version: 1.0.0
  * Requires at least: 6.4
  * Requires PHP: 8.0
- * Author: Vertex Strategy
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
  * Text Domain: fnc-content-model
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

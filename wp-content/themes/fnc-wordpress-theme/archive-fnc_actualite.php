@@ -1,16 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_actualite".
+ * Forum Numérique Congo — liste des actualités.
  *
- * Complete la couverture des archives : les 5 autres CPT publics ont chacun
- * leur gabarit archive-{cpt}.php ; seule l'archive des actualites retombait sur
- * index.php (liste brute). Ce gabarit l'habille comme les autres.
- *
- * Rappel (modele de contenu) : la route publique des actualites du vrai site
- * est desactivee par defaut (NEWS_ENABLED) — cette archive n'affiche donc du
- * contenu que si des actualites sont reellement publiees dans l'instance, avec
- * un etat d'attente sobre sinon. On s'appuie sur la boucle principale, deja
- * filtree par langue par Polylang.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

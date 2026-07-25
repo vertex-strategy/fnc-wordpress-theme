@@ -1,7 +1,11 @@
 <?php
 /**
- * En-tete du theme : <head>, navigation desktop, panneau mobile.
- * Porte la navigation de docs/mockups/homepage-v2/index.html (ADR-007).
+ * Forum Numérique Congo — en-tête du site (identité, navigation principale, sélecteur de langue).
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php fnc_language_switcher(); ?>
 		<?php
 		// CTA d'inscription pilote par le drapeau REGISTRATION_ENABLED (FNC Core,
-		// Module F) : ouvert → « S'inscrire » vers /inscription ; ferme (defaut) →
+		// les options d’affichage) : ouvert → « S'inscrire » vers /inscription ; ferme (defaut) →
 		// « Decouvrir l'edition » vers l'edition en cours. Meme seam que
 		// fnc_registration_cta() du plugin, en conservant la fleche.
 		$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();

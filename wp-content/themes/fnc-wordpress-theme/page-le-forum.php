@@ -1,14 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Le Forum".
+ * Forum Numérique Congo — gabarit de la page « Le Forum ».
  *
- * Applique automatiquement (hierarchie de templates WordPress) a toute
- * Page dont le slug est "le-forum". Porte
- * docs/mockups/homepage-v2/interior/le-forum.html — presente dans le
- * dossier du projet mais non encore committee sur la branche de l'ADR-007
- * au moment du scaffold initial (voir ADR-007, note ajoutee a la demande
- * du Decideur). Contenu statique/exemple, non officiel — marqueurs
- * "A confirmer" conserves a l'identique de la maquette source.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 /*
- * Lot 2 — composition par blocs. Sur le vrai site, « Le Forum » est une page
+ * Lot 2 — composition par blocs. Sur le site du Forum, « Le Forum » est une page
  * institutionnelle entierement composee de blocs administrables. Des que
  * l'editorial compose cette page avec des blocs FNC, ce gabarit s'efface au
  * profit du contenu compose ; sinon il conserve le contenu de demonstration
- * porte par la maquette (comportement inchange).
+ * porte par la référence de conception (comportement inchange).
  */
 /*
- * Lot 3 — Module G (ACF Flexible Content). Si l'editorial a compose cette
+ * Lot 3 — l’édition des pages (ACF Flexible Content). Si l'editorial a compose cette
  * page en sections ACF (archetype « institutionnel »), elles priment sur le
  * contenu de demonstration ci-dessous. Rendu delegue aux fonctions de blocs
  * verifiees via inc/page-sections.php.

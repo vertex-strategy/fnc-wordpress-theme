@@ -1,10 +1,11 @@
 <?php
 /**
- * Titres de section editables des pages a LISTE (surtitre + titre des bandes
- * internes : intro, recherche, listes, CTA…). Complement de inc/hero-settings.php
- * (qui gere le hero). Meme principe : surcharge editoriale (theme_mod) sinon
- * valeur par defaut (= rendu actuel). Editable via Personnaliser -> « Titres de
- * section ». La LISTE elle-meme reste dynamique.
+ * Forum Numérique Congo — titres de section éditables des pages à liste.
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

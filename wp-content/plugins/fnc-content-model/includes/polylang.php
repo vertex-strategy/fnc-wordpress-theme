@@ -1,18 +1,11 @@
 <?php
 /**
- * Compatibilite multilingue (Polylang) — declaration des contenus traduisibles.
+ * Forum Numérique Congo — compatibilité multilingue (contenus et taxonomies traduisibles).
  *
- * Rend les custom post types et taxonomies du plugin traduisibles PAR CODE,
- * via les filtres Polylang `pll_get_post_types` / `pll_get_taxonomies`, plutot
- * que par la configuration de l'administration (Langues → Reglages). Avantage :
- * la declaration est versionnee et s'applique des que Polylang est actif, sans
- * etape manuelle. Sans Polylang, ces filtres ne sont jamais appeles — aucun
- * effet, aucune dependance (conforme ADR-007, Decision 2 : dependance ciblee au
- * seul multilinguisme).
- *
- * Une fois declares traduisibles, chaque contenu porte une langue et peut avoir
- * des traductions ; le sélecteur de langue du theme relie alors les versions
- * entre elles (voir fnc_language_switcher / get_translation_url).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

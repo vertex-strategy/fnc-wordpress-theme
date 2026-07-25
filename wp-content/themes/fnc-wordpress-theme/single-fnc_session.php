@@ -1,14 +1,11 @@
 <?php
 /**
- * Fiche d'une session (single-fnc_session.php).
+ * Forum Numérique Congo — fiche détaillée d’une session.
  *
- * Structure alignee sur le site reel (/programme/[slug]) : hero .page-head
- * (type + jour/horaire/salle), puis un ARTICLE en colonne unique sur fond lin :
- * ligne meta -> Description (.prose-legal) -> Objectifs -> Intervenants
- * (.spk-grid : moderateur + intervenants) -> Tags -> Ressources.
- *
- * Une session est une vue de son edition (invariant du vrai site). Chaque bloc
- * est masque si la donnee n'existe pas.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 /**
- * Rendu d'une carte .spk (grille d'intervenants), portrait soumis a la RÈGLE 7.
+ * Rendu d'une carte .spk (grille d'intervenants), portrait soumis a la la règle du droit à l’image.
  */
 if ( ! function_exists( 'fnc_render_spk_card' ) ) {
 	function fnc_render_spk_card( $speaker_id, $kicker = '' ) {

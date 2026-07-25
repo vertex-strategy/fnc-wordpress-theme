@@ -1,12 +1,11 @@
 <?php
 /**
- * Rendu partage des formulaires (Module A) et des coordonnees (Reglages).
+ * Forum Numérique Congo — rendu partagé des formulaires et des coordonnées.
  *
- * Centralise le markup des formulaires contact / inscription / partenariat et
- * du bloc coordonnees, afin que les BLOCS editoriaux (fnc/form, fnc/coordonnees)
- * rendent EXACTEMENT la meme chose que les gabarits. Les champs, l'action
- * admin-post, les champs caches (nonce/honeypot via fnc_form_fields) et la
- * banniere de retour (fnc_submission_banner) restent fournis par FNC Core.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Definition d'un formulaire par type : entete, aide, libelle du bouton et
- * champs. Le `name` de chaque champ est celui attendu par FNC Core (Module A).
+ * champs. Le `name` de chaque champ est celui attendu par FNC Core (réception des formulaires).
  *
  * @param string $type contact|inscription|partenariat
  * @return array<string,mixed>|null
@@ -158,7 +157,7 @@ function fnc_render_submission_form( $type ) {
 		<?php endif; ?>
 
 		<?php
-		// Champs caches (action / nonce / honeypot) + banniere de retour (Module A).
+		// Champs caches (action / nonce / honeypot) + banniere de retour (réception des formulaires).
 		if ( function_exists( 'fnc_form_fields' ) ) {
 			fnc_form_fields( $type );
 		}

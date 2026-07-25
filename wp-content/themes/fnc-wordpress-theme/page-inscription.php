@@ -1,15 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Inscription".
+ * Forum Numérique Congo — gabarit de la page « Inscription ».
  *
- * Aligne sur la page reelle localhost:3000/fr/inscription : heros « Demander une
- * inscription » puis la carte « Votre demande » avec le formulaire (nom, e-mail,
- * organisation, profil, mode de participation, motivation).
- *
- * Formulaire non fonctionnel (pas de handler d'envoi) — fidele a la posture du
- * site tant que le canal n'est pas ouvert, et a l'exclusion de la collection
- * "Registrations" du perimetre (ADR-007, Decision 2). Seule partie dynamique :
- * le nom de l'edition active reelle (_fnc_edition_active).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

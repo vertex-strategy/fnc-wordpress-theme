@@ -1,9 +1,11 @@
 <?php
 /**
- * Gabarit de repli generique (obligatoire dans la hierarchie de templates
- * WordPress). La page d'accueil utilise front-page.php ; ce fichier ne sert
- * que pour les contextes qui n'ont pas encore de gabarit dedie (etape 2 du
- * plan de mise en oeuvre de l'ADR-007 ne couvre que la page d'accueil).
+ * Forum Numérique Congo — gabarit générique de repli.
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

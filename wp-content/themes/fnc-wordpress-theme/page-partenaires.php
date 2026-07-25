@@ -1,17 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Partenaires".
+ * Forum Numérique Congo — gabarit de la page « Partenaires ».
  *
- * Structure alignee sur le site officiel reel (localhost:3000/fr/partenaires) :
- * heros, "Pourquoi devenir partenaire", "Types et niveaux", mur de partenaires
- * groupes par niveau d'engagement (Institutionnel / Organisateur / Soutien /
- * Sponsor), puis une section "Discutons d'un partenariat" avec le formulaire de
- * demande de partenariat.
- *
- * Le mur de partenaires est DYNAMIQUE : vrais posts fnc_partenaire publies,
- * groupes par la taxonomie fnc_niveau_partenariat. Le formulaire reste non
- * fonctionnel (pas de handler d'envoi), fidele a la posture du site reel tant
- * que le canal officiel n'est pas ouvert.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -49,7 +43,7 @@ fnc_render_opening_hero(
 	)
 );
 
-// Champs du formulaire de demande de partenariat (ceux du site reel).
+// Champs du formulaire de demande de partenariat (ceux du site du Forum).
 $fnc_pa_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'partenariat' ) : null;
 $fnc_interest_options = array(
 	__( 'Partenariat institutionnel', 'fnc-wordpress-theme' ),

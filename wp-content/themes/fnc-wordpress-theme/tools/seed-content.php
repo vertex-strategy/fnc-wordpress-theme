@@ -1,26 +1,11 @@
 <?php
 /**
- * Seed reproductible des pages de contenu composees en blocs FNC.
+ * Forum Numérique Congo — semis de contenu de démonstration (reproductible).
  *
- * Transforme les pages EDITORIALES (contenu fige dans les gabarits) en pages
- * reellement administrables : chaque section devient un bloc FNC editable et
- * reagencable dans l'editeur WordPress. Rendu identique, mais tout devient
- * modifiable (texte, image, ordre des sections).
- *
- * Idempotent :
- *   - les images sont importees une seule fois (meta `_fnc_seed_src`) ;
- *   - une page deja composee de blocs est ignoree, sauf argument « force ».
- *
- * Usage (depuis le conteneur wp-cli) :
- *   wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php
- *   wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php force
- *
- * Couvre les pages composables en blocs, y compris via les blocs fonctionnels
- * fnc/form et fnc/coordonnees (contact, inscription). Les pages a LISTE
- * dynamique (mur de partenaires, ressources presse, rubriques pratiques de
- * l'edition, agenda live) ne sont volontairement PAS semees : leur liste
- * disparaitrait. Elles relevent de l'approche « hero editable + liste auto »
- * (options), comme les archives.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -152,7 +137,7 @@ $fnc_seed_force = isset( $args ) && is_array( $args ) && in_array( 'force', $arg
 
 fnc_seed_log( 'Seed des pages editoriales' . ( $fnc_seed_force ? ' (force)' : '' ) . ' :' );
 
-/* ---- Le Forum (page institutionnelle → sections ACF, Module G) ---- */
+/* ---- Le Forum (page institutionnelle → sections ACF, l’édition des pages) ---- */
 fnc_seed_acf_page(
 	'le-forum',
 	'institutional',
@@ -214,7 +199,7 @@ fnc_seed_acf_page(
 	$fnc_seed_force
 );
 
-/* ---- Le mot du Président (page institutionnelle → sections ACF, Module G) ---- */
+/* ---- Le mot du Président (page institutionnelle → sections ACF, l’édition des pages) ---- */
 fnc_seed_acf_page(
 	'le-forum/mot-du-president',
 	'institutional',
@@ -314,7 +299,7 @@ fnc_seed_page(
 );
 
 /**
- * Sème les sections ACF (Module G / Flexible Content) d'une page
+ * Sème les sections ACF (édition des pages) d'une page
  * institutionnelle ou composable. Le plugin fournit les CHAMPS ; le thème
  * fournit le rendu (inc/page-sections.php). Une seule source de vérité : on
  * vide le contenu bloc residuel pour eviter deux representations concurrentes.

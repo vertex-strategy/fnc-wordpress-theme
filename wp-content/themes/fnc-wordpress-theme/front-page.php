@@ -1,21 +1,11 @@
 <?php
 /**
- * Page d'accueil — les 8 "moments" (M1 a M8).
+ * Forum Numérique Congo — page d’accueil (enchaînement des sections éditoriales).
  *
- * Porte docs/mockups/homepage-v2/index.html (forum-numerique-congo), seule
- * page committee et validee au moment du scaffold (ADR-007, Decision 1).
- *
- * Lot 3 : le contenu n'est plus code en dur. Chaque moment lit ses textes,
- * medias et libelles de CTA depuis les reglages « Page d'accueil (M1 -> M8) »
- * du Customizer (voir inc/homepage.php), avec repli sur le contenu de la
- * maquette si rien n'est renseigne. Le storyboard reste FIGE : l'editeur ne
- * peut ni reordonner ni supprimer un moment, conformement au vrai site.
- *
- * Les moments qui presentent des donnees metier (M3 voix, M5 programme,
- * M6 partenaires, M7 archives, M8 compte a rebours) sont alimentes par les
- * vrais contenus du plugin fnc-content-model lorsqu'ils existent, et
- * retombent sinon sur un etat « a confirmer » explicite — jamais sur des
- * donnees inventees presentees comme confirmees.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,7 +33,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	<section class="moment" id="m1" aria-labelledby="m1-title">
 		<?php fnc_render_home_hero_media(); ?>
 		<div class="overlay" aria-hidden="true"></div>
-		<?php // Calque d'ambiance du hero : nappe de points en vague dessinee sur canvas (variante « dots » du site reel, HeroBackdrop). Anime par assets/js/main.js, statique sous prefers-reduced-motion. ?>
+		<?php // Calque d'ambiance du hero : nappe de points en vague dessinee sur canvas (variante « dots » du site du Forum, HeroBackdrop). Anime par assets/js/main.js, statique sous prefers-reduced-motion. ?>
 		<div class="hero-backdrop" aria-hidden="true"><canvas class="hb-canvas"></canvas></div>
 		<div class="hero-inner">
 			<div class="kicker">

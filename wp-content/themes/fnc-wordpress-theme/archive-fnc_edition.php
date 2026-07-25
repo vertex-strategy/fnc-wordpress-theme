@@ -1,20 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_edition".
+ * Forum Numérique Congo — liste des éditions du Forum.
  *
- * Porte docs/mockups/homepage-v2/editions.html (contenu genere par
- * site.js: editionsPage(), copy.editions). Contrairement a
- * page-le-forum.php et page-contact.php, ce gabarit est branche sur les
- * VRAIES donnees du plugin fnc-content-model (etape 4 de l'ADR-007,
- * amorcee ici) : la liste affichee reflete les editions reellement
- * publiees dans WordPress, pas du contenu d'exemple statique.
- *
- * Passe gabarits (reconciliation du modele de contenu) : rendu en frise
- * chronologique (annee, statut, theme, dates, lieu, edition speciale),
- * aligne sur la vraie page /editions du site officiel — qui montre une
- * frise, pas une grille de cartes. Trie par annee decroissante (champ
- * meta _fnc_edition_year), avec repli sur la date de publication WP si
- * l'annee n'est pas renseignee.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

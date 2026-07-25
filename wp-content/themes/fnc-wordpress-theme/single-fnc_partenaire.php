@@ -1,15 +1,11 @@
 <?php
 /**
- * Fiche d'un partenaire (single-fnc_partenaire.php).
+ * Forum Numérique Congo — fiche détaillée d’un partenaire.
  *
- * Complete la couverture des gabarits single : le CPT fnc_partenaire avait une
- * URL publique mais aucun gabarit dedie, retombant sur index.php (extrait seul).
- * Les partenaires ne sont pas encore lies depuis l'archive (logos non
- * cliquables), mais leur URL reste publique — cette fiche la rend utile.
- *
- * Affiche l'identite du partenaire (logo, type d'engagement), sa description,
- * son site web et ses editions associees avec le niveau par edition. Chaque
- * element est masque si la donnee n'existe pas.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

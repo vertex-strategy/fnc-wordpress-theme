@@ -1,36 +1,11 @@
-/* ==========================================================================
-   FNC — CSS de rattrapage n°2 (familles partiellement couvertes)   [P2]
-   ==========================================================================
-   Source : src/app/globals.css (site Next.js de production).
-   Méthode : diff RÈGLE PAR RÈGLE (sélecteur normalisé, commentaires ignorés)
-   entre globals.css et le style.css du thème. Déclarations extraites, non
-   réécrites. Doublons avec wordpress-catchup.css (P1) déjà écartés.
-   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
-
-   CONTENU — 33 règles absentes du thème :
-     • Couche typographique de base (.dad …)        10 règles
-     • Frise des éditions (.frise*)                 20 règles
-     • Chiffres-clés (.stat-line*)                   3 règles
-
-   ⚠️ PRÉREQUIS POUR LA COUCHE TYPOGRAPHIQUE
-   Les 10 règles « .dad … » ne s'appliqueront QUE si le <body> porte la classe
-   « dad ». Le thème utilise aujourd'hui `<body <?php body_class(); ?>>` sans
-   cette classe. Ajouter dans functions.php :
-
-       add_filter( 'body_class', function ( $classes ) {
-           $classes[] = 'dad';
-           return $classes;
-       } );
-
-   POURQUOI NE PAS SIMPLEMENT DÉ-SCOPER : la règle « .dad p { margin: 0 } »
-   appliquée globalement supprimerait les marges de paragraphe de TOUT le
-   contenu WordPress (the_content, éditeur Gutenberg) — régression garantie.
-   Le site réel neutralise ces marges parce qu'il pose des espacements
-   explicites (mt-*, gap-*) : voir wordpress-tailwind-utilities.css.
-
-   INSTALLATION — après style.css, P1, puis les utilitaires :
-     style.css → wordpress-catchup.css → wordpress-tailwind-utilities.css → CE FICHIER
-   ========================================================================== */
+/*
+ * Forum Numérique Congo — feuille de style — compléments de la charte.
+ *
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
+ */
 
 :root {
   /* Token DA référencé ici et absent du thème. Déjà fourni par

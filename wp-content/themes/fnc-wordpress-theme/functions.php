@@ -1,26 +1,28 @@
 <?php
 /**
- * FNC WordPress Theme — fonctions du theme.
+ * Forum Numérique Congo — point d’entrée du thème (configuration, scripts, navigation, aides d’affichage).
  *
- * Voir ADR-007 (depot forum-numerique-congo) pour le contexte produit :
- * template vitrine parallele, derive de docs/mockups/homepage-v2.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '0.5.3' );
+define( 'FNC_THEME_VERSION', '1.0.0' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
- * « Réglages du site » de Payload. Voir inc/customizer.php.
+ * « Réglages du site » du CMS. Voir inc/customizer.php.
  */
 require_once get_template_directory() . '/inc/customizer.php';
 
 /**
  * Blocs éditoriaux (composition de pages) — pendant des palettes de blocs
- * Payload (institutionalSections / pageSections). Voir inc/blocks.php.
+ * le CMS. Voir inc/blocks.php.
  */
 require_once get_template_directory() . '/inc/blocks.php';
 
@@ -37,7 +39,7 @@ require_once get_template_directory() . '/inc/homepage.php';
 require_once get_template_directory() . '/inc/seo.php';
 
 /**
- * Rendu partage des formulaires (Module A) et des coordonnees (Reglages),
+ * Rendu partage des formulaires (réception des formulaires) et des coordonnees (Reglages),
  * reutilise par les gabarits ET par les blocs fnc/form et fnc/coordonnees.
  */
 require_once get_template_directory() . '/inc/forms.php';
@@ -61,13 +63,13 @@ require_once get_template_directory() . '/inc/section-titles.php';
 require_once get_template_directory() . '/inc/admin-guide.php';
 
 /**
- * Rendu des sections composees (Module G / ACF Flexible Content) : adaptateur
+ * Rendu des sections composees (édition des pages) : adaptateur
  * layouts ACF -> fonctions de rendu de blocs verifiees. Voir inc/page-sections.php.
  */
 require_once get_template_directory() . '/inc/page-sections.php';
 
 /**
- * Module G (FNC Core) : base d'URL des images de hero par defaut. fnc_page_hero()
+ * l’édition des pages (FNC Core) : base d'URL des images de hero par defaut. fnc_page_hero()
  * resout ainsi l'image de route (« intervenants.png ») vers les assets du theme.
  * NB : le dossier reel est /assets/images (et non /assets/img/da de l'exemple).
  */
@@ -155,7 +157,7 @@ add_action( 'init', 'fnc_register_menus', 1 );
  * Enqueue des styles et scripts du theme.
  *
  * Kit de rattrapage de fidelite DA-D : quatre feuilles extraites du CSS de
- * production du site reel, chargees APRES style.css et dans un ordre STRICT
+ * production du site du Forum, chargees APRES style.css et dans un ordre STRICT
  * (la cascade en depend). L'ordre est garanti par une chaine de dependances :
  * chaque feuille depend de la precedente.
  *
@@ -185,7 +187,7 @@ function fnc_theme_assets() {
 	}
 
 	// Correctif empreinte EN DERNIER : le kit reference /images/brand/… (chemin
-	// absolu Next.js, 404 en WP) ; ce fichier repointe le motif vers ../img/
+	// absolu du site d’origine, 404 en WP) ; ce fichier repointe le motif vers ../img/
 	// (relatif a assets/css/). Depend de fnc-catchup-complet pour passer apres.
 	wp_enqueue_style( 'fnc-empreinte-fix', $dir . '/assets/css/wordpress-empreinte-fix.css', array( 'fnc-catchup-complet' ), $ver );
 
@@ -247,10 +249,10 @@ function fnc_archive_url( $post_type ) {
 }
 
 /**
- * Items de navigation principale, alignes sur le site officiel reel
+ * Items de navigation principale, alignes sur le site du Forum
  * (localhost:3000/fr) suite a l'amendement de la Decision 1 de
- * l'ADR-007 : 6 items (Le Forum, Edition en cours, Editions,
- * Ressources, Partenaires, Contact), pas les ancres de la maquette
+ * l': 6 items (Le Forum, Edition en cours, Editions,
+ * Ressources, Partenaires, Contact), pas les ancres de la référence de conception
  * mono-page d'origine. Liens reels vers les Pages/archives creees
  * dans cette instance ; reste sur "#" pour celles qui n'existent pas
  * encore.
@@ -282,7 +284,7 @@ function fnc_default_primary_menu() {
 
 /**
  * Variante du menu de repli pour le panneau mobile : liens a plat, sans
- * <ul>/<li>, conformement a la structure de la maquette source (le CSS
+ * <ul>/<li>, conformement a la structure de la référence de conception (le CSS
  * `.mobile-panel a` cible des liens directs, pas une liste).
  */
 function fnc_default_mobile_menu() {
@@ -319,8 +321,7 @@ function fnc_pll_language_url( $lang ) {
 /**
  * Selecteur de langue.
  *
- * Si Polylang est actif (ADR-007, Decision 2 — dependance ciblee acceptee
- * uniquement pour le multilinguisme), affiche des liens vers chaque langue
+ * Si Polylang est actif, affiche des liens vers chaque langue
  * configuree (traduction de la page courante, repli sur l'accueil). Sinon,
  * degrade gracieusement vers un rendu statique FR/EN (pas de lien casse).
  */
@@ -359,8 +360,8 @@ function fnc_language_switcher() {
 
 /**
  * Bloc "hero" secondaire partage par les pages interieures generees a
- * partir de docs/mockups/homepage-v2/site.js (contact, archives, etc.).
- * Distinct du bloc "opening" utilise par page-le-forum.php (maquette
+ * partir de la référence de conception (contact, archives, etc.).
+ * Distinct du bloc "opening" utilise par page-le-forum.php (référence de conception
  * interior/le-forum.html, systeme de gabarit different mais memes tokens
  * de couleur).
  *
@@ -506,7 +507,7 @@ function fnc_render_pageheader( $args ) {
 
 /**
  * Bloc d'en-tete sobre pour les pages legales (mentions, confidentialite,
- * CGU) : meme registre C que le-forum/contact (PageHeader du site reel),
+ * CGU) : meme registre C que le-forum/contact (PageHeader du site du Forum),
  * mais avec la date de mise a jour affichee en meta sous le titre.
  * $breadcrumb est conserve pour compatibilite d'appel mais n'est plus rendu
  * (le PageHeader reel n'affiche pas de fil d'ariane).
@@ -589,9 +590,9 @@ function fnc_speaker_meta_line( $speaker_id ) {
 
 /**
  * Drapeaux SVG inline des pays representes au Forum — memes pays et memes
- * geometries simplifiees que le composant CountryFlag.tsx du site officiel
- * (forum-numerique-congo/src/app/(frontend)/[locale]/intervenants/CountryFlag.tsx),
- * transposees en PHP puisque zero dependance tierce (ADR-007, Decision 2)
+ * geometries simplifiees que le composant l’affichage des drapeaux du site du Forum
+ * (le site du Forum)/[locale]/intervenants/l’affichage des drapeaux),
+ * transposees en PHP puisque zero dependance tierce
  * exclut d'importer un paquet de drapeaux.
  */
 function fnc_country_flag_svg( $country ) {
@@ -624,7 +625,7 @@ function fnc_country_flag_svg( $country ) {
 /**
  * Drapeau d'un pays : drapeau uploadé (via l'ordre éditorial des Réglages FNC)
  * prioritaire, repli sur le drapeau SVG intégré. Même logique que le composant
- * CountryFlag.tsx du vrai site (source éditoriale prioritaire, repli SVG). Sans
+ * l’affichage des drapeaux du site du Forum (source éditoriale prioritaire, repli SVG). Sans
  * l'un ni l'autre, retourne une chaîne vide (seul le nom du pays s'affiche).
  *
  * @param string $country
@@ -646,7 +647,7 @@ function fnc_flag_markup( $country ) {
 
 /**
  * Decoupe le champ texte libre `_fnc_speaker_country` (ex. "France / États-Unis")
- * en une liste de pays, meme convention que le site officiel (SpeakersExplorer.tsx).
+ * en une liste de pays, meme convention que le site du Forum (l’explorateur d’intervenants).
  */
 function fnc_split_countries( $country_field ) {
 	if ( ! $country_field ) {
@@ -709,7 +710,7 @@ function fnc_header_logo_img() {
 
 /**
  * Logo du pied de page : version claire (blanche) posée sur le footer navy, en
- * remplacement du wordmark texte (comportement du vrai site). Prend « Logo
+ * remplacement du wordmark texte (comportement du site du Forum). Prend « Logo
  * clair » des Réglages FNC s'il est défini, sinon le logo blanc embarqué.
  */
 function fnc_footer_logo_img() {

@@ -1,20 +1,11 @@
 <?php
 /**
- * Rendu des sections composées (Module G — FNC Core) pour les pages
- * institutionnelles et composables.
+ * Forum Numérique Congo — rendu des sections composées des pages.
  *
- * PONT, pas remplacement : Module G (ACF Flexible Content) fournit les
- * DONNÉES via fnc_page_sections() ; la SCÉNOGRAPHIE (markup DA-D) reste au
- * thème. On NE duplique PAS le markup dans des partials inst-*.php séparés —
- * ce serait deux copies du même HTML, promesses de dérive. Chaque layout ACF
- * est adapté (snake_case → camelCase, image ACF « array » → ID d'attachement)
- * puis délégué aux fonctions fnc_render_block_* déjà vérifiées (inc/blocks.php).
- *
- * Le gabarit institutionnel appelle fnc_render_page_sections() : si l'éditeur
- * a composé la page en ACF, ces sections priment ; sinon le gabarit conserve
- * son contenu de démonstration (comportement inchangé).
- *
- * @package fnc-wordpress-theme
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -42,7 +33,7 @@ if ( ! function_exists( 'fnc_acf_img_id' ) ) {
 
 if ( ! function_exists( 'fnc_page_has_sections' ) ) {
 	/**
-	 * Vrai si la page porte au moins une section composée (Module G).
+	 * Vrai si la page porte au moins une section composée (édition des pages).
 	 *
 	 * @param int    $post_id Identifiant de page (0 = page courante).
 	 * @param string $kind    'institutional' | 'generic'.
@@ -233,7 +224,7 @@ if ( ! function_exists( 'fnc_render_section_row' ) ) {
 
 if ( ! function_exists( 'fnc_render_page_sections' ) ) {
 	/**
-	 * Rend en HTML DA toutes les sections composées d'une page (Module G).
+	 * Rend en HTML DA toutes les sections composées d'une page (édition des pages).
 	 *
 	 * @param int    $post_id Identifiant de page (0 = page courante).
 	 * @param string $kind    'institutional' | 'generic'.

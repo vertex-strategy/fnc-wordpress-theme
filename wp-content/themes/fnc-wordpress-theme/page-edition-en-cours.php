@@ -1,19 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Édition en cours".
+ * Forum Numérique Congo — gabarit de la page « Édition en cours ».
  *
- * Structure alignee sur le site officiel reel
- * (localhost:3000/fr/edition-en-cours), suite a l'amendement de la
- * Decision 1 de l'ADR-007 : hero + statistiques + apercu programme +
- * apercu intervenants + bloc inscription. Contenu de demonstration
- * reste fictif — jamais les vraies identites de responsables publics
- * visibles sur le site officiel.
- *
- * Page DYNAMIQUE (etape 4) : recupere l'edition marquee "active" via le
- * plugin (_fnc_edition_active), avec repli sur l'edition la plus
- * recente si aucune n'est marquee. Statistiques et apercus calcules a
- * partir des vraies relations session -> edition / session -> intervenants
- * deja construites (archive-fnc_session.php, archive-fnc_intervenant.php).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -224,7 +216,7 @@ fnc_render_opening_hero(
 							<a class="spk" href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>">
 								<div class="ph">
 									<?php
-									// RÈGLE 7 : portrait uniquement si le droit est « obtenu » et non expire.
+									// la règle du droit à l’image : portrait uniquement si le droit est « obtenu » et non expire.
 									$fnc_pv = function_exists( 'fnc_speaker_portrait' )
 										? fnc_speaker_portrait( $fnc_speaker_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_speaker_id ) ) )
 										: '';
@@ -253,7 +245,7 @@ fnc_render_opening_hero(
 
 		<?php
 		/*
-		 * Informations pratiques : sur le site reel, elles vivent sur leur page
+		 * Informations pratiques : sur le site du Forum, elles vivent sur leur page
 		 * dediee (/infos-pratiques), pas sur l'edition en cours. La page Edition
 		 * se termine donc sur l'appel a l'inscription — les infos pratiques
 		 * restent accessibles via la navigation et le pied de page.

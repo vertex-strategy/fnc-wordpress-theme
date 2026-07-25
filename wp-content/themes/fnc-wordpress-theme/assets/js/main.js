@@ -1,7 +1,12 @@
 /**
- * FNC WordPress Theme — comportements de la page d'accueil.
- * Porte le script de docs/mockups/homepage-v2/index.html (ADR-007).
+ * Forum Numérique Congo — interactions front (navigation, animations, consentement).
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
+
 (function () {
 	'use strict';
 
@@ -112,7 +117,7 @@
 	}
 
 	// Carte des informations pratiques : chargement au clic uniquement
-	// (privacy-first, comme le vrai site). Aucune requete vers le service
+	// (privacy-first, comme sur le site du Forum). Aucune requete vers le service
 	// tiers n'est emise tant que l'utilisateur ne l'a pas demande.
 	document.querySelectorAll('.pract-map').forEach(function (wrap) {
 		var btn = wrap.querySelector('.pract-map-load');
@@ -140,7 +145,7 @@
 		// Le hero #m1 est EXCLU du reveal JS : le kit lui donne une entrée
 		// cinématographique en CSS pur (#m1 .hero-inner > * → hero-enter), fiable
 		// au chargement, là où le reveal JS « claque » au premier paint. Aligné
-		// sur HomeMotion du site réel (voir wordpress-catchup-complet.css).
+		// sur HomeMotion du site du Forum (voir wordpress-catchup-complet.css).
 		document.querySelectorAll('main > section:not(#m1), footer').forEach(function (sec) {
 			sec.querySelectorAll(sel).forEach(function (el, i) {
 				el.classList.add('reveal');

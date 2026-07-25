@@ -1,21 +1,11 @@
 <?php
 /**
- * Page d'accueil éditable — storyboard M1→M8 (Lot 3).
+ * Forum Numérique Congo — contenu éditable de la page d’accueil.
  *
- * Pendant WordPress natif de l'archétype « Homepage » de Payload
- * (src/payload/blocks/homepageFields.ts). Comme sur le vrai site, le
- * storyboard est **figé** : on n'expose pas une liste de blocs réordonnables
- * mais un groupe de champs fixe par moment. L'éditeur administre uniquement le
- * contenu (textes, médias, libellés de CTA) ; il ne peut ni changer l'ordre,
- * ni supprimer un moment, ni toucher à la DA.
- *
- * C'est pourquoi ces réglages passent par le Customizer et non par des blocs :
- * il ne s'agit pas de composition (cf. inc/blocks.php) mais de paramétrage
- * d'une structure figée — et le Customizer offre en prime l'aperçu en direct.
- *
- * Extension par rapport au vrai site (demande du Décideur) : le média du héros
- * M1 est configurable en **image fixe, vidéo ou slider**. Le vrai site ne
- * propose qu'une image de fond.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

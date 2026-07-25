@@ -21,17 +21,17 @@ msgstr ""
 
 #. Theme URI of the theme
 #: style.css
-msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgid "https://www.grinso.io"
 msgstr ""
 
 #. Description of the theme
 #: style.css
-msgid "Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload."
-msgstr "Showcase template derived from the homepage-v2 mockup of the Forum Numérique Congo (ADR-007). A parallel product, independent from the official Next.js/Payload site."
+msgid "Template institutionnel bilingue du Forum Numérique Congo."
+msgstr "Bilingual institutional template for the Forum Numérique Congo."
 
 #. Author of the theme
 #: style.css
-msgid "Vertex Strategy"
+msgid "Grinso & Associés"
 msgstr ""
 
 #: archive-fnc_actualite.php:24

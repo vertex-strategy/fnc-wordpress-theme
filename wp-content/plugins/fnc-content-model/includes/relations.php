@@ -1,29 +1,11 @@
 <?php
 /**
- * Relations entre custom post types + champs metier propres a chaque
- * collection, reflechis depuis le vrai schema Payload CMS du site officiel
- * (collections Editions/Sessions/Speakers/Partners/Publications lues dans
- * forum-numerique-congo/src/payload/collections/*.ts) plutot que depuis la
- * seule maquette statique ou l'observation du rendu.
+ * Forum Numérique Congo — relations entre contenus et données dérivées.
  *
- * Choix d'implementation inchange (ADR-007, Decision 2, "zero dependance
- * tierce") : tout est stocke en post meta natif (register_post_meta +
- * add_meta_box), aucun plugin de champs. Les relations entite-a-entite
- * restent des ID (ou tableaux d'ID) plutot que des taxonomies, pour la
- * raison deja documentee : `intervenant` et `edition` existent deja comme
- * post types, les referencer par ID evite toute duplication.
- *
- * Cette passe (reconciliation du modele de contenu, cf. exploration du code
- * reel demandee par le Decideur) est volontairement ADDITIVE : les champs
- * deja lus par les gabarits actuels du theme (_fnc_session_time,
- * _fnc_session_room, _fnc_session_jour, _fnc_edition_active,
- * _fnc_partenaire_site, _fnc_partenaire_editions) restent en place et
- * continuent de fonctionner sans modification des gabarits. Les nouveaux
- * champs ci-dessous (type de session, moderateur, objectifs, statut
- * d'edition, theme/dates/lieu, titre/organisation/pays/rang protocolaire des
- * intervenants, type de publication, participations partenaires avec
- * niveau) ne sont pas encore consommes par les gabarits — ce sera l'objet
- * d'une passe suivante explicitement distincte (mise a jour des templates).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -66,7 +48,7 @@ const FNC_META_SPEAKER_ORG            = '_fnc_speaker_org';
 const FNC_META_SPEAKER_COUNTRY        = '_fnc_speaker_country';
 const FNC_META_SPEAKER_PROTOCOL_ORDER = '_fnc_speaker_protocol_order';
 const FNC_META_SPEAKER_LINKS          = '_fnc_speaker_links';
-// RÈGLE 7 — droit à l'image (consommé par FNC Core, Module C : fnc_speaker_portrait).
+// la règle du droit à l’image — droit à l'image (consommé par FNC Core, les données du site : fnc_speaker_portrait).
 const FNC_META_SPEAKER_IMAGE_RIGHT    = '_fnc_speaker_image_right';   // non_verifie|obtenu|refuse|expire
 const FNC_META_SPEAKER_IMAGE_EXPIRES  = '_fnc_speaker_image_expires'; // date (optionnelle)
 
@@ -77,7 +59,7 @@ const FNC_META_PARTENAIRE_PARTICIPATIONS = '_fnc_partenaire_participations';
 
 /**
  * Listes de valeurs fixes, reprises telles quelles des champs `select` des
- * collections Payload correspondantes (voir les fichiers cites en tete de
+ * définitions correspondantes (voir les fichiers cites en tete de
  * fichier). Fonctions publiques : reutilisables par le theme (prochaine
  * passe gabarits) pour resoudre un libelle a partir d'une valeur stockee.
  */
@@ -474,7 +456,7 @@ function fnc_content_model_render_speaker_meta_box( $post ) {
 	echo '<p><label for="fnc_speaker_links"><strong>' . esc_html__( 'Liens (un par ligne, format « Libellé|URL »)', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<textarea id="fnc_speaker_links" name="fnc_speaker_links" rows="3" style="width:100%%;">%s</textarea></p>', esc_textarea( $links ) );
 
-	// RÈGLE 7 — droit à l'image : le portrait n'est publié que si « obtenu » et non expiré.
+	// la règle du droit à l’image — droit à l'image : le portrait n'est publié que si « obtenu » et non expiré.
 	$image_right   = get_post_meta( $post->ID, FNC_META_SPEAKER_IMAGE_RIGHT, true );
 	$image_expires = get_post_meta( $post->ID, FNC_META_SPEAKER_IMAGE_EXPIRES, true );
 	$right_options = array(
@@ -483,7 +465,7 @@ function fnc_content_model_render_speaker_meta_box( $post ) {
 		'refuse'      => __( 'Refusé', 'fnc-content-model' ),
 		'expire'      => __( 'Expiré', 'fnc-content-model' ),
 	);
-	echo '<hr /><p><label for="fnc_speaker_image_right"><strong>' . esc_html__( 'Droit à l’image (RÈGLE 7)', 'fnc-content-model' ) . '</strong></label><br />';
+	echo '<hr /><p><label for="fnc_speaker_image_right"><strong>' . esc_html__( 'Droit à l’image (la règle du droit à l’image)', 'fnc-content-model' ) . '</strong></label><br />';
 	echo '<select id="fnc_speaker_image_right" name="fnc_speaker_image_right" style="width:100%;">';
 	foreach ( $right_options as $val => $lab ) {
 		printf( '<option value="%s"%s>%s</option>', esc_attr( $val ), selected( $image_right ? $image_right : 'non_verifie', $val, false ), esc_html( $lab ) );

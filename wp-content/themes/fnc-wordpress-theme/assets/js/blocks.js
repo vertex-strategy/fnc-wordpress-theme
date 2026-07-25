@@ -1,15 +1,12 @@
 /**
- * Moteur d'édition générique des blocs éditoriaux du thème (Lot 2).
+ * Forum Numérique Congo — éditeur des blocs du thème (aperçu et champs).
  *
- * Les blocs sont déclarés une seule fois côté PHP (inc/blocks.php) et
- * transmis ici via `window.fncBlockSchemas`. Ce script construit l'interface
- * d'édition à partir de ce schéma — il n'y a donc pas un composant d'édition
- * par bloc à maintenir, et aucune étape de build (pas de JSX, pas de bundler),
- * conformément au « zéro dépendance tierce » de l'ADR-007.
- *
- * Tous les blocs sont dynamiques : `save` retourne null, le rendu public est
- * produit en PHP avec le markup DA figé du thème.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
+
 ( function ( wp, schemas ) {
 	'use strict';
 

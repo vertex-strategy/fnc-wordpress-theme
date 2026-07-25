@@ -36,150 +36,135 @@ while ( have_posts() ) :
 		}
 	}
 
+	// Libellé de statut (« Édition en cours / À venir / Édition passée »), en
+	// sur-titre du hero — comme le site du Forum.
+	$fnc_status_labels = array(
+		'current'  => __( 'Édition en cours', 'fnc-wordpress-theme' ),
+		'upcoming' => __( 'À venir', 'fnc-wordpress-theme' ),
+		'past'     => __( 'Édition passée', 'fnc-wordpress-theme' ),
+	);
+	$fnc_status_label = isset( $fnc_status_labels[ $fnc_ed_status ] ) ? $fnc_status_labels[ $fnc_ed_status ] : ( $fnc_ed_year ? $fnc_ed_year : __( 'Édition', 'fnc-wordpress-theme' ) );
+
 	fnc_render_opening_hero(
 		array(
-			'eyebrow'    => $fnc_ed_year ? $fnc_ed_year : __( 'Édition', 'fnc-wordpress-theme' ),
+			'eyebrow'    => $fnc_status_label,
 			'title'      => get_the_title(),
-			'lead'       => $fnc_ed_theme,
+			'intro'      => $fnc_ed_theme ? '« ' . $fnc_ed_theme . ' »' : '',
 			'image'      => has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_ed_id, 'full' ) : get_template_directory_uri() . '/assets/images/le-programme.png',
 			'image_alt'  => '',
 			'breadcrumb' => get_the_title(),
 		)
 	);
-
-	$fnc_ed_pratique = fnc_render_practical_info( $fnc_ed_id );
 	?>
 
 	<main id="main">
+		<?php // Dates + lieu (structure .split du site du Forum). ?>
 		<section class="section">
-			<div class="container">
-				<p class="frise-meta">
-					<?php if ( isset( $fnc_statuses[ $fnc_ed_status ] ) ) : ?>
-						<?php fnc_render_badge( $fnc_statuses[ $fnc_ed_status ] ); ?>
-					<?php endif; ?>
-					<?php if ( $fnc_ed_dates ) : ?>
-						<b><?php echo esc_html( $fnc_ed_dates ); ?></b>
-					<?php endif; ?>
-					<?php if ( $fnc_ed_dates && $fnc_ed_location ) : ?> · <?php endif; ?>
-					<?php echo esc_html( $fnc_ed_location ); ?>
-				</p>
-				<?php if ( $fnc_ed_is_spec && $fnc_ed_special ) : ?>
-					<p class="frise-note"><?php echo esc_html( $fnc_ed_special ); ?></p>
-				<?php endif; ?>
-
-				<?php
-				// Contenu editorial SANS les rubriques pratiques : celles-ci sont
-				// composees dans ce meme contenu mais rendues dans leur section
-				// dediee ci-dessous — sans exclusion, elles s'afficheraient deux fois.
-				$fnc_ed_content = fnc_render_content_excluding_practical( $fnc_ed_id );
-				if ( '' !== trim( wp_strip_all_tags( $fnc_ed_content ) ) ) :
-					?>
-					<div class="reading" style="margin-top:28px;">
-						<?php echo $fnc_ed_content; // phpcs:ignore WordPress.Security.EscapeOutput -- passe par les filtres the_content. ?>
-					</div>
-				<?php endif; ?>
+			<div class="split">
+				<div>
+					<span class="eyebrow"><?php esc_html_e( 'Dates', 'fnc-wordpress-theme' ); ?></span>
+					<p class="body"><?php echo $fnc_ed_dates ? esc_html( $fnc_ed_dates ) : '<span class="tbc">' . esc_html__( 'À confirmer', 'fnc-wordpress-theme' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				</div>
+				<div>
+					<span class="eyebrow"><?php esc_html_e( 'Lieu', 'fnc-wordpress-theme' ); ?></span>
+					<p class="body"><?php echo $fnc_ed_location ? esc_html( $fnc_ed_location ) : '<span class="tbc">' . esc_html__( 'À confirmer', 'fnc-wordpress-theme' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				</div>
 			</div>
+			<?php if ( 'current' === $fnc_ed_status ) : ?>
+				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'edition-en-cours' ) ); ?>" style="margin-top:24px;display:inline-block;"><?php esc_html_e( 'Voir le hub de l’édition', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+			<?php endif; ?>
 		</section>
 
-		<?php if ( '' !== trim( $fnc_ed_pratique ) ) : ?>
-			<section class="section linen">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Sur place', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Informations pratiques.', 'fnc-wordpress-theme' ); ?></h2>
-						</div>
-					</div>
-					<div class="pract-grid">
-						<?php echo $fnc_ed_pratique; // phpcs:ignore WordPress.Security.EscapeOutput -- markup produit par les renderers de blocs, deja echappe. ?>
-					</div>
-				</div>
-			</section>
-		<?php endif; ?>
-
 		<?php
-		// Sessions rattachees a cette edition.
+		// Sessions de cette édition (top 6, hors pause/logistique) — structure .session.
 		$fnc_ed_sessions = get_posts(
 			array(
 				'post_type'      => 'fnc_session',
 				'posts_per_page' => -1,
-				'meta_key'       => '_fnc_session_edition',
-				'meta_value'     => $fnc_ed_id,
-				'orderby'        => 'date',
+				'meta_key'       => '_fnc_session_start',
+				'meta_query'     => array( array( 'key' => '_fnc_session_edition', 'value' => $fnc_ed_id ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
+				'orderby'        => 'menu_order date',
 				'order'          => 'ASC',
 			)
 		);
-		if ( ! empty( $fnc_ed_sessions ) ) :
-			$fnc_session_types = fnc_content_model_session_types();
+		$fnc_ed_prog = array();
+		foreach ( $fnc_ed_sessions as $fnc_es ) {
+			$fnc_es_type = get_post_meta( $fnc_es->ID, '_fnc_session_type', true );
+			if ( ! in_array( $fnc_es_type, array( 'pause', 'logistique' ), true ) ) {
+				$fnc_ed_prog[] = $fnc_es;
+			}
+		}
+		$fnc_ed_prog = array_slice( $fnc_ed_prog, 0, 6 );
+		if ( ! empty( $fnc_ed_prog ) ) :
 			?>
-			<section class="section">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Programme', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Sessions de cette édition.', 'fnc-wordpress-theme' ); ?></h2>
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Programme', 'fnc-wordpress-theme' ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<div role="list">
+					<?php foreach ( $fnc_ed_prog as $fnc_es ) : ?>
+						<?php
+						$fnc_es_jour  = get_post_meta( $fnc_es->ID, '_fnc_session_jour', true );
+						$fnc_es_start = get_post_meta( $fnc_es->ID, '_fnc_session_start', true );
+						$fnc_es_time  = trim( implode( ' · ', array_filter( array( $fnc_es_jour, $fnc_es_start ) ) ) );
+						?>
+						<div class="session" role="listitem">
+							<span class="time"><?php echo esc_html( $fnc_es_time ); ?></span>
+							<a class="title s-title-link" href="<?php echo esc_url( get_permalink( $fnc_es ) ); ?>"><?php echo esc_html( get_the_title( $fnc_es ) ); ?></a>
 						</div>
-					</div>
-					<div class="agenda">
-						<?php foreach ( $fnc_ed_sessions as $fnc_es ) : ?>
-							<?php
-							$fnc_es_type = get_post_meta( $fnc_es->ID, '_fnc_session_type', true );
-							$fnc_es_hide = in_array( $fnc_es_type, array( 'pause', 'logistique' ), true );
-							?>
-							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_es ) ); ?>">
-								<span class="time"><?php echo esc_html( get_post_meta( $fnc_es->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
-								<span>
-									<strong><?php echo esc_html( get_the_title( $fnc_es ) ); ?></strong>
-									<?php if ( $fnc_es_type && ! $fnc_es_hide && isset( $fnc_session_types[ $fnc_es_type ] ) ) : ?>
-										<?php fnc_render_badge( $fnc_session_types[ $fnc_es_type ] ); ?>
-									<?php endif; ?>
-								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_es->ID, '_fnc_session_room', true ) ); ?></span>
-							</a>
-						<?php endforeach; ?>
-					</div>
+					<?php endforeach; ?>
 				</div>
+				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>"><?php esc_html_e( 'Programme', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
 			</section>
 		<?php endif; ?>
 
 		<?php
-		// Ressources rattachees a cette edition.
-		$fnc_ed_pubs = get_posts(
-			array(
-				'post_type'      => 'fnc_publication',
-				'posts_per_page' => -1,
-				'meta_key'       => '_fnc_publication_edition',
-				'meta_value'     => $fnc_ed_id,
-			)
-		);
-		if ( ! empty( $fnc_ed_pubs ) ) :
-			$fnc_pub_types = fnc_content_model_publication_types();
+		// Intervenants de l'édition (participants dérivés des sessions), top 8 —
+		// grille .spk-grid is-preview du site du Forum.
+		$fnc_ed_parts = function_exists( 'fnc_edition_participants' ) ? array_slice( fnc_edition_participants( $fnc_ed_id ), 0, 8 ) : array();
+		if ( ! empty( $fnc_ed_parts ) ) :
 			?>
-			<section class="section linen">
-				<div class="container">
-					<div class="section-head">
-						<div>
-							<p class="eyebrow"><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></p>
-							<h2><?php esc_html_e( 'Publications liées.', 'fnc-wordpress-theme' ); ?></h2>
-						</div>
-					</div>
-					<div class="grid grid-3">
-						<?php foreach ( $fnc_ed_pubs as $fnc_ep ) : ?>
-							<?php $fnc_ep_type = get_post_meta( $fnc_ep->ID, '_fnc_publication_type', true ); ?>
-							<article class="card fnc-card">
-								<p class="card-kicker"><?php echo esc_html( isset( $fnc_pub_types[ $fnc_ep_type ] ) ? $fnc_pub_types[ $fnc_ep_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
-								<h3><a href="<?php echo esc_url( get_permalink( $fnc_ep ) ); ?>"><?php echo esc_html( get_the_title( $fnc_ep ) ); ?></a></h3>
-								<?php if ( has_excerpt( $fnc_ep ) ) : ?>
-									<p><?php echo esc_html( get_the_excerpt( $fnc_ep ) ); ?></p>
-								<?php endif; ?>
-							</article>
-						<?php endforeach; ?>
-					</div>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Intervenants', 'fnc-wordpress-theme' ); ?></span>
+				<div class="spk-grid is-preview" style="margin-top:32px;">
+					<?php foreach ( $fnc_ed_parts as $fnc_pid ) : ?>
+						<?php
+						$fnc_p_role     = get_post_meta( $fnc_pid, '_fnc_speaker_role', true );
+						$fnc_p_country  = get_post_meta( $fnc_pid, '_fnc_speaker_country', true );
+						$fnc_p_portrait = function_exists( 'fnc_speaker_portrait' ) ? fnc_speaker_portrait( $fnc_pid, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_pid ) ) ) : '';
+						?>
+						<a class="spk" href="<?php echo esc_url( get_permalink( $fnc_pid ) ); ?>">
+							<div class="ph">
+								<?php
+								if ( $fnc_p_portrait ) {
+									echo $fnc_p_portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+								} else {
+									printf( '<span class="m" aria-hidden="true">%s</span><span class="l">%s</span>', esc_html( fnc_speaker_initials( $fnc_pid ) ), esc_html__( 'Photo à venir', 'fnc-wordpress-theme' ) );
+								}
+								?>
+							</div>
+							<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_pid ) ); ?></div>
+							<?php if ( $fnc_p_role ) : ?><div class="r"><?php echo esc_html( $fnc_p_role ); ?></div><?php endif; ?>
+							<?php if ( $fnc_p_country ) : ?><span class="c"><?php echo esc_html( $fnc_p_country ); ?></span><?php endif; ?>
+						</a>
+					<?php endforeach; ?>
 				</div>
+				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>" style="margin-top:28px;display:inline-block;"><?php esc_html_e( 'Intervenants', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
 			</section>
 		<?php endif; ?>
 
-		<?php fnc_render_cta_band(); ?>
+		<?php
+		// Informations pratiques (mutualisées) — masquées si non renseignées.
+		$fnc_ed_pratique = fnc_render_practical_info( $fnc_ed_id );
+		if ( '' !== trim( $fnc_ed_pratique ) ) :
+			?>
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Sur place', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Informations pratiques.', 'fnc-wordpress-theme' ); ?></h2>
+				<div class="pract-grid" style="margin-top:24px;">
+					<?php echo $fnc_ed_pratique; // phpcs:ignore WordPress.Security.EscapeOutput -- markup produit par les renderers de blocs, deja echappe. ?>
+				</div>
+			</section>
+		<?php endif; ?>
 	</main>
 
 	<?php

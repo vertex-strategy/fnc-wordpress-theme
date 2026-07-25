@@ -242,38 +242,63 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 
 	<!-- M6 — LES PARTENAIRES -->
 	<?php
-	// Bloc communauté : partenaires disposant d'un logo (image à la une), afin
-	// d'afficher les logos (comme le site du Forum) plutôt que du texte.
+	// Bloc communauté : partenaires publiés ET munis d'un logo (image à la une),
+	// triés par ordre éditorial _fnc_partenaire_sort_index (absent -> dernier).
+	// Décision MOA : la rangée du haut porte 3 GRANDS logos (2 organisateurs +
+	// le sponsor officiel) — écart VOLONTAIRE vs le site du Forum (qui en met 2).
+	// Tiers : 3 GRANDS (t1) + jusqu'à 5 PETITS (t2) = 8 logos maximum. Les 3 du
+	// haut passent devant via un sort_index bas (GUOT 0, Grinso 1, sponsor 2).
 	$fnc_home_partners = get_posts( array(
 		'post_type'      => 'fnc_partenaire',
-		'posts_per_page' => 8,
+		'posts_per_page' => 12,
 		'meta_query'     => array( array( 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
-		'orderby'        => 'menu_order title',
-		'order'          => 'ASC',
+		'no_found_rows'  => true,
 	) );
-	if ( empty( $fnc_home_partners ) ) {
-		$fnc_home_partners = get_posts( array( 'post_type' => 'fnc_partenaire', 'posts_per_page' => 6 ) );
-	}
+	usort( $fnc_home_partners, function ( $a, $b ) {
+		$sa = get_post_meta( $a->ID, '_fnc_partenaire_sort_index', true );
+		$sb = get_post_meta( $b->ID, '_fnc_partenaire_sort_index', true );
+		$sa = ( '' === $sa ) ? PHP_INT_MAX : (int) $sa;
+		$sb = ( '' === $sb ) ? PHP_INT_MAX : (int) $sb;
+		if ( $sa !== $sb ) {
+			return $sa - $sb;
+		}
+		if ( $a->menu_order !== $b->menu_order ) {
+			return $a->menu_order - $b->menu_order;
+		}
+		return strcmp( get_the_title( $a ), get_the_title( $b ) );
+	} );
+	$fnc_p_t1 = array_slice( $fnc_home_partners, 0, 3 ); // 3 grands
+	$fnc_p_t2 = array_slice( $fnc_home_partners, 3, 5 ); // 4 à 5 petits
+
+	/**
+	 * Rendu d'une case logo (lien vers la fiche partenaire), logo contenu ; à
+	 * défaut de logo, le nom en texte (comme les placeholders du Forum).
+	 */
+	$fnc_render_partner = static function ( $partner ) {
+		printf(
+			'<a class="logo-ph" href="%s" aria-label="%s">%s</a>',
+			esc_url( get_permalink( $partner ) ),
+			esc_attr( get_the_title( $partner ) ),
+			has_post_thumbnail( $partner )
+				? get_the_post_thumbnail( $partner, 'medium', array( 'alt' => esc_attr( get_the_title( $partner ) ) ) )
+				: esc_html( get_the_title( $partner ) )
+		);
+	};
 	?>
 	<section class="moment" id="m6" aria-labelledby="m6-title">
 		<span class="eyebrow"><?php echo esc_html( fnc_home_setting( 'm6_eyebrow', __( 'La communauté', 'fnc-wordpress-theme' ) ) ); ?></span>
 		<h2 id="m6-title"><?php echo esc_html( fnc_home_setting( 'm6_title', __( 'Ils construisent le Forum avec nous', 'fnc-wordpress-theme' ) ) ); ?></h2>
 		<div class="rule-c" aria-hidden="true"></div>
 		<div class="tiers">
-			<?php if ( ! empty( $fnc_home_partners ) ) : ?>
+			<?php if ( ! empty( $fnc_p_t1 ) ) : ?>
 				<div class="tier t1">
-					<?php foreach ( $fnc_home_partners as $fnc_hp ) : ?>
-						<a class="logo-ph" href="<?php echo esc_url( get_permalink( $fnc_hp ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_hp ) ); ?>">
-							<?php
-							if ( has_post_thumbnail( $fnc_hp ) ) {
-								echo get_the_post_thumbnail( $fnc_hp, 'medium', array( 'alt' => esc_attr( get_the_title( $fnc_hp ) ) ) );
-							} else {
-								echo esc_html( get_the_title( $fnc_hp ) );
-							}
-							?>
-						</a>
-					<?php endforeach; ?>
+					<?php foreach ( $fnc_p_t1 as $fnc_hp ) { $fnc_render_partner( $fnc_hp ); } ?>
 				</div>
+				<?php if ( ! empty( $fnc_p_t2 ) ) : ?>
+					<div class="tier t2">
+						<?php foreach ( $fnc_p_t2 as $fnc_hp ) { $fnc_render_partner( $fnc_hp ); } ?>
+					</div>
+				<?php endif; ?>
 			<?php else : ?>
 				<div class="tier t1">
 					<div class="logo-ph"><?php esc_html_e( 'Partenaire · À confirmer', 'fnc-wordpress-theme' ); ?></div>

@@ -292,12 +292,20 @@ fnc_ds_log( '  ✔ ' . count( $data['sessions'] ) . ' sessions reliées (éditio
 
 /* ---- 4. Partenaires ---- */
 fnc_ds_log( 'Partenaires :' );
+// Ordre d'affichage des logos (accueil M6 + page Partenaires). Décision MOA :
+// les 3 logos de tête = 2 organisateurs (GUOT, Grinso) + le sponsor officiel
+// (SNPC), donc sortIndex 0/1/2. Le reste suit l'ordre du dataset. Éditable
+// ensuite dans l'admin (champ « Ordre d'affichage » de la fiche partenaire).
+$PARTNER_SORT = array( 'guot' => 0, 'grinso' => 1, 'snpc' => 2 );
+$fnc_p_next   = count( $PARTNER_SORT );
 foreach ( $data['partners'] as $p ) {
 	$id = fnc_ds_upsert( 'fnc_partenaire', $p['legacyId'], $p['name'], $p['description'] ? wpautop( $p['description'] ) : '', $p['legacyId'] );
 	fnc_ds_partner_logo( $id, $p['legacyId'] ); // Logo officiel (si disponible dans le thème).
 	if ( $p['website'] ) {
 		update_post_meta( $id, '_fnc_partenaire_site', esc_url_raw( $p['website'] ) );
 	}
+	$fnc_sort = isset( $PARTNER_SORT[ $p['legacyId'] ] ) ? $PARTNER_SORT[ $p['legacyId'] ] : $fnc_p_next++;
+	update_post_meta( $id, '_fnc_partenaire_sort_index', (int) $fnc_sort );
 	$slug = sanitize_title( $p['type'] );
 	$term = fnc_ds_term( 'fnc_niveau_partenariat', $slug, isset( $NIVEAUX[ $slug ] ) ? $NIVEAUX[ $slug ] : ucfirst( $p['type'] ) );
 	if ( $term ) {

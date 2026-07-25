@@ -62,6 +62,16 @@
 .voice-dots button { width: 22px !important; }
 
 /* --------------------------------------------------------------------------
+   C-play) Bouton lecture/pause — les 2 icones se SUPERPOSENT.
+   Le bouton contient 2 SVG (pause + play) dont un porte l'attribut [hidden] ;
+   le JS bascule bien cet attribut au clic (main.js). MAIS une regle generale
+   `svg { display:block }` du kit ecrase le comportement natif de [hidden] et
+   affiche les deux. On restaure la semantique de [hidden] pour ces icones.
+   -------------------------------------------------------------------------- */
+.voice-play svg[hidden],
+[data-voice-play] svg[hidden] { display: none !important; }
+
+/* --------------------------------------------------------------------------
    C6) M6 « La communauté » — logos CONTENUS dans la case.
    Le site du Forum n'a PAS d'images dans #m6 : des cases `.logo-ph` à taille
    fixe (t1 184×76, t2 144×62) affichant le NOM du partenaire. En WordPress on

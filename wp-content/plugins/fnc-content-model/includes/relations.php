@@ -47,6 +47,11 @@ const FNC_META_SPEAKER_TITLE          = '_fnc_speaker_title';
 const FNC_META_SPEAKER_ORG            = '_fnc_speaker_org';
 const FNC_META_SPEAKER_COUNTRY        = '_fnc_speaker_country';
 const FNC_META_SPEAKER_PROTOCOL_ORDER = '_fnc_speaker_protocol_order';
+// Départage secondaire de l'ordre global (après l'ordre protocolaire) — éditable.
+const FNC_META_SPEAKER_SORT_INDEX     = '_fnc_speaker_sort_index';
+// Promotion du carrousel « Les voix » (accueil) : mise en avant + rang.
+const FNC_META_SPEAKER_HOME_FEATURED       = '_fnc_speaker_home_featured';
+const FNC_META_SPEAKER_HOME_FEATURED_ORDER = '_fnc_speaker_home_featured_order';
 const FNC_META_SPEAKER_LINKS          = '_fnc_speaker_links';
 // la règle du droit à l’image — droit à l'image (consommé par FNC Core, les données du site : fnc_speaker_portrait).
 const FNC_META_SPEAKER_IMAGE_RIGHT    = '_fnc_speaker_image_right';   // non_verifie|obtenu|refuse|expire
@@ -54,6 +59,8 @@ const FNC_META_SPEAKER_IMAGE_EXPIRES  = '_fnc_speaker_image_expires'; // date (o
 
 // --- Partenaires ------------------------------------------------------
 const FNC_META_PARTENAIRE_SITE           = '_fnc_partenaire_site';
+// Ordre éditorial des logos (accueil M6 + page Partenaires) — éditable.
+const FNC_META_PARTENAIRE_SORT_INDEX     = '_fnc_partenaire_sort_index';
 const FNC_META_PARTENAIRE_EDITIONS       = '_fnc_partenaire_editions';
 const FNC_META_PARTENAIRE_PARTICIPATIONS = '_fnc_partenaire_participations';
 
@@ -162,6 +169,9 @@ function fnc_content_model_register_meta() {
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_ORG, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_COUNTRY, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_PROTOCOL_ORDER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_SORT_INDEX, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_HOME_FEATURED, array( 'type' => 'boolean', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_HOME_FEATURED_ORDER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_RIGHT, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_EXPIRES, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta(
@@ -187,6 +197,7 @@ function fnc_content_model_register_meta() {
 
 	// Partenaires.
 	register_post_meta( 'fnc_partenaire', FNC_META_PARTENAIRE_SITE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_partenaire', FNC_META_PARTENAIRE_SORT_INDEX, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta(
 		'fnc_partenaire',
 		FNC_META_PARTENAIRE_EDITIONS,
@@ -453,6 +464,21 @@ function fnc_content_model_render_speaker_meta_box( $post ) {
 	echo '<p><label for="fnc_speaker_protocol_order"><strong>' . esc_html__( 'Rang protocolaire', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<input type="number" id="fnc_speaker_protocol_order" name="fnc_speaker_protocol_order" value="%s" style="width:100%%;" /></p>', esc_attr( $protocol_order ) );
 
+	$sort_index = get_post_meta( $post->ID, FNC_META_SPEAKER_SORT_INDEX, true );
+	echo '<p><label for="fnc_speaker_sort_index"><strong>' . esc_html__( 'Ordre secondaire', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="number" id="fnc_speaker_sort_index" name="fnc_speaker_sort_index" value="%s" style="width:100%%;" /></p>', esc_attr( $sort_index ) );
+	echo '<p class="description">' . esc_html__( 'Départage les intervenants de même rang protocolaire (le plus petit d’abord). Utilisé partout : page Intervenants, participants, aperçus.', 'fnc-content-model' ) . '</p>';
+
+	// Promotion du carrousel « Les voix » (accueil).
+	$home_featured       = get_post_meta( $post->ID, FNC_META_SPEAKER_HOME_FEATURED, true );
+	$home_featured_order = get_post_meta( $post->ID, FNC_META_SPEAKER_HOME_FEATURED_ORDER, true );
+	echo '<hr /><p><label for="fnc_speaker_home_featured">';
+	printf( '<input type="checkbox" id="fnc_speaker_home_featured" name="fnc_speaker_home_featured" value="1"%s /> ', checked( (bool) $home_featured, true, false ) );
+	echo '<strong>' . esc_html__( 'Mettre en avant dans le carrousel « Les voix » (accueil)', 'fnc-content-model' ) . '</strong></label></p>';
+	echo '<p><label for="fnc_speaker_home_featured_order"><strong>' . esc_html__( 'Rang de mise en avant', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="number" id="fnc_speaker_home_featured_order" name="fnc_speaker_home_featured_order" value="%s" style="width:100%%;" /></p>', esc_attr( $home_featured_order ) );
+	echo '<p class="description">' . esc_html__( 'Les voix mises en avant passent en tête du carrousel, triées par ce rang. Doit être un participant de l’édition en cours. Carrousel plafonné à 10.', 'fnc-content-model' ) . '</p>';
+
 	echo '<p><label for="fnc_speaker_links"><strong>' . esc_html__( 'Liens (un par ligne, format « Libellé|URL »)', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<textarea id="fnc_speaker_links" name="fnc_speaker_links" rows="3" style="width:100%%;">%s</textarea></p>', esc_textarea( $links ) );
 
@@ -491,6 +517,11 @@ function fnc_content_model_render_partenaire_meta_box( $post ) {
 
 	echo '<p><label for="fnc_partenaire_site"><strong>' . esc_html__( 'Site web', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<input type="url" id="fnc_partenaire_site" name="fnc_partenaire_site" value="%s" placeholder="https://" style="width:100%%;" /></p>', esc_attr( $site ) );
+
+	$sort_index = get_post_meta( $post->ID, FNC_META_PARTENAIRE_SORT_INDEX, true );
+	echo '<p><label for="fnc_partenaire_sort_index"><strong>' . esc_html__( 'Ordre d’affichage (logos)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="number" id="fnc_partenaire_sort_index" name="fnc_partenaire_sort_index" value="%s" style="width:100%%;" /></p>', esc_attr( $sort_index ) );
+	echo '<p class="description">' . esc_html__( 'Ordonne les logos sur l’accueil (bloc « La communauté ») et la page Partenaires. Le plus petit d’abord : donnez 0, 1 et 2 aux trois logos de tête (les deux organisateurs et le sponsor officiel). L’accueil affiche 8 logos maximum (3 grands en haut + 5 petits).', 'fnc-content-model' ) . '</p>';
 
 	echo '<p style="margin-top:16px;"><strong>' . esc_html__( 'Participations par édition', 'fnc-content-model' ) . '</strong></p>';
 	echo '<p class="description">' . esc_html__( 'Le type de partenaire (institutionnel/organisateur/soutien/sponsor) se règle via la taxonomie « Type de partenaire » dans la colonne de droite. Le niveau ci-dessous est plus fin et varie par édition (ex. sponsor « principal » en 2025, « contributeur » en 2027).', 'fnc-content-model' ) . '</p>';
@@ -665,6 +696,9 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		wp_set_object_terms( $post_id, $fnc_country_names, 'fnc_pays', false );
 
 		update_post_meta( $post_id, FNC_META_SPEAKER_PROTOCOL_ORDER, isset( $_POST['fnc_speaker_protocol_order'] ) ? absint( $_POST['fnc_speaker_protocol_order'] ) : '' );
+		update_post_meta( $post_id, FNC_META_SPEAKER_SORT_INDEX, isset( $_POST['fnc_speaker_sort_index'] ) && '' !== $_POST['fnc_speaker_sort_index'] ? absint( $_POST['fnc_speaker_sort_index'] ) : '' );
+		update_post_meta( $post_id, FNC_META_SPEAKER_HOME_FEATURED, empty( $_POST['fnc_speaker_home_featured'] ) ? '' : 1 );
+		update_post_meta( $post_id, FNC_META_SPEAKER_HOME_FEATURED_ORDER, isset( $_POST['fnc_speaker_home_featured_order'] ) && '' !== $_POST['fnc_speaker_home_featured_order'] ? absint( $_POST['fnc_speaker_home_featured_order'] ) : '' );
 
 		$fnc_right_allowed = array( 'non_verifie', 'obtenu', 'refuse', 'expire' );
 		$fnc_right         = isset( $_POST['fnc_speaker_image_right'] ) ? sanitize_key( wp_unslash( $_POST['fnc_speaker_image_right'] ) ) : 'non_verifie';
@@ -693,6 +727,7 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		&& current_user_can( 'edit_post', $post_id )
 	) {
 		update_post_meta( $post_id, FNC_META_PARTENAIRE_SITE, isset( $_POST['fnc_partenaire_site'] ) ? esc_url_raw( wp_unslash( $_POST['fnc_partenaire_site'] ) ) : '' );
+		update_post_meta( $post_id, FNC_META_PARTENAIRE_SORT_INDEX, isset( $_POST['fnc_partenaire_sort_index'] ) && '' !== $_POST['fnc_partenaire_sort_index'] ? absint( $_POST['fnc_partenaire_sort_index'] ) : '' );
 
 		$selected_editions = isset( $_POST['fnc_partenaire_participation_editions'] ) && is_array( $_POST['fnc_partenaire_participation_editions'] )
 			? array_map( 'absint', wp_unslash( $_POST['fnc_partenaire_participation_editions'] ) )

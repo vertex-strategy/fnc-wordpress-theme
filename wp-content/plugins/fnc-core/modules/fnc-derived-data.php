@@ -184,15 +184,22 @@ if ( ! function_exists( 'fnc_edition_participants' ) ) {
 			'no_found_rows'  => true,
 		) );
 
+		// Ordre GLOBAL (A1) : protocolOrder ASC (absent -> dernier), puis
+		// sort_index ASC (ordre editorial, editable), puis titre (tri stable).
 		usort( $speakers, function ( $a, $b ) {
 			$oa = (int) get_post_meta( $a->ID, '_fnc_speaker_protocol_order', true );
 			$ob = (int) get_post_meta( $b->ID, '_fnc_speaker_protocol_order', true );
 			$oa = $oa ? $oa : PHP_INT_MAX;
 			$ob = $ob ? $ob : PHP_INT_MAX;
-			if ( $oa === $ob ) {
-				return strcmp( get_the_title( $a ), get_the_title( $b ) );
+			if ( $oa !== $ob ) {
+				return $oa - $ob;
 			}
-			return $oa - $ob;
+			$sa = (int) get_post_meta( $a->ID, '_fnc_speaker_sort_index', true );
+			$sb = (int) get_post_meta( $b->ID, '_fnc_speaker_sort_index', true );
+			if ( $sa !== $sb ) {
+				return $sa - $sb;
+			}
+			return strcmp( get_the_title( $a ), get_the_title( $b ) );
 		} );
 
 		return wp_list_pluck( $speakers, 'ID' );
@@ -201,16 +208,48 @@ if ( ! function_exists( 'fnc_edition_participants' ) ) {
 
 if ( ! function_exists( 'fnc_home_voices' ) ) {
 	/**
-	 * Voix de la home : participants de l'édition active, plafonnés à $count.
-	 * NOTE : certaines voix peuvent être promues (champ « mis en avant »,
-	 * cf. options A/B). Ce champ n'existe PAS encore dans le modèle WP — à ajouter au
-	 * content-model si l'on veut la mise en avant. En attendant : ordre protocolaire.
+	 * Voix de la home : participants de l'édition active, avec PROMOTION
+	 * éditoriale, plafonnés à $count (défaut 10).
+	 *
+	 * Ordre (A2) : les voix « mises en avant » (_fnc_speaker_home_featured)
+	 * d'abord, triées par _fnc_speaker_home_featured_order (absent -> rang dans
+	 * l'ordre global), puis le reste dans l'ordre global (A1), le tout plafonné.
+	 * Une voix promue hors édition en cours n'apparaît pas (elle n'est pas
+	 * participante), ce qui préserve la cohérence « les voix de cette édition ».
 	 *
 	 * @return int[]
 	 */
 	function fnc_home_voices( $count = 10, $edition_id = 0 ) {
-		$ids = fnc_edition_participants( $edition_id );
-		return array_slice( $ids, 0, max( 0, (int) $count ) );
+		$count = max( 0, (int) $count );
+		$ids   = fnc_edition_participants( $edition_id ); // ordre global A1
+		if ( empty( $ids ) || 0 === $count ) {
+			return array_slice( $ids, 0, $count );
+		}
+
+		$featured = array();
+		$rest     = array();
+		foreach ( $ids as $rank => $pid ) {
+			if ( get_post_meta( $pid, '_fnc_speaker_home_featured', true ) ) {
+				$order      = get_post_meta( $pid, '_fnc_speaker_home_featured_order', true );
+				$featured[] = array(
+					'id'    => $pid,
+					'order' => ( '' === $order ) ? $rank : (int) $order,
+					'rank'  => $rank,
+				);
+			} else {
+				$rest[] = $pid;
+			}
+		}
+
+		usort( $featured, function ( $a, $b ) {
+			if ( $a['order'] !== $b['order'] ) {
+				return $a['order'] - $b['order'];
+			}
+			return $a['rank'] - $b['rank'];
+		} );
+
+		$ordered = array_merge( wp_list_pluck( $featured, 'id' ), $rest );
+		return array_slice( $ordered, 0, $count );
 	}
 }
 

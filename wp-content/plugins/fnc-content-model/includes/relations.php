@@ -671,7 +671,17 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 	) {
 		update_post_meta( $post_id, FNC_META_SPEAKER_TITLE, isset( $_POST['fnc_speaker_title'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_title'] ) ) : '' );
 		update_post_meta( $post_id, FNC_META_SPEAKER_ORG, isset( $_POST['fnc_speaker_org'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_org'] ) ) : '' );
-		update_post_meta( $post_id, FNC_META_SPEAKER_COUNTRY, isset( $_POST['fnc_speaker_country'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_country'] ) ) : '' );
+		$fnc_country_text = isset( $_POST['fnc_speaker_country'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_country'] ) ) : '';
+		update_post_meta( $post_id, FNC_META_SPEAKER_COUNTRY, $fnc_country_text );
+
+		// Synchronisation Pays : le champ texte est l'UNIQUE point de saisie ; on en
+		// derive la taxonomie fnc_pays (utilisee par le filtre de l'annuaire), en
+		// decoupant les pays multiples (« France / Cameroun »). Le panneau de la
+		// taxonomie est masque (meta_box_cb / show_in_rest = false, taxonomies.php)
+		// pour eviter la double saisie et l'incoherence affichage/filtre.
+		$fnc_country_names = array_values( array_filter( array_map( 'trim', preg_split( '#\s*[/,]\s*#', $fnc_country_text ) ) ) );
+		wp_set_object_terms( $post_id, $fnc_country_names, 'fnc_pays', false );
+
 		update_post_meta( $post_id, FNC_META_SPEAKER_PROTOCOL_ORDER, isset( $_POST['fnc_speaker_protocol_order'] ) ? absint( $_POST['fnc_speaker_protocol_order'] ) : '' );
 
 		$fnc_right_allowed = array( 'non_verifie', 'obtenu', 'refuse', 'expire' );

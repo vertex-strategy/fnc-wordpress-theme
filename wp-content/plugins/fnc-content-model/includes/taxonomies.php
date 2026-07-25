@@ -79,7 +79,11 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Gere automatiquement : synchronise depuis le champ texte « Pays » de
+			// la fiche intervenant (relations.php). On masque le panneau de saisie
+			// (block editor + classique) pour eviter la double saisie.
+			'show_in_rest'      => false,
+			'meta_box_cb'       => false,
 			'rewrite'           => array( 'slug' => 'pays' ),
 		)
 	);

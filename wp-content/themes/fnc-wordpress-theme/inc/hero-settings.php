@@ -152,6 +152,13 @@ function fnc_hero_customize_register( $wp_customize ) {
 			'title'   => __( 'Titre', 'fnc-wordpress-theme' ),
 			'intro'   => __( 'Introduction', 'fnc-wordpress-theme' ),
 		);
+		// Selecteurs (uniques par page : un seul hero .opening) pour l'apercu en
+		// direct (selective refresh) — le champ se met a jour sans rechargement.
+		$hero_selectors = array(
+			'eyebrow' => '.opening .eyebrow',
+			'title'   => '.opening h1',
+			'intro'   => '.opening .intro',
+		);
 		foreach ( $text_fields as $key => $label ) {
 			$is_area = ( 'intro' === $key );
 			$wp_customize->add_setting(
@@ -159,6 +166,7 @@ function fnc_hero_customize_register( $wp_customize ) {
 				array(
 					'default'           => '',
 					'sanitize_callback' => $is_area ? 'sanitize_textarea_field' : 'sanitize_text_field',
+					'transport'         => 'postMessage',
 				)
 			);
 			$wp_customize->add_control(
@@ -174,6 +182,17 @@ function fnc_hero_customize_register( $wp_customize ) {
 					'type'        => $is_area ? 'textarea' : 'text',
 				)
 			);
+			if ( isset( $wp_customize->selective_refresh ) ) {
+				$wp_customize->selective_refresh->add_partial(
+					"fnc_hero_{$route}_{$key}",
+					array(
+						'selector'        => $hero_selectors[ $key ],
+						'render_callback' => function () use ( $route, $key ) {
+							return esc_html( fnc_hero( $route, $key ) );
+						},
+					)
+				);
+			}
 		}
 
 		$wp_customize->add_setting(

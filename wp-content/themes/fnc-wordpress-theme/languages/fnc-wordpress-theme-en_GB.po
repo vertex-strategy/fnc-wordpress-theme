@@ -2570,3 +2570,20 @@ msgstr "Join the Forum"
 #: page-mot-du-president.php:56
 msgid "La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue."
 msgstr "The next edition brings together decision-makers, experts and civil society around digital. Take part in the dialogue."
+
+#: front-page.php
+msgctxt "eyebrow carrousel des voix"
+msgid "%1$s · %2$s, %3$s"
+msgstr "%1$s · %2$s, %3$s"
+
+#: front-page.php
+msgid "%d intervenant"
+msgid_plural "%d intervenants"
+msgstr[0] "%d speaker"
+msgstr[1] "%d speakers"
+
+#: front-page.php
+msgid "%d pays"
+msgid_plural "%d pays"
+msgstr[0] "%d country"
+msgstr[1] "%d countries"

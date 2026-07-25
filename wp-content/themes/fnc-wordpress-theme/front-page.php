@@ -82,7 +82,26 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 		? fnc_home_voices( max( 1, (int) fnc_home_setting( 'm3_count', 6 ) ) )
 		: array();
 	$fnc_voices = array_filter( array_map( 'get_post', $fnc_voice_ids ) );
-	$fnc_m3_eyebrow  = fnc_home_setting( 'm3_eyebrow', __( 'Les voix', 'fnc-wordpress-theme' ) );
+
+	// Eyebrow DYNAMIQUE (comme le site du Forum #m3) : « Les voix · N intervenants,
+	// N pays » — décomptes de l'édition en cours. On garde le libellé de base
+	// administrable (m3_eyebrow) et on lui adjoint les décomptes ; les fragments
+	// sont traduisibles (_n gère le pluriel FR/EN : speakers/countries). Si aucun
+	// participant n'est encore publié, on n'affiche que le libellé.
+	$fnc_m3_label   = fnc_home_setting( 'm3_eyebrow', __( 'Les voix', 'fnc-wordpress-theme' ) );
+	$fnc_m3_eyebrow = $fnc_m3_label;
+	if ( function_exists( 'fnc_edition_participants' ) && function_exists( 'fnc_edition_countries' ) ) {
+		$fnc_n_part = count( fnc_edition_participants() );
+		$fnc_n_pays = count( fnc_edition_countries() );
+		if ( $fnc_n_part > 0 ) {
+			/* translators: %d: nombre d'intervenants. */
+			$fnc_part_txt   = sprintf( _n( '%d intervenant', '%d intervenants', $fnc_n_part, 'fnc-wordpress-theme' ), $fnc_n_part );
+			/* translators: %d: nombre de pays. */
+			$fnc_pays_txt   = sprintf( _n( '%d pays', '%d pays', $fnc_n_pays, 'fnc-wordpress-theme' ), $fnc_n_pays );
+			/* translators: 1: libellé (« Les voix »), 2: « N intervenants », 3: « N pays ». */
+			$fnc_m3_eyebrow = sprintf( _x( '%1$s · %2$s, %3$s', 'eyebrow carrousel des voix', 'fnc-wordpress-theme' ), $fnc_m3_label, $fnc_part_txt, $fnc_pays_txt );
+		}
+	}
 	$fnc_intervenants_url = get_post_type_archive_link( 'fnc_intervenant' );
 
 	$fnc_initials = static function ( $name ) {

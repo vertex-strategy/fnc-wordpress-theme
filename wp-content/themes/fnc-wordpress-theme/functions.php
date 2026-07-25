@@ -61,6 +61,12 @@ require_once get_template_directory() . '/inc/section-titles.php';
 require_once get_template_directory() . '/inc/admin-guide.php';
 
 /**
+ * Rendu des sections composees (Module G / ACF Flexible Content) : adaptateur
+ * layouts ACF -> fonctions de rendu de blocs verifiees. Voir inc/page-sections.php.
+ */
+require_once get_template_directory() . '/inc/page-sections.php';
+
+/**
  * Module G (FNC Core) : base d'URL des images de hero par defaut. fnc_page_hero()
  * resout ainsi l'image de route (« intervenants.png ») vers les assets du theme.
  * NB : le dossier reel est /assets/images (et non /assets/img/da de l'exemple).

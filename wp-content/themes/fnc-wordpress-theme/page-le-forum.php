@@ -24,6 +24,21 @@ get_header();
  * profit du contenu compose ; sinon il conserve le contenu de demonstration
  * porte par la maquette (comportement inchange).
  */
+/*
+ * Lot 3 — Module G (ACF Flexible Content). Si l'editorial a compose cette
+ * page en sections ACF (archetype « institutionnel »), elles priment sur le
+ * contenu de demonstration ci-dessous. Rendu delegue aux fonctions de blocs
+ * verifiees via inc/page-sections.php.
+ */
+if ( function_exists( 'fnc_render_page_sections' ) ) {
+	$fnc_sections_html = fnc_render_page_sections( get_queried_object_id(), 'institutional' );
+	if ( '' !== $fnc_sections_html ) {
+		echo '<main id="main">' . $fnc_sections_html . '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput -- HTML echappe dans les fonctions de rendu.
+		get_footer();
+		return;
+	}
+}
+
 if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	while ( have_posts() ) {
 		the_post();

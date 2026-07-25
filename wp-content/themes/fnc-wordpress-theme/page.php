@@ -50,7 +50,7 @@ while ( have_posts() ) :
 		?>
 		<main id="main">
 			<section class="section">
-				<div class="container reading">
+				<div class="container reading prose-legal">
 					<?php the_content(); ?>
 				</div>
 			</section>

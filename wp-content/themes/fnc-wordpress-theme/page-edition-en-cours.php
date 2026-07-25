@@ -188,7 +188,7 @@ fnc_render_opening_hero(
 										<?php fnc_render_badge( $fnc_session_types[ $fnc_type ] ); ?>
 									<?php endif; ?>
 								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_room', true ) ); ?></span>
 							</a>
 						<?php endforeach; ?>
 					</div>

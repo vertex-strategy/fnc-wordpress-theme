@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.0' );
+define( 'FNC_THEME_VERSION', '1.0.1' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -566,6 +566,36 @@ function fnc_render_badge( $label ) {
 		return;
 	}
 	printf( '<span class="badge">%s</span>', esc_html( $label ) );
+}
+
+/**
+ * Libelle de dates d'une edition (« 25–27 mars 2027 »), localise, a partir de
+ * _fnc_edition_start_date / _fnc_edition_end_date. Sert de repli a la page
+ * d'accueil quand aucun libelle n'est saisi dans les reglages : l'edition
+ * active pilote alors les dates affichees, plutot qu'un « A confirmer ».
+ *
+ * @param int $edition_id 0 = edition active.
+ * @return string Chaine vide si aucune date exploitable.
+ */
+function fnc_edition_dates_label( $edition_id = 0 ) {
+	$edition_id = $edition_id ? (int) $edition_id : ( function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0 );
+	if ( ! $edition_id ) {
+		return '';
+	}
+	$start = (string) get_post_meta( $edition_id, '_fnc_edition_start_date', true );
+	$ts_s  = $start ? strtotime( $start ) : false;
+	if ( ! $ts_s ) {
+		return '';
+	}
+	$end  = (string) get_post_meta( $edition_id, '_fnc_edition_end_date', true );
+	$ts_e = $end ? strtotime( $end ) : false;
+	if ( ! $ts_e || $ts_e === $ts_s ) {
+		return wp_date( 'j F Y', $ts_s );
+	}
+	if ( wp_date( 'n Y', $ts_s ) === wp_date( 'n Y', $ts_e ) ) {
+		return wp_date( 'j', $ts_s ) . '–' . wp_date( 'j F Y', $ts_e ); // meme mois : « 25–27 mars 2027 ».
+	}
+	return wp_date( 'j F', $ts_s ) . ' – ' . wp_date( 'j F Y', $ts_e );
 }
 
 /**

@@ -41,8 +41,9 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 					<span class="place"><?php echo esc_html( fnc_home_setting( 'm1_place', 'Brazzaville · République du Congo' ) ); ?></span>
 				<?php endif; ?>
 				<span class="place">
-					<?php if ( fnc_home_setting( 'm1_dates' ) ) : ?>
-						<?php echo esc_html( fnc_home_setting( 'm1_dates' ) ); ?>
+					<?php $fnc_m1_dates = fnc_home_setting( 'm1_dates' ) ?: fnc_edition_dates_label(); ?>
+					<?php if ( $fnc_m1_dates ) : ?>
+						<?php echo esc_html( $fnc_m1_dates ); ?>
 					<?php else : ?>
 						<?php esc_html_e( 'Dates', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span>
 					<?php endif; ?>
@@ -210,8 +211,8 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 				<span class="eyebrow"><?php echo esc_html( fnc_home_setting( 'm5_eyebrow', __( 'Programme', 'fnc-wordpress-theme' ) ) ); ?></span>
 				<h2 id="m5-title"><?php echo esc_html( fnc_home_setting( 'm5_title', __( 'Trois jours de travail collectif', 'fnc-wordpress-theme' ) ) ); ?></h2>
 				<span class="prog-date">
-					<?php if ( fnc_home_setting( 'm5_date_label' ) ) : ?>
-						<?php echo esc_html( fnc_home_setting( 'm5_date_label' ) ); ?>
+					<?php if ( fnc_home_setting( 'm5_date_label' ) || fnc_edition_dates_label() ) : ?>
+						<?php echo esc_html( fnc_home_setting( 'm5_date_label' ) ?: fnc_edition_dates_label() ); ?>
 					<?php else : ?>
 						<?php esc_html_e( 'Journée d’ouverture · Date', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span>
 					<?php endif; ?>
@@ -223,7 +224,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 							<div class="session" role="listitem">
 								<span class="time"><?php echo esc_html( get_post_meta( $fnc_hs->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
 								<span class="title"><?php echo esc_html( get_the_title( $fnc_hs ) ); ?></span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_hs->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+								<span class="room"><?php echo esc_html( (string) get_post_meta( $fnc_hs->ID, '_fnc_session_room', true ) ); ?></span>
 							</div>
 						<?php endforeach; ?>
 					<?php else : ?>

@@ -95,8 +95,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="<?php echo esc_url( fnc_page_url( 'mentions-legales' ) ); ?>"><?php esc_html_e( 'Mentions légales', 'fnc-wordpress-theme' ); ?></a>
 			· <a href="<?php echo esc_url( fnc_page_url( 'politique-confidentialite' ) ); ?>"><?php esc_html_e( 'Confidentialité', 'fnc-wordpress-theme' ); ?></a>
 			<?php
-			// Bouton de reouverture du consentement (FNC Core, le consentement) : visible seulement si Matomo actif.
-			if ( function_exists( 'fnc_consent_reopen_button' ) ) { echo ' · ' . fnc_consent_reopen_button(); } // phpcs:ignore WordPress.Security.EscapeOutput
+			// Bouton de reouverture du consentement (le consentement) : visible seulement
+			// si la mesure d'audience est active. Le separateur ne s'affiche que si le
+			// bouton existe (sinon « · » orphelin quand la mesure est desactivee).
+			if ( function_exists( 'fnc_consent_reopen_button' ) ) {
+				$fnc_reopen = fnc_consent_reopen_button();
+				if ( '' !== trim( (string) $fnc_reopen ) ) {
+					echo ' · ' . $fnc_reopen; // phpcs:ignore WordPress.Security.EscapeOutput -- markup interne echappe.
+				}
+			}
 			?>
 		</span>
 	</div>

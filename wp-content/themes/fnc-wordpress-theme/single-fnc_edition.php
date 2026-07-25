@@ -134,7 +134,7 @@ while ( have_posts() ) :
 										<?php fnc_render_badge( $fnc_session_types[ $fnc_es_type ] ); ?>
 									<?php endif; ?>
 								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_es->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+								<span class="room"><?php echo esc_html( get_post_meta( $fnc_es->ID, '_fnc_session_room', true ) ); ?></span>
 							</a>
 						<?php endforeach; ?>
 					</div>

@@ -164,7 +164,7 @@ while ( have_posts() ) :
 													<span class="person-meta"><?php esc_html_e( 'En modération', 'fnc-wordpress-theme' ); ?></span>
 												<?php endif; ?>
 											</span>
-											<span class="room"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+											<span class="room"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_room', true ) ); ?></span>
 										</a>
 									<?php endforeach; ?>
 								</div>

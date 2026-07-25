@@ -147,7 +147,9 @@ $fnc_cat_class = static function ( $slug ) {
 							$fnc_sp_id      = get_the_ID();
 							$fnc_sp_profils = get_the_terms( $fnc_sp_id, 'fnc_profil' );
 							$fnc_sp_profil  = ( $fnc_sp_profils && ! is_wp_error( $fnc_sp_profils ) ) ? $fnc_sp_profils[0] : null;
+							$fnc_sp_role    = get_post_meta( $fnc_sp_id, '_fnc_speaker_role', true );
 							$fnc_sp_org     = get_post_meta( $fnc_sp_id, '_fnc_speaker_org', true );
+							$fnc_sp_desc    = $fnc_sp_role ? $fnc_sp_role : $fnc_sp_org; // Fonction (comme le site du Forum), repli sur l'organisation.
 							$fnc_sp_country = get_post_meta( $fnc_sp_id, '_fnc_speaker_country', true );
 							?>
 							<a class="spk" href="<?php the_permalink(); ?>">
@@ -169,8 +171,8 @@ $fnc_cat_class = static function ( $slug ) {
 									?>
 								</div>
 								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></div>
-								<?php if ( $fnc_sp_org ) : ?>
-									<div class="r"><?php echo esc_html( $fnc_sp_org ); ?></div>
+								<?php if ( $fnc_sp_desc ) : ?>
+									<div class="r"><?php echo esc_html( $fnc_sp_desc ); ?></div>
 								<?php endif; ?>
 								<?php if ( $fnc_sp_country ) : ?>
 									<span class="c"><?php echo esc_html( $fnc_sp_country ); ?></span>

@@ -70,6 +70,55 @@ function fnc_ds_upsert( $post_type, $legacy, $title, $content = '', $slug = '' )
 	return $id;
 }
 
+/**
+ * Importe la photo officielle d'un intervenant (assets/images/speakers/{legacy}.ext)
+ * comme image mise en avant, et renvoie true si une photo a ete posee. Idempotent
+ * (attachement reutilise via la meta _fnc_ds_photo).
+ */
+function fnc_ds_speaker_photo( $post_id, $legacy ) {
+	$dir   = get_template_directory() . '/assets/images/speakers/';
+	$found = '';
+	foreach ( array( 'jpeg', 'jpg', 'png', 'webp' ) as $ext ) {
+		if ( is_readable( $dir . $legacy . '.' . $ext ) ) {
+			$found = $dir . $legacy . '.' . $ext;
+			break;
+		}
+	}
+	if ( '' === $found ) {
+		return false;
+	}
+	$existing = get_posts( array(
+		'post_type'   => 'attachment',
+		'post_status' => 'inherit',
+		'meta_key'    => '_fnc_ds_photo',
+		'meta_value'  => $legacy,
+		'fields'      => 'ids',
+		'numberposts' => 1,
+	) );
+	if ( ! empty( $existing ) ) {
+		$att = (int) $existing[0];
+	} else {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$upload = wp_upload_bits( basename( $found ), null, file_get_contents( $found ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		if ( ! empty( $upload['error'] ) ) {
+			return false;
+		}
+		$type = wp_check_filetype( $upload['file'] );
+		$att  = wp_insert_attachment( array(
+			'post_mime_type' => $type['type'],
+			'post_title'     => get_the_title( $post_id ),
+			'post_status'    => 'inherit',
+		), $upload['file'], $post_id );
+		if ( is_wp_error( $att ) || ! $att ) {
+			return false;
+		}
+		wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $upload['file'] ) );
+		update_post_meta( $att, '_fnc_ds_photo', $legacy );
+	}
+	set_post_thumbnail( $post_id, $att );
+	return true;
+}
+
 /** Garantit un terme (par slug) et renvoie son term_id. */
 function fnc_ds_term( $taxonomy, $slug, $name ) {
 	$t = get_term_by( 'slug', $slug, $taxonomy );
@@ -150,9 +199,11 @@ foreach ( $data['speakers'] as $s ) {
 		'_fnc_speaker_country'        => $s['country'],
 		'_fnc_speaker_protocol_order' => (int) $s['protocolOrder'],
 	) );
-	// Droit à l'image : fermé par défaut (portrait masqué → monogramme). À ouvrir
-	// au cas par cas quand l'autorisation est réellement acquise.
-	if ( '' === get_post_meta( $id, '_fnc_speaker_image_right', true ) ) {
+	// Photo officielle (déjà publiée sur le site public) : import + droit exercé.
+	// Sinon droit fermé par défaut → monogramme (« Photo à venir »).
+	if ( fnc_ds_speaker_photo( $id, $s['legacyId'] ) ) {
+		update_post_meta( $id, '_fnc_speaker_image_right', 'obtenu' );
+	} elseif ( '' === get_post_meta( $id, '_fnc_speaker_image_right', true ) ) {
 		update_post_meta( $id, '_fnc_speaker_image_right', 'non_verifie' );
 	}
 	$term = fnc_ds_term( 'fnc_profil', $s['kind'], isset( $PROFILS[ $s['kind'] ] ) ? $PROFILS[ $s['kind'] ] : ucfirst( $s['kind'] ) );

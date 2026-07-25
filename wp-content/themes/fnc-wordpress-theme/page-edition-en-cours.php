@@ -98,10 +98,10 @@ if ( $fnc_edition ) {
 
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Édition en cours', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Édition 2027', 'fnc-wordpress-theme' ),
-		'intro'      => __( 'Trois jours de travail collectif autour de la souveraineté numérique. Voici tout ce qu\'il faut pour préparer votre participation.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/edition-en-cours.jpeg',
+		'eyebrow'    => fnc_hero( 'edition-en-cours', 'eyebrow' ),
+		'title'      => fnc_hero( 'edition-en-cours', 'title' ),
+		'intro'      => fnc_hero( 'edition-en-cours', 'intro' ),
+		'image'      => fnc_hero_image_url( 'edition-en-cours' ),
 		'image_alt'  => __( 'Édition 2027 du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 	)
@@ -172,8 +172,8 @@ fnc_render_opening_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php esc_html_e( 'Le programme', 'fnc-wordpress-theme' ); ?></p>
-						<h2><?php esc_html_e( 'Un aperçu des prochaines sessions.', 'fnc-wordpress-theme' ); ?></h2>
+						<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'eyebrow' ) ); ?></p>
+						<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'title' ) ); ?></h2>
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
@@ -213,8 +213,8 @@ fnc_render_opening_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php esc_html_e( 'Les intervenants', 'fnc-wordpress-theme' ); ?></p>
-						<h2><?php esc_html_e( 'Décideurs, experts et acteurs de la société civile.', 'fnc-wordpress-theme' ); ?></h2>
+						<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'eyebrow' ) ); ?></p>
+						<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'title' ) ); ?></h2>
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_speaker_ids ) ) : ?>
@@ -259,7 +259,7 @@ fnc_render_opening_hero(
 		 */
 		?>
 		<section class="callout">
-			<h2><?php esc_html_e( 'Inscription', 'fnc-wordpress-theme' ); ?></h2>
+			<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'inscription', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?></p>
 			<?php if ( function_exists( 'fnc_registration_enabled' ) && fnc_registration_enabled() ) : ?>
 				<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>

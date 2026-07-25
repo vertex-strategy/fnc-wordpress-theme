@@ -77,6 +77,14 @@ function fnc_section_registry() {
 				'cta'    => array( 'label' => __( 'Appel final', 'fnc-wordpress-theme' ), 'title' => 'Prêt à participer ?' ),
 			),
 		),
+		'edition-en-cours' => array(
+			'label'    => __( 'Édition en cours', 'fnc-wordpress-theme' ),
+			'sections' => array(
+				'programme'    => array( 'label' => __( 'Aperçu programme', 'fnc-wordpress-theme' ), 'eyebrow' => 'Le programme', 'title' => 'Un aperçu des prochaines sessions.' ),
+				'intervenants' => array( 'label' => __( 'Aperçu intervenants', 'fnc-wordpress-theme' ), 'eyebrow' => 'Les intervenants', 'title' => 'Décideurs, experts et acteurs de la société civile.' ),
+				'inscription'  => array( 'label' => __( 'Appel inscription', 'fnc-wordpress-theme' ), 'title' => 'Inscription' ),
+			),
+		),
 	);
 }
 

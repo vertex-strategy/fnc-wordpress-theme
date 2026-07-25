@@ -79,6 +79,13 @@ function fnc_hero_registry() {
 			'intro'   => __( 'Tout ce qu’il faut pour organiser votre participation — lieu, transport, hébergement, visa, badge et contacts utiles.', 'fnc-wordpress-theme' ),
 			'image'   => 'le-badge.png',
 		),
+		'edition-en-cours' => array(
+			'label'   => __( 'Édition en cours', 'fnc-wordpress-theme' ),
+			'eyebrow' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
+			'title'   => __( 'Édition 2027', 'fnc-wordpress-theme' ),
+			'intro'   => __( 'Trois jours de travail collectif autour de la souveraineté numérique. Voici tout ce qu’il faut pour préparer votre participation.', 'fnc-wordpress-theme' ),
+			'image'   => 'edition-en-cours.jpeg',
+		),
 	);
 }
 

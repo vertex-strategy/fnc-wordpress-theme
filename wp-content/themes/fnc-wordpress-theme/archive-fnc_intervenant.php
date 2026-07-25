@@ -197,7 +197,7 @@ $fnc_cat_class = static function ( $slug ) {
 	</section>
 
 	<section class="callout">
-		<h2><?php esc_html_e( 'Proposer une intervention', 'fnc-wordpress-theme' ); ?></h2>
+		<h2><?php echo esc_html( fnc_stitle( 'intervenants', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'Vous souhaitez contribuer au programme ? Les candidatures d’intervenants seront ouvertes prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
 		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Nous contacter', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

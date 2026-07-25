@@ -56,8 +56,8 @@ $fnc_publications = get_posts(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Lecture', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Lire, comprendre, prolonger.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'ressources', 'intro', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'ressources', 'intro', 'title' ) ); ?></h2>
 				</div>
 				<div>
 					<p><?php esc_html_e( 'Une bibliothèque claire et sobre : les ressources disponibles d’un côté, les parutions à venir de l’autre. Chaque document publié engage le Forum.', 'fnc-wordpress-theme' ); ?></p>
@@ -71,8 +71,8 @@ $fnc_publications = get_posts(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Bibliothèque', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Rechercher, filtrer, consulter.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'ressources', 'search', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'ressources', 'search', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Retrouvez une ressource par mot-clé ou par type de document.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -126,8 +126,8 @@ $fnc_publications = get_posts(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Suite', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Lire les traces, puis comprendre le cadre.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'ressources', 'cta', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'ressources', 'cta', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les publications nourrissent le dialogue public. Découvrez le rôle du Forum, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
 			</div>

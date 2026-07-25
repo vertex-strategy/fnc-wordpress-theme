@@ -49,6 +49,12 @@ require_once get_template_directory() . '/inc/forms.php';
 require_once get_template_directory() . '/inc/hero-settings.php';
 
 /**
+ * Titres de section editables (Customizer) des pages a liste. Voir
+ * inc/section-titles.php.
+ */
+require_once get_template_directory() . '/inc/section-titles.php';
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

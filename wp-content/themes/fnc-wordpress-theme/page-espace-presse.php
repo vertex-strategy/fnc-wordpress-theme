@@ -65,8 +65,8 @@ $fnc_communiques      = $fnc_communiques_term
 <main id="main">
 	<section class="section">
 		<div class="container reading">
-			<p class="eyebrow"><?php esc_html_e( 'Information', 'fnc-wordpress-theme' ); ?></p>
-			<h2><?php esc_html_e( 'Des ressources vérifiables, pas un dossier de façade.', 'fnc-wordpress-theme' ); ?></h2>
+			<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'intro', 'eyebrow' ) ); ?></p>
+			<h2><?php echo esc_html( fnc_stitle( 'espace-presse', 'intro', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés. Le Forum privilégie une information traçable, sobre et utilisable.', 'fnc-wordpress-theme' ); ?></p>
 			<p class="frise-note" style="margin-top:14px;"><?php esc_html_e( 'Kit presse, contacts et modalités : à confirmer lorsque non publiés.', 'fnc-wordpress-theme' ); ?></p>
 		</div>
@@ -76,8 +76,8 @@ $fnc_communiques      = $fnc_communiques_term
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Communiqués', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Ressources presse publiées.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'resources', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'espace-presse', 'resources', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les communiqués de presse restent des ressources du portail. Chaque document publié conserve son lien vers la bibliothèque.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -107,8 +107,8 @@ $fnc_communiques      = $fnc_communiques_term
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Contacts', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Contacts presse confirmés.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'contacts', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'espace-presse', 'contacts', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les contacts presse sont portés par les Réglages du site et réutilisables par les surfaces éditoriales.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -151,8 +151,8 @@ $fnc_communiques      = $fnc_communiques_term
 
 	<section class="section linen">
 		<div class="container reading">
-			<p class="eyebrow"><?php esc_html_e( 'Accréditation', 'fnc-wordpress-theme' ); ?></p>
-			<h2><?php esc_html_e( 'L’accréditation reste un échange direct.', 'fnc-wordpress-theme' ); ?></h2>
+			<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'accreditation', 'eyebrow' ) ); ?></p>
+			<h2><?php echo esc_html( fnc_stitle( 'espace-presse', 'accreditation', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'Il n’existe pas de formulaire d’accréditation : les journalistes peuvent utiliser la page Contact pour signaler leur demande.', 'fnc-wordpress-theme' ); ?></p>
 			<p style="margin-top:20px;"><a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a></p>
 		</div>

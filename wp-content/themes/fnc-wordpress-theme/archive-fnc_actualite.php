@@ -36,8 +36,8 @@ fnc_render_opening_hero(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Actualités', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Dernières publications.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'title' ) ); ?></h2>
 				</div>
 			</div>
 

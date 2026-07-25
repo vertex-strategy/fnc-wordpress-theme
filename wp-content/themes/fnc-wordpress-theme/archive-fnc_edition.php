@@ -50,8 +50,8 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Archives', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Une histoire qui s’écrit, édition après édition.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'editions', 'intro', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'editions', 'intro', 'title' ) ); ?></h2>
 				</div>
 				<div>
 					<p><?php esc_html_e( 'Chaque édition est un chapitre : ce qui s’y est dit, décidé, engagé. Vous y retrouvez ce qui est déjà documenté, ce qui se prépare, et ce qui reste à confirmer.', 'fnc-wordpress-theme' ); ?></p>
@@ -65,8 +65,8 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'La liste', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Les éditions publiées', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'editions', 'list', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'editions', 'list', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Filtrez par moment : l’édition en cours, celles à venir, celles déjà passées.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -134,8 +134,8 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Suite', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'De l’édition à la ressource.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'eyebrow' ) ); ?></p>
+					<h2><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
 			</div>

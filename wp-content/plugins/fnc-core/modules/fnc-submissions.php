@@ -1,12 +1,14 @@
 <?php
 /**
- * Plugin Name: FNC Core — Réception des formulaires (Module A)
+ * Plugin Name: FNC Core — Réception des formulaires
  * Description: Traitement serveur des formulaires Contact / Inscription / Partenariat :
- *              validation par champ, honeypot, anti-abus (rate-limit), stockage en CPT
- *              privé, accusé de réception e-mail. Portage fidèle de la logique Next.js
- *              (src/lib/submissions.ts + app/api/contact/route.ts).
+ *              validation par champ, anti-spam, anti-abus (limite d'envois), stockage
+ *              privé et accusé de réception par e-mail.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : ce fichier est autonome (activable tel quel) OU à fusionner dans le
  * plugin FNC Core (includes/submissions.php). Le MARKUP des formulaires reste au thème ;
@@ -22,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* ==========================================================================
- * 1. Définition des 3 formulaires — champs réels des collections Payload
+ * 1. Définition des 3 formulaires — champs de chaque formulaire
  *    (ContactSubmissions, Registrations, PartnershipRequests).
- *    Les longueurs max reflètent lib/submissions.ts (LIMITS).
+ *    Les longueurs maximales bornent chaque champ.
  * ======================================================================== */
 function fnc_submission_forms() {
 	return array(
@@ -48,7 +50,7 @@ function fnc_submission_forms() {
 				'participation' => array( 'required' => false, 'type' => 'text',     'max' => 80 ),
 				'motivation'    => array( 'required' => false, 'type' => 'textarea', 'max' => 4000 ),
 				// `edition` : résolue côté serveur (édition active), l'utilisateur ne
-				// choisit pas — voir Module C (fnc_resolve_active_edition). Cf. filtre plus bas.
+				// choisit pas — voir fnc_resolve_active_edition(). Cf. filtre plus bas.
 			),
 		),
 		'partenariat' => array(
@@ -134,8 +136,8 @@ function fnc_handle_submission() {
 		fnc_submission_success_redirect( $redirect, $type );
 	}
 
-	// Gouvernance par drapeau (Module F) : un type peut être FERMÉ (p. ex. inscriptions
-	// non ouvertes → refus honnête, comme le 403 de api/inscription). Défaut : accepté.
+	// Gouvernance par option : un type peut être FERMÉ (p. ex. inscriptions non
+	// ouvertes → refus honnête, message « fermé »). Défaut : accepté.
 	if ( ! apply_filters( 'fnc_submission_accepts', true, $type ) ) {
 		fnc_submission_flash_redirect( $redirect, $type, array( '_form' => 'closed' ), array() );
 	}
@@ -191,7 +193,7 @@ function fnc_handle_submission() {
 
 	/**
 	 * Hook d'extension (notifications internes, CRM, résolution d'édition active pour
-	 * l'inscription via Module C, etc.).
+	 * l'inscription via fnc_current_edition_id(), etc.).
 	 */
 	do_action( 'fnc_submission_stored', $post_id, $type, $data );
 

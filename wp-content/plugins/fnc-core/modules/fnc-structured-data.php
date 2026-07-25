@@ -1,14 +1,17 @@
 <?php
 /**
- * Plugin Name: FNC Core — Données structurées schema.org (Module D)
- * Description: Émet Organization + WebSite sur toutes les pages, et Event
- *              (édition en cours : dates, lieu, intervenants) sur l'accueil.
- *              Portage fidèle de src/lib/seo/structuredData.ts (C4).
+ * Plugin Name: FNC Core — Données structurées (SEO)
+ * Description: Émet les données structurées schema.org — Organization + WebSite sur
+ *              toutes les pages, et Event (édition en cours : dates, lieu, intervenants)
+ *              sur l'accueil — pour un meilleur référencement.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. S'accroche à wp_head.
- * DÉPEND (souplement) du Module C pour l'édition active + participants
+ * DÉPEND (souplement) des « Données du site » pour l'édition active + participants
  * (function_exists ; sans lui, l'Event est simplement omis).
  *
  * PRINCIPE : jamais de balisage PARTIEL. L'Event n'est émis que si nom + date de
@@ -90,7 +93,7 @@ if ( ! function_exists( 'fnc_sd_same_as' ) ) {
 }
 
 /* ==========================================================================
- * Constructeurs (miroir de structuredData.ts)
+ * Constructeurs schema.org
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_sd_organization' ) ) {
@@ -147,7 +150,7 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 	 */
 	function fnc_sd_event() {
 		if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
-			return null; // Module C requis pour l'édition active.
+			return null; // « Données du site » requises pour l'édition active.
 		}
 		$ed = fnc_resolve_active_edition();
 		if ( ! $ed ) {
@@ -202,7 +205,7 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 			$event['image'] = fnc_sd_abs( $img );
 		}
 
-		// Intervenants (Module C). Person[] { name, jobTitle }.
+		// Intervenants. Person[] { name, jobTitle }.
 		if ( function_exists( 'fnc_edition_participants' ) ) {
 			$performers = array();
 			foreach ( fnc_edition_participants( $ed->ID ) as $sid ) {

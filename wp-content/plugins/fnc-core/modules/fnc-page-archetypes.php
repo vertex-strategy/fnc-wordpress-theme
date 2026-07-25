@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: FNC Core — Éditeur de pages / archétypes (Module G)
- * Description: Parité éditoriale avec src/payload/collections/Pages.ts : système
- *              d'archétypes de page (legal / institutional / list / detail / generic /
- *              homepage). Rend éditable sans développeur le HERO par page (override
- *              image/titre/eyebrow/intro), la composition institutionnelle (7 blocs
- *              curatés) et générique (palette bornée), les états vides.
+ * Plugin Name: FNC Core — Édition des pages
+ * Description: Système d'archétypes de page (légale / institutionnelle / liste / détail /
+ *              composable / accueil). Rend éditable sans développeur le HERO de chaque
+ *              page (image, sur-titre, titre, introduction), la composition des pages
+ *              institutionnelles (blocs curatés) et composables, et les états vides.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Enregistre ses champs via ACF
  * PRO par code (aucun clic UI). Le RENDU (classes DA-D) reste au thème : ce module ne
@@ -237,7 +239,7 @@ if ( ! function_exists( 'fnc_page_sections' ) ) {
 }
 
 /* ==========================================================================
- * Enregistrement des champs ACF (par code) — miroir de Pages.ts + blocks/*
+ * Enregistrement des champs (par code)
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_g_field' ) ) {

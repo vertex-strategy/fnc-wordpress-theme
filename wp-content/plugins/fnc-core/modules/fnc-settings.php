@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: FNC Core — Réglages du site (Module B)
+ * Plugin Name: FNC Core — Réglages du site
  * Description: Surface unique de gouvernance transverse (identité, logos, coordonnées,
- *              réseaux, menu principal, ordre des pays, footer, SEO par défaut) + les
- *              accesseurs `fnc_get_setting()` / `fnc_social_links()` consommés par les
- *              autres modules et le thème. Portage de globals/Settings.ts (+ le filtrage
- *              des placeholders de layout.tsx).
+ *              réseaux, menu principal, ordre des pays, pied de page, SEO par défaut) et
+ *              les accesseurs `fnc_get_setting()` / `fnc_social_links()` utilisés par le
+ *              thème et les autres composants de l'extension.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Page « Réglages → FNC ».
  * Amorcé partiellement dans le thème → À DÉPLACER ici (retirer les doublons du thème
@@ -31,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* ==========================================================================
- * Stockage + valeurs par défaut (miroir des defaultValue de Settings.ts)
+ * Stockage + valeurs par défaut des réglages
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_settings_defaults' ) ) {
@@ -91,7 +93,7 @@ if ( ! function_exists( 'fnc_get_setting' ) ) {
 }
 
 /* ==========================================================================
- * Filtrage des placeholders (portage de layout.tsx)
+ * Filtrage des coordonnées de démonstration (placeholders)
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_is_placeholder_phone' ) ) {

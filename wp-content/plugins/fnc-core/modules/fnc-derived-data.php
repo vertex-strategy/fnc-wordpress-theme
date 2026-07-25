@@ -1,12 +1,15 @@
 <?php
 /**
- * Plugin Name: FNC Core — Données dérivées (Module C)
- * Description: Helpers de logique métier portables (indépendants du thème) : édition
- *              active + statut, compte à rebours, participants dérivés des sessions
- *              publiées, voix mises en avant, et garde « droit à l'image » (RÈGLE 7).
- *              Portage fidèle de src/data/agenda.ts + src/data/editions.ts.
+ * Plugin Name: FNC Core — Données du site
+ * Description: Fonctions métier portables (indépendantes du thème) : édition active +
+ *              statut, compte à rebours, participants dérivés des sessions publiées,
+ *              voix mises en avant, programme par jour, filtres d'intervenants et garde
+ *              « droit à l'image » (portrait affiché seulement si l'autorisation est acquise).
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Toutes les fonctions sont
  * gardées par function_exists() → aucun conflit avec le thème existant.
@@ -29,13 +32,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /* ==========================================================================
  * ÉDITION — résolution de l'édition active + statut + compte à rebours
- * (cf. data/editions.ts : resolveActiveEdition, loadCurrentEdition ; page.tsx : daysToForum)
+ * (édition active + compte à rebours)
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 	/**
 	 * Édition active = l'édition « en cours » ; à défaut, la prochaine « à venir »
-	 * (année la plus proche). L'utilisateur ne choisit jamais l'édition (décision MOA).
+	 * (année la plus proche). L'utilisateur ne choisit jamais l'édition.
 	 *
 	 * @return WP_Post|null
 	 */
@@ -113,7 +116,7 @@ if ( ! function_exists( 'fnc_days_until_edition' ) ) {
 
 /* ==========================================================================
  * PARTICIPANTS — dérivés des sessions PUBLIÉES de l'édition
- * (cf. data/agenda.ts : deriveParticipants — modérateur + intervenants d'≥1 session,
+ * (participants = modérateur + intervenants d'≥1 session publiée,
  *  ordonnés par protocole)
  * ======================================================================== */
 
@@ -199,7 +202,7 @@ if ( ! function_exists( 'fnc_edition_participants' ) ) {
 if ( ! function_exists( 'fnc_home_voices' ) ) {
 	/**
 	 * Voix de la home : participants de l'édition active, plafonnés à $count.
-	 * NOTE : le site Next.js promeut certaines voix (champ homeFeatured/homeFeaturedOrder,
+	 * NOTE : certaines voix peuvent être promues (champ « mis en avant »,
 	 * cf. options A/B). Ce champ n'existe PAS encore dans le modèle WP — à ajouter au
 	 * content-model si l'on veut la mise en avant. En attendant : ordre protocolaire.
 	 *
@@ -213,7 +216,7 @@ if ( ! function_exists( 'fnc_home_voices' ) ) {
 
 /* ==========================================================================
  * PAYS REPRÉSENTÉS — dérivés du champ pays des participants
- * (cf. data/agenda.ts : countries. L'ORDRE et les DRAPEAUX sont déjà dans le thème :
+ * (pays des participants. L'ORDRE et les DRAPEAUX peuvent venir des réglages :
  *  fnc_order_countries / fnc_country_flag — à consolider ICI à terme. On ne les
  *  redéfinit pas pour éviter tout conflit ; on les réutilise s'ils existent.)
  * ======================================================================== */
@@ -251,9 +254,9 @@ if ( ! function_exists( 'fnc_edition_countries' ) ) {
 }
 
 /* ==========================================================================
- * RÈGLE 7 — GARDE « DROIT À L'IMAGE »
+ * GARDE « DROIT À L'IMAGE »
  * Un portrait n'est affiché publiquement QUE si le droit à l'image est « obtenu »
- * et non expiré. Aucune autorisation n'est présumée. (cf. data/agenda.ts mapSpeaker.)
+ * et non expiré. Aucune autorisation n'est présumée.
  *
  * ⚠️ IMPORTANT : les métas ci-dessous N'EXISTENT PAS encore dans le content-model WP.
  *    À AJOUTER à la collection Intervenant (post-types.php) :
@@ -271,7 +274,7 @@ if ( ! function_exists( 'fnc_speaker_image_allowed' ) ) {
 		$allowed = ( 'obtenu' === $status ) && $not_expired;
 
 		/**
-		 * Filtre de TRANSITION. RÈGLE 7 = false par défaut (aucune présomption).
+		 * Filtre de TRANSITION. Garde = false par défaut (aucune présomption).
 		 * Pour afficher les portraits pendant la saisie des droits :
 		 *   add_filter('fnc_speaker_image_allowed', '__return_true');
 		 * — à RETIRER une fois les droits renseignés.
@@ -300,7 +303,7 @@ if ( ! function_exists( 'fnc_speaker_portrait' ) ) {
 
 /* ==========================================================================
  * AGENDA — sessions groupées par jour (jour puis horaire)
- * (cf. data/agenda.ts : `days` + `sessions.sort(day, startMinutes)`.)
+ * (sessions groupées par jour, triées par horaire.)
  * Dérivation PURE : renvoie une structure prête, ZÉRO rendu (la scénographie —
  * onglets, cartes — reste au thème). Rend l'agenda portable d'un thème à l'autre.
  * ======================================================================== */
@@ -458,7 +461,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
  *  • Compte à rebours (home) :
  *      <b><?php echo esc_html( fnc_days_until_edition() ); ?></b> <span>jours</span>
  *
- *  • Portraits d'intervenants (RÈGLE 7) — remplacer tout affichage direct de la
+ *  • Portraits d'intervenants (droit à l'image) — remplacer tout affichage direct de la
  *    vignette par :
  *      <?php echo fnc_speaker_portrait( $speaker_id, 'medium' ) ?: fnc_render_monogram( $speaker_id ); ?>
  *      (si le droit n'est pas acquis, la fonction renvoie '' -> afficher le monogramme, initiales)
@@ -489,7 +492,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
  *        </button>
  *      <?php endforeach; ?>
  *
- *  • Inscription (Module A) — résoudre l'édition active côté serveur :
+ *  • Inscription — résoudre l'édition active côté serveur :
  *      add_action( 'fnc_submission_stored', function ( $post_id, $type ) {
  *        if ( 'inscription' === $type ) {
  *          update_post_meta( $post_id, 'edition', fnc_current_edition_id() );

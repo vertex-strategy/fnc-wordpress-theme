@@ -104,6 +104,8 @@ while ( have_posts() ) :
 					<?php foreach ( $fnc_ed_prog as $fnc_es ) : ?>
 						<?php
 						$fnc_es_jour  = get_post_meta( $fnc_es->ID, '_fnc_session_jour', true );
+						/* translators: %s: numéro du jour. */
+						$fnc_es_jour  = $fnc_es_jour ? sprintf( __( 'Jour %s', 'fnc-wordpress-theme' ), $fnc_es_jour ) : '';
 						$fnc_es_start = get_post_meta( $fnc_es->ID, '_fnc_session_start', true );
 						$fnc_es_time  = trim( implode( ' · ', array_filter( array( $fnc_es_jour, $fnc_es_start ) ) ) );
 						?>

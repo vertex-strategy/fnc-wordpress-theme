@@ -274,7 +274,7 @@ foreach ( $data['sessions'] as $s ) {
 	}
 	fnc_ds_meta( $id, array(
 		'_fnc_session_type'  => $s['type'],
-		'_fnc_session_jour'  => $s['jour'],
+		'_fnc_session_jour'  => (int) $s['day'], // Jour 1/2/3 (entier) — le libellé « Jour N » est composé à l'affichage.
 		'_fnc_session_start' => $s['start'],
 		'_fnc_session_end'   => $s['end'],
 		'_fnc_session_time'  => $s['time'],

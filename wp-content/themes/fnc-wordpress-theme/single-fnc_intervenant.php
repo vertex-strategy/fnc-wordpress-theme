@@ -149,6 +149,8 @@ while ( have_posts() ) :
 									<?php foreach ( $fnc_i_sessions as $fnc_is ) : ?>
 										<?php
 										$fnc_is_jour  = get_post_meta( $fnc_is->ID, '_fnc_session_jour', true );
+										/* translators: %s: numéro du jour. */
+										$fnc_is_jour  = $fnc_is_jour ? sprintf( __( 'Jour %s', 'fnc-wordpress-theme' ), $fnc_is_jour ) : '';
 										$fnc_is_start = get_post_meta( $fnc_is->ID, '_fnc_session_start', true );
 										$fnc_is_when  = trim( implode( ' · ', array_filter( array( $fnc_is_jour, $fnc_is_start ) ) ) );
 										$fnc_is_mod   = (int) get_post_meta( $fnc_is->ID, '_fnc_session_moderator', true ) === $fnc_i_id;

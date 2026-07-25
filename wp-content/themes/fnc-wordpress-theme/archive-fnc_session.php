@@ -78,12 +78,29 @@ $fnc_type_class = static function ( $slug ) {
 <main id="main">
 	<section class="section linen programme-panorama">
 		<div class="container">
-			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+			<span class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></span>
+			<?php
+			$fnc_prog_edition = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+			$fnc_prog_theme   = $fnc_prog_edition ? get_post_meta( $fnc_prog_edition, '_fnc_edition_theme', true ) : '';
+			if ( $fnc_prog_theme ) :
+				?>
+				<p style="margin-top:20px;max-width:54ch;color:var(--texte-sec);font-size:1.05rem;">
+					<b style="color:var(--navy-deep);"><?php esc_html_e( 'Thème', 'fnc-wordpress-theme' ); ?> · </b>
+					<span style="font-style:italic;font-family:var(--serif);">« <?php echo esc_html( $fnc_prog_theme ); ?> »</span>
+				</p>
+			<?php endif; ?>
 			<div class="stat-line">
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_pays ) ); ?></b><span><?php esc_html_e( 'pays représentés', 'fnc-wordpress-theme' ); ?></span></div>
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_jours ) ); ?></b><span><?php esc_html_e( 'jours', 'fnc-wordpress-theme' ); ?></span></div>
 			</div>
+			<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
+				<nav class="day-nav" aria-label="<?php esc_attr_e( 'Journées', 'fnc-wordpress-theme' ); ?>">
+					<?php foreach ( $fnc_sessions_by_day as $fnc_nav_label => $fnc_nav_ids ) : ?>
+						<a href="#fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_nav_label ) ); ?>"><b><?php echo esc_html( $fnc_nav_label ); ?></b></a>
+					<?php endforeach; ?>
+				</nav>
+			<?php endif; ?>
 		</div>
 	</section>
 
@@ -110,14 +127,37 @@ $fnc_type_class = static function ( $slug ) {
 										<span class="type <?php echo esc_attr( $fnc_type_class( $fnc_type ) ); ?>"><?php echo esc_html( $fnc_session_types[ $fnc_type ] ); ?></span>
 									<?php endif; ?>
 									<div class="s-title"><a href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a></div>
-									<?php if ( $fnc_moderator > 0 || $fnc_room ) : ?>
-										<div class="s-mod">
-											<?php if ( $fnc_moderator > 0 ) : ?>
-												<?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?> : <?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?>
-											<?php endif; ?>
-											<?php if ( $fnc_moderator > 0 && $fnc_room ) : ?> · <?php endif; ?>
-											<?php echo esc_html( $fnc_room ); ?>
-										</div>
+									<?php
+									if ( $fnc_moderator > 0 ) :
+										$fnc_mod_org  = get_post_meta( $fnc_moderator, '_fnc_speaker_org', true );
+										$fnc_mod_ctry = get_post_meta( $fnc_moderator, '_fnc_speaker_country', true );
+										?>
+										<p class="s-mod">
+											<?php esc_html_e( 'Modérateur', 'fnc-wordpress-theme' ); ?> · <b><a class="spk-link" href="<?php echo esc_url( get_permalink( $fnc_moderator ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?></a></b><?php if ( $fnc_mod_org || $fnc_mod_ctry ) : ?> — <?php echo esc_html( $fnc_mod_org ); ?><?php if ( $fnc_mod_ctry ) : ?> (<?php echo esc_html( $fnc_mod_ctry ); ?>)<?php endif; ?><?php endif; ?>
+										</p>
+									<?php endif; ?>
+									<?php $fnc_note = get_post_meta( $fnc_session_id, '_fnc_session_note', true ); ?>
+									<?php if ( $fnc_note ) : ?>
+										<p class="s-note"><?php echo esc_html( $fnc_note ); ?></p>
+									<?php endif; ?>
+									<?php
+									$fnc_spk = get_post_meta( $fnc_session_id, '_fnc_session_speakers', true );
+									$fnc_spk = is_array( $fnc_spk ) ? array_values( array_filter( array_map( 'intval', $fnc_spk ) ) ) : array();
+									if ( ! empty( $fnc_spk ) ) :
+										?>
+										<details>
+											<summary><?php echo esc_html( count( $fnc_spk ) ); ?> <?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></summary>
+											<ul class="spk-list">
+												<?php foreach ( $fnc_spk as $fnc_sp_id ) : ?>
+													<?php
+													$fnc_sp_role = get_post_meta( $fnc_sp_id, '_fnc_speaker_role', true );
+													$fnc_sp_org2 = get_post_meta( $fnc_sp_id, '_fnc_speaker_org', true );
+													$fnc_sp_ctry = get_post_meta( $fnc_sp_id, '_fnc_speaker_country', true );
+													?>
+													<li><b><a class="spk-link" href="<?php echo esc_url( get_permalink( $fnc_sp_id ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></a></b><?php echo $fnc_sp_role ? ' — ' . esc_html( $fnc_sp_role ) : ''; ?><?php echo $fnc_sp_org2 ? ', ' . esc_html( $fnc_sp_org2 ) : ''; ?> <?php if ( $fnc_sp_ctry ) : ?><span class="ctry">(<?php echo esc_html( $fnc_sp_ctry ); ?>)</span><?php endif; ?></li>
+												<?php endforeach; ?>
+											</ul>
+										</details>
 									<?php endif; ?>
 								</div>
 							</div>

@@ -138,6 +138,7 @@ function fnc_section_titles_customize_register( $wp_customize ) {
 					array(
 						'default'           => '',
 						'sanitize_callback' => 'sanitize_text_field',
+						'transport'         => 'postMessage',
 					)
 				);
 				$wp_customize->add_control(
@@ -153,6 +154,19 @@ function fnc_section_titles_customize_register( $wp_customize ) {
 						'type'        => 'text',
 					)
 				);
+				// Apercu en direct : le titre se met a jour sans rechargement
+				// (attribut data-fnc-st ajoute sur chaque en-tete).
+				if ( isset( $wp_customize->selective_refresh ) ) {
+					$wp_customize->selective_refresh->add_partial(
+						$setting,
+						array(
+							'selector'        => '[data-fnc-st="' . $route . '.' . $key . '.' . $field . '"]',
+							'render_callback' => function () use ( $route, $key, $field ) {
+								return esc_html( fnc_stitle( $route, $key, $field ) );
+							},
+						)
+					);
+				}
 			}
 		}
 	}

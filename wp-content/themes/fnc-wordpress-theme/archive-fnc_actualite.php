@@ -36,8 +36,8 @@ fnc_render_opening_hero(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'eyebrow' ) ); ?></p>
-					<h2><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'title' ) ); ?></h2>
+					<p class="eyebrow" data-fnc-st="actualites.list.eyebrow"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="actualites.list.title"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'title' ) ); ?></h2>
 				</div>
 			</div>
 

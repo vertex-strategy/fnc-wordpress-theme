@@ -67,7 +67,7 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'onsite', 'eyebrow' ) ); ?></p>
+						<p class="eyebrow" data-fnc-st="infos-pratiques.onsite.eyebrow"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'onsite', 'eyebrow' ) ); ?></p>
 						<h2><?php echo esc_html( get_the_title( $fnc_ip_edition ) ); ?></h2>
 					</div>
 					<p><?php esc_html_e( 'Seules les rubriques confirmées sont publiées.', 'fnc-wordpress-theme' ); ?></p>
@@ -87,7 +87,7 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 	<?php endif; ?>
 
 	<section class="callout">
-		<h2><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'cta', 'title' ) ); ?></h2>
+		<h2 data-fnc-st="infos-pratiques.cta.title"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville.', 'fnc-wordpress-theme' ); ?></p>
 		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

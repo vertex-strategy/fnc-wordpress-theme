@@ -172,8 +172,8 @@ fnc_render_opening_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'eyebrow' ) ); ?></p>
-						<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'title' ) ); ?></h2>
+						<p class="eyebrow" data-fnc-st="edition-en-cours.programme.eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'eyebrow' ) ); ?></p>
+						<h2 data-fnc-st="edition-en-cours.programme.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'title' ) ); ?></h2>
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
@@ -213,8 +213,8 @@ fnc_render_opening_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'eyebrow' ) ); ?></p>
-						<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'title' ) ); ?></h2>
+						<p class="eyebrow" data-fnc-st="edition-en-cours.intervenants.eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'eyebrow' ) ); ?></p>
+						<h2 data-fnc-st="edition-en-cours.intervenants.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'title' ) ); ?></h2>
 					</div>
 				</div>
 				<?php if ( ! empty( $fnc_speaker_ids ) ) : ?>
@@ -259,7 +259,7 @@ fnc_render_opening_hero(
 		 */
 		?>
 		<section class="callout">
-			<h2><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'inscription', 'title' ) ); ?></h2>
+			<h2 data-fnc-st="edition-en-cours.inscription.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'inscription', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?></p>
 			<?php if ( function_exists( 'fnc_registration_enabled' ) && fnc_registration_enabled() ) : ?>
 				<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>

@@ -64,8 +64,8 @@ $fnc_interest_options = array(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'eyebrow' ) ); ?></p>
-					<h2><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'title' ) ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.why.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.why.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique. Chaque partenaire renforce la crédibilité collective de la démarche et gagne en visibilité auprès des décideurs.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -76,8 +76,8 @@ $fnc_interest_options = array(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'eyebrow' ) ); ?></p>
-					<h2><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'title' ) ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.types.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.types.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Le partenariat distingue clairement l’engagement institutionnel de l’engagement commercial.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -96,8 +96,8 @@ $fnc_interest_options = array(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'eyebrow' ) ); ?></p>
-					<h2><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'title' ) ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.confirmed.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.confirmed.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les organisations associées au Forum, regroupées par nature d’engagement.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -198,8 +198,8 @@ $fnc_interest_options = array(
 	<section class="section linen">
 		<div class="split media-left">
 			<div>
-				<span class="eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'eyebrow' ) ); ?></span>
-				<h2 class="lines"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'title' ) ); ?></h2>
+				<span class="eyebrow" data-fnc-st="partenaires.cta.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'eyebrow' ) ); ?></span>
+				<h2 class="lines" data-fnc-st="partenaires.cta.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'title' ) ); ?></h2>
 				<p class="body"><?php esc_html_e( 'Vous représentez une institution ou une entreprise ? Contactez l’organisation pour construire un partenariat adapté.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 

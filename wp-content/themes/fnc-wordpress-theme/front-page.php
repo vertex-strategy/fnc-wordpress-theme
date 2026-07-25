@@ -72,41 +72,104 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 
 	<!-- M3 — LES VOIX / INTERVENANTS -->
 	<?php
-	// Voix : intervenants reellement publies ; sinon etat « a confirmer ».
-	$fnc_voices = get_posts(
-		array(
-			'post_type'      => 'fnc_intervenant',
-			'posts_per_page' => max( 1, (int) fnc_home_setting( 'm3_count', 5 ) ),
-			'orderby'        => 'menu_order title',
-			'order'          => 'ASC',
-		)
-	);
-	$fnc_voice  = ! empty( $fnc_voices ) ? $fnc_voices[0] : null;
-	$fnc_voice_photo = $fnc_voice && has_post_thumbnail( $fnc_voice ) ? get_the_post_thumbnail_url( $fnc_voice, 'large' ) : $fnc_img_dir . 'le-portrait.png';
+	// Voix : participants de l'édition active, en ordre protocolaire (module Données
+	// du site). Sinon état « à confirmer ». Le carrousel monte toutes les voix ; le
+	// script assets/js/main.js gère le défilement, les flèches, les pastilles et
+	// lecture/pause. Droit à l'image respecté : portrait seulement si acquis, sinon
+	// monogramme (initiales).
+	$fnc_voice_ids = function_exists( 'fnc_home_voices' )
+		? fnc_home_voices( max( 1, (int) fnc_home_setting( 'm3_count', 6 ) ) )
+		: array();
+	$fnc_voices = array_filter( array_map( 'get_post', $fnc_voice_ids ) );
+	$fnc_m3_eyebrow  = fnc_home_setting( 'm3_eyebrow', __( 'Les voix', 'fnc-wordpress-theme' ) );
+	$fnc_intervenants_url = get_post_type_archive_link( 'fnc_intervenant' );
+
+	$fnc_initials = static function ( $name ) {
+		$ini = '';
+		foreach ( preg_split( '/\s+/u', trim( wp_strip_all_tags( (string) $name ) ) ) as $word ) {
+			if ( '' !== $word && preg_match( '/\p{L}/u', $word ) ) {
+				$ini .= function_exists( 'mb_strtoupper' ) ? mb_strtoupper( mb_substr( $word, 0, 1 ) ) : strtoupper( substr( $word, 0, 1 ) );
+			}
+			if ( strlen( $ini ) >= 2 ) {
+				break;
+			}
+		}
+		return '' !== $ini ? $ini : '·';
+	};
 	?>
-	<section id="m3" aria-labelledby="m3-title">
-		<div class="voix-grid">
-			<div class="portrait"><img src="<?php echo esc_url( $fnc_voice_photo ); ?>" alt="<?php echo esc_attr( $fnc_voice ? fnc_speaker_display_name( $fnc_voice->ID ) : __( 'Portrait d’un participant du Forum Numérique Congo', 'fnc-wordpress-theme' ) ); ?>" /></div>
+	<section id="m3" aria-label="<?php echo esc_attr( $fnc_m3_eyebrow ); ?>">
+		<div class="voix-grid"<?php echo $fnc_voices ? ' data-voices' : ''; ?>>
+			<div class="portrait voice-portrait">
+				<?php
+				if ( $fnc_voices ) :
+					foreach ( array_values( $fnc_voices ) as $fnc_vi => $fnc_v ) :
+						$fnc_on   = 0 === $fnc_vi ? ' on' : '';
+						$fnc_attr = array( 'class' => 'voice-slide' . $fnc_on, 'alt' => fnc_speaker_display_name( $fnc_v->ID ) );
+						if ( 0 !== $fnc_vi ) {
+							$fnc_attr['aria-hidden'] = 'true';
+						}
+						$fnc_img = function_exists( 'fnc_speaker_portrait' ) ? fnc_speaker_portrait( $fnc_v->ID, 'large', $fnc_attr ) : '';
+						if ( $fnc_img ) :
+							echo $fnc_img; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WordPress.
+						else :
+							?>
+							<div class="voice-ph voice-slide<?php echo esc_attr( $fnc_on ); ?>" aria-hidden="true">
+								<span class="voice-mono"><?php echo esc_html( $fnc_initials( get_the_title( $fnc_v ) ) ); ?></span>
+								<span class="voice-phlabel"><?php esc_html_e( 'Photo à venir', 'fnc-wordpress-theme' ); ?></span>
+							</div>
+							<?php
+						endif;
+					endforeach;
+				else :
+					?>
+					<img class="media-cover" src="<?php echo esc_url( $fnc_img_dir . 'le-portrait.png' ); ?>" alt="" aria-hidden="true" />
+				<?php endif; ?>
+			</div>
 			<div class="identity">
-				<span class="eyebrow" style="color:var(--jaune)"><?php echo esc_html( fnc_home_setting( 'm3_eyebrow', __( 'Les voix', 'fnc-wordpress-theme' ) ) ); ?></span>
-				<?php if ( $fnc_voice ) : ?>
-					<h2 class="name" id="m3-title"><?php echo esc_html( fnc_speaker_display_name( $fnc_voice->ID ) ); ?></h2>
-					<div class="role"><?php echo esc_html( get_post_meta( $fnc_voice->ID, '_fnc_speaker_org', true ) ); ?></div>
-					<div class="org"><?php echo esc_html( get_post_meta( $fnc_voice->ID, '_fnc_speaker_country', true ) ); ?></div>
-					<?php if ( has_excerpt( $fnc_voice ) ) : ?>
-						<p class="quote"><?php echo esc_html( get_the_excerpt( $fnc_voice ) ); ?></p>
-					<?php endif; ?>
-					<div class="dots" aria-hidden="true">
-						<?php foreach ( $fnc_voices as $fnc_vi => $fnc_v ) : ?>
-							<span<?php echo 0 === $fnc_vi ? ' class="on"' : ''; ?>></span>
+				<span class="eyebrow" style="color:var(--jaune)"><?php echo esc_html( $fnc_m3_eyebrow ); ?></span>
+				<?php if ( $fnc_voices ) : ?>
+					<div class="voice-live" aria-live="polite" aria-atomic="true">
+						<?php foreach ( array_values( $fnc_voices ) as $fnc_vi => $fnc_v ) : ?>
+							<div class="voice-fade voice-identity<?php echo 0 === $fnc_vi ? ' on' : ''; ?>"<?php echo 0 === $fnc_vi ? '' : ' hidden'; ?> data-voice-identity>
+								<p class="name"><?php echo esc_html( fnc_speaker_display_name( $fnc_v->ID ) ); ?></p>
+								<div class="role"><?php echo esc_html( get_post_meta( $fnc_v->ID, '_fnc_speaker_role', true ) ); ?></div>
+								<div class="org">
+									<?php
+									$fnc_v_org  = (string) get_post_meta( $fnc_v->ID, '_fnc_speaker_org', true );
+									$fnc_v_pays = (string) get_post_meta( $fnc_v->ID, '_fnc_speaker_country', true );
+									echo esc_html( trim( implode( ' · ', array_filter( array( $fnc_v_org, $fnc_v_pays ) ) ) ) );
+									?>
+								</div>
+							</div>
 						<?php endforeach; ?>
 					</div>
+
+					<div class="voice-controls">
+						<button type="button" class="voice-arrow" data-voice-prev aria-label="<?php esc_attr_e( 'Précédent', 'fnc-wordpress-theme' ); ?>">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+						</button>
+						<div class="voice-dots" role="group" aria-label="<?php echo esc_attr( $fnc_m3_eyebrow ); ?>">
+							<?php foreach ( array_values( $fnc_voices ) as $fnc_vi => $fnc_v ) : ?>
+								<button type="button" data-voice-dot="<?php echo (int) $fnc_vi; ?>" aria-label="<?php echo esc_attr( fnc_speaker_display_name( $fnc_v->ID ) ); ?>"<?php echo 0 === $fnc_vi ? ' class="on" aria-current="true"' : ''; ?>></button>
+							<?php endforeach; ?>
+						</div>
+						<button type="button" class="voice-arrow" data-voice-next aria-label="<?php esc_attr_e( 'Suivant', 'fnc-wordpress-theme' ); ?>">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+						</button>
+						<button type="button" class="voice-play" data-voice-play aria-pressed="false" aria-label="<?php esc_attr_e( 'Mettre en pause le défilement', 'fnc-wordpress-theme' ); ?>">
+							<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-voice-icon-pause><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+							<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-voice-icon-play hidden><path d="M8 5v14l11-7z" /></svg>
+						</button>
+					</div>
+
+					<?php if ( $fnc_intervenants_url ) : ?>
+						<a class="link-more" href="<?php echo esc_url( $fnc_intervenants_url ); ?>" style="margin-top:26px;color:#fff"><?php esc_html_e( 'Voir tous les intervenants', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+					<?php endif; ?>
 				<?php else : ?>
-					<h2 class="name" id="m3-title"><?php esc_html_e( 'Intervenant·e', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></h2>
+					<p class="name"><?php esc_html_e( 'Intervenant·e', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
 					<div class="role"><?php esc_html_e( 'Fonction officielle — à valider', 'fnc-wordpress-theme' ); ?></div>
 					<div class="org"><?php esc_html_e( 'Institution — à valider', 'fnc-wordpress-theme' ); ?></div>
 					<p class="quote"><?php esc_html_e( '« La citation de l’intervenant apparaîtra ici une fois sa participation confirmée. »', 'fnc-wordpress-theme' ); ?></p>
-					<div class="dots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
 				<?php endif; ?>
 			</div>
 		</div>

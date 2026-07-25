@@ -141,8 +141,10 @@ foreach ( $data['speakers'] as $s ) {
 	// Le rôle (fonction) est aussi placé en contenu : il alimente la fiche détail
 	// et reste disponible même si le gabarit change.
 	$id = fnc_ds_upsert( 'fnc_intervenant', $s['legacyId'], $s['name'], $s['roleFr'] ? wpautop( $s['roleFr'] ) : '', $s['slug'] );
+	// Civilité forcée (même vide) : c'est le préfixe du nom ; ne jamais y laisser
+	// une ancienne valeur (sinon le rôle se retrouve collé au nom).
+	update_post_meta( $id, '_fnc_speaker_title', $s['title'] );
 	fnc_ds_meta( $id, array(
-		'_fnc_speaker_title'          => $s['title'],   // Civilité (Pr./Dr./Ing./M./Mme), préfixe du nom.
 		'_fnc_speaker_role'           => $s['roleFr'],  // Fonction — affichée par « Les voix » et la fiche.
 		'_fnc_speaker_org'            => $s['org'],
 		'_fnc_speaker_country'        => $s['country'],

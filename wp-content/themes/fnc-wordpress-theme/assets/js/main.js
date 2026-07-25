@@ -222,4 +222,80 @@
 		});
 		draw();
 	})();
+
+	/* ------------------------------------------------------------------ *
+	 * Carrousel « Les voix » (M3) : defilement auto (4 s), pause au survol
+	 * et au focus, fleches, pastilles et lecture/pause. Toutes les voix sont
+	 * montees dans le DOM ; on bascule l'active (fondu enchaine en CSS).
+	 * Respecte prefers-reduced-motion (pas de defilement auto).
+	 * ------------------------------------------------------------------ */
+	(function () {
+		var root = document.querySelector('[data-voices]');
+		if (!root) { return; }
+		var slides = root.querySelectorAll('.voice-slide');
+		var ids = root.querySelectorAll('[data-voice-identity]');
+		var dots = root.querySelectorAll('[data-voice-dot]');
+		var prev = root.querySelector('[data-voice-prev]');
+		var next = root.querySelector('[data-voice-next]');
+		var play = root.querySelector('[data-voice-play]');
+		var iconPause = root.querySelector('[data-voice-icon-pause]');
+		var iconPlay = root.querySelector('[data-voice-icon-play]');
+		var count = ids.length;
+		if (count < 1) { return; }
+
+		var active = 0;
+		var paused = false;
+		var playing = true;
+
+		// aria-hidden : uniquement sur les portraits <img> (le monogramme reste
+		// decoratif et toujours masque aux lecteurs d'ecran).
+		function ariaHide(el, hide) {
+			if (el && el.tagName === 'IMG') {
+				if (hide) { el.setAttribute('aria-hidden', 'true'); } else { el.removeAttribute('aria-hidden'); }
+			}
+		}
+
+		function show(i) {
+			i = (i % count + count) % count;
+			if (slides[active]) { slides[active].classList.remove('on'); ariaHide(slides[active], true); }
+			if (ids[active]) { ids[active].classList.remove('on'); ids[active].setAttribute('hidden', ''); }
+			if (dots[active]) { dots[active].classList.remove('on'); dots[active].removeAttribute('aria-current'); }
+
+			active = i;
+
+			if (slides[active]) { slides[active].classList.add('on'); ariaHide(slides[active], false); }
+			if (ids[active]) {
+				ids[active].removeAttribute('hidden');
+				void ids[active].offsetWidth; // relance l'animation de fondu
+				ids[active].classList.add('on');
+			}
+			if (dots[active]) { dots[active].classList.add('on'); dots[active].setAttribute('aria-current', 'true'); }
+		}
+
+		function step(delta) { show(active + delta); }
+
+		if (prev) { prev.addEventListener('click', function () { step(-1); }); }
+		if (next) { next.addEventListener('click', function () { step(1); }); }
+		for (var d = 0; d < dots.length; d++) {
+			(function (idx) { dots[idx].addEventListener('click', function () { show(idx); }); })(d);
+		}
+		if (play) {
+			play.addEventListener('click', function () {
+				playing = !playing;
+				play.setAttribute('aria-pressed', playing ? 'false' : 'true');
+				if (iconPause) { if (playing) { iconPause.removeAttribute('hidden'); } else { iconPause.setAttribute('hidden', ''); } }
+				if (iconPlay) { if (playing) { iconPlay.setAttribute('hidden', ''); } else { iconPlay.removeAttribute('hidden'); } }
+			});
+		}
+
+		root.addEventListener('mouseenter', function () { paused = true; });
+		root.addEventListener('mouseleave', function () { paused = false; });
+		root.addEventListener('focusin', function () { paused = true; });
+		root.addEventListener('focusout', function () { paused = false; });
+
+		window.setInterval(function () {
+			if (paused || !playing || reduce || count < 2) { return; }
+			step(1);
+		}, 4000);
+	})();
 })();

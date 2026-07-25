@@ -88,6 +88,25 @@ function fnc_seed_image( $rel ) {
 	return (int) $id;
 }
 
+/**
+ * Assigne la langue par defaut du site a un contenu, si le multilinguisme
+ * (Polylang) est actif et qu'aucune langue n'est encore posee. Rend le seed
+ * sur-multilingue reproductible : sans cela, les contenus crees par code
+ * n'ont pas de langue et n'apparaissent pas dans les listes filtrees.
+ *
+ * @param int $post_id
+ */
+function fnc_seed_language( $post_id ) {
+	if ( ! function_exists( 'pll_set_post_language' ) || ! function_exists( 'pll_get_post_language' ) ) {
+		return;
+	}
+	if ( pll_get_post_language( $post_id ) ) {
+		return;
+	}
+	$default = function_exists( 'pll_default_language' ) ? pll_default_language() : 'fr';
+	pll_set_post_language( $post_id, $default );
+}
+
 /** Compose un commentaire de bloc dynamique FNC. */
 function fnc_seed_block( $name, array $attrs ) {
 	return '<!-- wp:fnc/' . $name . ' ' . wp_json_encode( $attrs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . ' /-->';
@@ -123,6 +142,7 @@ function fnc_seed_page( $path, array $blocks, $force, $archetype = 'generic' ) {
 			'post_content' => implode( "\n\n", $blocks ) . "\n",
 		)
 	);
+	fnc_seed_language( $page->ID );
 	fnc_seed_log( "  ✔ $path composee en blocs (#{$page->ID}, archetype=$archetype)" );
 }
 
@@ -328,6 +348,7 @@ function fnc_seed_acf_page( $path, $archetype, array $sections, $force ) {
 	if ( '' !== trim( (string) $page->post_content ) ) {
 		wp_update_post( array( 'ID' => $page->ID, 'post_content' => '' ) );
 	}
+	fnc_seed_language( $page->ID );
 	fnc_seed_log( "  ✔ $path : " . count( $sections ) . " sections ACF semees (#{$page->ID})" );
 }
 
@@ -347,6 +368,7 @@ function fnc_seed_classic_page( $path, $content, $force ) {
 		return;
 	}
 	wp_update_post( array( 'ID' => $page->ID, 'post_content' => $content ) );
+	fnc_seed_language( $page->ID );
 	fnc_seed_log( "  ✔ $path contenu legal seme (#{$page->ID})" );
 }
 

@@ -94,17 +94,24 @@ function fnc_seed_block( $name, array $attrs ) {
 }
 
 /**
- * Ecrit une composition de blocs dans une Page (par chemin de slug).
+ * Ecrit une composition de blocs dans une Page (par chemin de slug) et fixe son
+ * archetype (qui verrouille la palette de blocs de l'editeur, cf. le filtre
+ * fnc_restrict_page_blocks).
  *
- * @param string   $path  Slug (ex. « le-forum » ou « le-forum/mot-du-president »).
+ * @param string   $path      Slug (ex. « le-forum » ou « le-forum/mot-du-president »).
  * @param string[] $blocks
- * @param bool     $force Recomposer meme si la page est deja en blocs.
+ * @param bool     $force     Recomposer meme si la page est deja en blocs.
+ * @param string   $archetype Archetype a poser (verrouille la palette si
+ *                            « institutional » ou « generic »).
  */
-function fnc_seed_page( $path, array $blocks, $force ) {
+function fnc_seed_page( $path, array $blocks, $force, $archetype = 'generic' ) {
 	$page = get_page_by_path( $path );
 	if ( ! $page ) {
 		fnc_seed_log( "  ⚠ page introuvable : $path" );
 		return;
+	}
+	if ( function_exists( 'update_field' ) ) {
+		update_field( 'fnc_archetype', $archetype, $page->ID );
 	}
 	if ( ! $force && function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks( $page ) ) {
 		fnc_seed_log( "  = $path deja compose (skip ; « force » pour recomposer)" );
@@ -116,7 +123,7 @@ function fnc_seed_page( $path, array $blocks, $force ) {
 			'post_content' => implode( "\n\n", $blocks ) . "\n",
 		)
 	);
-	fnc_seed_log( "  ✔ $path composee en blocs (#{$page->ID})" );
+	fnc_seed_log( "  ✔ $path composee en blocs (#{$page->ID}, archetype=$archetype)" );
 }
 
 /* ------------------------------------------------------------------ */
@@ -259,7 +266,8 @@ fnc_seed_page(
 			array( 'formType' => 'contact' )
 		),
 	),
-	$fnc_seed_force
+	$fnc_seed_force,
+	'institutional'
 );
 
 /* ---- Inscription (héros + formulaire) ---- */
@@ -281,7 +289,8 @@ fnc_seed_page(
 			array( 'formType' => 'inscription', 'linen' => '1' )
 		),
 	),
-	$fnc_seed_force
+	$fnc_seed_force,
+	'generic'
 );
 
 /**

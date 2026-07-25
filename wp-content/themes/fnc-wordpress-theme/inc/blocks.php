@@ -505,6 +505,41 @@ function fnc_register_blocks() {
 add_action( 'init', 'fnc_register_blocks' );
 
 /**
+ * Verrouille la palette de blocs des Pages pour préserver la direction
+ * artistique. Sur une Page composable ou institutionnelle, seuls les blocs du
+ * thème (« fnc/* ») sont proposés, plus un paragraphe libre ; l'éditeur ne peut
+ * donc pas insérer de bloc hors charte. Les pages à contenu simple (mentions,
+ * confidentialité…) et les pages à liste gardent l'éditeur standard.
+ *
+ * La liste des blocs autorisés est dérivée du registre : tout bloc « fnc/* »
+ * ajouté au thème est automatiquement disponible, sans maintenance ici.
+ *
+ * @param bool|string[]           $allowed Blocs autorisés (true = tous).
+ * @param WP_Block_Editor_Context $context Contexte de l'éditeur.
+ * @return bool|string[]
+ */
+function fnc_restrict_page_blocks( $allowed, $context ) {
+	if ( empty( $context->post ) || 'page' !== $context->post->post_type ) {
+		return $allowed;
+	}
+	$archetype = function_exists( 'fnc_page_archetype' ) ? fnc_page_archetype( $context->post->ID ) : 'legal';
+	if ( ! in_array( $archetype, array( 'institutional', 'generic' ), true ) ) {
+		return $allowed; // Contenu simple, liste, détail : éditeur standard.
+	}
+
+	$palette = array();
+	foreach ( WP_Block_Type_Registry::get_instance()->get_all_registered() as $block_name => $block_type ) {
+		if ( 0 === strpos( $block_name, 'fnc/' ) ) {
+			$palette[] = $block_name;
+		}
+	}
+	$palette[] = 'core/paragraph'; // Un paragraphe libre reste utile et sans risque pour la charte.
+
+	return $palette;
+}
+add_filter( 'allowed_block_types_all', 'fnc_restrict_page_blocks', 10, 2 );
+
+/**
  * Charge le moteur d'édition générique et lui transmet les schémas.
  */
 function fnc_enqueue_block_editor_assets() {

@@ -56,11 +56,18 @@ async function main() {
     const slug = f.replace(/\.md$/, '');
     const year = fm.year || slug.slice(0, 4);
     const is2027 = year === '2027';
+    // Titre au format du site du Forum : l'édition active porte le nom de
+    // l'évènement ; les précédentes, leur rang ordinal + le thème.
+    const ordinals = { '2018': '1re', '2020': '2e', '2022': '3e', '2024': '4e', '2027': '5e' };
+    const ord = ordinals[year] || '';
+    const title = is2027
+      ? `Forum Numérique Congo ${year}`
+      : ( ord ? `${ord} édition — ${fm.theme || ''}`.trim() : `Édition ${year}` );
     editions.push({
       legacyId: slug,
       slug,
       year,
-      title: `Édition ${year}`,
+      title,
       theme: fm.theme || '',
       themeEn: is2027 ? agenda.edition.themeEn : '',
       // L'édition active pilote l'accueil : statut « current » (le résolveur la

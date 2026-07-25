@@ -49,9 +49,9 @@ while ( have_posts() ) :
 
 	fnc_render_pagehead(
 		array(
-			'eyebrow'    => '', // spec §4 : la fiche intervenant n'a pas d'eyebrow dans le hero.
+			'eyebrow'    => '', // La fiche intervenant n'a pas de sur-titre dans le hero.
 			'title'      => $fnc_i_name,
-			'lead'       => trim( implode( ' · ', array_filter( array( $fnc_i_org, $fnc_i_country ) ) ) ),
+			'lead'       => get_post_meta( $fnc_i_id, '_fnc_speaker_role', true ), // Fonction, comme le site du Forum.
 			'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',
 			'image_alt'  => '',
 			'breadcrumb' => $fnc_i_name,
@@ -143,39 +143,56 @@ while ( have_posts() ) :
 						</div>
 
 						<?php if ( ! empty( $fnc_i_sessions ) ) : ?>
-							<?php $fnc_types = fnc_content_model_session_types(); ?>
 							<div class="person-detail__block">
-								<p class="page-eyebrow text-navy"><?php esc_html_e( 'Sessions', 'fnc-wordpress-theme' ); ?></p>
-								<div class="agenda" style="margin-top:16px;">
+								<p class="page-eyebrow text-navy"><?php esc_html_e( 'Ses interventions', 'fnc-wordpress-theme' ); ?></p>
+								<ul class="person-sessions" role="list" style="margin-top:16px;">
 									<?php foreach ( $fnc_i_sessions as $fnc_is ) : ?>
 										<?php
-										$fnc_is_type = get_post_meta( $fnc_is->ID, '_fnc_session_type', true );
-										$fnc_is_hide = in_array( $fnc_is_type, array( 'pause', 'logistique' ), true );
-										$fnc_is_mod  = (int) get_post_meta( $fnc_is->ID, '_fnc_session_moderator', true ) === $fnc_i_id;
+										$fnc_is_jour  = get_post_meta( $fnc_is->ID, '_fnc_session_jour', true );
+										$fnc_is_start = get_post_meta( $fnc_is->ID, '_fnc_session_start', true );
+										$fnc_is_when  = trim( implode( ' · ', array_filter( array( $fnc_is_jour, $fnc_is_start ) ) ) );
+										$fnc_is_mod   = (int) get_post_meta( $fnc_is->ID, '_fnc_session_moderator', true ) === $fnc_i_id;
 										?>
-										<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_is ) ); ?>">
-											<span class="time"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
-											<span>
-												<strong><?php echo esc_html( get_the_title( $fnc_is ) ); ?></strong>
-												<?php if ( $fnc_is_type && ! $fnc_is_hide && isset( $fnc_types[ $fnc_is_type ] ) ) : ?>
-													<?php fnc_render_badge( $fnc_types[ $fnc_is_type ] ); ?>
-												<?php endif; ?>
-												<?php if ( $fnc_is_mod ) : ?>
-													<span class="person-meta"><?php esc_html_e( 'En modération', 'fnc-wordpress-theme' ); ?></span>
-												<?php endif; ?>
-											</span>
-											<span class="room"><?php echo esc_html( get_post_meta( $fnc_is->ID, '_fnc_session_room', true ) ); ?></span>
-										</a>
+										<li>
+											<a class="s-title-link" href="<?php echo esc_url( get_permalink( $fnc_is ) ); ?>">
+												<span class="time"><?php echo esc_html( $fnc_is_when ); ?></span>
+												<span class="title"><?php echo esc_html( get_the_title( $fnc_is ) ); ?></span>
+												<?php if ( $fnc_is_mod ) : ?><span class="as-moderator"><?php esc_html_e( 'En modération', 'fnc-wordpress-theme' ); ?></span><?php endif; ?>
+											</a>
+										</li>
 									<?php endforeach; ?>
-								</div>
+								</ul>
 							</div>
+
+							<?php
+							// Éditions auxquelles l'intervenant a participé (dérivées de ses sessions).
+							$fnc_i_editions = array();
+							foreach ( $fnc_i_sessions as $fnc_is ) {
+								$fnc_eid = (int) get_post_meta( $fnc_is->ID, '_fnc_session_edition', true );
+								if ( $fnc_eid && ! isset( $fnc_i_editions[ $fnc_eid ] ) ) {
+									$fnc_i_editions[ $fnc_eid ] = get_post( $fnc_eid );
+								}
+							}
+							if ( ! empty( $fnc_i_editions ) ) :
+								?>
+								<div class="person-detail__block">
+									<p class="page-eyebrow text-navy"><?php esc_html_e( 'Éditions', 'fnc-wordpress-theme' ); ?></p>
+									<ul class="ed-chips" style="margin-top:16px;">
+										<?php foreach ( $fnc_i_editions as $fnc_ie ) : ?>
+											<?php if ( ! $fnc_ie ) { continue; } ?>
+											<li><a class="ed-chip" href="<?php echo esc_url( get_permalink( $fnc_ie ) ); ?>"><?php echo esc_html( get_the_title( $fnc_ie ) ); ?></a></li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+							<?php endif; ?>
 						<?php endif; ?>
 					</article>
 
 				</div>
 
-				<div style="margin-top:48px;">
-					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>"><?php esc_html_e( 'Tous les intervenants', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+				<div class="person-detail__back" style="margin-top:48px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+					<a class="btn btn-ghost" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>">← <?php esc_html_e( 'Tous les intervenants', 'fnc-wordpress-theme' ); ?></a>
+					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>"><?php esc_html_e( 'Voir le programme', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
 				</div>
 			</div>
 		</section>

@@ -56,6 +56,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
    droite (répartis), comme le site du Forum. Sans cela, le contenu se colle à
    gauche du bouton large et laisse un grand vide à droite. */
 .btn[type="submit"]{justify-content:space-between;}
+/* Fiche intervenant : liste « Ses interventions » + chips « Éditions »
+   (structure du site du Forum). */
+.person-sessions{list-style:none;margin:0;padding:0;}
+.person-sessions li{border-top:1px solid var(--border);}
+.person-sessions li:last-child{border-bottom:1px solid var(--border);}
+.person-sessions .s-title-link{display:block;padding:16px 0;}
+.person-sessions .time{display:block;font-size:.86rem;font-weight:600;color:var(--texte-sec);}
+.person-sessions .title{display:block;margin-top:4px;font-family:var(--serif);font-size:1.12rem;color:var(--navy-deep);}
+.person-sessions .s-title-link:hover .title{text-decoration:underline;text-decoration-color:var(--rouge);}
+.person-sessions .as-moderator{display:inline-block;margin-top:4px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--rouge);}
+.ed-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px;}
+.ed-chip{display:inline-flex;min-height:44px;align-items:center;border:1px solid var(--border);background:#fff;border-radius:6px;padding:0 16px;font-size:.86rem;font-weight:600;color:var(--navy-deep);transition:border-color .2s var(--ease);}
+.ed-chip:hover{border-color:var(--navy-deep);}
 .btn-red:hover{background:var(--rouge-deep);box-shadow:0 14px 30px rgba(204,34,34,.34);}
 .btn-white{background:#fff;color:var(--navy-deep);}
 .btn-white:hover{box-shadow:0 14px 30px rgba(0,0,0,.28);}

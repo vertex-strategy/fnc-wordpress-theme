@@ -154,6 +154,21 @@ function fnc_register_menus() {
 add_action( 'init', 'fnc_register_menus', 1 );
 
 /**
+ * Archive des intervenants : ordre protocolaire (officiels d'abord, comme le
+ * site du Forum) via _fnc_speaker_protocol_order, puis alphabetique. Affiche
+ * tout le monde (pas de pagination sur la grille).
+ */
+function fnc_order_intervenant_archive( $query ) {
+	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'fnc_intervenant' ) ) {
+		return;
+	}
+	$query->set( 'meta_key', '_fnc_speaker_protocol_order' );
+	$query->set( 'orderby', array( 'meta_value_num' => 'ASC', 'title' => 'ASC' ) );
+	$query->set( 'posts_per_page', -1 );
+}
+add_action( 'pre_get_posts', 'fnc_order_intervenant_archive' );
+
+/**
  * Enqueue des styles et scripts du theme.
  *
  * Kit de rattrapage de fidelite DA-D : quatre feuilles extraites du CSS de

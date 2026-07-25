@@ -62,6 +62,25 @@
 .voice-dots button { width: 22px !important; }
 
 /* --------------------------------------------------------------------------
+   C6) M6 « La communauté » — logos CONTENUS dans la case.
+   Le site du Forum n'a PAS d'images dans #m6 : des cases `.logo-ph` à taille
+   fixe (t1 184×76, t2 144×62) affichant le NOM du partenaire. En WordPress on
+   garde de VRAIS logos, mais ils doivent rester DANS la case (l'audit le
+   permet « s'ils sont contenus »). Mesuré : un logo portrait montait à 210px
+   (overflow:visible) et débordait. On cape la hauteur sous la case et on
+   centre par `object-fit:contain`, sans toucher aux dimensions de la case
+   (qui, elles, restent fidèles au Forum). Vérifié : 210 → ≤52px.
+   -------------------------------------------------------------------------- */
+.dad-linked #m6 .logo-ph img,
+#m6 .logo-ph img {
+  max-width: 84% !important;
+  max-height: 52px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+/* --------------------------------------------------------------------------
    3) Garde-fous DA génériques (sûrs) — au cas où le thème les aurait perdus.
    Le serif de la DA ne sert QU'AUX accents en italique (jamais aux titres) ;
    le vert et le jaune ne sont JAMAIS des couleurs de texte (illisibles).

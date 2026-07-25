@@ -96,12 +96,13 @@ if ( $fnc_edition ) {
 	$fnc_speaker_ids = array_unique( $fnc_speaker_ids );
 }
 
+$fnc_route_h = fnc_route_hero( 'edition-en-cours' );
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => fnc_hero( 'edition-en-cours', 'eyebrow' ),
-		'title'      => fnc_hero( 'edition-en-cours', 'title' ),
-		'intro'      => fnc_hero( 'edition-en-cours', 'intro' ),
-		'image'      => fnc_hero_image_url( 'edition-en-cours' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
 		'image_alt'  => __( 'Édition 2027 du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 	)

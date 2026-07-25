@@ -216,3 +216,63 @@ function fnc_hero_customize_register( $wp_customize ) {
 	}
 }
 add_action( 'customize_register', 'fnc_hero_customize_register' );
+
+/**
+ * Pont Module G (FNC Core) <-> heros editables du Customizer.
+ *
+ * Module G expose l'accesseur fnc_page_hero() qui applique : override ACF ->
+ * defaut de route. On branche ici ses DEFAUTS (image/sur-titre/titre) sur les
+ * valeurs editables du Customizer (fnc_hero). Resultat via fnc_page_hero() :
+ * ACF (si installe) -> Customizer (editable sans ACF) -> defaut de route.
+ * Aucune regression, pret pour ACF le jour ou il est actif.
+ */
+function fnc_bridge_hero_defaults( $out, $route, $en ) {
+	$reg = fnc_hero_registry();
+	if ( isset( $reg[ $route ] ) ) {
+		$out['eyebrow'] = fnc_hero( $route, 'eyebrow' );
+		$out['title']   = fnc_hero( $route, 'title' );
+		$img            = fnc_hero_image_url( $route );
+		if ( $img ) {
+			$out['image'] = $img;
+		}
+	}
+	return $out;
+}
+add_filter( 'fnc_page_hero_defaults', 'fnc_bridge_hero_defaults', 10, 3 );
+
+/**
+ * Hero resolu d'une route, pour les gabarits de liste. Passe par l'accesseur
+ * Module G fnc_page_hero() (donc override ACF puis Customizer via le pont), et
+ * complete l'intro — que Module G ne porte pas par defaut — avec la valeur
+ * editable du Customizer. Degrade proprement si Module G est absent.
+ *
+ * @param string $route Slug de route (ex. « intervenants »).
+ * @return array{image:string,eyebrow:string,title:string,intro:string}
+ */
+function fnc_route_hero( $route ) {
+	if ( function_exists( 'fnc_page_hero' ) ) {
+		$page = function_exists( 'fnc_page_for_route' ) ? fnc_page_for_route( $route ) : null;
+		$h    = fnc_page_hero( $page ? $page->ID : 0, $route );
+	} else {
+		// Module G absent : on lit directement la couche Customizer.
+		$h = array(
+			'image'   => fnc_hero_image_url( $route ),
+			'eyebrow' => fnc_hero( $route, 'eyebrow' ),
+			'title'   => fnc_hero( $route, 'title' ),
+			'intro'   => '',
+		);
+	}
+	// Intro : override ACF (deja dans $h si present) SINON valeur Customizer.
+	if ( empty( $h['intro'] ) ) {
+		$reg = fnc_hero_registry();
+		if ( isset( $reg[ $route ] ) ) {
+			$h['intro'] = fnc_hero( $route, 'intro' );
+		}
+	}
+	return array(
+		'image'   => isset( $h['image'] ) ? (string) $h['image'] : '',
+		'eyebrow' => isset( $h['eyebrow'] ) ? (string) $h['eyebrow'] : '',
+		'title'   => isset( $h['title'] ) ? (string) $h['title'] : '',
+		'intro'   => isset( $h['intro'] ) ? (string) $h['intro'] : '',
+	);
+}

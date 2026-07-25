@@ -33,12 +33,13 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	return;
 }
 
+$fnc_route_h = fnc_route_hero( 'espace-presse' );
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => fnc_hero( 'espace-presse', 'eyebrow' ),
-		'title'      => fnc_hero( 'espace-presse', 'title' ),
-		'intro'      => fnc_hero( 'espace-presse', 'intro' ),
-		'image'      => fnc_hero_image_url( 'espace-presse' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
 		'image_alt'  => __( 'Espace presse du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Espace presse', 'fnc-wordpress-theme' ),
 	)

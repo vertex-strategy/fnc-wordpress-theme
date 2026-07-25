@@ -19,12 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+$fnc_route_h = fnc_route_hero( 'ressources' );
 fnc_render_opening_hero(
 	array(
-		'eyebrow'    => fnc_hero( 'ressources', 'eyebrow' ),
-		'title'      => fnc_hero( 'ressources', 'title' ),
-		'intro'      => fnc_hero( 'ressources', 'intro' ),
-		'image'      => fnc_hero_image_url( 'ressources' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
 		'image_alt'  => __( 'Ressources du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Ressources', 'fnc-wordpress-theme' ),
 	)

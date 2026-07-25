@@ -19,42 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php echo fnc_footer_logo_img(); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et échappé par fnc_footer_logo_img(). ?>
 			</a>
 			<p><?php echo esc_html( fnc_get_setting_i18n( 'footer_text', __( 'Institution permanente de réflexion sur l’avenir numérique de l’Afrique centrale. Brazzaville.', 'fnc-wordpress-theme' ) ) ); ?></p>
-			<?php
-			// Coordonnées : affichées uniquement si renseignées dans les Réglages
-			// FNC (RÈGLE 4 — aucune coordonnée fictive).
-			$fnc_email   = fnc_get_setting( 'email', '' );
-			$fnc_phone   = fnc_get_setting( 'phone', '' );
-			$fnc_address = fnc_get_setting_i18n( 'address', '' );
-			if ( $fnc_address || $fnc_email || $fnc_phone ) :
-				?>
-				<ul class="foot-contact">
-					<?php if ( $fnc_address ) : ?>
-						<li><?php echo nl2br( esc_html( $fnc_address ) ); ?></li>
-					<?php endif; ?>
-					<?php if ( $fnc_email ) : ?>
-						<li><a href="mailto:<?php echo esc_attr( antispambot( $fnc_email ) ); ?>"><?php echo esc_html( antispambot( $fnc_email ) ); ?></a></li>
-					<?php endif; ?>
-					<?php if ( $fnc_phone ) : ?>
-						<li><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $fnc_phone ) ); ?>"><?php echo esc_html( $fnc_phone ); ?></a></li>
-					<?php endif; ?>
-				</ul>
-			<?php endif; ?>
-			<?php
-			$fnc_social = fnc_social_links();
-			if ( ! empty( $fnc_social ) ) :
-				?>
-				<div class="social-row" aria-label="<?php esc_attr_e( 'Réseaux sociaux', 'fnc-wordpress-theme' ); ?>">
-					<?php foreach ( $fnc_social as $fnc_s ) :
-							$fnc_platform = isset( $fnc_s['platform'] ) ? $fnc_s['platform'] : 'other';
-							$fnc_url      = isset( $fnc_s['url'] ) ? $fnc_s['url'] : '';
-							$fnc_label    = ( isset( $fnc_s['label'] ) && '' !== $fnc_s['label'] ) ? $fnc_s['label'] : fnc_social_label( $fnc_platform );
-							?>
-						<a class="social-chip social-chip--icon" href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( sprintf( '%s, %s', $fnc_label, __( 's’ouvre dans un nouvel onglet', 'fnc-wordpress-theme' ) ) ); ?>">
-							<?php echo fnc_social_icon( $fnc_platform ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique interne (fnc_social_icon). ?>
-						</a>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
 		</div>
 		<div>
 			<h4><?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?></h4>
@@ -81,6 +45,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<li><a href="<?php echo esc_url( fnc_page_url( 'partenaires' ) ); ?>"><?php esc_html_e( 'Devenir partenaire', 'fnc-wordpress-theme' ); ?></a></li>
 				<li><a href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?></a></li>
 			</ul>
+			<?php
+			// Coordonnées publiques (affichées seulement si renseignées, RÈGLE 4).
+			$fnc_email   = fnc_get_setting( 'email', '' );
+			$fnc_address = fnc_get_setting_i18n( 'address', '' );
+			if ( $fnc_email || $fnc_address ) :
+				?>
+				<ul class="foot-contact">
+					<?php if ( $fnc_email ) : ?>
+						<li><a href="mailto:<?php echo esc_attr( antispambot( $fnc_email ) ); ?>"><?php echo esc_html( antispambot( $fnc_email ) ); ?></a></li>
+					<?php endif; ?>
+					<?php if ( $fnc_address ) : ?>
+						<li><?php echo nl2br( esc_html( $fnc_address ) ); ?></li>
+					<?php endif; ?>
+				</ul>
+			<?php endif; ?>
+			<?php
+			// Réseaux sociaux : boutons-icônes, en bas de la colonne Contact
+			// (même disposition que le site du Forum).
+			$fnc_social = fnc_social_links();
+			if ( ! empty( $fnc_social ) ) :
+				?>
+				<div class="social-row" aria-label="<?php esc_attr_e( 'Réseaux sociaux', 'fnc-wordpress-theme' ); ?>">
+					<?php foreach ( $fnc_social as $fnc_s ) :
+							$fnc_platform = isset( $fnc_s['platform'] ) ? $fnc_s['platform'] : 'other';
+							$fnc_url      = isset( $fnc_s['url'] ) ? $fnc_s['url'] : '';
+							$fnc_label    = ( isset( $fnc_s['label'] ) && '' !== $fnc_s['label'] ) ? $fnc_s['label'] : fnc_social_label( $fnc_platform );
+							?>
+						<a class="social-chip social-chip--icon" href="<?php echo esc_url( $fnc_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( sprintf( '%s, %s', $fnc_label, __( 's’ouvre dans un nouvel onglet', 'fnc-wordpress-theme' ) ) ); ?>">
+							<?php echo fnc_social_icon( $fnc_platform ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique interne (fnc_social_icon). ?>
+						</a>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 	<div class="foot-bottom">

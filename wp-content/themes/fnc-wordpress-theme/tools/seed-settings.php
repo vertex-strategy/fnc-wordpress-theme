@@ -34,8 +34,9 @@ $set = function ( $key, $value ) use ( &$s, $fnc_force ) {
 	}
 };
 
-// Coordonnées publiques réelles (source : fiche Contact du Forum).
-$set( 'address', 'Rue Kouanga Makosso, Zone Portuaire, Pointe-Noire, République du Congo' );
+// Coordonnées publiques (alignées sur le site du Forum).
+$set( 'email', 'contact@forum-numerique-congo.cg' );
+$set( 'address', 'Brazzaville, République du Congo' );
 $set( 'phone', '+242 06 665 19 04' );
 
 // Réseaux sociaux — DÉMONSTRATION : icônes visibles, liens vers le site officiel.

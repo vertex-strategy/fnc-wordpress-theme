@@ -231,6 +231,12 @@ footer{background:linear-gradient(180deg,var(--navy-deep),var(--noir));color:rgb
 .foot-social{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.82rem;}
 .foot-social a{opacity:.82;transition:opacity .2s var(--ease);}
 .foot-social a:hover{opacity:1;text-decoration:underline;}
+/* Réseaux sociaux du pied de page (colonne Contact) : boutons-icônes clairs sur
+   le fond navy, arrondis, comme le site du Forum. Sans cet override, .social-chip
+   hérite de la couleur navy foncé → icônes invisibles sur fond sombre. */
+.dad-footer .social-row{margin-top:18px;}
+.dad-footer .social-chip{color:#fff;border-color:rgba(255,255,255,.22);border-radius:8px;}
+.dad-footer .social-chip:hover{border-color:#fff;background:rgba(255,255,255,.08);}
 /* Logos de marque : la version blanche reste dans le flux (elle porte la taille
    de .brand) ; la version couleur se superpose en absolu (.brand est positionné
    plus haut) et le kit CSS prod permute leur opacité selon .nav / .nav.solid. Le

@@ -61,6 +61,18 @@ require_once get_template_directory() . '/inc/section-titles.php';
 require_once get_template_directory() . '/inc/admin-guide.php';
 
 /**
+ * Module G (FNC Core) : base d'URL des images de hero par defaut. fnc_page_hero()
+ * resout ainsi l'image de route (« intervenants.png ») vers les assets du theme.
+ * NB : le dossier reel est /assets/images (et non /assets/img/da de l'exemple).
+ */
+add_filter(
+	'fnc_hero_image_base_url',
+	static function () {
+		return get_template_directory_uri() . '/assets/images';
+	}
+);
+
+/**
  * Theme setup : support des fonctionnalites WordPress utilisees par les gabarits.
  */
 function fnc_theme_setup() {

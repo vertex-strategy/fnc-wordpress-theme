@@ -43,6 +43,7 @@ $fnc_core_modules = array(
 	'fnc-structured-data.php', // D — schema.org (consomme B + C)
 	'fnc-consent-matomo.php',  // E — consentement + Matomo
 	'fnc-feature-flags.php',   // F — drapeaux (consomme le seam du Module A)
+	'fnc-page-archetypes.php', // G — edition des pages (archetypes, hero override, blocs) ; ACF Pro
 );
 
 $fnc_core_missing = array();

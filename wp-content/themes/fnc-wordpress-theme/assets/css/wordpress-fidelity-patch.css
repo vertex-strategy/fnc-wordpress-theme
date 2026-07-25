@@ -1,0 +1,44 @@
+/*!
+ * Forum Numérique Congo — patch de fidélité (overrides DA mesurés).
+ * © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * Développé par Vanel NGOYO ADOUMA, Lead développeur.
+ */
+
+/* ==========================================================================
+   PATCH DE FIDÉLITÉ — à charger EN DERNIER (après le thème et le kit).
+   Ne corrige QUE des dérives de VALEUR CSS mesurées à l'écran par rapport à la
+   DA-D. Les écarts STRUCTURELS (titre de hero manquant, portraits, image de
+   fiche édition, badges de frise) ne se corrigent PAS ici — voir l'audit
+   (docs/design/wordpress-fidelity-audit.md). Étendre au fil des dérives trouvées.
+
+   Enqueue (functions.php du thème), en dépendance de la dernière feuille du kit :
+     wp_enqueue_style('fnc-fidelity', get_template_directory_uri().'/assets/css/wordpress-fidelity-patch.css',
+       array('fnc-catchup-complet'), '1.0.0');
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1) Carrousel « Les voix » — le NOM doit être en GRAS (DA : 700).
+   Mesuré : le nom rend en 400 (regular) → « police pas correcte ».
+   Cause : le carrousel réécrit omet le wrapper .identity, donc la règle du kit
+   `#m3 .identity .name { font-weight:700 }` ne s'applique pas, et la règle
+   maison de .name ne fixe pas la graisse. On la ré-assère ici.
+   Réf. DA : #m3 .identity .name { font-weight:700; font-size:clamp(2.1rem,4vw,3.5rem);
+             line-height:1; letter-spacing:-.02em } (les autres valeurs sont déjà bonnes).
+   -------------------------------------------------------------------------- */
+#m3 .name,
+.voix-grid .name,
+[class*="voice"] .name,
+.voice-portrait ~ .identity .name {
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2) Garde-fous DA génériques (sûrs) — au cas où le thème les aurait perdus.
+   Le serif de la DA ne sert QU'AUX accents en italique (jamais aux titres) ;
+   le vert et le jaune ne sont JAMAIS des couleurs de texte (illisibles).
+   Ces règles ne changent rien si la DA est déjà respectée ; elles rattrapent
+   une éventuelle dérive.
+   -------------------------------------------------------------------------- */
+/* Le monogramme de repli (sans photo) reste un cercle d'initiales, pas un
+   faux visage : si le thème a mis une image générique en repli, la neutraliser
+   visuellement est du ressort du template (voir audit) — pas de override ici. */

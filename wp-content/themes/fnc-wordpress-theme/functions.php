@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.4' );
+define( 'FNC_THEME_VERSION', '1.0.5' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -205,6 +205,10 @@ function fnc_theme_assets() {
 	// absolu du site d’origine, 404 en WP) ; ce fichier repointe le motif vers ../img/
 	// (relatif a assets/css/). Depend de fnc-catchup-complet pour passer apres.
 	wp_enqueue_style( 'fnc-empreinte-fix', $dir . '/assets/css/wordpress-empreinte-fix.css', array( 'fnc-catchup-complet' ), $ver );
+
+	// Patch de fidelite DA (dernier) : ne corrige QUE des derives de valeur CSS
+	// mesurees a l'ecran par rapport a la charte (ex. graisse du nom du carrousel).
+	wp_enqueue_style( 'fnc-fidelity', $dir . '/assets/css/wordpress-fidelity-patch.css', array( 'fnc-empreinte-fix' ), $ver );
 
 	wp_enqueue_script( 'fnc-theme-main', $dir . '/assets/js/main.js', array(), $ver, true );
 }

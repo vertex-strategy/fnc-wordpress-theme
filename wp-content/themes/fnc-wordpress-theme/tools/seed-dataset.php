@@ -119,6 +119,54 @@ function fnc_ds_speaker_photo( $post_id, $legacy ) {
 	return true;
 }
 
+/**
+ * Importe le logo d'un partenaire (assets/images/partners/{legacy}.ext) comme
+ * image mise en avant. Idempotent (attachement reutilise via _fnc_ds_logo).
+ */
+function fnc_ds_partner_logo( $post_id, $legacy ) {
+	$dir   = get_template_directory() . '/assets/images/partners/';
+	$found = '';
+	foreach ( array( 'png', 'jpeg', 'jpg', 'webp', 'svg' ) as $ext ) {
+		if ( is_readable( $dir . $legacy . '.' . $ext ) ) {
+			$found = $dir . $legacy . '.' . $ext;
+			break;
+		}
+	}
+	if ( '' === $found ) {
+		return false;
+	}
+	$existing = get_posts( array(
+		'post_type'   => 'attachment',
+		'post_status' => 'inherit',
+		'meta_key'    => '_fnc_ds_logo',
+		'meta_value'  => $legacy,
+		'fields'      => 'ids',
+		'numberposts' => 1,
+	) );
+	if ( ! empty( $existing ) ) {
+		$att = (int) $existing[0];
+	} else {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$upload = wp_upload_bits( basename( $found ), null, file_get_contents( $found ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		if ( ! empty( $upload['error'] ) ) {
+			return false;
+		}
+		$type = wp_check_filetype( $upload['file'] );
+		$att  = wp_insert_attachment( array(
+			'post_mime_type' => $type['type'],
+			'post_title'     => get_the_title( $post_id ),
+			'post_status'    => 'inherit',
+		), $upload['file'], $post_id );
+		if ( is_wp_error( $att ) || ! $att ) {
+			return false;
+		}
+		wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $upload['file'] ) );
+		update_post_meta( $att, '_fnc_ds_logo', $legacy );
+	}
+	set_post_thumbnail( $post_id, $att );
+	return true;
+}
+
 /** Garantit un terme (par slug) et renvoie son term_id. */
 function fnc_ds_term( $taxonomy, $slug, $name ) {
 	$t = get_term_by( 'slug', $slug, $taxonomy );
@@ -246,6 +294,7 @@ fnc_ds_log( '  ✔ ' . count( $data['sessions'] ) . ' sessions reliées (éditio
 fnc_ds_log( 'Partenaires :' );
 foreach ( $data['partners'] as $p ) {
 	$id = fnc_ds_upsert( 'fnc_partenaire', $p['legacyId'], $p['name'], $p['description'] ? wpautop( $p['description'] ) : '', $p['legacyId'] );
+	fnc_ds_partner_logo( $id, $p['legacyId'] ); // Logo officiel (si disponible dans le thème).
 	if ( $p['website'] ) {
 		update_post_meta( $id, '_fnc_partenaire_site', esc_url_raw( $p['website'] ) );
 	}

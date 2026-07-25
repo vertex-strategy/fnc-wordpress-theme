@@ -242,7 +242,18 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 
 	<!-- M6 — LES PARTENAIRES -->
 	<?php
-	$fnc_home_partners = get_posts( array( 'post_type' => 'fnc_partenaire', 'posts_per_page' => 6 ) );
+	// Bloc communauté : partenaires disposant d'un logo (image à la une), afin
+	// d'afficher les logos (comme le site du Forum) plutôt que du texte.
+	$fnc_home_partners = get_posts( array(
+		'post_type'      => 'fnc_partenaire',
+		'posts_per_page' => 8,
+		'meta_query'     => array( array( 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
+		'orderby'        => 'menu_order title',
+		'order'          => 'ASC',
+	) );
+	if ( empty( $fnc_home_partners ) ) {
+		$fnc_home_partners = get_posts( array( 'post_type' => 'fnc_partenaire', 'posts_per_page' => 6 ) );
+	}
 	?>
 	<section class="moment" id="m6" aria-labelledby="m6-title">
 		<span class="eyebrow"><?php echo esc_html( fnc_home_setting( 'm6_eyebrow', __( 'La communauté', 'fnc-wordpress-theme' ) ) ); ?></span>

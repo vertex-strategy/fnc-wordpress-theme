@@ -217,6 +217,53 @@ function fnc_ds_ensure_pages() {
 	fnc_ds_log( '  ✔ ' . count( $defs ) . ' pages éditoriales (FR' . ( $has_pll ? ' + EN' : '' ) . ')' );
 }
 
+/**
+ * Réglages du site : nom officiel (title-tag/SEO), slogan, coordonnées, réseaux
+ * de démonstration et valeurs SEO par défaut. Sans ça, le <title> reste le nom
+ * WordPress d'installation (souvent un intitulé technique) et la meta description
+ * est absente. Ne remplit que les champs vides (n'écrase pas l'existant).
+ */
+function fnc_ds_ensure_settings() {
+	$name    = 'Forum Numérique Congo';
+	$tagline = 'L’espace où l’Afrique centrale décide de son avenir numérique.';
+
+	// Nom du site WordPress (utilisé par le <title> via title-tag, les e-mails…).
+	if ( in_array( get_option( 'blogname' ), array( '', 'FNC WordPress Theme - Dev', 'FNC WordPress Theme – Dev' ), true ) ) {
+		update_option( 'blogname', $name );
+	}
+	if ( '' === (string) get_option( 'blogdescription' ) || 'Just another WordPress site' === get_option( 'blogdescription' ) ) {
+		update_option( 'blogdescription', $tagline );
+	}
+
+	$s = get_option( 'fnc_settings', array() );
+	if ( ! is_array( $s ) ) {
+		$s = array();
+	}
+	$set = function ( $key, $value ) use ( &$s ) {
+		if ( empty( $s[ $key ] ) ) {
+			$s[ $key ] = $value;
+		}
+	};
+	$set( 'officialName', $name );
+	$set( 'description', $tagline );
+	$set( 'email', 'contact@forum-numerique-congo.cg' );
+	$set( 'address', 'Brazzaville, République du Congo' );
+	$set( 'phone', '+242 06 665 19 04' );
+	$set( 'seo_default_description', 'Le Forum Numérique Congo réunit décideurs, experts et société civile autour de la souveraineté numérique de l’Afrique centrale, à Brazzaville.' );
+	$site = 'https://forumnumeriquecongo.net';
+	$set(
+		'social',
+		array(
+			array( 'platform' => 'linkedin', 'label' => 'LinkedIn', 'url' => $site ),
+			array( 'platform' => 'facebook', 'label' => 'Facebook', 'url' => $site ),
+			array( 'platform' => 'x', 'label' => 'X', 'url' => $site ),
+			array( 'platform' => 'youtube', 'label' => 'YouTube', 'url' => $site ),
+		)
+	);
+	update_option( 'fnc_settings', $s );
+	fnc_ds_log( '  ✔ Réglages du site (nom « ' . $name .' », coordonnées, SEO par défaut)' );
+}
+
 /** Retrouve un post par clé stable + type. */
 function fnc_ds_find( $legacy, $post_type ) {
 	$q = get_posts( array(
@@ -410,7 +457,11 @@ $sp_map    = array();
 $ed_map_en = array(); // legacyId -> ID de la traduction EN (relations EN)
 $sp_map_en = array();
 
-/* ---- 0. Pages éditoriales (nav + gabarits page-{slug}.php) ---- */
+/* ---- 0. Réglages du site (nom officiel, coordonnées, SEO par défaut) ---- */
+fnc_ds_log( 'Réglages du site :' );
+fnc_ds_ensure_settings();
+
+/* ---- 0b. Pages éditoriales (nav + gabarits page-{slug}.php) ---- */
 fnc_ds_log( 'Pages éditoriales :' );
 fnc_ds_ensure_pages();
 

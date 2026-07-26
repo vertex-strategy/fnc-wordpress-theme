@@ -215,6 +215,13 @@ function fnc_seo_document_title_parts( $parts ) {
 			$parts['title'] = $custom;
 		}
 	}
+	// Nom du site dans le <title> = nom officiel du Forum (réglage officialName),
+	// et NON le « Nom du site » brut de WordPress. On ne remplace que la partie
+	// « site » LORSQU'ELLE EXISTE (pages internes) : sur l'accueil WordPress place
+	// déjà le nom en titre, l'ajouter dupliquerait « Nom – slogan – Nom ».
+	if ( isset( $parts['site'] ) ) {
+		$parts['site'] = fnc_site_name();
+	}
 	return $parts;
 }
 add_filter( 'document_title_parts', 'fnc_seo_document_title_parts' );
@@ -234,6 +241,12 @@ function fnc_head_meta() {
 
 	$url = is_singular() ? get_permalink() : home_url( add_query_arg( array() ) );
 	$url = $url ? $url : home_url( '/' );
+
+	// Canonique : WordPress n'émet rel=canonical que sur les vues « singular ».
+	// On la complète pour l'accueil et les archives (où elle manquait).
+	if ( ! is_singular() ) {
+		printf( '<link rel="canonical" href="%s" />' . "\n", esc_url( $url ) );
+	}
 
 	if ( $description ) {
 		printf( '<meta name="description" content="%s" />' . "\n", esc_attr( $description ) );

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.2' );
+define( 'FNC_THEME_VERSION', '1.0.3' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -110,6 +110,31 @@ function fnc_theme_setup() {
 	);
 }
 add_action( 'after_setup_theme', 'fnc_theme_setup' );
+
+/**
+ * Gabarit par slug pour les pages TRADUITES.
+ *
+ * Une page anglaise porte un slug distinct (« le-forum-en ») afin d'éviter le
+ * conflit Polylang du même slug dans deux langues (qui provoque une redirection
+ * 301 vers la version française). Mais elle doit utiliser le MÊME gabarit
+ * page-{slug}.php que sa version FR. On résout donc le slug de la traduction en
+ * langue par défaut (FR) et on charge page-{slug-FR}.php si elle existe. Sans
+ * effet sur les pages FR (leur propre slug est déjà le bon).
+ */
+function fnc_translated_page_template( $template ) {
+	if ( ! is_page() || ! function_exists( 'pll_get_post' ) || ! function_exists( 'pll_default_language' ) ) {
+		return $template;
+	}
+	$fnc_id      = get_queried_object_id();
+	$fnc_default = pll_get_post( $fnc_id, pll_default_language() );
+	if ( ! $fnc_default || (int) $fnc_default === (int) $fnc_id ) {
+		return $template; // Déjà en langue par défaut : rien à faire.
+	}
+	$fnc_slug    = get_post_field( 'post_name', $fnc_default );
+	$fnc_located = $fnc_slug ? locate_template( array( "page-{$fnc_slug}.php" ) ) : '';
+	return $fnc_located ? $fnc_located : $template;
+}
+add_filter( 'template_include', 'fnc_translated_page_template' );
 
 /**
  * Chargement des traductions du theme.
@@ -319,6 +344,12 @@ function fnc_default_menu_items() {
  * @return bool
  */
 function fnc_menu_is_active( $href ) {
+	// Lien inexistant (page non créée) : jamais actif. Sans ce garde-fou, un
+	// href « # » se réduit à un chemin vide et serait pris pour l'accueil, ce qui
+	// allumerait l'état actif sur TOUS les liens brisés à la fois.
+	if ( '' === $href || '#' === $href ) {
+		return false;
+	}
 	$req  = isset( $GLOBALS['wp']->request ) ? $GLOBALS['wp']->request : '';
 	$cur  = trim( (string) wp_parse_url( home_url( $req ), PHP_URL_PATH ), '/' );
 	$item = trim( (string) wp_parse_url( $href, PHP_URL_PATH ), '/' );

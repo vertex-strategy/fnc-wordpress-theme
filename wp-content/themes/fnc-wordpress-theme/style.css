@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.2
+Version: 1.0.3
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -404,7 +404,7 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 .grid{display:grid;gap:18px;}
 .grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
 .grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
-.card{position:relative;min-height:100%;padding:28px 24px;border:1px solid var(--border);border-top:3px solid rgba(45,49,128,.45);border-radius:5px;background:linear-gradient(180deg,#fff 0%,#fbfbfd 100%);transition:transform .22s var(--ease),border-color .22s var(--ease),background .22s var(--ease);}
+.card{position:relative;min-height:100%;padding:28px 24px;border:1px solid var(--border);border-radius:5px;background:#fff;transition:transform .22s var(--ease),border-color .22s var(--ease),background .22s var(--ease);}
 .card:hover{transform:translateY(-2px);border-color:rgba(45,49,128,.38);background:#fff;}
 .card::after{content:"";position:absolute;right:22px;top:22px;width:28px;height:1px;background:var(--jaune);opacity:.85;}
 .card-kicker{color:var(--rouge);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;}

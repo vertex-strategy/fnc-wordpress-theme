@@ -100,6 +100,123 @@ function fnc_ds_copy_terms( $fr_id, $en_id, $taxonomy ) {
 	}
 }
 
+/**
+ * Crée les PAGES éditoriales attendues par les gabarits et la navigation
+ * (le-forum, contact, mot-du-président, pages légales…). Sans elles, sur une
+ * installation neuve, les liens de menu retombent sur « # » (page absente) et
+ * les gabarits page-{slug}.php ne s'appliquent pas.
+ *
+ * Idempotent : ADOPTE une page existante de même slug (pour ne pas dupliquer)
+ * et la marque d'une clé de semis. Crée la traduction EN liée (même slug, requis
+ * pour que WordPress applique le bon gabarit page-{slug}.php aussi en anglais).
+ * Le gabarit se charge du contenu de démonstration ; les pages sont créées vides.
+ */
+function fnc_ds_ensure_pages() {
+	// slug, titre FR, titre EN, slug du parent (pour /le-forum/mot-du-president).
+	$defs = array(
+		array( 'le-forum', 'Le Forum', 'The Forum', '' ),
+		array( 'edition-en-cours', 'Édition en cours', 'Current edition', '' ),
+		array( 'partenaires', 'Partenaires', 'Partners', '' ),
+		array( 'contact', 'Contact', 'Contact', '' ),
+		array( 'inscription', 'Inscription', 'Registration', '' ),
+		array( 'informations-pratiques', 'Informations pratiques', 'Practical information', '' ),
+		array( 'espace-presse', 'Espace presse', 'Press area', '' ),
+		array( 'mot-du-president', 'Le mot du Président', 'The President’s address', 'le-forum' ),
+		array( 'mentions-legales', 'Mentions légales', 'Legal notice', '' ),
+		array( 'politique-confidentialite', 'Politique de confidentialité', 'Privacy policy', '' ),
+		array( 'conditions-generales-utilisation', 'Conditions générales d’utilisation', 'Terms of use', '' ),
+		array( 'declaration-accessibilite', 'Déclaration d’accessibilité', 'Accessibility statement', '' ),
+	);
+	$has_pll = function_exists( 'pll_set_post_language' ) && function_exists( 'pll_save_post_translations' );
+
+	// --- Passe 1 : pages FR (adoption des existantes par slug). ---
+	$fr = array();
+	foreach ( $defs as $d ) {
+		list( $slug, $title_fr ) = $d;
+		$legacy = 'page::' . $slug;
+		$id     = fnc_ds_find( $legacy, 'page' );
+		if ( ! $id ) {
+			// Adopter une page existante de même slug (langue par défaut), quelle
+			// que soit sa hiérarchie. get_page_by_path échouerait pour une page
+			// ENFANT (ex. mot-du-président dont le chemin réel est
+			// « le-forum/mot-du-president »), ce qui créerait un doublon « -2 ».
+			$found = get_posts(
+				array(
+					'post_type'   => 'page',
+					'name'        => $slug,
+					'post_status' => 'any',
+					'numberposts' => 1,
+					'fields'      => 'ids',
+					'lang'        => fnc_ds_def_lang(),
+				)
+			);
+			if ( ! empty( $found ) ) {
+				$id = (int) $found[0];
+				update_post_meta( $id, '_fnc_seed_legacy', $legacy );
+			}
+		}
+		if ( $id ) {
+			wp_update_post( array( 'ID' => $id, 'post_status' => 'publish' ) );
+		} else {
+			$id = (int) wp_insert_post(
+				array(
+					'post_type'   => 'page',
+					'post_title'  => $title_fr,
+					'post_name'   => $slug,
+					'post_status' => 'publish',
+				)
+			);
+			update_post_meta( $id, '_fnc_seed_legacy', $legacy );
+		}
+		fnc_ds_language( $id ); // langue par défaut (fr).
+		$fr[ $slug ] = $id;
+	}
+	// Parenté FR (mot-du-président sous le-forum -> /le-forum/mot-du-president/).
+	foreach ( $defs as $d ) {
+		if ( $d[3] && isset( $fr[ $d[3] ], $fr[ $d[0] ] ) ) {
+			wp_update_post( array( 'ID' => $fr[ $d[0] ], 'post_parent' => $fr[ $d[3] ] ) );
+		}
+	}
+
+	// --- Passe 2 : traductions EN (même slug, liées). ---
+	if ( $has_pll ) {
+		$en = array();
+		foreach ( $defs as $d ) {
+			list( $slug, , $title_en ) = $d;
+			$legacy = 'page::' . $slug . '::en';
+			$id     = fnc_ds_find( $legacy, 'page' );
+			if ( $id ) {
+				wp_update_post( array( 'ID' => $id, 'post_title' => $title_en, 'post_status' => 'publish' ) );
+			} else {
+				// Slug distinct « {slug}-en » : évite tout conflit Polylang (le même
+				// slug dans deux langues déclenche une redirection 301 vers le FR).
+				// Le bon gabarit est appliqué via le filtre template_include du thème
+				// (page-{slug-FR}.php), donc le slug EN peut différer sans souci.
+				$id = (int) wp_insert_post(
+					array(
+						'post_type'   => 'page',
+						'post_title'  => $title_en,
+						'post_name'   => $slug . '-en',
+						'post_status' => 'publish',
+					)
+				);
+				update_post_meta( $id, '_fnc_seed_legacy', $legacy );
+			}
+			pll_set_post_language( $id, 'en' );
+			pll_set_post_language( $fr[ $slug ], fnc_ds_def_lang() );
+			pll_save_post_translations( array( fnc_ds_def_lang() => $fr[ $slug ], 'en' => $id ) );
+			$en[ $slug ] = $id;
+		}
+		foreach ( $defs as $d ) {
+			if ( $d[3] && isset( $en[ $d[3] ], $en[ $d[0] ] ) ) {
+				wp_update_post( array( 'ID' => $en[ $d[0] ], 'post_parent' => $en[ $d[3] ] ) );
+			}
+		}
+	}
+
+	fnc_ds_log( '  ✔ ' . count( $defs ) . ' pages éditoriales (FR' . ( $has_pll ? ' + EN' : '' ) . ')' );
+}
+
 /** Retrouve un post par clé stable + type. */
 function fnc_ds_find( $legacy, $post_type ) {
 	$q = get_posts( array(
@@ -292,6 +409,10 @@ function fnc_ds_run_seed() {
 $sp_map    = array();
 $ed_map_en = array(); // legacyId -> ID de la traduction EN (relations EN)
 $sp_map_en = array();
+
+/* ---- 0. Pages éditoriales (nav + gabarits page-{slug}.php) ---- */
+fnc_ds_log( 'Pages éditoriales :' );
+fnc_ds_ensure_pages();
 
 /* ---- 1. Éditions ---- */
 fnc_ds_log( 'Éditions :' );

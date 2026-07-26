@@ -20,10 +20,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function fnc_ds_log( $m ) {
+	// Journal tamponné : consultable par l'importateur d'administration
+	// (fnc_ds_run_seed le renvoie). En CLI on continue d'afficher en direct.
+	if ( ! isset( $GLOBALS['fnc_ds_log_buffer'] ) || ! is_array( $GLOBALS['fnc_ds_log_buffer'] ) ) {
+		$GLOBALS['fnc_ds_log_buffer'] = array();
+	}
+	$GLOBALS['fnc_ds_log_buffer'][] = $m;
+
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		WP_CLI::log( $m );
-	} else {
-		echo $m . "\n";
+	} elseif ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) && ! is_admin() ) {
+		echo esc_html( $m ) . "\n";
 	}
 }
 
@@ -248,30 +255,40 @@ function fnc_ds_meta( $id, $pairs ) {
 
 /* ====================================================================== */
 
-$fnc_ds_file = __DIR__ . '/dataset.json';
-if ( ! is_readable( $fnc_ds_file ) ) {
-	fnc_ds_log( '⚠ dataset.json introuvable — lancez d’abord : npx tsx tools/build-dataset.mjs' );
-	return;
-}
-$data = json_decode( file_get_contents( $fnc_ds_file ), true );
-if ( ! is_array( $data ) ) {
-	fnc_ds_log( '⚠ dataset.json illisible.' );
-	return;
-}
+/**
+ * Exécute le semis complet (idempotent) et renvoie le journal (tableau de
+ * lignes). Appelable en CLI (wp eval-file) ET par l'importateur de démo
+ * d'administration (inc/demo-import.php).
+ *
+ * @return array<int,string> Lignes de journal.
+ */
+function fnc_ds_run_seed() {
+	$GLOBALS['fnc_ds_log_buffer'] = array();
 
-$PROFILS = array(
-	'official' => 'Officiel',
-	'expert'   => 'Expert',
-	'host'     => 'Animateur',
-);
-$NIVEAUX = array(
-	'institutionnel' => 'Institutionnel',
-	'organisateur'   => 'Organisateur',
-	'soutien'        => 'Soutien',
-	'sponsor'        => 'Sponsor',
-);
+	$PROFILS = array(
+		'official' => 'Officiel',
+		'expert'   => 'Expert',
+		'host'     => 'Animateur',
+	);
+	$NIVEAUX = array(
+		'institutionnel' => 'Institutionnel',
+		'organisateur'   => 'Organisateur',
+		'soutien'        => 'Soutien',
+		'sponsor'        => 'Sponsor',
+	);
 
-$ed_map    = array();
+	$fnc_ds_file = __DIR__ . '/dataset.json';
+	if ( ! is_readable( $fnc_ds_file ) ) {
+		fnc_ds_log( '⚠ dataset.json introuvable — lancez d’abord : npx tsx tools/build-dataset.mjs' );
+		return $GLOBALS['fnc_ds_log_buffer'];
+	}
+	$data = json_decode( file_get_contents( $fnc_ds_file ), true );
+	if ( ! is_array( $data ) ) {
+		fnc_ds_log( '⚠ dataset.json illisible.' );
+		return $GLOBALS['fnc_ds_log_buffer'];
+	}
+
+	$ed_map    = array();
 $sp_map    = array();
 $ed_map_en = array(); // legacyId -> ID de la traduction EN (relations EN)
 $sp_map_en = array();
@@ -455,6 +472,16 @@ foreach ( $data['publications'] as $p ) {
 		}
 	}
 }
-fnc_ds_log( '  ✔ ' . count( $data['publications'] ) . ' publications (traductions EN incluses)' );
+	fnc_ds_log( '  ✔ ' . count( $data['publications'] ) . ' publications (traductions EN incluses)' );
 
-fnc_ds_log( 'Terminé.' );
+	fnc_ds_log( 'Terminé.' );
+
+	return $GLOBALS['fnc_ds_log_buffer'];
+}
+
+// Exécution directe en ligne de commande (wp eval-file), inchangée. En dehors
+// de la CLI, l'inclusion ne fait que définir fnc_ds_run_seed() (appelée par
+// l'importateur de démo de l'administration).
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	fnc_ds_run_seed();
+}

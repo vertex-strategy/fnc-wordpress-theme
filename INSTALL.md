@@ -38,17 +38,26 @@ Le paquet contient le **thème** et deux **extensions**.
 5. **Réglages du site** : renseigner l'identité, les coordonnées, les logos et le menu
    dans **Réglages → FNC** (voir `GUIDE.md`, §3).
 
-### (Option) Contenu de démonstration
+### Contenu de démonstration (« starter kit »)
 
-Le thème fournit un jeu de contenu de démonstration reproductible. Depuis la racine
-WordPress, avec WP-CLI :
+Pour découvrir la structure du site sur une installation neuve, le thème installe
+en un clic un jeu de contenu de démonstration complet — éditions, intervenants,
+sessions, partenaires et publications, avec leurs images et leurs relations,
+**bilingue français + anglais** si Polylang est actif.
 
-```bash
-wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php
-```
+1. Terminer les étapes ci-dessus (thème + extensions + Polylang fr/en activés).
+2. Aller dans **Apparence → Contenu de démonstration**.
+3. Cliquer sur **« Importer le contenu de démonstration »**.
 
-Ajouter l'argument `force` pour réécrire un contenu déjà en place. Ce contenu est marqué
-« démo » et destiné à être remplacé par les informations réelles.
+L'opération est **sûre et rejouable** (aucun doublon : relancer met à jour). Le
+contenu est destiné à être remplacé par les informations réelles ; supprimez les
+éléments de démonstration ou modifiez-les directement.
+
+> **Alternative développeur (WP-CLI).** Depuis la racine WordPress :
+> ```bash
+> wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-dataset.php
+> ```
+> Puis vider le cache : `wp cache flush`.
 
 ## Après l'installation
 

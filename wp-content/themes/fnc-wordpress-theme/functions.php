@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.10' );
+define( 'FNC_THEME_VERSION', '1.0.1' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -61,6 +61,13 @@ require_once get_template_directory() . '/inc/section-titles.php';
  * liens directs — contre la fragmentation. Voir inc/admin-guide.php.
  */
 require_once get_template_directory() . '/inc/admin-guide.php';
+
+/**
+ * Importateur de contenu de démonstration (« starter kit ») : page sous
+ * Apparence qui installe en un clic le jeu de données de démo (bilingue si
+ * Polylang actif). Voir inc/demo-import.php.
+ */
+require_once get_template_directory() . '/inc/demo-import.php';
 
 /**
  * Rendu des sections composees (édition des pages) : adaptateur

@@ -102,7 +102,9 @@ function fnc_content_model_register_post_types() {
 			),
 			'public'       => true,
 			'has_archive'  => true,
-			'rewrite'      => array( 'slug' => 'publications' ),
+			// Slug « ressources » (comme le site du Forum : /ressources), pas
+			// « publications » ; l'ancien 404 sur /ressources est ainsi corrigé.
+			'rewrite'      => array( 'slug' => 'ressources' ),
 			'menu_icon'    => 'dashicons-media-document',
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 			'show_in_rest' => true,

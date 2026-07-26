@@ -161,13 +161,23 @@ function fnc_register_menus() {
 add_action( 'init', 'fnc_register_menus', 1 );
 
 /**
- * Archive des intervenants : ordre protocolaire (officiels d'abord, comme le
- * site du Forum) via _fnc_speaker_protocol_order, puis alphabetique. Affiche
- * tout le monde (pas de pagination sur la grille).
+ * Archive des intervenants : PÉRIMÈTRE = participants de l'édition en cours
+ * (comme le site du Forum, qui n'affiche pas tout l'annuaire historique), dans
+ * l'ordre global (protocolaire puis sort_index). Repli sur tout l'annuaire en
+ * ordre protocolaire si le périmètre n'est pas résoluble (pas d'édition active).
  */
 function fnc_order_intervenant_archive( $query ) {
 	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( 'fnc_intervenant' ) ) {
 		return;
+	}
+	if ( function_exists( 'fnc_edition_participants' ) ) {
+		$fnc_ids = fnc_edition_participants();
+		if ( ! empty( $fnc_ids ) ) {
+			$query->set( 'post__in', $fnc_ids );
+			$query->set( 'orderby', 'post__in' ); // conserve l'ordre global déjà trié.
+			$query->set( 'posts_per_page', -1 );
+			return;
+		}
 	}
 	$query->set( 'meta_key', '_fnc_speaker_protocol_order' );
 	$query->set( 'orderby', array( 'meta_value_num' => 'ASC', 'title' => 'ASC' ) );

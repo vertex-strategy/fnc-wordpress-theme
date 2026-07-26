@@ -244,10 +244,24 @@ if ( ! function_exists( 'fnc_sd_render' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fnc_sd_seo_plugin_active' ) ) {
+	/**
+	 * Un plugin SEO dédié (AIOSEO / Yoast) émet-il déjà Organization + WebSite ?
+	 * Si oui, on ne les redouble pas ici (on ne garde que l'Event, qu'aucun de
+	 * ces plugins ne sait produire pour l'édition en cours).
+	 */
+	function fnc_sd_seo_plugin_active() {
+		return defined( 'AIOSEO_VERSION' ) || function_exists( 'aioseo' ) || defined( 'WPSEO_VERSION' );
+	}
+}
+
 if ( ! function_exists( 'fnc_sd_output' ) ) {
 	function fnc_sd_output() {
-		// Identité de site — partout.
-		fnc_sd_render( fnc_sd_identity_graph() );
+		// Identité de site (Organization + WebSite) — partout, SAUF si un plugin
+		// SEO dédié les émet déjà (anti-doublon).
+		if ( ! fnc_sd_seo_plugin_active() ) {
+			fnc_sd_render( fnc_sd_identity_graph() );
+		}
 
 		// Event — sur l'accueil (comme le site réel). Décommenter is_page pour l'ajouter
 		// aussi au hub « édition en cours ».

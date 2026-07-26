@@ -17,6 +17,19 @@ const FNC_META_SEO_DESCRIPTION = '_fnc_seo_description';
 const FNC_META_SEO_NOINDEX     = '_fnc_seo_noindex';
 
 /**
+ * Un plugin SEO dédié (AIOSEO / Yoast) est-il actif ? Si oui, le thème lui
+ * DÉLÈGUE le <title>, la meta description, l'OpenGraph, la canonique et le
+ * schema Organization/WebSite : ces plugins les émettent déjà, et doublonner
+ * dégraderait le SEO. Le thème conserve alors uniquement ce que le plugin ne
+ * produit pas (le schema Event de l'édition, via le Module D « données du site »).
+ *
+ * @return bool
+ */
+function fnc_seo_delegated() {
+	return defined( 'AIOSEO_VERSION' ) || function_exists( 'aioseo' ) || defined( 'WPSEO_VERSION' );
+}
+
+/**
  * Types de contenu recevant les champs SEO : Pages et articles natifs, plus
  * les contenus publics du plugin s'il est actif.
  *
@@ -209,6 +222,9 @@ function fnc_seo_is_noindex() {
  * @return array<string,string>
  */
 function fnc_seo_document_title_parts( $parts ) {
+	if ( fnc_seo_delegated() ) {
+		return $parts; // AIOSEO / Yoast gère le <title>.
+	}
 	if ( is_singular() ) {
 		$custom = get_post_meta( get_the_ID(), FNC_META_SEO_TITLE, true );
 		if ( $custom ) {
@@ -233,6 +249,11 @@ add_filter( 'document_title_parts', 'fnc_seo_document_title_parts' );
  * sinon valeurs par défaut du site (Réglages FNC → SEO par défaut).
  */
 function fnc_head_meta() {
+	// Déléguée à AIOSEO/Yoast s'il est actif : ne rien émettre ici (meta
+	// description, OpenGraph, canonique, twitter) pour éviter les balises en double.
+	if ( fnc_seo_delegated() ) {
+		return;
+	}
 	$site_name   = fnc_site_name();
 	$description = fnc_seo_description();
 	$title       = fnc_seo_title();

@@ -29,6 +29,18 @@ Le template se compose de deux éléments :
     **Secure Custom Fields** (gratuite, maintenue par WordPress.org). **Non requise** :
     l'édition des pages, des héros et des blocs fonctionne **nativement** dans l'éditeur
     WordPress et le personnalisateur ; cette extension n'ajoute qu'un confort de saisie.
+  - *(Recommandé pour le SEO)* **All in One SEO (AIOSEO)** — gratuit. Gère les titres,
+    descriptions, image de partage (OpenGraph) et le plan de site. **Le thème s'adapte
+    automatiquement** : dès qu'AIOSEO (ou Yoast) est actif, il lui laisse le `<title>`,
+    la meta description, l'OpenGraph, la canonique et le schema Organization/WebSite —
+    aucune balise en double. Le thème conserve seulement le schema **Event** de l'édition
+    (dates, lieu, intervenants), qu'AIOSEO ne sait pas produire. Sans plugin SEO, le thème
+    assure lui-même un référencement de base (voir §7.1).
+
+    > Après activation d'AIOSEO : lancer son assistant (type **Organisation**, nom
+    > « Forum Numérique Congo », logo, **image OG 1200×630**, profils sociaux), activer sa
+    > **compatibilité Polylang** (pour n'avoir qu'une série de balises hreflang) et le
+    > laisser gérer le **plan de site** (`/sitemap.xml`).
 
 ---
 

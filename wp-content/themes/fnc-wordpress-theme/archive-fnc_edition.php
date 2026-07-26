@@ -84,7 +84,7 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 							}
 						}
 						?>
-						<li class="frise-item<?php echo 'current' === $fnc_status ? ' is-current' : ''; ?>">
+						<li class="frise-item<?php echo $fnc_status ? ' is-' . esc_attr( $fnc_status ) : ''; ?>">
 							<div class="frise-rail" aria-hidden="true"><span class="frise-node"></span></div>
 							<div class="frise-body">
 								<div class="frise-head">
@@ -122,19 +122,13 @@ $fnc_statuses = fnc_content_model_edition_statuses();
 		</div>
 	</section>
 
-	<section class="section">
-		<div class="container">
-			<div class="section-head">
-				<div>
-					<p class="eyebrow" data-fnc-st="editions.cta.eyebrow"><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'eyebrow' ) ); ?></p>
-					<h2 data-fnc-st="editions.cta.title"><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'title' ) ); ?></h2>
-				</div>
-				<p><?php esc_html_e( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
-			</div>
-			<div class="toolbar" style="gap:28px;margin-top:8px;">
-				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>"><?php esc_html_e( 'Voir les publications', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
-				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
-			</div>
+	<!-- Bande CTA finale (registre .callout du site du Forum) — clôt la frise. -->
+	<section class="callout">
+		<h2 data-fnc-st="editions.cta.title"><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'title' ) ); ?></h2>
+		<p><?php esc_html_e( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
+		<div class="toolbar" style="gap:28px;justify-content:center;">
+			<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>"><?php esc_html_e( 'Voir les publications', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
+			<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
 		</div>
 	</section>
 </main>

@@ -60,11 +60,13 @@ function fnc_demo_import_render_page() {
 	}
 
 	$fnc_log     = array();
-	$fnc_done    = false;
+	$fnc_done    = false;   // import réalisé
+	$fnc_removed = false;   // suppression réalisée
 	$fnc_error   = '';
 	$fnc_has_cpt = post_type_exists( 'fnc_intervenant' );
 	$fnc_has_pll = function_exists( 'pll_set_post_language' );
 
+	// --- Import ---
 	if ( isset( $_POST['fnc_demo_import'] )
 		&& check_admin_referer( 'fnc_demo_import', 'fnc_demo_import_nonce' )
 	) {
@@ -89,6 +91,28 @@ function fnc_demo_import_render_page() {
 			}
 		}
 	}
+
+	// --- Suppression (zone sensible) ---
+	if ( isset( $_POST['fnc_demo_remove'] )
+		&& check_admin_referer( 'fnc_demo_remove', 'fnc_demo_remove_nonce' )
+	) {
+		$fnc_seed = get_template_directory() . '/tools/seed-dataset.php';
+		if ( ! is_readable( $fnc_seed ) ) {
+			$fnc_error = __( 'Fichier de semis introuvable (tools/seed-dataset.php).', 'fnc-wordpress-theme' );
+		} else {
+			require_once $fnc_seed;
+			if ( ! function_exists( 'fnc_ds_remove_seed' ) ) {
+				$fnc_error = __( 'Fonction de nettoyage indisponible.', 'fnc-wordpress-theme' );
+			} else {
+				if ( function_exists( 'set_time_limit' ) ) {
+					set_time_limit( 300 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors
+				}
+				$fnc_log     = (array) fnc_ds_remove_seed();
+				fnc_demo_import_flush_caches();
+				$fnc_removed = true;
+			}
+		}
+	}
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Contenu de démonstration', 'fnc-wordpress-theme' ); ?></h1>
@@ -99,10 +123,15 @@ function fnc_demo_import_render_page() {
 
 		<?php if ( $fnc_done ) : ?>
 			<div class="notice notice-success"><p><strong><?php esc_html_e( 'Import terminé.', 'fnc-wordpress-theme' ); ?></strong> <?php esc_html_e( 'Le contenu de démonstration a été installé. Consultez la page d’accueil pour voir la structure.', 'fnc-wordpress-theme' ); ?></p></div>
-			<?php if ( ! empty( $fnc_log ) ) : ?>
-				<h2><?php esc_html_e( 'Journal', 'fnc-wordpress-theme' ); ?></h2>
-				<pre style="max-height:340px;overflow:auto;background:#fff;border:1px solid #ccd0d4;padding:12px;white-space:pre-wrap;"><?php echo esc_html( implode( "\n", $fnc_log ) ); ?></pre>
-			<?php endif; ?>
+		<?php endif; ?>
+
+		<?php if ( $fnc_removed ) : ?>
+			<div class="notice notice-success"><p><strong><?php esc_html_e( 'Nettoyage terminé.', 'fnc-wordpress-theme' ); ?></strong> <?php esc_html_e( 'Le contenu de démonstration a été retiré.', 'fnc-wordpress-theme' ); ?></p></div>
+		<?php endif; ?>
+
+		<?php if ( ( $fnc_done || $fnc_removed ) && ! empty( $fnc_log ) ) : ?>
+			<h2><?php esc_html_e( 'Journal', 'fnc-wordpress-theme' ); ?></h2>
+			<pre style="max-height:340px;overflow:auto;background:#fff;border:1px solid #ccd0d4;padding:12px;white-space:pre-wrap;"><?php echo esc_html( implode( "\n", $fnc_log ) ); ?></pre>
 		<?php endif; ?>
 
 		<p><?php esc_html_e( 'Installe en un clic le jeu de données de démonstration du Forum Numérique Congo — éditions, intervenants, sessions, partenaires et publications, avec leurs images et leurs relations. Idéal pour découvrir la structure du site après une installation neuve.', 'fnc-wordpress-theme' ); ?></p>
@@ -132,6 +161,19 @@ function fnc_demo_import_render_page() {
 			<?php wp_nonce_field( 'fnc_demo_import', 'fnc_demo_import_nonce' ); ?>
 			<button type="submit" name="fnc_demo_import" value="1" class="button button-primary button-hero"<?php disabled( ! $fnc_has_cpt ); ?>>
 				<?php echo $fnc_done ? esc_html__( 'Relancer l’import', 'fnc-wordpress-theme' ) : esc_html__( 'Importer le contenu de démonstration', 'fnc-wordpress-theme' ); ?>
+			</button>
+		</form>
+
+		<hr style="margin:32px 0;" />
+
+		<h2 style="color:#d63638;"><?php esc_html_e( 'Retirer le contenu de démonstration', 'fnc-wordpress-theme' ); ?></h2>
+		<p><?php esc_html_e( 'Supprime définitivement tout le contenu installé par l’import (éditions, intervenants, sessions, partenaires, publications) dans les deux langues, ainsi que les images importées (photos, logos). À utiliser une fois le vrai contenu saisi, pour nettoyer la démonstration.', 'fnc-wordpress-theme' ); ?></p>
+		<p class="description"><strong><?php esc_html_e( 'Attention :', 'fnc-wordpress-theme' ); ?></strong> <?php esc_html_e( 'cette opération est irréversible et retire aussi les éléments de démonstration que vous auriez modifiés (tant qu’ils restent marqués « démonstration »). Elle ne touche à aucun autre contenu ni média que vous avez ajouté vous-même.', 'fnc-wordpress-theme' ); ?></p>
+
+		<form method="post" style="margin-top:12px;" onsubmit="return confirm('<?php echo esc_js( __( 'Retirer définitivement tout le contenu de démonstration (les deux langues + images importées) ? Cette action est irréversible.', 'fnc-wordpress-theme' ) ); ?>');">
+			<?php wp_nonce_field( 'fnc_demo_remove', 'fnc_demo_remove_nonce' ); ?>
+			<button type="submit" name="fnc_demo_remove" value="1" class="button button-link-delete" style="border:1px solid #d63638;color:#d63638;padding:0 14px;">
+				<?php esc_html_e( 'Retirer le contenu de démonstration', 'fnc-wordpress-theme' ); ?>
 			</button>
 		</form>
 	</div>

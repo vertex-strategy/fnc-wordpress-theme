@@ -479,6 +479,64 @@ foreach ( $data['publications'] as $p ) {
 	return $GLOBALS['fnc_ds_log_buffer'];
 }
 
+/**
+ * Retire tout le contenu de démonstration : les posts marqués par la clé de
+ * semis (_fnc_seed_legacy), toutes langues confondues (FR + traductions EN), et
+ * les médias importés par le semis (photos d'intervenants, logos de partenaires,
+ * marqués _fnc_ds_photo / _fnc_ds_logo). Ne touche à AUCUN autre contenu ni
+ * média téléversé par l'éditeur. Renvoie le journal.
+ *
+ * ⚠ Supprime aussi un contenu de démo qui aurait été édité, tant qu'il porte
+ * encore la clé _fnc_seed_legacy. Opération définitive (suppression forcée).
+ *
+ * @return array<int,string> Lignes de journal.
+ */
+function fnc_ds_remove_seed() {
+	$GLOBALS['fnc_ds_log_buffer'] = array();
+
+	$types = array( 'fnc_edition', 'fnc_intervenant', 'fnc_session', 'fnc_partenaire', 'fnc_publication' );
+	$posts = get_posts( array(
+		'post_type'   => $types,
+		'post_status' => 'any',
+		'numberposts' => -1,
+		'fields'      => 'ids',
+		'lang'        => '', // toutes langues (Polylang)
+		'meta_key'    => '_fnc_seed_legacy',
+		'no_found_rows'=> true,
+	) );
+	$n = 0;
+	foreach ( $posts as $pid ) {
+		if ( wp_delete_post( $pid, true ) ) {
+			$n++;
+		}
+	}
+	fnc_ds_log( sprintf( '  ✔ %d contenus de démonstration supprimés (toutes langues)', $n ) );
+
+	$atts = get_posts( array(
+		'post_type'   => 'attachment',
+		'post_status' => 'any',
+		'numberposts' => -1,
+		'fields'      => 'ids',
+		'lang'        => '',
+		'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery
+			'relation' => 'OR',
+			array( 'key' => '_fnc_ds_photo', 'compare' => 'EXISTS' ),
+			array( 'key' => '_fnc_ds_logo', 'compare' => 'EXISTS' ),
+		),
+		'no_found_rows'=> true,
+	) );
+	$m = 0;
+	foreach ( $atts as $aid ) {
+		if ( wp_delete_attachment( $aid, true ) ) {
+			$m++;
+		}
+	}
+	fnc_ds_log( sprintf( '  ✔ %d médias de démonstration supprimés', $m ) );
+	fnc_ds_log( 'Nettoyage terminé.' );
+
+	return $GLOBALS['fnc_ds_log_buffer'];
+}
+
 // Exécution directe en ligne de commande (wp eval-file), inchangée. En dehors
 // de la CLI, l'inclusion ne fait que définir fnc_ds_run_seed() (appelée par
 // l'importateur de démo de l'administration).

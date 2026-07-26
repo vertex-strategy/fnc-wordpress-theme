@@ -43,6 +43,32 @@ Le template se compose de deux éléments :
 Une fois activés, deux menus apparaissent dans l'administration : **Réglages → FNC** (contenu du
 site) et **Réglages → FNC (fonctionnalités)** (activation des inscriptions et des actualités).
 
+### 2.1 Contenu de démonstration *(Apparence → Contenu de démonstration)*
+
+Sur une installation neuve, vous pouvez **découvrir la structure du site** en installant un jeu
+de contenu de démonstration complet — éditions, intervenants, sessions, partenaires et
+publications, avec leurs images et leurs liaisons.
+
+**Installer la démonstration.**
+1. Terminez d'abord l'installation ci-dessus (thème + extensions + langues Polylang).
+2. Ouvrez **Apparence → Contenu de démonstration**.
+3. Cliquez sur **« Importer le contenu de démonstration »**.
+
+La page vérifie les prérequis avant l'import (extension de contenu requise ; Polylang recommandé
+pour obtenir la version **bilingue français + anglais**). L'opération est **sûre et rejouable** :
+la relancer met à jour le contenu de démonstration, sans jamais créer de doublon.
+
+**Retirer la démonstration.**
+Une fois votre **vrai contenu** saisi, revenez sur la même page et utilisez, tout en bas, le
+bouton **« Retirer le contenu de démonstration »** (zone en rouge). Il supprime définitivement
+tout le contenu installé par l'import — dans les **deux langues** — ainsi que les **images**
+importées avec lui. Il ne touche à **aucun** autre contenu ni média que vous avez ajouté.
+
+> **À savoir.** Le retrait supprime aussi un élément de démonstration que vous auriez modifié,
+> tant qu'il reste marqué « démonstration ». Si vous partez d'un contenu de démo pour bâtir un
+> contenu réel, préférez **le modifier en profondeur et le conserver** plutôt que de lancer le
+> retrait global. L'action de retrait demande une confirmation et est **irréversible**.
+
 ---
 
 ## 3. Premiers réglages du site  *(Réglages → FNC)*

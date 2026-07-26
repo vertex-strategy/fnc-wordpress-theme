@@ -1099,9 +1099,11 @@ function fnc_pract_wrap( $title, $default_title, $inner, $modifier = '' ) {
 	if ( '' === trim( $inner ) ) {
 		return '';
 	}
+	// Structure du site du Forum (PracticalInfo) : .practical-item + .practical-title,
+	// puis le contenu tel quel (pas d'enveloppe .pract-body). Le $modifier est ignoré
+	// (le Forum ne différencie pas les rubriques par une classe modificatrice).
 	return sprintf(
-		'<article class="pract-item%1$s"><h3 class="pract-title">%2$s</h3><div class="pract-body">%3$s</div></article>',
-		$modifier ? ' pract-item--' . esc_attr( $modifier ) : '',
+		'<article class="practical-item"><h3 class="practical-title">%1$s</h3>%2$s</article>',
 		esc_html( $title ? $title : $default_title ),
 		$inner
 	);
@@ -1113,7 +1115,12 @@ function fnc_render_pract_simple( $a, $default_title, $modifier ) {
 	if ( ! $body ) {
 		return '';
 	}
-	return fnc_pract_wrap( fnc_attr( $a, 'title' ), $default_title, fnc_render_rich( $body ), $modifier );
+	return fnc_pract_wrap(
+		fnc_attr( $a, 'title' ),
+		$default_title,
+		'<div class="prose-legal" style="margin-top:12px;">' . fnc_render_rich( $body ) . '</div>',
+		$modifier
+	);
 }
 
 function fnc_render_block_pract_transport( $a ) {
@@ -1138,30 +1145,38 @@ function fnc_render_block_pract_venue( $a ) {
 	$map_image = fnc_attachment_url( fnc_attr( $a, 'mapImage', 0 ) );
 	$map_url   = fnc_attr( $a, 'mapEmbedUrl' );
 
-	ob_start();
+	if ( ! $address && ! $body && ! $map_image && ! $map_url ) {
+		return '';
+	}
 
+	// Lieu (PracticalInfo du Forum) : .practical-item > .split [ colonne texte |
+	// figure.practical-map ]. Le titre est DANS la colonne texte.
+	$title = fnc_attr( $a, 'title' );
+	ob_start();
+	echo '<article class="practical-item"><div class="split"><div>';
+	printf( '<h3 class="practical-title">%s</h3>', esc_html( $title ? $title : __( 'Lieu & plan d’accès', 'fnc-wordpress-theme' ) ) );
 	if ( $address ) {
-		printf( '<p class="pract-address">%s</p>', nl2br( esc_html( $address ) ) );
+		printf( '<p class="body" style="white-space:pre-line;">%s</p>', esc_html( $address ) );
 	}
 	if ( $body ) {
-		echo fnc_render_rich( $body ); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
-	}
-	if ( $map_image ) {
-		printf( '<img class="pract-map-image" src="%s" alt="" loading="lazy" />', esc_url( $map_image ) );
+		echo '<div class="prose-legal" style="margin-top:12px;">' . fnc_render_rich( $body ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
 	}
 	if ( $map_url ) {
 		// Privacy-first (comme sur le site du Forum) : aucune requête vers le service
-		// tiers avant un clic explicite de l'utilisateur.
+		// tiers avant un clic explicite (lien externe, pas d'embed automatique).
 		printf(
-			'<div class="pract-map" data-map-url="%1$s" data-map-title="%2$s"><button type="button" class="btn btn-soft pract-map-load">%3$s</button><p class="help">%4$s</p></div>',
+			'<a class="link-more" href="%1$s" target="_blank" rel="noopener noreferrer" style="margin-top:12px;display:inline-block;">%2$s <span class="arrow" aria-hidden="true">→</span></a>',
 			esc_url( $map_url ),
-			esc_attr__( 'Carte du lieu', 'fnc-wordpress-theme' ),
-			esc_html__( 'Afficher la carte interactive', 'fnc-wordpress-theme' ),
-			esc_html__( 'La carte n’est chargée qu’à votre demande : aucun contenu tiers n’est appelé avant.', 'fnc-wordpress-theme' )
+			esc_html__( 'Ouvrir le plan', 'fnc-wordpress-theme' )
 		);
 	}
+	echo '</div>';
+	if ( $map_image ) {
+		printf( '<figure class="practical-map"><img src="%s" alt="" loading="lazy" /></figure>', esc_url( $map_image ) );
+	}
+	echo '</div></article>';
 
-	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Lieu & plan d’accès', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'venue' );
+	return (string) ob_get_clean();
 }
 
 function fnc_render_block_pract_lodging( $a ) {
@@ -1171,7 +1186,7 @@ function fnc_render_block_pract_lodging( $a ) {
 	}
 
 	ob_start();
-	echo '<ul class="pract-list">';
+	echo '<ul class="practical-lodging" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$name = isset( $item['name'] ) ? $item['name'] : '';
 		if ( ! $name ) {
@@ -1179,14 +1194,15 @@ function fnc_render_block_pract_lodging( $a ) {
 		}
 		$url  = isset( $item['url'] ) ? $item['url'] : '';
 		$note = isset( $item['note'] ) ? $item['note'] : '';
-		echo '<li>';
+		echo '<li><span class="lodging-name">';
 		if ( $url ) {
 			printf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $url ), esc_html( $name ) );
 		} else {
-			echo '<strong>' . esc_html( $name ) . '</strong>';
+			echo esc_html( $name );
 		}
+		echo '</span>';
 		if ( $note ) {
-			echo ' <span class="pract-note">' . esc_html( $note ) . '</span>';
+			echo '<span class="lodging-note"> — ' . esc_html( $note ) . '</span>';
 		}
 		echo '</li>';
 	}
@@ -1202,21 +1218,22 @@ function fnc_render_block_pract_contacts( $a ) {
 	}
 
 	ob_start();
-	echo '<dl class="pract-contacts">';
+	echo '<ul class="practical-contacts" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$label = isset( $item['label'] ) ? $item['label'] : '';
 		$value = isset( $item['value'] ) ? $item['value'] : '';
 		if ( ! $label && ! $value ) {
 			continue;
 		}
-		printf( '<dt>%s</dt>', esc_html( $label ) );
+		echo '<li><span class="contact-label">' . esc_html( $label ) . '</span><span class="contact-value">';
 		if ( is_email( $value ) ) {
-			printf( '<dd><a href="mailto:%1$s">%1$s</a></dd>', esc_attr( antispambot( $value ) ) );
+			printf( '<a href="mailto:%1$s">%1$s</a>', esc_attr( antispambot( $value ) ) );
 		} else {
-			printf( '<dd>%s</dd>', esc_html( $value ) );
+			echo esc_html( $value );
 		}
+		echo '</span></li>';
 	}
-	echo '</dl>';
+	echo '</ul>';
 
 	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Contacts utiles', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'contacts' );
 }
@@ -1228,15 +1245,15 @@ function fnc_render_block_pract_faq( $a ) {
 	}
 
 	ob_start();
-	echo '<div class="faq-list">';
+	echo '<div class="practical-faq" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$q = isset( $item['q'] ) ? $item['q'] : '';
 		if ( ! $q ) {
 			continue;
 		}
-		echo '<details class="faq-item"><summary>' . esc_html( $q ) . '</summary>';
+		echo '<details><summary>' . esc_html( $q ) . '</summary>';
 		if ( ! empty( $item['a'] ) ) {
-			echo '<div class="faq-answer">' . fnc_render_rich( $item['a'] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
+			echo '<div class="prose-legal">' . fnc_render_rich( $item['a'] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
 		}
 		echo '</details>';
 	}

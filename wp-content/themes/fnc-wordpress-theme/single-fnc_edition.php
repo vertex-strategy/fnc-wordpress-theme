@@ -162,7 +162,7 @@ while ( have_posts() ) :
 			<section class="section linen">
 				<span class="eyebrow"><?php esc_html_e( 'Sur place', 'fnc-wordpress-theme' ); ?></span>
 				<h2><?php esc_html_e( 'Informations pratiques.', 'fnc-wordpress-theme' ); ?></h2>
-				<div class="pract-grid" style="margin-top:24px;">
+				<div class="practical-list" style="margin-top:24px;">
 					<?php echo $fnc_ed_pratique; // phpcs:ignore WordPress.Security.EscapeOutput -- markup produit par les renderers de blocs, deja echappe. ?>
 				</div>
 			</section>

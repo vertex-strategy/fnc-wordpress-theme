@@ -58,16 +58,11 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 
 <main id="main">
 	<?php if ( '' !== trim( $fnc_ip_rubriques ) ) : ?>
-		<section class="section">
+		<section class="section" aria-labelledby="practical-info-title">
 			<div class="container">
-				<div class="section-head">
-					<div>
-						<p class="eyebrow" data-fnc-st="infos-pratiques.onsite.eyebrow"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'onsite', 'eyebrow' ) ); ?></p>
-						<h2><?php echo esc_html( get_the_title( $fnc_ip_edition ) ); ?></h2>
-					</div>
-					<p><?php esc_html_e( 'Seules les rubriques confirmées sont publiées.', 'fnc-wordpress-theme' ); ?></p>
-				</div>
-				<div class="pract-grid">
+				<span class="eyebrow" id="practical-info-title" data-fnc-st="infos-pratiques.onsite.eyebrow"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'onsite', 'eyebrow' ) ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<div class="practical-list">
 					<?php echo $fnc_ip_rubriques; // phpcs:ignore WordPress.Security.EscapeOutput -- markup produit par les renderers de blocs, deja echappe. ?>
 				</div>
 			</div>

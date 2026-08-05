@@ -9,12 +9,16 @@ programme, ressources, partenaires, actualités et demandes en ligne.
 > de code et sans risquer de casser le design. Tout ce qui se voit sur le site s'édite
 > depuis l'administration.
 
-Le template se compose de deux éléments :
+Le template se compose de **trois éléments** :
 
 | Élément | Rôle |
 |---|---|
 | **Thème « Forum Numérique Congo »** | L'apparence, les gabarits de page et les animations. |
-| **Extension « FNC Core »** | Les contenus (éditions, intervenants, sessions…), les formulaires, la mesure d'audience et l'édition des pages. |
+| **Extension « FNC Content Model »** | Le modèle de données : types de contenu (éditions, intervenants, sessions…), taxonomies, relations, statut *archivé*. |
+| **Extension « FNC Core »** | La logique du site : réglages, données dérivées (programme, annuaire, compteurs), formulaires, mesure d'audience, SEO. |
+
+> Voir aussi : **`INSTALL.md`** (installation pas à pas) et **`README.md`** (référence
+> technique développeur).
 
 ---
 
@@ -22,7 +26,8 @@ Le template se compose de deux éléments :
 
 - **WordPress** 6.0 ou plus récent, **PHP** 7.4 ou plus récent.
 - **Extensions à activer :**
-  - **FNC Core** (fournie avec le template) — indispensable.
+  - **FNC Content Model** et **FNC Core** (fournies avec le template, à activer dans cet
+    ordre) — indispensables.
   - **Polylang** — gestion du bilingue français / anglais.
   - Un service **SMTP** (extension au choix) — pour l'envoi fiable des accusés de réception.
   - *(Optionnel)* Une extension de champs personnalisés compatible ACF — par exemple
@@ -273,6 +278,6 @@ l'image et le titre officiels s'affichent par défaut.
 
 ---
 
-*Template **Forum Numérique Congo** — thème + extension « FNC Core ».*
+*Template **Forum Numérique Congo** — thème + extensions « FNC Content Model » et « FNC Core ».*
 *© 2026 **Grinso & Associés** — [www.grinso.io](https://www.grinso.io). Tous droits réservés.*
 *Développé par **Vanel NGOYO ADOUMA**, Lead développeur.*

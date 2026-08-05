@@ -30,7 +30,7 @@ Le paquet contient le **thème** et deux **extensions**.
 
 1. **Thème** : Apparence → Thèmes → *Ajouter* → *Téléverser un thème* →
    `forum-numerique-congo-theme.zip` → **Activer**.
-   > L'archive du thème inclut les visuels de démonstration (~33 Mo). Si le
+   > L'archive du thème inclut les visuels de démonstration (~37 Mo). Si le
    > téléversement échoue, augmentez `upload_max_filesize` / `post_max_size`
    > (php.ini) ou installez le thème par copie du dossier dans `wp-content/themes/`.
 2. **Extensions** (Extensions → *Ajouter* → *Téléverser une extension*), à activer **dans cet ordre** :

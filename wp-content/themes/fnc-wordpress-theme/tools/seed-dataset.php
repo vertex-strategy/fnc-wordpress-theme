@@ -223,6 +223,47 @@ function fnc_ds_ensure_pages() {
  * WordPress d'installation (souvent un intitulé technique) et la meta description
  * est absente. Ne remplit que les champs vides (n'écrase pas l'existant).
  */
+/**
+ * Importe (idempotent) un visuel du thème comme image de partage OpenGraph par
+ * défaut et renvoie son ID d'attachement (0 si indisponible). Marqué `_fnc_ds_og`.
+ *
+ * @return int
+ */
+function fnc_ds_import_og_image() {
+	$src = get_template_directory() . '/assets/images/le-forum.png';
+	if ( ! is_readable( $src ) ) {
+		return 0;
+	}
+	$existing = get_posts( array(
+		'post_type'   => 'attachment',
+		'post_status' => 'inherit',
+		'meta_key'    => '_fnc_ds_og',
+		'meta_value'  => '1',
+		'fields'      => 'ids',
+		'numberposts' => 1,
+	) );
+	if ( ! empty( $existing ) ) {
+		return (int) $existing[0];
+	}
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$upload = wp_upload_bits( 'og-forum-numerique-congo.png', null, file_get_contents( $src ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	if ( ! empty( $upload['error'] ) ) {
+		return 0;
+	}
+	$type = wp_check_filetype( $upload['file'] );
+	$att  = wp_insert_attachment( array(
+		'post_mime_type' => $type['type'],
+		'post_title'     => 'Forum Numérique Congo — image de partage',
+		'post_status'    => 'inherit',
+	), $upload['file'] );
+	if ( is_wp_error( $att ) || ! $att ) {
+		return 0;
+	}
+	wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $upload['file'] ) );
+	update_post_meta( $att, '_fnc_ds_og', '1' );
+	return (int) $att;
+}
+
 function fnc_ds_ensure_settings() {
 	$name    = 'Forum Numérique Congo';
 	$tagline = 'L’espace où l’Afrique centrale décide de son avenir numérique.';
@@ -250,6 +291,16 @@ function fnc_ds_ensure_settings() {
 	$set( 'address', 'Brazzaville, République du Congo' );
 	$set( 'phone', '+242 06 665 19 04' );
 	$set( 'seo_default_description', 'Le Forum Numérique Congo réunit décideurs, experts et société civile autour de la souveraineté numérique de l’Afrique centrale, à Brazzaville.' );
+
+	// Image de partage (OpenGraph) par défaut : importe un visuel du thème comme
+	// média et le pose en réglage (clé interne « ogDefaultImage »). Sert au
+	// standalone ET de repli avant configuration d'un plugin SEO. Idempotent.
+	if ( empty( $s['ogDefaultImage'] ) ) {
+		$fnc_og_id = fnc_ds_import_og_image();
+		if ( $fnc_og_id ) {
+			$s['ogDefaultImage'] = $fnc_og_id;
+		}
+	}
 	$site = 'https://forumnumeriquecongo.net';
 	$set(
 		'social',

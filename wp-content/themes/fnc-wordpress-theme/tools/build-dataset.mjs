@@ -60,16 +60,30 @@ async function main() {
     // l'évènement ; les précédentes, leur rang ordinal + le thème.
     const ordinals = { '2018': '1re', '2020': '2e', '2022': '3e', '2024': '4e', '2027': '5e' };
     const ord = ordinals[year] || '';
+    // Corrections/traductions VALIDÉES MOA, absentes des sources statiques :
+    //  - thème FR canonique (le CMS Payload porte une version plus riche pour 2024) ;
+    //  - thème EN des éditions passées (le CMS ne les a pas saisis → traductions
+    //    validées par le Décideur). 2027 garde son themeEn de agenda-2027.ts.
+    const THEME_FR_OVERRIDE = {
+      '2024-intelligence-artificielle': 'L’Intelligence Artificielle — Rupture ou Continuité ?',
+    };
+    const PAST_THEME_EN = {
+      '2018-dematerialisation-gouvernance': 'Dematerialization and electronic governance',
+      '2020-transformation-digitale': 'Digital transformation: opportunities and threats',
+      '2022-innovation-donnee': 'Technological innovation and data at the heart of digital transformation: issues and challenges',
+      '2024-intelligence-artificielle': 'Artificial Intelligence — Disruption or Continuity?',
+    };
+    const themeFr = THEME_FR_OVERRIDE[slug] || fm.theme || '';
     const title = is2027
       ? `Forum Numérique Congo ${year}`
-      : ( ord ? `${ord} édition — ${fm.theme || ''}`.trim() : `Édition ${year}` );
+      : ( ord ? `${ord} édition — ${themeFr}`.trim() : `Édition ${year}` );
     editions.push({
       legacyId: slug,
       slug,
       year,
       title,
-      theme: fm.theme || '',
-      themeEn: is2027 ? agenda.edition.themeEn : '',
+      theme: themeFr,
+      themeEn: is2027 ? agenda.edition.themeEn : ( PAST_THEME_EN[slug] || '' ),
       // L'édition active pilote l'accueil : statut « current » (le résolveur la
       // choisit en priorité), même si l'évènement est à venir (compte à rebours).
       status: is2027 ? 'current' : ( statusMap[fm.status] || 'past' ),

@@ -98,19 +98,22 @@ $fnc_interest_options = array(
 			</div>
 
 			<?php
-			$fnc_niveaux = get_terms(
-				array(
-					'taxonomy'   => 'fnc_niveau_partenariat',
-					'object_ids' => get_posts( array( 'post_type' => 'fnc_partenaire', 'posts_per_page' => -1, 'fields' => 'ids' ) ),
-				)
-			);
+			// Groupement dans l'ordre FIXE du site du Forum (institution ->
+			// organisateur -> soutien -> sponsor), partenaires tries par ordre
+			// d'affichage (_fnc_partenaire_sort_index).
 			$fnc_has_partners = false;
-			if ( ! is_wp_error( $fnc_niveaux ) && ! empty( $fnc_niveaux ) ) :
-				foreach ( $fnc_niveaux as $fnc_niveau ) :
+			foreach ( array( 'institutionnel', 'organisateur', 'soutien', 'sponsor' ) as $fnc_niveau_slug ) :
+				$fnc_niveau = get_term_by( 'slug', $fnc_niveau_slug, 'fnc_niveau_partenariat' );
+				if ( ! $fnc_niveau || is_wp_error( $fnc_niveau ) ) {
+					continue;
+				}
 					$fnc_partners = get_posts(
 						array(
 							'post_type'      => 'fnc_partenaire',
 							'posts_per_page' => -1,
+							'orderby'        => 'meta_value_num title',
+							'meta_key'       => '_fnc_partenaire_sort_index',
+							'order'          => 'ASC',
 							'tax_query'      => array(
 								array(
 									'taxonomy' => 'fnc_niveau_partenariat',
@@ -178,7 +181,6 @@ $fnc_interest_options = array(
 					</div>
 					<?php
 				endforeach;
-			endif;
 			if ( ! $fnc_has_partners ) :
 				?>
 				<div class="empty" role="status">

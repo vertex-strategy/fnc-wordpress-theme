@@ -190,9 +190,12 @@ function fnc_render_submission_form( $type ) {
  * @return string
  */
 function fnc_render_contact_coordinates() {
-	$email   = function_exists( 'fnc_get_setting' ) ? fnc_get_setting( 'email', '' ) : '';
-	$phone   = function_exists( 'fnc_get_setting' ) ? fnc_get_setting( 'phone', '' ) : '';
-	$address = function_exists( 'fnc_get_setting_i18n' ) ? fnc_get_setting_i18n( 'address', '' ) : '';
+	// Accesseurs « publics » : ils écartent les valeurs de démonstration (e-mail
+	// invalide, téléphone factice « À confirmer » — motif ^\+?2420?60+$). À défaut
+	// (extension inactive), repli sur le réglage brut.
+	$email   = function_exists( 'fnc_public_email' ) ? fnc_public_email() : ( function_exists( 'fnc_get_setting' ) ? fnc_get_setting( 'email', '' ) : '' );
+	$phone   = function_exists( 'fnc_public_phone' ) ? fnc_public_phone() : ( function_exists( 'fnc_get_setting' ) ? fnc_get_setting( 'phone', '' ) : '' );
+	$address = function_exists( 'fnc_public_address' ) ? fnc_public_address() : ( function_exists( 'fnc_get_setting_i18n' ) ? fnc_get_setting_i18n( 'address', '' ) : '' );
 	$social  = function_exists( 'fnc_social_links' ) ? fnc_social_links() : array();
 
 	ob_start();

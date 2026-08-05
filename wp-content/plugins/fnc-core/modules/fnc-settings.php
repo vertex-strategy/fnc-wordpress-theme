@@ -97,10 +97,14 @@ if ( ! function_exists( 'fnc_get_setting' ) ) {
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_is_placeholder_phone' ) ) {
-	/** Téléphone fictif « À confirmer » → à ne pas publier. */
+	/**
+	 * Téléphone fictif « À confirmer » → à ne pas publier. Reprend le motif du
+	 * site du Forum (Footer.tsx) : indicatif 242 suivi uniquement de 0/6 de
+	 * remplissage (ex. +24206000000, +242060000000). Motif : ^\+?2420?60+$.
+	 */
 	function fnc_is_placeholder_phone( $value ) {
 		$n = preg_replace( '/[^\d+]/', '', (string) $value );
-		return '+24206000000' === $n || '+242060000000' === $n;
+		return 1 === preg_match( '/^\+?2420?60+$/', $n );
 	}
 }
 

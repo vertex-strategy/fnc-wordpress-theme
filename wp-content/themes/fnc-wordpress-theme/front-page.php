@@ -78,8 +78,11 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	// script assets/js/main.js gère le défilement, les flèches, les pastilles et
 	// lecture/pause. Droit à l'image respecté : portrait seulement si acquis, sinon
 	// monogramme (initiales).
+	// Plafond du carrousel : défaut 10, borné 4–12 (comme le champ CMS m3VoicesCount
+	// du site du Forum). fnc_home_setting reste administrable dans cet intervalle.
+	$fnc_m3_count  = max( 4, min( 12, (int) fnc_home_setting( 'm3_count', 10 ) ) );
 	$fnc_voice_ids = function_exists( 'fnc_home_voices' )
-		? fnc_home_voices( max( 1, (int) fnc_home_setting( 'm3_count', 6 ) ) )
+		? fnc_home_voices( $fnc_m3_count )
 		: array();
 	$fnc_voices = array_filter( array_map( 'get_post', $fnc_voice_ids ) );
 
@@ -330,7 +333,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 				</div>
 			<?php endif; ?>
 		</div>
-		<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'partenaires' ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm6_link', __( 'Devenir partenaire', 'fnc-wordpress-theme' ) ) ); ?> <span class="arrow">→</span></a>
+		<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm6_link', __( 'Devenir partenaire', 'fnc-wordpress-theme' ) ) ); ?> <span class="arrow">→</span></a>
 	</section>
 
 	<!-- M7 — LES ARCHIVES -->

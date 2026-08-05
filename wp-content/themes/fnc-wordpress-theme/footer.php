@@ -47,8 +47,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</ul>
 			<?php
 			// Coordonnées publiques (affichées seulement si renseignées, RÈGLE 4).
-			$fnc_email   = fnc_get_setting( 'email', '' );
-			$fnc_address = fnc_get_setting_i18n( 'address', '' );
+			// Accesseurs « publics » : écartent les valeurs de démonstration (e-mail
+			// invalide, etc.), comme les filtres anti-fictif du site du Forum.
+			$fnc_email   = function_exists( 'fnc_public_email' ) ? fnc_public_email() : fnc_get_setting( 'email', '' );
+			$fnc_address = function_exists( 'fnc_public_address' ) ? fnc_public_address() : fnc_get_setting_i18n( 'address', '' );
 			if ( $fnc_email || $fnc_address ) :
 				?>
 				<ul class="foot-contact">

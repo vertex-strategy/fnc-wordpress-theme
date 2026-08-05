@@ -132,10 +132,24 @@ le **lieu**, puis réglez le **statut** sur **En cours**. Publiez.
 
 ### 5.2 Ajouter un intervenant
 Intervenants → *Ajouter*. Renseignez :
-- **Nom**, **fonction / titre**, **organisation**, **pays** (séparez par « / » si plusieurs),
-- **Profil** (par exemple *Officiel*, *Expert*, *Animateur*) — sert aux filtres,
-- **Portrait** (image mise en avant) et ses **liens** éventuels,
-- **Ordre protocolaire** si un ordre d'affichage précis est requis.
+- **Nom**, **civilité** (Pr./Dr./M./Mme…), **fonction / titre**, **organisation**, **pays**
+  (séparez par « / » si plusieurs),
+- **Profil** (par exemple *Officiel*, *Expert*, *Animateur*) — sert aux **filtres et au badge**
+  (il ne change **pas** l'ordre : voir ci-dessous),
+- **Portrait** (image mise en avant) et ses **liens** éventuels.
+
+**Ordre d'affichage (partout : annuaire, participants, aperçus).** Deux champs, du plus
+prioritaire au moins prioritaire :
+- **Rang protocolaire** — le plus petit d'abord (les officiels reçoivent un rang bas pour
+  passer devant). Laissé vide, l'intervenant est rejeté en fin de liste.
+- **Ordre secondaire** — départage deux intervenants de **même rang protocolaire** (le plus
+  petit d'abord), puis, à égalité, l'ordre alphabétique.
+
+**Mise en avant dans le carrousel « Les voix » (accueil).** Cochez **« Mettre en avant »** pour
+faire passer un intervenant **en tête du carrousel** de la page d'accueil, indépendamment de
+l'ordre général ; le **« Rang de mise en avant »** ordonne les intervenants ainsi promus. Le
+carrousel affiche au plus **10 voix** (les promus d'abord, puis le reste dans l'ordre général).
+Un intervenant promu doit être **participant de l'édition en cours** pour apparaître.
 
 **Autorisation d'image (droit à l'image).** Le portrait n'est publié **que si** l'autorisation
 est **obtenue** et non expirée. Renseignez le statut de l'autorisation (*non vérifié / obtenue /
@@ -159,8 +173,14 @@ Publications → *Ajouter* : **titre**, **type**, contenu et fichiers. La page *
 propose automatiquement la recherche et les filtres par type.
 
 ### 5.6 Ajouter un partenaire
-Partenaires → *Ajouter* : **nom**, **type d'engagement**, **logo** et description. La page
-**Partenaires** les regroupe par type.
+Partenaires → *Ajouter* : **nom**, **type d'engagement** (Institutionnel / Organisateur /
+Soutien / Sponsor), **logo** et description. La page **Partenaires** les **regroupe par type**
+dans l'ordre Institutionnel → Organisateur → Soutien → Sponsor.
+
+**Ordre d'affichage des logos** — champ **« Ordre d'affichage »** (le plus petit d'abord). Il
+pilote à la fois la page Partenaires et le bloc « La communauté » de l'accueil. Sur l'accueil,
+seuls les partenaires **munis d'un logo** apparaissent : **3 grands en tête** (donnez 0, 1, 2 aux
+deux organisateurs + le sponsor officiel) puis jusqu'à 5 plus petits — **8 au maximum**.
 
 ### 5.7 Publier une actualité
 Actualités → *Ajouter* : **titre**, **catégorie**, image et contenu.
@@ -198,6 +218,16 @@ monde et respecte la vie privée. Un **cookie de mesure** n'est déposé **qu'ap
 explicite. Le bandeau propose **Refuser** et **Autoriser** avec le même poids, et un lien de
 pied de page permet de rouvrir le choix à tout moment. Aucune configuration n'est nécessaire côté
 éditorial.
+
+### 5.11 Archiver un contenu (retirer sans supprimer)
+Chaque contenu du Forum (édition, intervenant, session, partenaire, publication, actualité) peut
+prendre le statut **« Archivé »**, en plus de *Brouillon* et *Publié*. Un contenu **archivé** est
+**retiré du site public** (invisible en front, exclu de la recherche) mais **conservé** — distinct
+de la corbeille. Utile pour retirer proprement un contenu daté sans le perdre.
+
+Pour archiver : depuis la **liste** du type de contenu, **Modification rapide** → menu *Statut* →
+**Archivé** (également disponible dans le menu Publier de l'éditeur classique). Repasser en
+*Publié* le remet en ligne.
 
 ---
 

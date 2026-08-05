@@ -2,7 +2,14 @@
 
 Thème WordPress + plugin de contenu, dérivés de la maquette statique `docs/mockups/homepage-v2` du dépôt [`forum-numerique-congo`](https://github.com/vertex-strategy/forum-numerique-congo).
 
-**Statut : parité fonctionnelle atteinte avec les surfaces administrables du vrai site.** Le thème et le plugin sont branchés (étape 4 terminée), et les sept lots d'administrabilité sont livrés : réglages globaux (Customizer), composition de pages par blocs, page d'accueil éditable (héros image/vidéo/slider), informations pratiques rattachées à l'édition, SEO par page, fiches individuelles des contenus, et ordre des pays + drapeaux uploadables. Multilinguisme (Polylang) non encore intégré. Détail de chaque lot dans les sections dédiées ci-dessous.
+**Statut : template de livraison (kit 1.0.8).** Le thème et le plugin sont branchés sur les
+données, les huit lots d'administrabilité sont livrés (réglages globaux, composition par blocs,
+accueil éditable, informations pratiques, SEO par page, fiches individuelles, ordre pays/drapeaux,
+**multilinguisme Polylang**), puis une **passe de fidélité + packaging** a rendu le template
+installable et fidèle au site Next (starter kit en un clic, contenu de démonstration bilingue,
+délégation SEO à AIOSEO, statut « archivé », ordre éditorial des intervenants/partenaires). Le
+détail des lots est ci-dessous ; la passe 1.0.x est résumée en fin de document (« Passe fidélité
+& packaging »).
 
 ## Positionnement
 
@@ -407,23 +414,54 @@ Sont traduisibles : les 6 CPT (éditions, sessions, intervenants, partenaires, p
 
 Polylang n'est pas versionné (plugin tiers, hors dépôt) : il doit être installé et activé sur chaque instance, puis les deux langues créées (FR par défaut, EN=en_GB) et la langue par défaut assignée aux contenus existants.
 
+## Passe fidélité & packaging (1.0.x)
+
+Après les 8 lots, une passe a transformé le thème en **template livrable et fidèle** au site Next
+(source de vérité). Points structurants (détaillés dans `docs/design/` du dépôt principal :
+`wordpress-rules-reference.md`, `wordpress-integration-audit.md`) :
+
+- **Jeu de données & starter kit.** `tools/build-dataset.mjs` (Node/`tsx`) extrait les vraies
+  données de la source Next → `tools/dataset.json` (versionné). `tools/seed-dataset.php` expose
+  **`fnc_ds_run_seed()`** (idempotent, clé `_fnc_seed_legacy`) qui installe éditions/intervenants/
+  sessions/partenaires/publications, **crée les pages éditoriales** (le-forum, contact, légales…,
+  parent le-forum pour mot-du-président), **seede les réglages** (nom du site, coordonnées, SEO,
+  image OG) et importe les médias. Exposé en un clic sous **Apparence → Contenu de démonstration**
+  (`inc/demo-import.php`), avec un bouton de **retrait** (`fnc_ds_remove_seed()`).
+- **Bilingue = contenu traduit (Polylang).** Le seed crée la **traduction EN de chaque CPT** liée
+  FR↔EN (roleEn/titleEn/themeEn de la source ; themeEn des éditions passées = valeurs validées MOA,
+  overrides dans `build-dataset.mjs`). Les pages EN ont un slug `-en` + un filtre
+  `fnc_translated_page_template` qui applique `page-{slug-FR}.php` (évite le conflit de slug/301).
+  Décision MOA : les **slugs de section EN restent en FR** (pas de `/speakers`, `/partners`).
+- **Ordre éditorial.** `fnc_edition_participants()` trie protocolOrder → **sort_index** → titre ;
+  `fnc_home_voices()` applique la **promotion** (`home_featured` + `home_featured_order`) puis un
+  plafond (défaut 10, borné 4-12). Partenaires ordonnés par `_fnc_partenaire_sort_index` (M6 :
+  3 en tête = 0/1/2 ; **écart MOA volontaire** vs le 2+4 du Next). Méta éditables (metaboxes).
+- **SEO — délégation anti-doublon.** `inc/seo.php` (`fnc_seo_delegated()`) et le Module « données
+  structurées » (`fnc_sd_seo_plugin_active()`) se **retirent automatiquement** si **AIOSEO/Yoast**
+  est actif (plus de title/meta/OG/canonique/Organization+WebSite en double) ; le thème conserve
+  le schema **Event**. Sans plugin SEO, il assure tout lui-même. `<title>` basé sur `officialName`.
+  Matomo : mécanique de consentement (ordre `_paq`, cookie après « oui »), URL/siteId configurables.
+- **Statut « archivé ».** `fnc-content-model/includes/statuses.php` enregistre un statut non public
+  `archived` (3ᵉ état draft/published/archived) pour les 6 CPT, exposé dans les menus de statut.
+- **Fidélité DA.** Rendu réaligné sur le Next (structure `.practical-*` des infos pratiques, frise
+  éditions avec statut + `.callout`, périmètre annuaire = participants de l'édition, `/ressources`
+  au lieu de `/publications`, filtres anti-données-fictives du footer). Couverture CSS 265/266.
+- **Packaging.** `build-package.py` produit `dist/…-{version}/` (thème + 2 extensions + docs) et une
+  archive conteneur. Versions alignées (thème + extensions + build).
+
 ## Prochaines étapes
 
-Plan de mise en œuvre de l'ADR-007 :
-1. ~~Créer le dépôt~~ (fait)
-2. ~~Scaffolder la structure thème~~ (fait)
-3. ~~Scaffolder le plugin~~ (fait — CPTs, taxonomies, relations en meta)
-4. ~~Brancher le thème sur les données du plugin~~ (fait — tous les gabarits interrogent les vraies données)
+Plan ADR-007 : dépôt, scaffolding thème/plugin, branchement données (**faits**). Huit lots
+d'administrabilité **livrés** (réglages globaux, blocs Gutenberg, accueil éditable, infos pratiques,
+SEO par page, fiches individuelles, ordre pays/drapeaux, **multilinguisme Polylang**). Passe
+fidélité & packaging **livrée** (ci-dessus).
 
-Réconciliation avec les surfaces administrables du vrai site (sept lots, tous livrés) :
-1. ~~Réglages globaux (Customizer)~~
-2. ~~Composition de pages par blocs Gutenberg~~
-3. ~~Page d'accueil éditable (héros image/vidéo/slider)~~
-4. ~~Informations pratiques rattachées à l'édition~~
-5. ~~SEO par page~~
-6. ~~Fiches individuelles des contenus~~
-7. ~~Ordre des pays + drapeaux uploadables~~
-
-Reste :
-- **Multilinguisme** (Polylang ou équivalent GPL) — dépendance ciblée actée à l'ADR-007, non encore intégrée.
-- **Dette connue** : le champ fichier des ressources et les drapeaux de pays sont des champs URL (téléversement via la Médiathèque puis copie de l'adresse) plutôt que des sélecteurs de média, par choix « zéro dépendance / zéro JS d'administration » ; la traduction éditoriale du contenu de démonstration reste à saisir (la brique technique est en place).
+**Dette connue / réserves** :
+- Champ fichier des ressources et drapeaux de pays = champs URL (téléversement Médiathèque puis
+  copie de l'adresse), par choix « zéro dépendance / zéro JS d'administration ».
+- État `archived` = statut non public (WordPress n'a pas d'« archivé » natif ; pas d'intégration
+  complète du sélecteur dans le panneau Gutenberg — réglable via Modification rapide).
+- Image OG par défaut = un visuel du thème ; à remplacer par un visuel 1200×630 dédié en prod
+  (ou via l'assistant AIOSEO).
+- Voir `docs/design/wordpress-integration-audit.md` pour l'état d'intégration détaillé (≈ 90 %,
+  écarts réels traités en 1.0.6, réserves data levées en 1.0.7/1.0.8).

@@ -15,10 +15,15 @@ Le paquet contient le **thème** et deux **extensions**.
 ## Prérequis
 
 - **WordPress** 6.4 ou plus récent, **PHP** 8.0 ou plus récent.
-- Deux extensions du répertoire WordPress.org, à installer en plus du paquet :
+- Extensions du répertoire WordPress.org, à installer en plus du paquet :
   - **Polylang** — gestion du bilingue français / anglais (requis).
   - **Secure Custom Fields** — recommandé : active les champs visuels d'édition des pages
     (le contenu reste consultable sans, mais l'édition assistée des pages composées en dépend).
+  - **All in One SEO (AIOSEO)** — recommandé pour le référencement (titres, descriptions,
+    image de partage, plan de site). **Le thème s'adapte automatiquement** : dès qu'AIOSEO
+    (ou Yoast) est actif, il lui laisse `<title>` / meta description / OpenGraph / canonique /
+    schema Organization+WebSite et ne conserve que le schema **Event** — aucune balise en
+    double. Sans plugin SEO, le thème assure lui-même un référencement de base. *(Voir GUIDE.md §1.)*
 - *(Recommandé)* un service **SMTP** pour l'envoi fiable des accusés de réception.
 
 ## Étapes

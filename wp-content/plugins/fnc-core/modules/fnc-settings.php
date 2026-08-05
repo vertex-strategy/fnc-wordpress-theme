@@ -51,6 +51,7 @@ if ( ! function_exists( 'fnc_settings_defaults' ) ) {
 			'mainNav'               => array(), // [ ['label','linkType','internalRoute'|'externalUrl','openInNewTab','visible'], … ]
 			'countryOrder'          => array(), // [ ['name','flag'=>attachment_id], … ]
 			'footerLinkGroups'      => array(), // [ ['title','kind','links'=>[ ['label','href','external','openInNewTab','ariaLabel','enabled'] ]], … ]
+			'footerLinkGroupsText'  => '', // Saisie éditeur (texte) des groupes de liens ; analysée par le thème. Prioritaire sur footerLinkGroups.
 			'footerText'            => '',
 			'copyright'             => '',
 			'seoDefaultTitle'       => '',
@@ -436,7 +437,7 @@ if ( ! function_exists( 'fnc_settings_sanitize' ) ) {
 				$out[ $k ] = sanitize_text_field( $input[ $k ] );
 			}
 		}
-		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'seoDefaultDescription' );
+		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'footerLinkGroupsText', 'seoDefaultDescription' );
 		foreach ( $area_keys as $k ) {
 			if ( isset( $input[ $k ] ) ) {
 				$out[ $k ] = sanitize_textarea_field( $input[ $k ] );
@@ -566,6 +567,17 @@ if ( ! function_exists( 'fnc_settings_page' ) ) {
 					fnc_settings_field_area( 'footerText', 'Texte du footer' );
 					fnc_settings_field_text( 'copyright', 'Mention de copyright', 'text', 'L’année courante est ajoutée par le thème.' );
 					?>
+					<tr>
+						<th scope="row"><label for="fnc-footerLinkGroupsText">Groupes de liens</label></th>
+						<td>
+							<textarea id="fnc-footerLinkGroupsText" name="fnc_settings[footerLinkGroupsText]" rows="10" class="large-text" placeholder="Le Forum | main&#10;- Présentation | /le-forum&#10;- Programme | /programme&#10;&#10;Ressources | resources&#10;- Éditions | /editions&#10;- Dossier presse | https://… | newtab"><?php echo esc_textarea( isset( $all['footerLinkGroupsText'] ) ? $all['footerLinkGroupsText'] : '' ); ?></textarea>
+							<p class="description">
+								Une ligne d’en-tête <code>Titre | genre</code> ouvre un groupe (genre optionnel : main, resources, press, legal, useful, institutional, custom).
+								Les lignes <code>- Libellé | lien</code> qui suivent sont ses liens, dans l’ordre. Options en 3ᵉ champ : <code>newtab</code> (nouvel onglet), <code>off</code> (masqué).
+								Une ligne <code>// …</code> est une note interne. <strong>Vide → colonnes par défaut</strong> du thème (jamais de pied de page sans navigation).
+							</p>
+						</td>
+					</tr>
 				</table>
 
 				<h2><?php echo esc_html__( 'SEO par défaut', 'fnc' ); ?></h2>

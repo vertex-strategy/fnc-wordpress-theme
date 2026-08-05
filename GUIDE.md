@@ -97,6 +97,12 @@ Renseignez une seule fois les informations transverses du portail :
 - **Réseaux sociaux** : une ligne par réseau (`plateforme | libellé | adresse`).
 - **Logos & favicon**.
 - **Menu principal** : les entrées de navigation (ordre, libellés, liens internes ou externes).
+- **Pied de page → Groupes de liens** : les colonnes de liens du bas de page. Une ligne
+  d'en-tête `Titre | genre` ouvre un groupe (genre optionnel : main, resources, press,
+  legal, useful, institutional, custom) ; les lignes `- Libellé | lien` qui suivent sont
+  ses liens, dans l'ordre. Options en 3ᵉ champ : `newtab` (nouvel onglet), `off` (masqué).
+  Une ligne `// …` est une note interne. **Laissé vide → colonnes par défaut** (le pied de
+  page n'est jamais sans navigation).
 - **SEO par défaut** : titre et description affichés lors des partages.
 
 > Ces valeurs alimentent l'en-tête, le pied de page et les informations de contact partout
@@ -176,6 +182,12 @@ Vous n'avez rien à assembler : ajoutez/éditez des sessions, la page suit.
 ### 5.5 Publier une ressource
 Publications → *Ajouter* : **titre**, **type**, contenu et fichiers. La page **Ressources**
 propose automatiquement la recherche et les filtres par type.
+
+> **Fichier à télécharger.** Une ressource peut être publiée **sans** fichier. Mais si un
+> fichier est renseigné, il doit être un **PDF** — sauf pour les types **Vidéo** et
+> **Interview**, qui s'appuient sur le champ **URL média**. Une ressource publiée avec un
+> fichier non-PDF est automatiquement **remise en brouillon**, avec un message d'explication :
+> fournissez un PDF, videz le champ fichier, ou choisissez le type Vidéo/Interview.
 
 ### 5.6 Ajouter un partenaire
 Partenaires → *Ajouter* : **nom**, **type d'engagement** (Institutionnel / Organisateur /

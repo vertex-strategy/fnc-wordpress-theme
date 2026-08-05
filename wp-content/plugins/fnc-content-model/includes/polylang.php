@@ -72,3 +72,34 @@ function fnc_content_model_pll_taxonomies( $taxonomies, $is_settings ) {
 	return $taxonomies;
 }
 add_filter( 'pll_get_taxonomies', 'fnc_content_model_pll_taxonomies', 10, 2 );
+
+/**
+ * Meta d'ordre synchronisees entre traductions (copy/sync Polylang).
+ *
+ * L'ordre editorial (protocole, index de tri, mise en avant accueil) est une
+ * donnee STRUCTURELLE, pas du contenu localise : il doit rester identique en FR
+ * et en EN. Sans cette synchronisation, un ajustement du tri cote FR seulement
+ * ferait DIVERGER l'ordre des listes entre les deux langues. En declarant ces
+ * cles comme copiees, toute modification sur une traduction se propage aux
+ * autres. (Les feuilles reellement localisees — titres, textes — ne sont PAS
+ * listees ici : elles restent traduisibles independamment.)
+ *
+ * @param array<int,string> $metas Cles meta copiees/synchronisees par Polylang.
+ * @return array<int,string>
+ */
+function fnc_content_model_pll_copy_metas( $metas ) {
+	$ordering = array(
+		'_fnc_speaker_protocol_order',
+		'_fnc_speaker_sort_index',
+		'_fnc_speaker_home_featured',
+		'_fnc_speaker_home_featured_order',
+		'_fnc_partenaire_sort_index',
+	);
+	foreach ( $ordering as $key ) {
+		if ( ! in_array( $key, (array) $metas, true ) ) {
+			$metas[] = $key;
+		}
+	}
+	return $metas;
+}
+add_filter( 'pll_copy_post_metas', 'fnc_content_model_pll_copy_metas' );

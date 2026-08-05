@@ -751,3 +751,109 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 	}
 }
 add_action( 'save_post', 'fnc_content_model_save_relations', 10, 2 );
+
+/**
+ * Vrai si l'URL pointe vers un PDF (extension .pdf ou piece jointe MIME pdf).
+ *
+ * @param string $url
+ * @return bool
+ */
+function fnc_content_model_is_pdf_url( $url ) {
+	$url = trim( (string) $url );
+	if ( '' === $url ) {
+		return false;
+	}
+	// Extension .pdf (en ignorant une eventuelle chaine de requete/ancre).
+	$path = wp_parse_url( $url, PHP_URL_PATH );
+	if ( is_string( $path ) && preg_match( '/\.pdf$/i', $path ) ) {
+		return true;
+	}
+	// Sinon : piece jointe de la mediatheque dont le type MIME est PDF.
+	$attachment_id = attachment_url_to_postid( $url );
+	if ( $attachment_id && 'application/pdf' === get_post_mime_type( $attachment_id ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Validation du fichier de publication a la PUBLICATION — alignee sur Payload
+ * (Publications.ts) : validation PDF *conditionnelle*, jamais fichier obligatoire.
+ *
+ * Regle :
+ *   - Une publication PEUT etre publiee SANS fichier (pas de blocage sur vide).
+ *   - Les types « video » / « interview » utilisent `media_url` : aucun PDF requis.
+ *   - Pour TOUT autre type : SI un fichier est renseigne, il DOIT etre un PDF.
+ *
+ * En cas d'ecart, on ne rejette pas silencieusement : on repasse la publication
+ * en brouillon et on affiche un message a l'editeur (transient). Comportement
+ * volontairement PAS plus strict que le site Next.
+ *
+ * @param int      $post_id
+ * @param \WP_Post $post
+ * @return void
+ */
+function fnc_content_model_validate_publication_pdf( $post_id, $post ) {
+	if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+	if ( 'publish' !== $post->post_status ) {
+		return;
+	}
+
+	$file = (string) get_post_meta( $post_id, FNC_META_PUBLICATION_FILE, true );
+	if ( '' === trim( $file ) ) {
+		return; // Publier sans fichier est autorise (parite Payload).
+	}
+
+	$type = (string) get_post_meta( $post_id, FNC_META_PUBLICATION_TYPE, true );
+	if ( in_array( $type, array( 'video', 'interview' ), true ) ) {
+		return; // Ces types s'appuient sur media_url, pas de PDF attendu.
+	}
+
+	if ( fnc_content_model_is_pdf_url( $file ) ) {
+		return; // Conforme.
+	}
+
+	// Non conforme : repasser en brouillon (garde anti-recursion) + message.
+	remove_action( 'save_post', 'fnc_content_model_save_relations', 10 );
+	remove_action( 'save_post_fnc_publication', 'fnc_content_model_validate_publication_pdf', 20 );
+	wp_update_post(
+		array(
+			'ID'          => $post_id,
+			'post_status' => 'draft',
+		)
+	);
+	add_action( 'save_post', 'fnc_content_model_save_relations', 10, 2 );
+	add_action( 'save_post_fnc_publication', 'fnc_content_model_validate_publication_pdf', 20, 2 );
+
+	set_transient(
+		'fnc_cm_pub_notice_' . get_current_user_id(),
+		__( 'Publication remise en brouillon : le fichier renseigné doit être un PDF (types « Vidéo » et « Interview » exceptés, qui utilisent l’URL média). Fournissez un PDF ou videz le champ « Fichier à télécharger » pour publier.', 'fnc-content-model' ),
+		60
+	);
+}
+add_action( 'save_post_fnc_publication', 'fnc_content_model_validate_publication_pdf', 20, 2 );
+
+/**
+ * Message d'admin apres remise en brouillon d'une publication non conforme.
+ *
+ * @return void
+ */
+function fnc_content_model_publication_admin_notice() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'fnc_publication' !== $screen->post_type ) {
+		return;
+	}
+	$key     = 'fnc_cm_pub_notice_' . get_current_user_id();
+	$message = get_transient( $key );
+	if ( ! $message ) {
+		return;
+	}
+	delete_transient( $key );
+	printf(
+		'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+		esc_html( $message )
+	);
+}
+add_action( 'admin_notices', 'fnc_content_model_publication_admin_notice' );

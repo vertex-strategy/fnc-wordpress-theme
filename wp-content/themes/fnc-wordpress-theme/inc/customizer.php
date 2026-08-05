@@ -145,6 +145,23 @@ function fnc_register_pll_strings() {
 			}
 		}
 	}
+
+	// Groupes de liens du pied de page saisis : titres et libellés (et aria)
+	// deviennent traduisibles. Les colonnes PAR DÉFAUT ne sont pas enregistrées
+	// ici (déjà traduites via le domaine du thème).
+	foreach ( fnc_footer_groups_source() as $gi => $fgroup ) {
+		if ( '' !== $fgroup['title'] ) {
+			pll_register_string( 'fnc_footer_group_' . $gi . '_title', $fgroup['title'], $group, false );
+		}
+		foreach ( $fgroup['links'] as $li => $flink ) {
+			if ( ! empty( $flink['label'] ) ) {
+				pll_register_string( 'fnc_footer_group_' . $gi . '_link_' . $li . '_label', $flink['label'], $group, false );
+			}
+			if ( ! empty( $flink['ariaLabel'] ) ) {
+				pll_register_string( 'fnc_footer_group_' . $gi . '_link_' . $li . '_aria', $flink['ariaLabel'], $group, false );
+			}
+		}
+	}
 }
 add_action( 'init', 'fnc_register_pll_strings' );
 
@@ -330,6 +347,248 @@ function fnc_country_flag_map() {
 		}
 	}
 	return $map;
+}
+
+/**
+ * Analyse le réglage « Groupes de liens du pied de page ».
+ *
+ * Modèle Payload répliqué (footerLinkGroups) : une liste ORDONNÉE de groupes,
+ * chacun portant un titre, un « genre » (kind) et une liste de liens ordonnés.
+ * Choix zéro-dépendance (comme « Ordre des pays » et « Contacts presse ») : un
+ * format texte administrable sans plugin de champs ni JavaScript.
+ *
+ * Syntaxe (une entité par ligne) :
+ *   - Ligne d'en-tête de groupe : « Titre | kind »  (kind optionnel → « custom »).
+ *   - Ligne de lien (préfixe « - ») : « - Libellé | href | drapeaux | aria »
+ *       · drapeaux : liste séparée par des virgules parmi « newtab » (ouvre dans
+ *         un nouvel onglet) et « off » (lien désactivé, masqué au rendu).
+ *       · « external » est déduit automatiquement d'une URL absolue (http/https),
+ *         mais peut être forcé via le drapeau « external ».
+ *       · aria : libellé accessible optionnel (4ᵉ champ).
+ *   - Ligne « // … » : note interne (sourceNote), ignorée au rendu.
+ *   - Ligne vide : séparateur visuel, ignorée.
+ *
+ * Réglage vide → le pied de page retombe sur ses groupes par défaut (jamais vide).
+ *
+ * @param string|null $raw
+ * @return array<int,array{title:string,kind:string,links:array<int,array<string,mixed>>}>
+ */
+function fnc_parse_footer_groups( $raw = null ) {
+	if ( null === $raw ) {
+		$raw = fnc_footer_groups_raw();
+	}
+	$groups  = array();
+	$current = null;
+	if ( ! $raw ) {
+		return $groups;
+	}
+
+	$flush = static function () use ( &$groups, &$current ) {
+		if ( is_array( $current ) && ( '' !== $current['title'] || ! empty( $current['links'] ) ) ) {
+			$groups[] = $current;
+		}
+		$current = null;
+	};
+
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) $raw ) as $line ) {
+		$line = trim( $line );
+		if ( '' === $line || 0 === strpos( $line, '//' ) ) {
+			continue; // Séparateur ou note interne.
+		}
+
+		if ( '-' === $line[0] ) {
+			// Ligne de lien.
+			if ( null === $current ) {
+				$current = array( 'title' => '', 'kind' => 'custom', 'links' => array() );
+			}
+			$parts = array_map( 'trim', explode( '|', ltrim( $line, "- \t" ) ) );
+			$label = $parts[0] ?? '';
+			$href  = $parts[1] ?? '';
+			if ( '' === $label || '' === $href ) {
+				continue;
+			}
+			$flags    = isset( $parts[2] ) ? array_map( 'trim', explode( ',', strtolower( $parts[2] ) ) ) : array();
+			$aria     = $parts[3] ?? '';
+			$is_abs   = (bool) preg_match( '#^https?://#i', $href );
+			$external = in_array( 'external', $flags, true ) || $is_abs;
+			$current['links'][] = array(
+				'label'        => $label,
+				'href'         => $is_abs ? esc_url_raw( $href ) : $href,
+				'external'     => $external,
+				'openInNewTab' => in_array( 'newtab', $flags, true ),
+				'ariaLabel'    => $aria,
+				'enabled'      => ! in_array( 'off', $flags, true ) && ! in_array( 'disabled', $flags, true ),
+			);
+			continue;
+		}
+
+		// Ligne d'en-tête de groupe : on clôt le groupe précédent.
+		$flush();
+		$parts   = array_map( 'trim', explode( '|', $line, 2 ) );
+		$current = array(
+			'title' => $parts[0],
+			'kind'  => isset( $parts[1] ) && '' !== $parts[1] ? sanitize_key( $parts[1] ) : 'custom',
+			'links' => array(),
+		);
+	}
+	$flush();
+
+	return $groups;
+}
+
+/**
+ * Groupes de liens du pied de page par défaut — reproduction fidèle des colonnes
+ * historiques du thème (libellés traduits, URLs résolues dynamiquement). Utilisés
+ * quand le réglage « Groupes de liens du pied de page » est vide, pour ne jamais
+ * afficher un pied de page sans navigation.
+ *
+ * @return array<int,array{title:string,kind:string,links:array<int,array<string,mixed>>}>
+ */
+function fnc_footer_default_columns() {
+	$link = static function ( $label, $href ) {
+		return array(
+			'label'        => $label,
+			'href'         => $href,
+			'external'     => false,
+			'openInNewTab' => false,
+			'ariaLabel'    => '',
+			'enabled'      => true,
+		);
+	};
+
+	return array(
+		array(
+			'title' => __( 'Le Forum', 'fnc-wordpress-theme' ),
+			'kind'  => 'main',
+			'links' => array(
+				$link( __( 'Présentation', 'fnc-wordpress-theme' ), fnc_page_url( 'le-forum' ) ),
+				$link( __( 'Édition en cours', 'fnc-wordpress-theme' ), fnc_page_url( 'edition-en-cours' ) ),
+				$link( __( 'Programme', 'fnc-wordpress-theme' ), fnc_archive_url( 'fnc_session' ) ),
+				$link( __( 'Intervenants', 'fnc-wordpress-theme' ), fnc_archive_url( 'fnc_intervenant' ) ),
+			),
+		),
+		array(
+			'title' => __( 'Ressources', 'fnc-wordpress-theme' ),
+			'kind'  => 'resources',
+			'links' => array(
+				$link( __( 'Éditions', 'fnc-wordpress-theme' ), fnc_archive_url( 'fnc_edition' ) ),
+				$link( __( 'Ressources', 'fnc-wordpress-theme' ), fnc_archive_url( 'fnc_publication' ) ),
+				$link( __( 'Informations pratiques', 'fnc-wordpress-theme' ), fnc_page_url( 'informations-pratiques' ) ),
+				$link( __( 'Dossier presse', 'fnc-wordpress-theme' ), fnc_page_url( 'espace-presse' ) ),
+			),
+		),
+		array(
+			'title' => __( 'Contact', 'fnc-wordpress-theme' ),
+			'kind'  => 'useful',
+			'links' => array(
+				$link( __( 'Contact', 'fnc-wordpress-theme' ), fnc_page_url( 'contact' ) ),
+				$link( __( 'Devenir partenaire', 'fnc-wordpress-theme' ), fnc_page_url( 'partenaires' ) ),
+				$link( __( 'S’inscrire', 'fnc-wordpress-theme' ), fnc_page_url( 'inscription' ) ),
+			),
+		),
+	);
+}
+
+/**
+ * Texte brut des groupes de liens du pied de page, quelle que soit l'installation.
+ *
+ * Deux surfaces d'édition coexistent selon la présence de l'extension FNC Core :
+ *   - Installation complète (FNC Core actif) : page « Réglages → FNC », clé
+ *     d'option `footerLinkGroupsText` (lue par l'accesseur du plugin).
+ *   - Thème seul (sans FNC Core) : Personnaliser → FNC → Footer, theme_mod
+ *     `fnc_footer_link_groups`.
+ * On lit la première renseignée. Vide dans les deux cas → chaîne vide.
+ *
+ * @return string
+ */
+function fnc_footer_groups_raw() {
+	$raw = (string) fnc_get_setting( 'footerLinkGroupsText', '' );
+	if ( '' === trim( $raw ) && function_exists( 'get_theme_mod' ) ) {
+		$raw = (string) get_theme_mod( 'fnc_footer_link_groups', '' );
+	}
+	return $raw;
+}
+
+/**
+ * Source normalisée des groupes de liens du pied de page (avant traduction) :
+ *   1. le texte saisi par l'éditeur (surface d'admin), s'il produit des groupes ;
+ *   2. sinon un tableau structuré `footerLinkGroups` fourni par l'extension FNC
+ *      Core (seed, filtre ou champs) ;
+ *   3. sinon un tableau vide (le rendu retombera sur les colonnes par défaut).
+ *
+ * Le texte l'emporte pour que l'édition manuelle soit toujours prioritaire.
+ *
+ * @return array<int,array{title:string,kind:string,links:array<int,array<string,mixed>>}>
+ */
+function fnc_footer_groups_source() {
+	$parsed = fnc_parse_footer_groups( fnc_footer_groups_raw() );
+	if ( ! empty( $parsed ) ) {
+		return $parsed;
+	}
+
+	// Repli : tableau structuré exposé par l'extension (déjà nettoyé côté plugin).
+	if ( function_exists( 'fnc_footer_link_groups' ) ) {
+		$structured = fnc_footer_link_groups();
+		if ( ! empty( $structured ) ) {
+			$groups = array();
+			foreach ( $structured as $g ) {
+				$links = array();
+				foreach ( ( isset( $g['links'] ) ? $g['links'] : array() ) as $l ) {
+					$href    = isset( $l['href'] ) ? (string) $l['href'] : '';
+					$links[] = array(
+						'label'        => isset( $l['label'] ) ? (string) $l['label'] : '',
+						'href'         => $href,
+						'external'     => ! empty( $l['external'] ) || (bool) preg_match( '#^https?://#i', $href ),
+						'openInNewTab' => ! empty( $l['openInNewTab'] ),
+						'ariaLabel'    => isset( $l['ariaLabel'] ) ? (string) $l['ariaLabel'] : '',
+						'enabled'      => true,
+					);
+				}
+				$groups[] = array(
+					'title' => isset( $g['title'] ) ? (string) $g['title'] : '',
+					'kind'  => isset( $g['kind'] ) ? (string) $g['kind'] : 'custom',
+					'links' => $links,
+				);
+			}
+			return $groups;
+		}
+	}
+
+	return array();
+}
+
+/**
+ * Colonnes de liens du pied de page effectivement rendues : les groupes de la
+ * source normalisée (liens désactivés et groupes vides écartés), ou, à défaut,
+ * les colonnes par défaut. Les libellés passent par le module de traduction
+ * Polylang (chaînes enregistrées via fnc_register_pll_strings()).
+ *
+ * @return array<int,array{title:string,kind:string,links:array<int,array<string,mixed>>}>
+ */
+function fnc_footer_columns() {
+	$columns = array();
+
+	foreach ( fnc_footer_groups_source() as $group ) {
+		$links = array();
+		foreach ( $group['links'] as $l ) {
+			if ( empty( $l['enabled'] ) ) {
+				continue;
+			}
+			$l['label']     = fnc_pll( $l['label'] );
+			$l['ariaLabel'] = '' !== $l['ariaLabel'] ? fnc_pll( $l['ariaLabel'] ) : '';
+			$links[]        = $l;
+		}
+		if ( '' === $group['title'] && empty( $links ) ) {
+			continue;
+		}
+		$columns[] = array(
+			'title' => fnc_pll( $group['title'] ),
+			'kind'  => $group['kind'],
+			'links' => $links,
+		);
+	}
+
+	return ! empty( $columns ) ? $columns : fnc_footer_default_columns();
 }
 
 /**
@@ -540,6 +799,21 @@ function fnc_customize_register( $wp_customize ) {
 			'description' => __( 'Sans l’année (ajoutée automatiquement). Vide → nom officiel utilisé.', 'fnc-wordpress-theme' ),
 			'section'     => 'fnc_footer',
 			'type'        => 'text',
+		)
+	);
+
+	$wp_customize->add_setting( 'fnc_footer_link_groups', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ) );
+	$wp_customize->add_control(
+		'fnc_footer_link_groups',
+		array(
+			'label'       => __( 'Groupes de liens du pied de page', 'fnc-wordpress-theme' ),
+			'description' => __( 'Une ligne d’en-tête « Titre | genre » ouvre un groupe (genre optionnel : main, resources, press, legal, useful, institutional, custom). Les lignes « - Libellé | lien » qui suivent sont ses liens, dans l’ordre. Options en 3ᵉ champ : « newtab » (nouvel onglet), « off » (masqué). Une ligne « // … » est une note interne. Vide → colonnes par défaut du thème (jamais de pied de page vide).', 'fnc-wordpress-theme' ),
+			'section'     => 'fnc_footer',
+			'type'        => 'textarea',
+			'input_attrs' => array(
+				'placeholder' => "Le Forum | main\n- Présentation | /le-forum\n- Programme | /programme\n\nRessources | resources\n- Éditions | /editions\n- Dossier presse | https://… | newtab",
+				'rows'        => 10,
+			),
 		)
 	);
 

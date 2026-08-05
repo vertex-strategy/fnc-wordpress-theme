@@ -103,3 +103,62 @@ function fnc_content_model_pll_copy_metas( $metas ) {
 	return $metas;
 }
 add_filter( 'pll_copy_post_metas', 'fnc_content_model_pll_copy_metas' );
+
+/**
+ * Publication source d'une NOUVELLE traduction en cours de création.
+ *
+ * Polylang ouvre l'écran de création d'une traduction avec les paramètres
+ * `from_post` (ID de la publication d'origine) et `new_lang` (langue cible). On
+ * s'appuie dessus pour PRÉ-REMPLIR la traduction avec le contenu d'origine.
+ *
+ * @return \WP_Post|null
+ */
+function fnc_content_model_translation_source() {
+	// Lecture seule de paramètres de navigation Polylang ; l'écran d'édition est
+	// déjà protégé par WordPress. On vérifie tout de même la capacité de lecture.
+	if ( empty( $_GET['from_post'] ) || empty( $_GET['new_lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return null;
+	}
+	$from_id = absint( wp_unslash( $_GET['from_post'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ! $from_id || ! current_user_can( 'read_post', $from_id ) ) {
+		return null;
+	}
+	$source = get_post( $from_id );
+	return ( $source instanceof WP_Post ) ? $source : null;
+}
+
+/**
+ * Duplique la STRUCTURE (titre, contenu en blocs, extrait) de la publication
+ * d'origine dans une nouvelle traduction, à sa création — réalisant le modèle
+ * « Option A » validé MOA : la version EN démarre sur la structure de blocs FR,
+ * et l'éditeur traduit le texte SUR PLACE (mêmes blocs, même ordre).
+ *
+ * Il s'agit d'une copie unique à la création (comme la duplication Polylang),
+ * PAS d'une synchronisation structurelle continue. L'éditeur reste libre ensuite.
+ *
+ * @param string $default Valeur par défaut proposée par WordPress.
+ * @return string
+ */
+function fnc_content_model_translation_default_content( $default ) {
+	if ( '' !== $default ) {
+		return $default;
+	}
+	$source = fnc_content_model_translation_source();
+	return $source ? $source->post_content : $default;
+}
+add_filter( 'default_content', 'fnc_content_model_translation_default_content' );
+
+/**
+ * Extrait d'origine pré-rempli sur une nouvelle traduction (voir ci-dessus).
+ *
+ * @param string $default
+ * @return string
+ */
+function fnc_content_model_translation_default_excerpt( $default ) {
+	if ( '' !== $default ) {
+		return $default;
+	}
+	$source = fnc_content_model_translation_source();
+	return $source ? $source->post_excerpt : $default;
+}
+add_filter( 'default_excerpt', 'fnc_content_model_translation_default_excerpt' );

@@ -251,7 +251,16 @@ Pour archiver : depuis la **liste** du type de contenu, **Modification rapide** 
 ## 6. Site bilingue (français / anglais)
 Chaque contenu et chaque page se traduit via **Polylang** : créez la version anglaise depuis
 l'icône de langue de la fiche. Les libellés d'interface (menus, boutons) sont fournis dans les
-deux langues. Pensez à traduire les pages composées (leur contenu est propre à chaque langue).
+deux langues.
+
+> **Convention pour les pages composées (blocs).** Créez toujours la traduction **depuis la
+> version française** (icône « + » de la langue cible) : la nouvelle page démarre avec la
+> **même structure de blocs** que le français. **Traduisez le texte sur place**, sans
+> réorganiser, ajouter ni supprimer de blocs différemment d'une langue à l'autre. Ainsi les
+> deux versions restent alignées. Le contenu de chaque page reste propre à sa langue : une
+> modification de structure côté français n'est **pas** reportée automatiquement — reprenez
+> la traduction si vous changez l'ossature. *(L'ordre éditorial des listes — intervenants,
+> partenaires — est, lui, synchronisé automatiquement entre les langues.)*
 
 ---
 

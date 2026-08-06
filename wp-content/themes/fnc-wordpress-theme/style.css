@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.24
+Version: 1.0.25
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -21,7 +21,7 @@ Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits r�
 :root{
   --navy:#2D3180; --navy-deep:#1A1D5C; --vert:#3BA04A; --rouge:#CC2222;
   --rouge-deep:#A51B1B; --jaune:#F5C000; --blanc:#FFFFFF; --noir:#0F0F0F; --linen:#F8F6F1;
-  --texte-corps:#1A1A2E; --texte-sec:#4A4A6A; --texte-tert:#8A8AAA; --border:#E2E2EA;
+  --texte-corps:#1A1A2E; --texte-sec:#4A4A6A; --texte-tert:#6C6C8C; --border:#E2E2EA;
   --marge:clamp(24px,8vw,120px);
   --display:clamp(2.7rem,8.2vw,7.2rem); --h2:clamp(1.9rem,5vw,4rem);
   --lead:clamp(1.15rem,2vw,1.6rem); --body:1.0625rem;
@@ -216,7 +216,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
 .arch:last-of-type{border-bottom:1px solid rgba(255,255,255,.14);}
 .arch:hover{padding-left:10px;background:rgba(255,255,255,.02);}
 .arch .year{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;line-height:1;color:rgba(255,255,255,.88);font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
-.arch .ph{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.arch .ph{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);}
 #m7 .link-more{color:#fff;margin-top:40px;}
 #m7 .link-more .arrow{color:var(--jaune);}
 

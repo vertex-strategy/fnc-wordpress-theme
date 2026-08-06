@@ -292,7 +292,7 @@ fnc_render_opening_hero(
 								</div>
 								<?php
 								// Civilité (M./Mme…) devant le nom si renseignée (secondaire).
-								$fnc_pv_civ  = (string) get_post_meta( $fnc_speaker_id, '_fnc_speaker_civilite', true );
+								$fnc_pv_civ  = (string) get_post_meta( $fnc_speaker_id, '_fnc_speaker_title', true );
 								$fnc_pv_name = fnc_speaker_display_name( $fnc_speaker_id );
 								// Sous-titre = RÔLE/fonction (comme /intervenants), repli sur l'organisation.
 								$fnc_pv_role = get_post_meta( $fnc_speaker_id, '_fnc_speaker_role', true );

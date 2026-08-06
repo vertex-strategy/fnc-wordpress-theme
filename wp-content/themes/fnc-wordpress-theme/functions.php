@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.26' );
+define( 'FNC_THEME_VERSION', '1.0.27' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -693,6 +693,27 @@ function fnc_theme_image( $url, $alt = '', $opts = array() ) {
 		}
 	}
 	return $img;
+}
+
+/**
+ * Icône SVG d'un lien externe selon le réseau (host/libellé) : LinkedIn, X,
+ * sinon globe (site) — pour les liens d'intervenant. Renvoie du SVG inline
+ * `currentColor`, `aria-hidden` (le libellé du lien porte le sens).
+ *
+ * @param string $url
+ * @param string $label
+ * @return string
+ */
+function fnc_link_icon_svg( $url, $label = '' ) {
+	$host = strtolower( (string) wp_parse_url( (string) $url, PHP_URL_HOST ) );
+	$open = '<svg class="link-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">';
+	if ( false !== strpos( $host, 'linkedin.' ) ) {
+		return $open . '<path fill="currentColor" d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.5 8.4h3.4V21H3.5V8.4Zm5.7 0h3.26v1.72h.05c.45-.86 1.56-1.77 3.2-1.77 3.43 0 4.06 2.26 4.06 5.2V21h-3.4v-5.6c0-1.34-.02-3.06-1.86-3.06-1.87 0-2.15 1.46-2.15 2.96V21H9.2V8.4Z"/></svg>';
+	}
+	if ( false !== strpos( $host, 'twitter.' ) || preg_match( '#(^|\.)x\.com$#', $host ) ) {
+		return $open . '<path fill="currentColor" d="M17.53 3H20l-5.6 6.4L21 21h-5.15l-4.03-5.27L7.2 21H4.73l5.99-6.85L3.4 3h5.28l3.64 4.82L17.53 3Zm-.9 16.2h1.37L7.44 4.72H5.97L16.63 19.2Z"/></svg>';
+	}
+	return $open . '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 0c2.5 2 3.5 5.5 3.5 9s-1 7-3.5 9c-2.5-2-3.5-5.5-3.5-9s1-7 3.5-9ZM3.5 12h17"/></svg>';
 }
 
 /**

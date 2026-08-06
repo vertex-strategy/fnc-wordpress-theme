@@ -125,7 +125,7 @@ while ( have_posts() ) :
 											continue;
 										}
 										?>
-										<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $fnc_link_label ); ?></a></li>
+										<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo fnc_link_icon_svg( $fnc_link_url, $fnc_link_label ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique inline. ?><span><?php echo esc_html( $fnc_link_label ); ?></span></a></li>
 									<?php endforeach; ?>
 								</ul>
 							</div>

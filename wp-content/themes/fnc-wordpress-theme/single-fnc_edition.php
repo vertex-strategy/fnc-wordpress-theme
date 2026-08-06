@@ -155,6 +155,45 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php
+		// Rétrospective (édition passée) : bilan + chiffres clés + galerie —
+		// repris de Editions.review/keyFigures/gallery de la référence. Masqué
+		// si rien n'est renseigné.
+		$fnc_ed_review  = get_post_meta( $fnc_ed_id, '_fnc_edition_review', true );
+		$fnc_ed_figures = get_post_meta( $fnc_ed_id, '_fnc_edition_figures', true );
+		$fnc_ed_gallery = get_post_meta( $fnc_ed_id, '_fnc_edition_gallery', true );
+		$fnc_ed_figures = is_array( $fnc_ed_figures ) ? $fnc_ed_figures : array();
+		$fnc_ed_gallery = is_array( $fnc_ed_gallery ) ? $fnc_ed_gallery : array();
+		if ( $fnc_ed_review || ! empty( $fnc_ed_figures ) || ! empty( $fnc_ed_gallery ) ) :
+			?>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<?php if ( ! empty( $fnc_ed_figures ) ) : ?>
+					<div class="stat-line" style="margin-top:24px;">
+						<?php foreach ( $fnc_ed_figures as $fnc_fig ) : ?>
+							<?php if ( ! empty( $fnc_fig['value'] ) ) : ?>
+								<div class="stat">
+									<b style="color:var(--navy);"><?php echo esc_html( $fnc_fig['value'] ); ?></b>
+									<?php if ( ! empty( $fnc_fig['label'] ) ) : ?><span style="color:var(--texte-tert);"><?php echo esc_html( $fnc_fig['label'] ); ?></span><?php endif; ?>
+								</div>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( $fnc_ed_review ) : ?>
+					<div class="prose-legal" style="margin-top:24px;"><?php echo wp_kses_post( wpautop( $fnc_ed_review ) ); ?></div>
+				<?php endif; ?>
+				<?php if ( ! empty( $fnc_ed_gallery ) ) : ?>
+					<div class="retro-gallery" style="margin-top:32px;">
+						<?php foreach ( $fnc_ed_gallery as $fnc_g_url ) : ?>
+							<figure><?php echo fnc_theme_image( $fnc_g_url, '' ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</section>
+		<?php endif; ?>
+
+		<?php
 		// Informations pratiques (mutualisées) — masquées si non renseignées.
 		$fnc_ed_pratique = fnc_render_practical_info( $fnc_ed_id );
 		if ( '' !== trim( $fnc_ed_pratique ) ) :

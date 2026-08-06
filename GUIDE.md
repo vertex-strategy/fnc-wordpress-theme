@@ -137,17 +137,28 @@ L'édition marquée **En cours** pilote la page d'accueil, le compte à rebours 
 ## 5. Tâches éditoriales
 
 ### 5.1 Définir l'édition en cours
-Éditions → *Ajouter*. Renseignez l'**année**, le **thème**, les **dates de début et de fin**,
-le **lieu**, puis réglez le **statut** sur **En cours**. Publiez.
+Éditions → *Ajouter*. Dans **« Statut et informations d'édition »** (colonne de droite),
+renseignez l'**année**, le **thème**, les **dates de début et de fin**, le **lieu**, puis réglez
+le **statut** sur **En cours**. La **description générale** se saisit dans l'éditeur principal, le
+**visuel de couverture** via l'**image mise en avant**. Publiez.
 → La page d'accueil, le compte à rebours et le hub « Édition en cours » se mettent à jour.
+
+**Rétrospective (édition passée).** Le panneau **« Rétrospective (édition passée) »** (sous
+l'éditeur) affiche, en bas de la fiche de l'édition :
+- **Bilan / rétrospective** — texte libre ;
+- **Chiffres clés** — une ligne par chiffre au format `Valeur|Libellé` (ex. `1 200|Participants`) ;
+- **Galerie** — une **URL d'image** par ligne (téléversez d'abord dans la Médiathèque, puis collez
+  l'adresse). Laissé vide, le bloc ne s'affiche pas.
 
 ### 5.2 Ajouter un intervenant
 Intervenants → *Ajouter*. Renseignez :
-- **Nom**, **civilité** (Pr./Dr./M./Mme…), **fonction / titre**, **organisation**, **pays**
-  (séparez par « / » si plusieurs),
+- **Nom**, **civilité** (Pr./Dr./M./Mme…), **Fonction** (l'intitulé exact, affiché sous le nom
+  partout), **organisation**, **pays** (séparez par « / » si plusieurs),
 - **Profil** (par exemple *Officiel*, *Expert*, *Animateur*) — sert aux **filtres et au badge**
   (il ne change **pas** l'ordre : voir ci-dessous),
-- **Portrait** (image mise en avant) et ses **liens** éventuels.
+- **Portrait** (image mise en avant),
+- **Liens** — champs dédiés **Site web**, **LinkedIn**, **X (Twitter)** (icônes automatiques au
+  rendu), plus une zone **« Autres liens »** (une ligne par lien, format `Libellé|URL`).
 
 **Drapeaux des pays.** Sur la page Intervenants, le drapeau de chaque pays s'affiche
 **automatiquement** à partir du nom saisi (« France », « Congo », « RDC », « États-Unis »,
@@ -166,7 +177,10 @@ prioritaire au moins prioritaire :
 faire passer un intervenant **en tête du carrousel** de la page d'accueil, indépendamment de
 l'ordre général ; le **« Rang de mise en avant »** ordonne les intervenants ainsi promus. Le
 carrousel affiche au plus **10 voix** (les promus d'abord, puis le reste dans l'ordre général).
-Un intervenant promu doit être **participant de l'édition en cours** pour apparaître.
+Un intervenant promu doit être **participant de l'édition en cours** pour apparaître (rattaché,
+comme intervenant ou modérateur, à une **session publiée** de l'édition active). Si vous cochez
+« Mettre en avant » sans que ce soit le cas, l'éditeur affiche un **avertissement** rappelant que
+la voix n'apparaîtra pas tant qu'elle n'est pas rattachée.
 
 **Autorisation d'image (droit à l'image).** Le portrait n'est publié **que si** l'autorisation
 est **obtenue** et non expirée. Renseignez le statut de l'autorisation (*non vérifié / obtenue /

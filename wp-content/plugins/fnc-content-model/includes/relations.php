@@ -41,9 +41,15 @@ const FNC_META_EDITION_END_DATE     = '_fnc_edition_end_date';
 const FNC_META_EDITION_LOCATION     = '_fnc_edition_location';
 const FNC_META_EDITION_IS_SPECIAL   = '_fnc_edition_is_special';
 const FNC_META_EDITION_SPECIAL_NOTE = '_fnc_edition_special_note';
+// Rétrospective (édition passée) — aligné sur Editions.review/keyFigures/gallery du Next.
+const FNC_META_EDITION_REVIEW       = '_fnc_edition_review';   // bilan (texte multi-ligne)
+const FNC_META_EDITION_FIGURES      = '_fnc_edition_figures';  // chiffres clés : [ {value,label} ]
+const FNC_META_EDITION_GALLERY      = '_fnc_edition_gallery';  // galerie : [ url, … ]
 
 // --- Intervenants ---------------------------------------------------------
 const FNC_META_SPEAKER_TITLE          = '_fnc_speaker_title';
+// Fonction / rôle (intitulé de poste) — aligné sur Speakers.role du Next, rendu dans 7 gabarits.
+const FNC_META_SPEAKER_ROLE           = '_fnc_speaker_role';
 const FNC_META_SPEAKER_ORG            = '_fnc_speaker_org';
 const FNC_META_SPEAKER_COUNTRY        = '_fnc_speaker_country';
 const FNC_META_SPEAKER_PROTOCOL_ORDER = '_fnc_speaker_protocol_order';
@@ -163,9 +169,40 @@ function fnc_content_model_register_meta() {
 	register_post_meta( 'fnc_edition', FNC_META_EDITION_LOCATION, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_edition', FNC_META_EDITION_IS_SPECIAL, array( 'type' => 'boolean', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_edition', FNC_META_EDITION_SPECIAL_NOTE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_edition', FNC_META_EDITION_REVIEW, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta(
+		'fnc_edition',
+		FNC_META_EDITION_FIGURES,
+		array(
+			'type'         => 'array',
+			'single'       => true,
+			'show_in_rest' => array(
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array(
+						'type'       => 'object',
+						'properties' => array(
+							'value' => array( 'type' => 'string' ),
+							'label' => array( 'type' => 'string' ),
+						),
+					),
+				),
+			),
+		)
+	);
+	register_post_meta(
+		'fnc_edition',
+		FNC_META_EDITION_GALLERY,
+		array(
+			'type'         => 'array',
+			'single'       => true,
+			'show_in_rest' => array( 'schema' => array( 'type' => 'array', 'items' => array( 'type' => 'string' ) ) ),
+		)
+	);
 
 	// Intervenants.
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_TITLE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_ROLE, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_ORG, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_COUNTRY, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_PROTOCOL_ORDER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
@@ -237,6 +274,7 @@ function fnc_content_model_add_meta_boxes() {
 	add_meta_box( 'fnc_session_relations', __( 'Édition, type et intervenants', 'fnc-content-model' ), 'fnc_content_model_render_session_meta_box', 'fnc_session', 'side' );
 	add_meta_box( 'fnc_publication_relations', __( 'Édition liée et type', 'fnc-content-model' ), 'fnc_content_model_render_publication_meta_box', 'fnc_publication', 'side' );
 	add_meta_box( 'fnc_edition_active', __( 'Statut et informations d’édition', 'fnc-content-model' ), 'fnc_content_model_render_edition_meta_box', 'fnc_edition', 'side' );
+	add_meta_box( 'fnc_edition_retro', __( 'Rétrospective (édition passée)', 'fnc-content-model' ), 'fnc_content_model_render_edition_retro_meta_box', 'fnc_edition', 'normal', 'default' );
 	add_meta_box( 'fnc_partenaire_details', __( 'Site web et éditions associées', 'fnc-content-model' ), 'fnc_content_model_render_partenaire_meta_box', 'fnc_partenaire', 'side' );
 	add_meta_box( 'fnc_speaker_details', __( 'Identité et protocole', 'fnc-content-model' ), 'fnc_content_model_render_speaker_meta_box', 'fnc_intervenant', 'side' );
 }
@@ -408,6 +446,46 @@ function fnc_content_model_render_edition_meta_box( $post ) {
 	printf( '<input type="text" id="fnc_edition_special_note" name="fnc_edition_special_note" value="%s" style="width:100%%;" /></p>', esc_attr( $special_note ) );
 }
 
+/**
+ * Méta-box « Rétrospective » (colonne principale) : bilan, chiffres clés et
+ * galerie d'une édition passée — repris de Editions.review/keyFigures/gallery
+ * du site de référence. Sans dépendance ni JavaScript d'administration
+ * (galerie = URLs collées depuis la Médiathèque, même parti pris que le champ
+ * « Fichier à télécharger » des publications).
+ */
+function fnc_content_model_render_edition_retro_meta_box( $post ) {
+	wp_nonce_field( 'fnc_edition_retro_save', 'fnc_edition_retro_nonce' );
+
+	$review  = get_post_meta( $post->ID, FNC_META_EDITION_REVIEW, true );
+	$figures = get_post_meta( $post->ID, FNC_META_EDITION_FIGURES, true );
+	$gallery = get_post_meta( $post->ID, FNC_META_EDITION_GALLERY, true );
+
+	$figures_text = is_array( $figures )
+		? implode(
+			"\n",
+			array_map(
+				static function ( $fig ) {
+					return trim( ( $fig['value'] ?? '' ) . '|' . ( $fig['label'] ?? '' ), '|' );
+				},
+				$figures
+			)
+		)
+		: '';
+	$gallery_text = is_array( $gallery ) ? implode( "\n", $gallery ) : '';
+
+	echo '<p class="description">' . esc_html__( 'À renseigner pour les éditions passées : ce contenu s’affiche en bas de la fiche de l’édition (bilan, chiffres, galerie).', 'fnc-content-model' ) . '</p>';
+
+	echo '<p><label for="fnc_edition_review"><strong>' . esc_html__( 'Bilan / rétrospective', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<textarea id="fnc_edition_review" name="fnc_edition_review" rows="6" style="width:100%%;">%s</textarea></p>', esc_textarea( $review ) );
+
+	echo '<p><label for="fnc_edition_figures"><strong>' . esc_html__( 'Chiffres clés (un par ligne, format « Valeur|Libellé »)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<textarea id="fnc_edition_figures" name="fnc_edition_figures" rows="4" style="width:100%%;" placeholder="1 200|Participants&#10;54|Pays représentés">%s</textarea></p>', esc_textarea( $figures_text ) );
+
+	echo '<p><label for="fnc_edition_gallery"><strong>' . esc_html__( 'Galerie rétrospective (une URL d’image par ligne)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<textarea id="fnc_edition_gallery" name="fnc_edition_gallery" rows="4" style="width:100%%;" placeholder="https://…/photo-1.jpg">%s</textarea></p>', esc_textarea( $gallery_text ) );
+	echo '<p class="description">' . esc_html__( 'Téléversez les images dans la Médiathèque puis collez ici leur adresse (une par ligne). Aucun sélecteur média : le plugin reste sans dépendance JavaScript.', 'fnc-content-model' ) . '</p>';
+}
+
 function fnc_content_model_render_publication_meta_box( $post ) {
 	wp_nonce_field( 'fnc_publication_relations_save', 'fnc_publication_relations_nonce' );
 
@@ -431,28 +509,55 @@ function fnc_content_model_render_publication_meta_box( $post ) {
 	fnc_content_model_render_edition_select( 'fnc_publication_edition', $edition_id );
 }
 
+/**
+ * Répartit les liens stockés (_fnc_speaker_links : [ {label,url} ]) dans les
+ * champs dédiés (site / LinkedIn / X) + un reliquat « autres », pour pré-remplir
+ * l'éditeur. La saisie reste recomposée dans le même _fnc_speaker_links à
+ * l'enregistrement : aucun changement du contrat de rendu.
+ *
+ * @return array{site:string,linkedin:string,x:string,autres:array<int,array{label:string,url:string}>}
+ */
+function fnc_content_model_bucket_speaker_links( $links ) {
+	$out = array( 'site' => '', 'linkedin' => '', 'x' => '', 'autres' => array() );
+	if ( ! is_array( $links ) ) {
+		return $out;
+	}
+	foreach ( $links as $link ) {
+		$url   = is_array( $link ) ? ( $link['url'] ?? '' ) : '';
+		$label = is_array( $link ) ? ( $link['label'] ?? '' ) : '';
+		if ( '' === $url ) {
+			continue;
+		}
+		$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+		if ( '' === $out['linkedin'] && false !== strpos( $host, 'linkedin.' ) ) {
+			$out['linkedin'] = $url;
+		} elseif ( '' === $out['x'] && ( false !== strpos( $host, 'twitter.' ) || preg_match( '#(^|\.)x\.com$#', $host ) ) ) {
+			$out['x'] = $url;
+		} elseif ( '' === $out['site'] && preg_match( '/site|web/i', (string) $label ) ) {
+			$out['site'] = $url;
+		} else {
+			$out['autres'][] = array( 'label' => (string) $label, 'url' => (string) $url );
+		}
+	}
+	return $out;
+}
+
 function fnc_content_model_render_speaker_meta_box( $post ) {
 	wp_nonce_field( 'fnc_speaker_details_save', 'fnc_speaker_details_nonce' );
 
 	$title          = get_post_meta( $post->ID, FNC_META_SPEAKER_TITLE, true );
+	$role           = get_post_meta( $post->ID, FNC_META_SPEAKER_ROLE, true );
 	$org            = get_post_meta( $post->ID, FNC_META_SPEAKER_ORG, true );
 	$country        = get_post_meta( $post->ID, FNC_META_SPEAKER_COUNTRY, true );
 	$protocol_order = get_post_meta( $post->ID, FNC_META_SPEAKER_PROTOCOL_ORDER, true );
-	$links          = get_post_meta( $post->ID, FNC_META_SPEAKER_LINKS, true );
-	$links          = is_array( $links )
-		? implode(
-			"\n",
-			array_map(
-				static function ( $link ) {
-					return trim( ( $link['label'] ?? '' ) . '|' . ( $link['url'] ?? '' ), '|' );
-				},
-				$links
-			)
-		)
-		: '';
+	$links_raw      = get_post_meta( $post->ID, FNC_META_SPEAKER_LINKS, true );
 
 	echo '<p><label for="fnc_speaker_title"><strong>' . esc_html__( 'Civilité', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<input type="text" id="fnc_speaker_title" name="fnc_speaker_title" value="%s" placeholder="Pr., Dr., M., Mme…" style="width:100%%;" /></p>', esc_attr( $title ) );
+
+	echo '<p><label for="fnc_speaker_role"><strong>' . esc_html__( 'Fonction', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<input type="text" id="fnc_speaker_role" name="fnc_speaker_role" value="%s" placeholder="Ministre du Numérique…" style="width:100%%;" /></p>', esc_attr( $role ) );
+	echo '<p class="description">' . esc_html__( 'Intitulé exact de la fonction, affiché sous le nom partout (fiche, annuaire, carrousel…).', 'fnc-content-model' ) . '</p>';
 
 	echo '<p><label for="fnc_speaker_org"><strong>' . esc_html__( 'Organisation', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<input type="text" id="fnc_speaker_org" name="fnc_speaker_org" value="%s" style="width:100%%;" /></p>', esc_attr( $org ) );
@@ -479,8 +584,40 @@ function fnc_content_model_render_speaker_meta_box( $post ) {
 	printf( '<input type="number" id="fnc_speaker_home_featured_order" name="fnc_speaker_home_featured_order" value="%s" style="width:100%%;" /></p>', esc_attr( $home_featured_order ) );
 	echo '<p class="description">' . esc_html__( 'Les voix mises en avant passent en tête du carrousel, triées par ce rang. Doit être un participant de l’édition en cours. Carrousel plafonné à 10.', 'fnc-content-model' ) . '</p>';
 
-	echo '<p><label for="fnc_speaker_links"><strong>' . esc_html__( 'Liens (un par ligne, format « Libellé|URL »)', 'fnc-content-model' ) . '</strong></label><br />';
-	printf( '<textarea id="fnc_speaker_links" name="fnc_speaker_links" rows="3" style="width:100%%;">%s</textarea></p>', esc_textarea( $links ) );
+	// Avertissement de découvrabilité : une voix promue mais NON participante de
+	// l'édition en cours n'apparaît pas au carrousel (périmètre « voix de cette
+	// édition »). On le signale explicitement à l'éditeur.
+	if ( $home_featured && function_exists( 'fnc_current_edition_id' ) && function_exists( 'fnc_edition_participants' ) ) {
+		$active_ed = fnc_current_edition_id();
+		$is_part   = $active_ed && in_array( (int) $post->ID, array_map( 'intval', fnc_edition_participants( $active_ed ) ), true );
+		if ( ! $is_part ) {
+			echo '<p class="description" style="padding:8px;border-left:3px solid #d63638;background:#fcf0f1;">'
+				. esc_html__( '⚠ Mis en avant mais PAS encore participant de l’édition en cours : cette voix n’apparaîtra pas dans le carrousel tant qu’elle n’est pas rattachée (comme intervenant ou modérateur) à une session publiée de l’édition active.', 'fnc-content-model' )
+				. '</p>';
+		}
+	}
+
+	// Liens : champs dédiés (site / LinkedIn / X) + reliquat « autres ».
+	// Recomposés dans _fnc_speaker_links à l'enregistrement (contrat inchangé).
+	$link_buckets = fnc_content_model_bucket_speaker_links( $links_raw );
+	$autres_text  = implode(
+		"\n",
+		array_map(
+			static function ( $l ) {
+				return trim( $l['label'] . '|' . $l['url'], '|' );
+			},
+			$link_buckets['autres']
+		)
+	);
+	echo '<hr /><p><strong>' . esc_html__( 'Liens', 'fnc-content-model' ) . '</strong></p>';
+	echo '<p><label for="fnc_speaker_link_site">' . esc_html__( 'Site web', 'fnc-content-model' ) . '</label><br />';
+	printf( '<input type="url" id="fnc_speaker_link_site" name="fnc_speaker_link_site" value="%s" placeholder="https://" style="width:100%%;" /></p>', esc_attr( $link_buckets['site'] ) );
+	echo '<p><label for="fnc_speaker_link_linkedin">' . esc_html__( 'LinkedIn', 'fnc-content-model' ) . '</label><br />';
+	printf( '<input type="url" id="fnc_speaker_link_linkedin" name="fnc_speaker_link_linkedin" value="%s" placeholder="https://www.linkedin.com/in/…" style="width:100%%;" /></p>', esc_attr( $link_buckets['linkedin'] ) );
+	echo '<p><label for="fnc_speaker_link_x">' . esc_html__( 'X (Twitter)', 'fnc-content-model' ) . '</label><br />';
+	printf( '<input type="url" id="fnc_speaker_link_x" name="fnc_speaker_link_x" value="%s" placeholder="https://x.com/…" style="width:100%%;" /></p>', esc_attr( $link_buckets['x'] ) );
+	echo '<p><label for="fnc_speaker_links"><strong>' . esc_html__( 'Autres liens (un par ligne, format « Libellé|URL »)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<textarea id="fnc_speaker_links" name="fnc_speaker_links" rows="3" style="width:100%%;" placeholder="Rapport 2026|https://…">%s</textarea></p>', esc_textarea( $autres_text ) );
 
 	// la règle du droit à l’image — droit à l'image : le portrait n'est publié que si « obtenu » et non expiré.
 	$image_right   = get_post_meta( $post->ID, FNC_META_SPEAKER_IMAGE_RIGHT, true );
@@ -561,6 +698,7 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 	if ( ! isset( $_POST['fnc_session_relations_nonce'] )
 		&& ! isset( $_POST['fnc_publication_relations_nonce'] )
 		&& ! isset( $_POST['fnc_edition_active_nonce'] )
+		&& ! isset( $_POST['fnc_edition_retro_nonce'] )
 		&& ! isset( $_POST['fnc_partenaire_details_nonce'] )
 		&& ! isset( $_POST['fnc_speaker_details_nonce'] )
 	) {
@@ -677,12 +815,48 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		update_post_meta( $post_id, FNC_META_EDITION_SPECIAL_NOTE, isset( $_POST['fnc_edition_special_note'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_edition_special_note'] ) ) : '' );
 	}
 
+	if ( 'fnc_edition' === $post->post_type
+		&& isset( $_POST['fnc_edition_retro_nonce'] )
+		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['fnc_edition_retro_nonce'] ) ), 'fnc_edition_retro_save' )
+		&& current_user_can( 'edit_post', $post_id )
+	) {
+		update_post_meta( $post_id, FNC_META_EDITION_REVIEW, isset( $_POST['fnc_edition_review'] ) ? sanitize_textarea_field( wp_unslash( $_POST['fnc_edition_review'] ) ) : '' );
+
+		// Chiffres clés : « Valeur|Libellé » par ligne -> [ {value,label} ].
+		$figures_raw = isset( $_POST['fnc_edition_figures'] ) ? (string) wp_unslash( $_POST['fnc_edition_figures'] ) : '';
+		$figures     = array();
+		foreach ( preg_split( '/\r\n|\r|\n/', $figures_raw ) as $line ) {
+			$line = trim( $line );
+			if ( '' === $line ) {
+				continue;
+			}
+			$parts     = array_map( 'trim', explode( '|', $line, 2 ) );
+			$figures[] = array(
+				'value' => sanitize_text_field( $parts[0] ?? '' ),
+				'label' => sanitize_text_field( $parts[1] ?? '' ),
+			);
+		}
+		update_post_meta( $post_id, FNC_META_EDITION_FIGURES, $figures );
+
+		// Galerie : une URL par ligne -> [ url, … ].
+		$gallery_raw = isset( $_POST['fnc_edition_gallery'] ) ? (string) wp_unslash( $_POST['fnc_edition_gallery'] ) : '';
+		$gallery     = array();
+		foreach ( preg_split( '/\r\n|\r|\n/', $gallery_raw ) as $line ) {
+			$line = esc_url_raw( trim( $line ) );
+			if ( '' !== $line ) {
+				$gallery[] = $line;
+			}
+		}
+		update_post_meta( $post_id, FNC_META_EDITION_GALLERY, $gallery );
+	}
+
 	if ( 'fnc_intervenant' === $post->post_type
 		&& isset( $_POST['fnc_speaker_details_nonce'] )
 		&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['fnc_speaker_details_nonce'] ) ), 'fnc_speaker_details_save' )
 		&& current_user_can( 'edit_post', $post_id )
 	) {
 		update_post_meta( $post_id, FNC_META_SPEAKER_TITLE, isset( $_POST['fnc_speaker_title'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_title'] ) ) : '' );
+		update_post_meta( $post_id, FNC_META_SPEAKER_ROLE, isset( $_POST['fnc_speaker_role'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_role'] ) ) : '' );
 		update_post_meta( $post_id, FNC_META_SPEAKER_ORG, isset( $_POST['fnc_speaker_org'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_org'] ) ) : '' );
 		$fnc_country_text = isset( $_POST['fnc_speaker_country'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_country'] ) ) : '';
 		update_post_meta( $post_id, FNC_META_SPEAKER_COUNTRY, $fnc_country_text );
@@ -705,17 +879,36 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		update_post_meta( $post_id, FNC_META_SPEAKER_IMAGE_RIGHT, in_array( $fnc_right, $fnc_right_allowed, true ) ? $fnc_right : 'non_verifie' );
 		update_post_meta( $post_id, FNC_META_SPEAKER_IMAGE_EXPIRES, isset( $_POST['fnc_speaker_image_expires'] ) ? sanitize_text_field( wp_unslash( $_POST['fnc_speaker_image_expires'] ) ) : '' );
 
+		// Liens : champs dédiés (site / LinkedIn / X) recomposés en tête, puis le
+		// reliquat « autres » (Libellé|URL par ligne), dans le même
+		// _fnc_speaker_links (contrat de rendu inchangé).
+		$links    = array();
+		$dedicated = array(
+			'fnc_speaker_link_site'     => __( 'Site web', 'fnc-content-model' ),
+			'fnc_speaker_link_linkedin' => 'LinkedIn',
+			'fnc_speaker_link_x'        => 'X',
+		);
+		foreach ( $dedicated as $field => $label ) {
+			$url = isset( $_POST[ $field ] ) ? esc_url_raw( wp_unslash( $_POST[ $field ] ) ) : '';
+			if ( '' !== $url ) {
+				$links[] = array( 'label' => $label, 'url' => $url );
+			}
+		}
+
 		$links_raw = isset( $_POST['fnc_speaker_links'] ) ? (string) wp_unslash( $_POST['fnc_speaker_links'] ) : '';
-		$links     = array();
 		foreach ( preg_split( '/\r\n|\r|\n/', $links_raw ) as $line ) {
 			$line = trim( $line );
 			if ( '' === $line ) {
 				continue;
 			}
 			$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+			$url   = esc_url_raw( $parts[1] ?? '' );
+			if ( '' === $url ) {
+				continue;
+			}
 			$links[] = array(
 				'label' => sanitize_text_field( $parts[0] ?? '' ),
-				'url'   => esc_url_raw( $parts[1] ?? '' ),
+				'url'   => $url,
 			);
 		}
 		update_post_meta( $post_id, FNC_META_SPEAKER_LINKS, $links );

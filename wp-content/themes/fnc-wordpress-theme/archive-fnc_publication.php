@@ -146,7 +146,7 @@ foreach ( $fnc_type_counts as $fnc_tv => $fnc_cnt ) {
 				<?php if ( $fnc_current_type ) : ?>
 					<input type="hidden" name="fnc_type" value="<?php echo esc_attr( $fnc_current_type ); ?>" />
 				<?php endif; ?>
-				<button class="btn" type="submit" style="margin-top:10px;background:var(--navy);color:#fff;border-color:var(--navy);"><?php esc_html_e( 'Rechercher', 'fnc-wordpress-theme' ); ?></button>
+				<button class="btn" type="submit" style="margin-top:10px;"><?php esc_html_e( 'Rechercher', 'fnc-wordpress-theme' ); ?></button>
 			</form>
 
 			<?php

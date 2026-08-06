@@ -62,11 +62,13 @@ $fnc_address = fnc_get_setting_i18n( 'address', '' );
 $fnc_social  = fnc_social_links();
 
 // Champs du formulaire : name = nom du champ attendu par FNC Core (réception des formulaires).
+// Disposition alignée sur le site Next : Nom* / Organisation sur une ligne, puis
+// Email*, Sujet* et Message* chacun en PLEINE LARGEUR.
 $fnc_contact_fields = array(
 	array( 'name' => 'name', 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
 	array( 'name' => 'organization', 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
-	array( 'name' => 'email', 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true ),
-	array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
+	array( 'name' => 'email', 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true, 'full' => true ),
+	array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true, 'full' => true ),
 	array( 'name' => 'message', 'label' => __( 'Message', 'fnc-wordpress-theme' ), 'type' => 'textarea', 'required' => true ),
 );
 // Flash de retour (FNC Core la réception des formulaires) : repopulation + erreurs par champ.
@@ -75,7 +77,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 
 <main id="main">
 	<!-- Orientation -->
-	<section class="section">
+	<section class="section linen">
 		<div class="split">
 			<div>
 				<span class="eyebrow"><?php esc_html_e( 'Orientation', 'fnc-wordpress-theme' ); ?></span>
@@ -87,7 +89,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 	</section>
 
 	<!-- Coordonnées + formulaire -->
-	<section class="section linen">
+	<section class="section">
 		<div class="split media-left">
 			<div>
 				<span class="eyebrow"><?php esc_html_e( 'Coordonnées', 'fnc-wordpress-theme' ); ?></span>
@@ -153,7 +155,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 						$fnc_val = function_exists( 'fnc_old' ) ? fnc_old( $fnc_flash, $fnc_n ) : '';
 						$fnc_inv = ( function_exists( 'fnc_field_error' ) && fnc_field_error( $fnc_flash, $fnc_n ) ) ? 'true' : 'false';
 						?>
-						<div class="field <?php echo 'textarea' === $fnc_field['type'] ? 'full' : ''; ?>">
+						<div class="field <?php echo ( 'textarea' === $fnc_field['type'] || ! empty( $fnc_field['full'] ) ) ? 'full' : ''; ?>">
 							<label for="<?php echo esc_attr( $fnc_field_id ); ?>">
 								<?php echo esc_html( $fnc_field['label'] ); ?><?php echo $fnc_field['required'] ? ' <span class="req" aria-hidden="true">*</span>' : ''; ?>
 							</label>
@@ -169,7 +171,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 				</div>
 
 				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Vos informations ne sont transmises à personne tant que le canal officiel n’est pas ouvert.', 'fnc-wordpress-theme' ); ?></p>
-				<button class="btn btn-red" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
+				<button class="btn" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>

@@ -260,7 +260,7 @@ $fnc_interest_options = array(
 				</div>
 
 				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
-				<button class="btn" type="submit" style="background:var(--navy);color:#fff;border-color:var(--navy);"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
+				<button class="btn" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>

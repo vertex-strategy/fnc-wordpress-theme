@@ -27,10 +27,12 @@ function fnc_submission_form_config( $type ) {
 			'help'    => __( 'Préciser le sujet nous aide à orienter votre demande dès l’ouverture du canal officiel.', 'fnc-wordpress-theme' ),
 			'submit'  => __( 'Envoyer la demande', 'fnc-wordpress-theme' ),
 			'fields'  => array(
+				// Disposition alignée sur le site Next : Nom* / Organisation sur une
+				// ligne, puis Email*, Sujet* et Message* chacun en PLEINE LARGEUR.
 				array( 'name' => 'name', 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
 				array( 'name' => 'organization', 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
-				array( 'name' => 'email', 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true ),
-				array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
+				array( 'name' => 'email', 'label' => __( 'Email', 'fnc-wordpress-theme' ), 'type' => 'email', 'required' => true, 'full' => true ),
+				array( 'name' => 'subject', 'label' => __( 'Sujet', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true, 'full' => true ),
 				array( 'name' => 'message', 'label' => __( 'Message', 'fnc-wordpress-theme' ), 'type' => 'textarea', 'required' => true ),
 			),
 		),
@@ -115,7 +117,7 @@ function fnc_render_form_field( $type, $index, array $field, $flash ) {
 
 	ob_start();
 	?>
-	<div class="field <?php echo ( $is_area || $is_sel ) ? 'full' : ''; ?>">
+	<div class="field <?php echo ( $is_area || $is_sel || ! empty( $field['full'] ) ) ? 'full' : ''; ?>">
 		<label for="<?php echo esc_attr( $id ); ?>">
 			<?php echo esc_html( $field['label'] ); ?><?php echo $required ? ' <span class="req" aria-hidden="true">*</span>' : ''; ?>
 		</label>
@@ -175,7 +177,7 @@ function fnc_render_submission_form( $type ) {
 		</div>
 
 		<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
-		<button class="btn btn-red" type="submit"><?php echo esc_html( $cfg['submit'] ); ?>
+		<button class="btn" type="submit"><?php echo esc_html( $cfg['submit'] ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</button>
 	</form>

@@ -106,31 +106,40 @@ function fnc_submission_form_config( $type ) {
  * Rend un champ de formulaire (text / email / tel / select / textarea) avec
  * repopulation et etat d'erreur issus du flash FNC Core.
  */
-function fnc_render_form_field( $type, $index, array $field, $flash ) {
+function fnc_render_form_field( $type, $index, array $field, $flash, $focus_name = '' ) {
 	$id       = 'fnc-' . $type . '-field-' . $index;
 	$name     = $field['name'];
 	$required = ! empty( $field['required'] );
 	$is_area  = 'textarea' === $field['type'];
 	$is_sel   = 'select' === $field['type'];
 	$val      = function_exists( 'fnc_old' ) ? fnc_old( $flash, $name ) : '';
-	$invalid  = ( function_exists( 'fnc_field_error' ) && fnc_field_error( $flash, $name ) ) ? 'true' : 'false';
+	$err_code = function_exists( 'fnc_field_error' ) ? fnc_field_error( $flash, $name ) : '';
+	$invalid  = $err_code ? 'true' : 'false';
+	$err_id   = $id . '-error';
+	// aria-describedby relie le champ à son message d'erreur (a11y), autofocus
+	// place le curseur sur le 1er champ invalide (parité ContactForm.tsx).
+	$describe = $err_code ? ' aria-describedby="' . esc_attr( $err_id ) . '"' : '';
+	$focus    = ( '' !== $focus_name && $name === $focus_name ) ? ' autofocus' : '';
 
 	ob_start();
 	?>
-	<div class="field <?php echo ( $is_area || $is_sel || ! empty( $field['full'] ) ) ? 'full' : ''; ?>">
+	<div class="field <?php echo ( $is_area || $is_sel || ! empty( $field['full'] ) ) ? 'full' : ''; ?><?php echo $err_code ? ' has-error' : ''; ?>">
 		<label for="<?php echo esc_attr( $id ); ?>">
 			<?php echo esc_html( $field['label'] ); ?><?php echo $required ? ' <span class="req" aria-hidden="true">*</span>' : ''; ?>
 		</label>
 		<?php if ( $is_area ) : ?>
-			<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" aria-invalid="<?php echo esc_attr( $invalid ); ?>"<?php echo $required ? ' required' : ''; ?>><?php echo esc_textarea( $val ); ?></textarea>
+			<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" aria-invalid="<?php echo esc_attr( $invalid ); ?>"<?php echo $describe . $focus; // phpcs:ignore WordPress.Security.EscapeOutput -- attributs déjà échappés. ?><?php echo $required ? ' required' : ''; ?>><?php echo esc_textarea( $val ); ?></textarea>
 		<?php elseif ( $is_sel ) : ?>
-			<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>"<?php echo $required ? ' required' : ''; ?>>
+			<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" aria-invalid="<?php echo esc_attr( $invalid ); ?>"<?php echo $describe . $focus; // phpcs:ignore WordPress.Security.EscapeOutput -- attributs déjà échappés. ?><?php echo $required ? ' required' : ''; ?>>
 				<?php foreach ( $field['options'] as $opt ) : ?>
 					<option value="<?php echo esc_attr( $opt ); ?>"<?php selected( $val, $opt ); ?>><?php echo esc_html( $opt ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		<?php else : ?>
-			<input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="<?php echo esc_attr( $field['type'] ); ?>" value="<?php echo esc_attr( $val ); ?>" aria-invalid="<?php echo esc_attr( $invalid ); ?>"<?php echo $required ? ' required' : ''; ?> />
+			<input id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" type="<?php echo esc_attr( $field['type'] ); ?>" value="<?php echo esc_attr( $val ); ?>" aria-invalid="<?php echo esc_attr( $invalid ); ?>"<?php echo $describe . $focus; // phpcs:ignore WordPress.Security.EscapeOutput -- attributs déjà échappés. ?><?php echo $required ? ' required' : ''; ?> />
+		<?php endif; ?>
+		<?php if ( $err_code && function_exists( 'fnc_error_text' ) ) : ?>
+			<p class="field-error" id="<?php echo esc_attr( $err_id ); ?>" role="alert"><?php echo esc_html( fnc_error_text( $err_code ) ); ?></p>
 		<?php endif; ?>
 	</div>
 	<?php
@@ -170,8 +179,18 @@ function fnc_render_submission_form( $type ) {
 
 		<div class="form-grid">
 			<?php
+			// 1er champ en erreur (ordre du formulaire) → reçoit autofocus.
+			$fnc_focus_name = '';
+			if ( function_exists( 'fnc_field_error' ) ) {
+				foreach ( $cfg['fields'] as $field ) {
+					if ( fnc_field_error( $flash, $field['name'] ) ) {
+						$fnc_focus_name = $field['name'];
+						break;
+					}
+				}
+			}
 			foreach ( $cfg['fields'] as $i => $field ) {
-				echo fnc_render_form_field( $type, $i, $field, $flash ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+				echo fnc_render_form_field( $type, $i, $field, $flash, $fnc_focus_name ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
 			}
 			?>
 		</div>

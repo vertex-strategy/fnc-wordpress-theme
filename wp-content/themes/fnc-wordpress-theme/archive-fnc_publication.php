@@ -89,6 +89,8 @@ $fnc_publications = $fnc_current_type
 	)
 	: $fnc_all;
 
+	$fnc_pub_pg = fnc_paginate_list( $fnc_publications, 12 );
+
 // Options de chips : tous les types réellement présents (compte > 0), quel que
 // soit leur slug. Ordre : slugs du registre d'abord, puis les autres. Libellé :
 // pluriel connu, sinon libellé du registre, sinon « humanisation » du slug.
@@ -170,12 +172,13 @@ foreach ( $fnc_type_counts as $fnc_tv => $fnc_cnt ) {
 			<?php if ( ! empty( $fnc_publications ) ) : ?>
 				<div class="pubs" style="margin-top:32px;">
 					<?php
-					foreach ( $fnc_publications as $fnc_publication ) {
+					foreach ( $fnc_pub_pg["items"] as $fnc_publication ) {
 						fnc_render_publication_card( $fnc_publication->ID );
 					}
 					?>
 				</div>
-			<?php else : ?>
+			<?php fnc_render_pagination_nav( $fnc_pub_pg["paged"], $fnc_pub_pg["max_pages"], $fnc_archive_url, array( "s" => $fnc_search_query, "fnc_type" => $fnc_current_type ) ); ?>
+				<?php else : ?>
 				<div class="empty" role="status">
 					<?php if ( $fnc_current_type || $fnc_search_query ) : ?>
 						<h3><?php esc_html_e( 'Aucune publication ne correspond', 'fnc-wordpress-theme' ); ?></h3>

@@ -71,6 +71,8 @@ $fnc_shown = $fnc_cur_status
 	)
 	: $fnc_editions;
 
+$fnc_ed_pg = fnc_paginate_list( $fnc_shown, 12 );
+
 $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 ?>
 
@@ -132,7 +134,7 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 
 			<?php if ( ! empty( $fnc_shown ) ) : ?>
 				<ol class="frise">
-					<?php foreach ( $fnc_shown as $fnc_edition ) : ?>
+					<?php foreach ( $fnc_ed_pg["items"] as $fnc_edition ) : ?>
 						<?php
 						$fnc_year       = get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true );
 						$fnc_status     = get_post_meta( $fnc_edition->ID, '_fnc_edition_status', true );
@@ -180,7 +182,8 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 						</li>
 					<?php endforeach; ?>
 				</ol>
-			<?php else : ?>
+			<?php fnc_render_pagination_nav( $fnc_ed_pg["paged"], $fnc_ed_pg["max_pages"], $fnc_editions_url, array( "status" => $fnc_cur_status ) ); ?>
+				<?php else : ?>
 				<div class="empty" role="status">
 					<?php if ( $fnc_cur_status ) : ?>
 						<h3><?php echo esc_html( sprintf( /* translators: %s: libellé de statut. */ __( 'Aucune édition « %s »', 'fnc-wordpress-theme' ), $fnc_list_labels[ $fnc_cur_status ] ) ); ?></h3>

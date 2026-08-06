@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.28' );
+define( 'FNC_THEME_VERSION', '1.0.29' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -96,6 +96,13 @@ function fnc_theme_setup() {
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'script', 'style' ) );
 	add_theme_support( 'automatic-feed-links' );
 
+	// Tailles d'images générées (alignées sur Media.ts de la référence) :
+	// carte (800), couverture (1200), et og 1200×630 en RECADRAGE DUR pour un
+	// partage social propre sur les robots (Facebook/LinkedIn/X).
+	add_image_size( 'fnc-card', 800, 0 );
+	add_image_size( 'fnc-cover', 1200, 0 );
+	add_image_size( 'fnc-og', 1200, 630, true );
+
 	// Styles du thème injectés dans l'éditeur de blocs : les blocs dynamiques
 	// (ServerSideRender) s'affichent avec la vraie DA dans le canevas, pour une
 	// édition WYSIWYG plutôt qu'un simple formulaire.
@@ -110,6 +117,21 @@ function fnc_theme_setup() {
 	);
 }
 add_action( 'after_setup_theme', 'fnc_theme_setup' );
+
+/**
+ * Sécurité média : interdire le téléversement de SVG (anti-XSS stocké). WordPress
+ * l'exclut déjà par défaut ; ce filtre est une ceinture-et-bretelles au cas où un
+ * autre plugin réactiverait le type. Aligné sur l'allowlist mimeTypes (sans svg)
+ * de la référence.
+ *
+ * @param array<string,string> $mimes
+ * @return array<string,string>
+ */
+function fnc_block_svg_upload( $mimes ) {
+	unset( $mimes['svg'], $mimes['svgz'] );
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'fnc_block_svg_upload' );
 
 /**
  * Gabarit par slug pour les pages TRADUITES.
@@ -352,7 +374,7 @@ function fnc_order_intervenant_archive( $query ) {
 		if ( ! empty( $fnc_ids ) ) {
 			$query->set( 'post__in', $fnc_ids );
 			$query->set( 'orderby', 'post__in' ); // conserve l'ordre global déjà trié.
-			$query->set( 'posts_per_page', -1 );
+			$query->set( 'posts_per_page', 12 );
 			return;
 		}
 	}
@@ -714,6 +736,57 @@ function fnc_link_icon_svg( $url, $label = '' ) {
 		return $open . '<path fill="currentColor" d="M17.53 3H20l-5.6 6.4L21 21h-5.15l-4.03-5.27L7.2 21H4.73l5.99-6.85L3.4 3h5.28l3.64 4.82L17.53 3Zm-.9 16.2h1.37L7.44 4.72H5.97L16.63 19.2Z"/></svg>';
 	}
 	return $open . '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 0c2.5 2 3.5 5.5 3.5 9s-1 7-3.5 9c-2.5-2-3.5-5.5-3.5-9s1-7 3.5-9ZM3.5 12h17"/></svg>';
+}
+
+/**
+ * Nav de pagination bornée pour les archives (liens /page/N/), en préservant les
+ * filtres (add_args). N'affiche rien s'il n'y a qu'une page.
+ *
+ * @param int    $paged
+ * @param int    $max_pages
+ * @param string $base_url  URL de base de l'archive (sans /page/N/).
+ * @param array  $add_args  Paramètres de filtre à conserver dans les liens.
+ * @return void
+ */
+function fnc_render_pagination_nav( $paged, $max_pages, $base_url, $add_args = array() ) {
+	$max_pages = (int) $max_pages;
+	if ( $max_pages < 2 ) {
+		return;
+	}
+	$links = paginate_links( array(
+		'base'      => trailingslashit( $base_url ) . 'page/%#%/',
+		'format'    => '',
+		'current'   => max( 1, (int) $paged ),
+		'total'     => $max_pages,
+		'add_args'  => array_filter( (array) $add_args, static function ( $v ) { return '' !== $v && null !== $v; } ),
+		'prev_text' => __( '← Précédent', 'fnc-wordpress-theme' ),
+		'next_text' => __( 'Suivant →', 'fnc-wordpress-theme' ),
+	) );
+	if ( $links ) {
+		echo '<nav class="fnc-pagination" aria-label="' . esc_attr__( 'Pagination', 'fnc-wordpress-theme' ) . '">' . wp_kses_post( $links ) . '</nav>';
+	}
+}
+
+/**
+ * Découpe une liste en page courante (pagination bornée, page ∈ [1, max]).
+ *
+ * @param array $items
+ * @param int   $per_page
+ * @return array{items:array,paged:int,max_pages:int}
+ */
+function fnc_paginate_list( array $items, $per_page = 12 ) {
+	$per_page  = max( 1, (int) $per_page );
+	$max_pages = max( 1, (int) ceil( count( $items ) / $per_page ) );
+	$paged     = (int) get_query_var( 'paged' );
+	if ( ! $paged ) {
+		$paged = isset( $_GET['paged'] ) ? absint( wp_unslash( $_GET['paged'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification
+	}
+	$paged = min( max( 1, $paged ), $max_pages );
+	return array(
+		'items'     => array_slice( array_values( $items ), ( $paged - 1 ) * $per_page, $per_page ),
+		'paged'     => $paged,
+		'max_pages' => $max_pages,
+	);
 }
 
 /**

@@ -203,7 +203,24 @@ $fnc_cat_class = static function ( $slug ) {
 						endwhile;
 						?>
 					</div>
-					<?php wp_reset_postdata(); ?>
+					<?php
+					// Pagination serveur (12/page) en préservant les filtres profil/pays.
+					$fnc_pg_args = array(); // phpcs:disable WordPress.Security.NonceVerification.Recommended
+					if ( ! empty( $_GET['fnc_profil'] ) ) {
+						$fnc_pg_args['fnc_profil'] = sanitize_key( wp_unslash( $_GET['fnc_profil'] ) );
+					}
+					if ( ! empty( $_GET['fnc_pays'] ) ) {
+						$fnc_pg_args['fnc_pays'] = sanitize_text_field( wp_unslash( $_GET['fnc_pays'] ) );
+					}
+					// phpcs:enable WordPress.Security.NonceVerification.Recommended
+					the_posts_pagination( array(
+						'add_args'  => $fnc_pg_args,
+						'prev_text' => __( '← Précédent', 'fnc-wordpress-theme' ),
+						'next_text' => __( 'Suivant →', 'fnc-wordpress-theme' ),
+						'class'     => 'fnc-pagination',
+					) );
+					wp_reset_postdata();
+					?>
 				<?php else : ?>
 					<div class="empty" role="status">
 						<h3><?php esc_html_e( 'Aucun intervenant ne correspond', 'fnc-wordpress-theme' ); ?></h3>

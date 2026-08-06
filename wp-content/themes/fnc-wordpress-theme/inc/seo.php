@@ -192,13 +192,17 @@ function fnc_seo_description() {
  * @return string URL, ou chaîne vide.
  */
 function fnc_seo_image() {
+	// Taille dédiée au partage social : og 1200×630 (recadrage dur) quand elle
+	// existe, repli sur l'original sinon (image trop petite pour la générer).
 	if ( is_singular() && has_post_thumbnail() ) {
-		$url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+		$url = get_the_post_thumbnail_url( get_the_ID(), 'fnc-og' );
+		$url = $url ? $url : get_the_post_thumbnail_url( get_the_ID(), 'full' );
 		if ( $url ) {
 			return $url;
 		}
 	}
-	return fnc_get_setting_image_url( 'og_default_image', 'full' );
+	$url = fnc_get_setting_image_url( 'og_default_image', 'fnc-og' );
+	return $url ? $url : fnc_get_setting_image_url( 'og_default_image', 'full' );
 }
 
 /**
@@ -337,3 +341,57 @@ function fnc_filter_robots( $robots ) {
 	return $robots;
 }
 add_filter( 'wp_robots', 'fnc_filter_robots' );
+
+/**
+ * robots.txt : interdit l'admin et l'API REST aux robots, et pointe le sitemap.
+ * Idempotent (n'ajoute chaque directive que si absente), pour ne pas doublonner
+ * ce que le cœur WordPress émet déjà. Aligné sur src/app/robots.ts.
+ *
+ * @param string $output
+ * @param bool   $public
+ * @return string
+ */
+function fnc_robots_txt( $output, $public ) {
+	if ( ! $public ) {
+		return $output; // Site en « décourager les moteurs » : ne pas surcharger.
+	}
+	if ( false === strpos( $output, '/wp-admin/' ) ) {
+		$output .= "Disallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n";
+	}
+	if ( false === strpos( $output, '/wp-json/' ) ) {
+		$output .= "Disallow: /wp-json/\n";
+	}
+	if ( false === strpos( $output, 'Sitemap:' ) && function_exists( 'get_sitemap_url' ) ) {
+		$sitemap = get_sitemap_url( 'index' );
+		if ( $sitemap ) {
+			$output .= 'Sitemap: ' . esc_url_raw( $sitemap ) . "\n";
+		}
+	}
+	return $output;
+}
+add_filter( 'robots_txt', 'fnc_robots_txt', 10, 2 );
+
+/**
+ * Redirection 301 des anciennes URL /publications(/…) vers /ressources(/…).
+ * Le CPT a été renommé (slug « ressources ») ; on préserve le préfixe de langue
+ * (/en) et la chaîne de requête. Aligné sur la règle 301 de next.config.ts.
+ */
+function fnc_redirect_legacy_publications() {
+	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		return;
+	}
+	$uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$path = (string) wp_parse_url( $uri, PHP_URL_PATH );
+	if ( preg_match( '#^(/en)?/publications(/.*)?/?$#', untrailingslashit( $path ), $m ) ) {
+		$prefix = isset( $m[1] ) ? $m[1] : '';
+		$rest   = isset( $m[2] ) ? $m[2] : '';
+		$target = home_url( $prefix . '/ressources' . $rest );
+		$query  = (string) wp_parse_url( $uri, PHP_URL_QUERY );
+		if ( '' !== $query ) {
+			$target .= '?' . $query;
+		}
+		wp_safe_redirect( $target, 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'fnc_redirect_legacy_publications' );

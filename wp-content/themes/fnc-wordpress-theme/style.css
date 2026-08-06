@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.28
+Version: 1.0.29
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -46,6 +46,17 @@ picture{display:contents;}
 /* Liens d'intervenant : icône réseau + libellé alignés. */
 .person-detail__links a{display:inline-flex;align-items:center;gap:6px;}
 .link-icon{flex:none;color:var(--texte-tert);}
+/* Pagination bornée des archives (ressources / annuaire / éditions). */
+.fnc-pagination{margin-top:32px;}
+.fnc-pagination .nav-links,.fnc-pagination.pagination .nav-links{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.fnc-pagination .page-numbers{display:inline-flex;min-width:38px;height:38px;padding:0 10px;align-items:center;justify-content:center;border:1px solid var(--border,#e2e2ea);border-radius:2px;color:var(--navy);text-decoration:none;font-size:.9rem;}
+.fnc-pagination .page-numbers.current{background:var(--navy);color:#fff;border-color:var(--navy);}
+.fnc-pagination .page-numbers.dots{border:0;}
+.fnc-pagination a.page-numbers:hover{border-color:var(--navy);}
+/* Erreur de champ de formulaire (message près du champ + état). */
+.field-error{margin-top:6px;color:var(--rouge,#c0392b);font-size:.85rem;}
+.field.has-error input,.field.has-error textarea,.field.has-error select{border-color:var(--rouge,#c0392b);}
+.field [aria-invalid="true"]{border-color:var(--rouge,#c0392b);}
 a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offset:3px;border-radius:2px;}
 .skip{position:absolute;left:-999px;top:0;z-index:2000;background:var(--navy);color:#fff;padding:12px 18px;}
 .skip:focus{left:8px;top:8px;}

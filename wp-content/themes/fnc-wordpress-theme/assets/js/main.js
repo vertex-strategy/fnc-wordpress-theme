@@ -298,4 +298,21 @@
 			step(1);
 		}, 4000);
 	})();
+
+	/* ============================================================
+	   Compte a rebours M8 — recalcul cote client (anti-cache).
+	   Le nombre de jours est deja rendu cote serveur (repli sans JS
+	   + SEO). On le recalcule au chargement depuis la date ISO portee
+	   par l'attribut data-fnc-countdown, pour qu'une page mise en
+	   cache reste exacte. Aucune date -> l'element n'a pas l'attribut
+	   et rien n'est touche (« — · Date a confirmer » preserve).
+	   ============================================================ */
+	(function countdown() {
+		var el = document.querySelector('.num[data-fnc-countdown]');
+		if (!el) { return; }
+		var target = Date.parse(el.getAttribute('data-fnc-countdown'));
+		if (isNaN(target)) { return; }
+		var days = Math.max(0, Math.ceil((target - Date.now()) / 86400000));
+		el.textContent = String(days);
+	})();
 })();

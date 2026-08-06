@@ -370,18 +370,27 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	<!-- M8 — LA DECISION FINALE -->
 	<?php
 	// Compte a rebours reel depuis la date de debut de l'edition en cours.
+	// Clampe a 0 quand la date est aujourd'hui/passee (jamais negatif, comme le
+	// site Next). Reste null — « — · Date a confirmer » — seulement en l'ABSENCE
+	// de date (choix produit : pas de date fictive). La date ISO est aussi
+	// exposee en attribut pour un recalcul cote client (anti-cache) dans main.js.
 	$fnc_days_left = null;
+	$fnc_start_iso = '';
 	if ( $fnc_home_edition ) {
 		$fnc_start = get_post_meta( $fnc_home_edition->ID, '_fnc_edition_start_date', true );
 		if ( $fnc_start ) {
 			$fnc_ts = strtotime( $fnc_start );
 			if ( $fnc_ts ) {
-				$fnc_diff = (int) ceil( ( $fnc_ts - current_time( 'timestamp' ) ) / DAY_IN_SECONDS );
-				if ( $fnc_diff >= 0 ) {
-					$fnc_days_left = $fnc_diff;
-				}
+				$fnc_days_left = max( 0, (int) ceil( ( $fnc_ts - current_time( 'timestamp' ) ) / DAY_IN_SECONDS ) );
+				$fnc_start_iso = gmdate( 'Y-m-d', $fnc_ts );
 			}
 		}
+	}
+
+	// Lieu affiche sous le compte : reglage explicite, sinon lieu de l'edition.
+	$fnc_m8_venue = (string) fnc_home_setting( 'm8_venue', '' );
+	if ( '' === trim( $fnc_m8_venue ) && $fnc_home_edition ) {
+		$fnc_m8_venue = (string) get_post_meta( $fnc_home_edition->ID, '_fnc_edition_location', true );
 	}
 	?>
 	<section class="moment" id="m8" aria-labelledby="m8-title">
@@ -391,12 +400,15 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 			<div class="count-label"><?php echo esc_html( fnc_home_setting( 'm8_label', __( 'La prochaine édition', 'fnc-wordpress-theme' ) ) ); ?></div>
 			<h2 id="m8-title">
 				<?php echo esc_html( fnc_home_setting( 'm8_title_before', __( 'Le Forum Numérique Congo commence dans', 'fnc-wordpress-theme' ) ) ); ?>
-				<span class="num"><?php echo null !== $fnc_days_left ? esc_html( $fnc_days_left ) : '—'; ?></span>
+				<span class="num"<?php echo '' !== $fnc_start_iso ? ' data-fnc-countdown="' . esc_attr( $fnc_start_iso ) . '"' : ''; ?>><?php echo null !== $fnc_days_left ? esc_html( $fnc_days_left ) : '—'; ?></span>
 				<?php echo esc_html( fnc_home_setting( 'm8_title_after', __( 'jours', 'fnc-wordpress-theme' ) ) ); ?>
 				<?php if ( null === $fnc_days_left ) : ?>
 					<span class="tbc"><?php esc_html_e( 'Date à confirmer', 'fnc-wordpress-theme' ); ?></span>
 				<?php endif; ?>
 			</h2>
+			<?php if ( '' !== trim( $fnc_m8_venue ) ) : ?>
+				<p class="count-label" style="margin-top:16px;margin-bottom:0;opacity:.85;"><?php echo esc_html( $fnc_m8_venue ); ?></p>
+			<?php endif; ?>
 			<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?>
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 			</a>

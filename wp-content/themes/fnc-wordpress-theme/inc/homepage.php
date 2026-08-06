@@ -346,6 +346,7 @@ function fnc_homepage_customize_register( $wp_customize ) {
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_label', __( 'Label', 'fnc-wordpress-theme' ), 'text', 'La prochaine édition' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_title_before', __( 'Titre — avant le compte', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_title_after', __( 'Titre — après le compte', 'fnc-wordpress-theme' ), 'text', 'jours' );
+	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_venue', __( 'Lieu (sous le compte)', 'fnc-wordpress-theme' ), 'text', '', array( 'description' => __( 'Vide → lieu de l’édition en cours. Ligne masquée si les deux sont vides.', 'fnc-wordpress-theme' ) ) );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_cta', __( 'CTA — libellé', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_cta_url', __( 'CTA — lien', 'fnc-wordpress-theme' ), 'url' );
 }

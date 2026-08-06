@@ -69,6 +69,22 @@ $fnc_participations = array(
 <main id="main">
 	<section class="section">
 		<div class="container reading">
+			<?php
+			// État « fermé » honnête quand les inscriptions ne sont pas ouvertes
+			// (miroir du site Next). La page reste en ligne mais passe en noindex
+			// (posé par fnc_feature_flag_gate / inc/seo.php) et le formulaire est
+			// remplacé par un message ; le CTA d'inscription est déjà masqué ailleurs.
+			$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();
+			if ( ! $fnc_reg_open ) :
+				?>
+				<div class="callout">
+					<h2><?php esc_html_e( 'Les inscriptions ne sont pas encore ouvertes', 'fnc-wordpress-theme' ); ?></h2>
+					<p><?php esc_html_e( 'La billetterie de la prochaine édition ouvrira prochainement. Revenez bientôt ou suivez nos actualités pour être informé·e de l’ouverture.', 'fnc-wordpress-theme' ); ?></p>
+					<a class="btn btn-ghost-light" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Découvrir le Forum', 'fnc-wordpress-theme' ); ?></a>
+				</div>
+				<?php
+			else :
+				?>
 			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Formulaire d’inscription', 'fnc-wordpress-theme' ); ?>">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Votre demande', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
@@ -120,6 +136,7 @@ $fnc_participations = array(
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>
+			<?php endif; ?>
 		</div>
 	</section>
 </main>

@@ -829,7 +829,20 @@ function fnc_render_block_form( $a ) {
 				<p class="body"><?php echo esc_html( fnc_attr( $a, 'intro' ) ); ?></p>
 			<?php endif; ?>
 			<?php
-			echo function_exists( 'fnc_render_submission_form' ) ? fnc_render_submission_form( $type ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			// Feature flag INSCRIPTION au niveau du bloc : fermé → état honnête
+			// (miroir du site Next), pas de formulaire. Vaut aussi pour la page
+			// composée en blocs (le gabarit page-inscription.php gère le cas non-bloc).
+			if ( 'inscription' === $type && function_exists( 'fnc_registration_enabled' ) && ! fnc_registration_enabled() ) :
+				?>
+				<div class="callout">
+					<h2><?php esc_html_e( 'Les inscriptions ne sont pas encore ouvertes', 'fnc-wordpress-theme' ); ?></h2>
+					<p><?php esc_html_e( 'La billetterie de la prochaine édition ouvrira prochainement. Revenez bientôt ou suivez nos actualités pour être informé·e de l’ouverture.', 'fnc-wordpress-theme' ); ?></p>
+					<a class="btn btn-ghost-light" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Découvrir le Forum', 'fnc-wordpress-theme' ); ?></a>
+				</div>
+				<?php
+			else :
+				echo function_exists( 'fnc_render_submission_form' ) ? fnc_render_submission_form( $type ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			endif;
 			?>
 		</div>
 	</section>

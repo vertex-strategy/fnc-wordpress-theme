@@ -33,6 +33,14 @@
 	var burger = document.getElementById('burger');
 	var panel = document.getElementById('mobile-panel');
 
+	function panelFocusables() {
+		return panel
+			? Array.prototype.slice.call(
+					panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+				)
+			: [];
+	}
+
 	function setMenu(open) {
 		if (!panel || !burger) {
 			return;
@@ -45,9 +53,20 @@
 		);
 		panel.setAttribute('aria-hidden', open ? 'false' : 'true');
 		document.body.classList.toggle('menu-open', open);
+		if (open) {
+			panel.removeAttribute('inert');
+			var f = panelFocusables();
+			if (f.length) { f[0].focus(); }
+		} else {
+			// Rendre le focus au burger s'il était piégé dans le panneau, puis
+			// rendre le panneau inerte (retiré de l'ordre de tabulation).
+			if (panel.contains(document.activeElement)) { burger.focus(); }
+			panel.setAttribute('inert', '');
+		}
 	}
 
 	if (burger && panel) {
+		panel.setAttribute('inert', ''); // Fermé au chargement : hors tabulation.
 		burger.addEventListener('click', function () {
 			setMenu(!panel.classList.contains('open'));
 		});
@@ -57,8 +76,25 @@
 			});
 		});
 		document.addEventListener('keydown', function (e) {
+			if (!panel.classList.contains('open')) {
+				return;
+			}
 			if (e.key === 'Escape') {
 				setMenu(false);
+				burger.focus();
+			} else if (e.key === 'Tab') {
+				// Piège de focus : le Tab cycle à l'intérieur du panneau ouvert.
+				var f = panelFocusables();
+				if (!f.length) { return; }
+				var first = f[0];
+				var last = f[f.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if (!e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				}
 			}
 		});
 	}

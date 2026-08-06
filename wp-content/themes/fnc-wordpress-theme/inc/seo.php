@@ -207,6 +207,10 @@ function fnc_seo_image() {
  * @return bool
  */
 function fnc_seo_is_noindex() {
+	// Refus forcé par le contexte (ex. surface sous feature flag fermé).
+	if ( apply_filters( 'fnc_force_noindex', false ) ) {
+		return true;
+	}
 	return is_singular() && '1' === (string) get_post_meta( get_the_ID(), FNC_META_SEO_NOINDEX, true );
 }
 
@@ -295,6 +299,14 @@ add_action( 'wp_head', 'fnc_head_meta', 5 );
  * @return array<string,mixed>
  */
 function fnc_filter_robots( $robots ) {
+	// Page introuvable (404) : jamais indexée (parité avec le catch-all Next).
+	if ( is_404() ) {
+		$robots['noindex']  = true;
+		$robots['nofollow'] = true;
+		unset( $robots['index'], $robots['follow'] );
+		return $robots;
+	}
+
 	// Le refus d'indexation porté par le document prime sur le réglage global.
 	if ( fnc_seo_is_noindex() ) {
 		$robots['noindex']  = true;

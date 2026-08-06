@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.11' );
+define( 'FNC_THEME_VERSION', '1.0.12' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -135,6 +135,158 @@ function fnc_translated_page_template( $template ) {
 	return $fnc_located ? $fnc_located : $template;
 }
 add_filter( 'template_include', 'fnc_translated_page_template' );
+
+/**
+ * La page courante est-elle la page « Inscription » (FR ou sa traduction) ?
+ *
+ * @return bool
+ */
+function fnc_is_registration_page() {
+	if ( ! is_page() ) {
+		return false;
+	}
+	$id = (int) get_queried_object_id();
+	if ( ! $id ) {
+		return false;
+	}
+	if ( function_exists( 'fnc_page_for_route' ) ) {
+		$page = fnc_page_for_route( 'inscription' );
+		if ( $page && (int) $page->ID === $id ) {
+			return true;
+		}
+	}
+	// Repli slug (sans le plugin) : « inscription » / « inscription-en » / « registration ».
+	$slug = get_post_field( 'post_name', $id );
+	return in_array( $slug, array( 'inscription', 'inscription-en', 'registration' ), true );
+}
+
+/**
+ * Application des feature flags aux niveaux PAGE et SEO (le niveau API est géré
+ * par FNC Core, le niveau CTA par les gabarits). Miroir du comportement Next :
+ * une surface sous flag fermé renvoie un état honnête + noindex + hors sitemap.
+ *
+ *   - ACTUALITÉS (`fnc_news_enabled` faux) : /actualites (liste + fiche) → 404.
+ *   - INSCRIPTION (`fnc_registration_enabled` faux) : la page rend un état
+ *     « fermé » (géré dans le gabarit) et devient noindex.
+ *
+ * Exécuté sur `template_redirect`, AVANT le choix du gabarit et l'émission de
+ * `wp_head`, pour que le 404 et la directive robots s'appliquent réellement.
+ *
+ * @return void
+ */
+function fnc_feature_flag_gate() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	// Actualités fermées → 404 complet (WordPress chargera 404.php).
+	if ( function_exists( 'fnc_news_enabled' ) && ! fnc_news_enabled()
+		&& ( is_singular( 'fnc_actualite' ) || is_post_type_archive( 'fnc_actualite' ) ) ) {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
+		return;
+	}
+
+	// Inscription fermée → la page reste affichée (état « fermé »), mais noindex.
+	if ( function_exists( 'fnc_registration_enabled' ) && ! fnc_registration_enabled()
+		&& fnc_is_registration_page() ) {
+		add_filter( 'fnc_force_noindex', '__return_true' );
+	}
+}
+add_action( 'template_redirect', 'fnc_feature_flag_gate' );
+
+/**
+ * Exclusion du sitemap natif WordPress pour les surfaces sous flag fermé :
+ * le CPT actualités (entier) et la page inscription.
+ *
+ * @param array<string,\WP_Post_Type> $post_types
+ * @return array<string,\WP_Post_Type>
+ */
+function fnc_sitemap_filter_post_types( $post_types ) {
+	if ( function_exists( 'fnc_news_enabled' ) && ! fnc_news_enabled() ) {
+		unset( $post_types['fnc_actualite'] );
+	}
+	return $post_types;
+}
+add_filter( 'wp_sitemaps_post_types', 'fnc_sitemap_filter_post_types' );
+
+/**
+ * Retire la page inscription du sitemap quand les inscriptions sont fermées.
+ *
+ * @param array<int,array<string,mixed>> $entries
+ * @param string                         $post_type
+ * @return array<int,array<string,mixed>>
+ */
+function fnc_sitemap_filter_entries( $entries, $post_type ) {
+	if ( 'page' !== $post_type ) {
+		return $entries;
+	}
+	if ( function_exists( 'fnc_registration_enabled' ) && fnc_registration_enabled() ) {
+		return $entries;
+	}
+	if ( ! function_exists( 'fnc_page_for_route' ) ) {
+		return $entries;
+	}
+	$page = fnc_page_for_route( 'inscription' );
+	if ( ! $page ) {
+		return $entries;
+	}
+	$url = get_permalink( $page->ID );
+	return array_values(
+		array_filter(
+			$entries,
+			static function ( $entry ) use ( $url ) {
+				return ! isset( $entry['loc'] ) || $entry['loc'] !== $url;
+			}
+		)
+	);
+}
+add_filter( 'wp_sitemaps_posts_entries', 'fnc_sitemap_filter_entries', 10, 2 );
+
+/**
+ * Balises `hreflang` (fr / en / x-default) — émetteur unique du template.
+ *
+ * Next émet hreflang sur chaque page ; Polylang, dans cette configuration, ne
+ * les produit pas. On les émet donc ici, à partir des URL de traduction de la
+ * page courante (repli accueil de la langue), avec `x-default` = langue par
+ * défaut. N'émet rien sans Polylang (pas de multilingue → pas d'alternates).
+ *
+ * @return void
+ */
+function fnc_emit_hreflang() {
+	if ( ! function_exists( 'PLL' ) || ! PLL() || ! isset( PLL()->model ) ) {
+		return;
+	}
+	if ( is_404() ) {
+		return;
+	}
+	$langs = PLL()->model->get_languages_list();
+	if ( empty( $langs ) ) {
+		return;
+	}
+	$default = function_exists( 'pll_default_language' ) ? pll_default_language( 'slug' ) : 'fr';
+	$urls    = array();
+	foreach ( $langs as $lang ) {
+		$url = '';
+		if ( isset( PLL()->links ) && method_exists( PLL()->links, 'get_translation_url' ) ) {
+			$url = (string) PLL()->links->get_translation_url( $lang );
+		}
+		if ( '' === $url && function_exists( 'pll_home_url' ) ) {
+			$url = (string) pll_home_url( $lang->slug );
+		}
+		if ( '' === $url ) {
+			continue;
+		}
+		$urls[ $lang->slug ] = $url;
+		printf( '<link rel="alternate" hreflang="%s" href="%s" />' . "\n", esc_attr( $lang->slug ), esc_url( $url ) );
+	}
+	if ( isset( $urls[ $default ] ) ) {
+		printf( '<link rel="alternate" hreflang="x-default" href="%s" />' . "\n", esc_url( $urls[ $default ] ) );
+	}
+}
+add_action( 'wp_head', 'fnc_emit_hreflang', 5 );
 
 /**
  * Chargement des traductions du theme.

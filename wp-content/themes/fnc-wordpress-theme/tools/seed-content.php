@@ -154,10 +154,10 @@ fnc_seed_acf_page(
 		array(
 			'acf_fc_layout' => 'instPresident',
 			'eyebrow'       => 'Le mot du Président',
-			'photo'         => fnc_seed_image( 'le-portrait.png' ),
+			'photo'         => fnc_seed_image( 'eugene-rufin-bouya.jpeg' ),
 			'name'          => 'Eugène Rufin BOUYA',
 			'role'          => 'Président du Forum Numérique Congo',
-			'excerpt'       => 'Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais.',
+			'excerpt'       => 'Le numérique n’est plus seulement un outil d’innovation ; il est devenu un levier de puissance, de compétitivité, de souveraineté et de régulation.',
 			'cta_label'     => 'Lire le mot complet',
 		),
 		array(
@@ -167,7 +167,8 @@ fnc_seed_acf_page(
 			'l2'            => 'Rassembler.',
 			'l3'            => 'Décider ensemble.',
 			'body'          => 'Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions.',
-			'image'         => fnc_seed_image( 'le-panel.png' ),
+			// « Notre mission » : orateur seul au pupitre (canonique Next).
+			'image'         => fnc_seed_image( 'les-personnes.png' ),
 		),
 		array(
 			'acf_fc_layout' => 'instObjectives',
@@ -182,7 +183,8 @@ fnc_seed_acf_page(
 		),
 		array(
 			'acf_fc_layout' => 'instManifesto',
-			'image'         => fnc_seed_image( 'le-territoire-brazzaville.png' ),
+			// « Notre ancrage » : le fleuve brumeux de Brazzaville (canonique Next).
+			'image'         => fnc_seed_image( 'le-fleuve.png' ),
 			'eyebrow'       => 'Notre ancrage',
 			'manifest_a'    => 'Depuis Brazzaville,',
 			'manifest_b'    => 'au cœur du Bassin du Congo.',
@@ -214,7 +216,7 @@ fnc_seed_acf_page(
 		),
 		array(
 			'acf_fc_layout' => 'instPresident',
-			'photo'         => fnc_seed_image( 'le-portrait.png' ),
+			'photo'         => fnc_seed_image( 'eugene-rufin-bouya.jpeg' ),
 			'name'          => 'Eugène Rufin BOUYA',
 			'role'          => 'Président du Forum Numérique Congo',
 			'message'       => '<p>Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale.</p>'

@@ -633,6 +633,39 @@ function fnc_attachment_url( $id, $size = 'full' ) {
 	return $src ? $src[0] : '';
 }
 
+/**
+ * <img> d'un attachement de bloc : taille dimensionnée + srcset natif WP + lazy.
+ * Les médias téléversés portent ainsi width/height (anti-CLS) et un srcset
+ * responsive ; repli chaîne vide si l'ID est absent/invalide.
+ *
+ * @param int   $id   ID de l'attachement.
+ * @param array $args { class:string, alt:string, size:string, eager:bool, sizes:string }
+ * @return string
+ */
+function fnc_block_image( $id, $args = array() ) {
+	$id = (int) $id;
+	if ( $id <= 0 ) {
+		return '';
+	}
+	$args = wp_parse_args(
+		$args,
+		array( 'class' => '', 'alt' => '', 'size' => 'large', 'eager' => false, 'sizes' => '' )
+	);
+	$attr = array(
+		'class'    => $args['class'],
+		'alt'      => $args['alt'],
+		'decoding' => 'async',
+		'loading'  => $args['eager'] ? 'eager' : 'lazy',
+	);
+	if ( $args['eager'] ) {
+		$attr['fetchpriority'] = 'high';
+	}
+	if ( '' !== $args['sizes'] ) {
+		$attr['sizes'] = $args['sizes'];
+	}
+	return wp_get_attachment_image( $id, $args['size'], false, $attr );
+}
+
 /** Rendu d'un texte multi-ligne en paragraphes. */
 function fnc_render_rich( $text ) {
 	return wp_kses_post( wpautop( $text ) );
@@ -662,7 +695,7 @@ function fnc_render_cta_button( $label, $href, $class = 'btn btn-red' ) {
 /* ---------------- Palette institutionnelle ---------------- */
 
 function fnc_render_block_inst_hero( $a ) {
-	$image      = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image      = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'class' => 'media-cover', 'size' => '1536x1536', 'eager' => true, 'sizes' => '100vw' ) );
 	$breadcrumb = fnc_attr( $a, 'breadcrumb' );
 	$eyebrow    = fnc_attr( $a, 'eyebrow' );
 	$title_a    = fnc_attr( $a, 'titleA' );
@@ -672,9 +705,7 @@ function fnc_render_block_inst_hero( $a ) {
 	ob_start();
 	?>
 	<header class="opening">
-		<?php if ( $image ) : ?>
-			<img class="media-cover" src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<?php if ( $breadcrumb ) : ?>
@@ -697,7 +728,7 @@ function fnc_render_block_inst_hero( $a ) {
 }
 
 function fnc_render_block_inst_split( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ) );
 	$l1    = fnc_attr( $a, 'l1' );
 	$l2    = fnc_attr( $a, 'l2' );
 	$l3    = fnc_attr( $a, 'l3' );
@@ -722,7 +753,7 @@ function fnc_render_block_inst_split( $a ) {
 				<?php endif; ?>
 			</div>
 			<?php if ( $image ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -766,14 +797,12 @@ function fnc_render_block_inst_objectives( $a ) {
 }
 
 function fnc_render_block_inst_manifesto( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'size' => '1536x1536', 'sizes' => '100vw' ) );
 
 	ob_start();
 	?>
 	<section class="territory">
-		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
@@ -875,7 +904,7 @@ function fnc_render_block_coordonnees( $a ) {
 }
 
 function fnc_render_block_inst_president( $a ) {
-	$photo   = fnc_attachment_url( fnc_attr( $a, 'photo', 0 ) );
+	$photo   = fnc_block_image( fnc_attr( $a, 'photo', 0 ), array( 'alt' => fnc_attr( $a, 'name' ), 'size' => 'large' ) );
 	$excerpt = fnc_attr( $a, 'excerpt' );
 	$message = fnc_attr( $a, 'message' );
 
@@ -909,7 +938,7 @@ function fnc_render_block_inst_president( $a ) {
 				?>
 			</div>
 			<?php if ( $photo ) : ?>
-				<figure><img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( fnc_attr( $a, 'name' ) ); ?>" /></figure>
+				<figure><?php echo $photo; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -961,14 +990,12 @@ function fnc_render_block_inst_faq( $a ) {
 /* ---------------- Palette générique ---------------- */
 
 function fnc_render_block_hero( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'size' => '1536x1536', 'eager' => true, 'sizes' => '100vw' ) );
 
 	ob_start();
 	?>
 	<section class="hero secondary">
-		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="hero-inner">
 			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
 				<p class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></p>
@@ -1018,7 +1045,7 @@ function fnc_render_block_richtext( $a ) {
 }
 
 function fnc_render_block_split( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ) );
 	$left  = 'left' === fnc_attr( $a, 'mediaSide', 'right' );
 
 	ob_start();
@@ -1026,7 +1053,7 @@ function fnc_render_block_split( $a ) {
 	<section class="section">
 		<div class="split<?php echo $left ? ' media-left' : ''; ?>">
 			<?php if ( $image && $left ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 			<div>
 				<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
@@ -1042,7 +1069,7 @@ function fnc_render_block_split( $a ) {
 				?>
 			</div>
 			<?php if ( $image && ! $left ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -1155,7 +1182,7 @@ function fnc_render_block_pract_accessibility( $a ) {
 function fnc_render_block_pract_venue( $a ) {
 	$address   = fnc_attr( $a, 'address' );
 	$body      = fnc_attr( $a, 'body' );
-	$map_image = fnc_attachment_url( fnc_attr( $a, 'mapImage', 0 ) );
+	$map_image = fnc_block_image( fnc_attr( $a, 'mapImage', 0 ) );
 	$map_url   = fnc_attr( $a, 'mapEmbedUrl' );
 
 	if ( ! $address && ! $body && ! $map_image && ! $map_url ) {
@@ -1185,7 +1212,7 @@ function fnc_render_block_pract_venue( $a ) {
 	}
 	echo '</div>';
 	if ( $map_image ) {
-		printf( '<figure class="practical-map"><img src="%s" alt="" loading="lazy" /></figure>', esc_url( $map_image ) );
+		echo '<figure class="practical-map">' . $map_image . '</figure>'; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
 	}
 	echo '</div></article>';
 

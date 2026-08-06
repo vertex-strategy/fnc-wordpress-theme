@@ -47,7 +47,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 
 <main id="main">
 	<header class="opening" style="min-height:56vh;">
-		<img class="media-cover" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-pupitre.png' ); ?>" alt="" aria-hidden="true" />
+		<?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/le-pupitre.png', '', array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <a href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Le Forum', 'fnc-wordpress-theme' ); ?></a> · <?php esc_html_e( 'Le mot du Président', 'fnc-wordpress-theme' ); ?></p>
@@ -62,7 +62,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 		<div class="container">
 			<div class="split">
 				<div>
-					<figure><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+					<figure><?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/le-portrait.png', __( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 					<div class="president-identity">
 						<p class="president-name"><?php esc_html_e( 'Eugène Rufin BOUYA', 'fnc-wordpress-theme' ); ?></p>
 						<p class="president-role"><?php esc_html_e( 'Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?></p>

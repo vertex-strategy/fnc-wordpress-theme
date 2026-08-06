@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.25' );
+define( 'FNC_THEME_VERSION', '1.0.26' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -640,7 +640,7 @@ function fnc_render_hero( array $args ) {
 	);
 	?>
 	<section class="hero secondary">
-		<img src="<?php echo esc_url( $args['image'] ); ?>" alt="<?php echo esc_attr( $args['image_alt'] ); ?>" />
+		<?php echo fnc_theme_image( $args['image'], $args['image_alt'], array( 'eager' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup <picture>/<img> échappé dans le helper. ?>
 		<div class="hero-inner">
 			<?php if ( $args['breadcrumb'] ) : ?>
 				<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> / <?php echo esc_html( $args['breadcrumb'] ); ?></p>
@@ -660,6 +660,42 @@ function fnc_render_hero( array $args ) {
 }
 
 /**
+ * <img> optimisé pour un asset : sert le WebP via <picture> (repli sur l'original)
+ * quand un jumeau .webp existe dans le thème, avec loading/decoding et priorité.
+ * Les images d'asset du thème (héros, sections) sont ainsi ~95 % plus légères.
+ *
+ * @param string $url  URL de l'image (asset du thème ou média téléversé).
+ * @param string $alt
+ * @param array  $opts { class:string, eager:bool, aria_hidden:bool }
+ * @return string
+ */
+function fnc_theme_image( $url, $alt = '', $opts = array() ) {
+	$opts  = wp_parse_args( $opts, array( 'class' => '', 'eager' => false, 'aria_hidden' => false ) );
+	$class = $opts['class'] ? ' class="' . esc_attr( $opts['class'] ) . '"' : '';
+	$load  = $opts['eager'] ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"';
+	$aria  = $opts['aria_hidden'] ? ' aria-hidden="true"' : '';
+	$img   = sprintf(
+		'<img%s src="%s" alt="%s"%s decoding="async"%s />',
+		$class,
+		esc_url( $url ),
+		esc_attr( $alt ),
+		$load,
+		$aria
+	);
+
+	// Jumeau .webp présent dans le thème ? (assets locaux uniquement)
+	$webp_url  = preg_replace( '/\.(png|jpe?g)$/i', '.webp', (string) $url );
+	$base      = get_template_directory_uri();
+	if ( $webp_url !== $url && 0 === strpos( (string) $url, $base ) ) {
+		$webp_path = get_template_directory() . substr( $webp_url, strlen( $base ) );
+		if ( is_readable( $webp_path ) ) {
+			return sprintf( '<picture><source type="image/webp" srcset="%s" />%s</picture>', esc_url( $webp_url ), $img );
+		}
+	}
+	return $img;
+}
+
+/**
  * Héros registre A — .opening : photo plein cadre + Ken Burns + PCB animé.
  * Pages listing/section et détail d'édition (internal-pages-hero-spec.md §1/§3).
  * Image = image à la une (pages/fiches) SINON l'image par défaut de la route
@@ -674,10 +710,12 @@ function fnc_render_opening_hero( array $args ) {
 		array( 'eyebrow' => '', 'title' => '', 'title_b' => '', 'lead' => '', 'intro' => '', 'image' => '', 'image_alt' => '', 'breadcrumb' => '' )
 	);
 	$intro = $args['intro'] ? $args['intro'] : $args['lead'];
-	$image = ( is_singular() && has_post_thumbnail() ) ? get_the_post_thumbnail_url( null, 'full' ) : $args['image'];
+	// Média à la une (fiche) → taille « large » (dimensionnée, srcset natif WP) ;
+	// sinon image de route (asset du thème) servie en WebP par le helper.
+	$image = ( is_singular() && has_post_thumbnail() ) ? get_the_post_thumbnail_url( null, 'large' ) : $args['image'];
 	?>
 	<header class="opening">
-		<img class="media-cover" src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $args['image_alt'] ); ?>" />
+		<?php echo fnc_theme_image( $image, $args['image_alt'], array( 'class' => 'media-cover', 'eager' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<?php if ( $args['breadcrumb'] ) : ?>

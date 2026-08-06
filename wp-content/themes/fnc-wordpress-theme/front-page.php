@@ -67,7 +67,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 				<h2 class="lines" id="m2-title"><?php echo esc_html( fnc_home_setting( 'm2_line1', __( 'Pas une conférence.', 'fnc-wordpress-theme' ) ) ); ?><br><?php echo esc_html( fnc_home_setting( 'm2_line2', __( 'Un espace de décision.', 'fnc-wordpress-theme' ) ) ); ?><br><span class="muted"><?php echo esc_html( fnc_home_setting( 'm2_line3', __( 'Une institution permanente.', 'fnc-wordpress-theme' ) ) ); ?></span></h2>
 				<a class="link-more" href="<?php echo esc_url( fnc_home_setting( 'm2_link_url', fnc_page_url( 'le-forum' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm2_link', __( 'Découvrir le Forum', 'fnc-wordpress-theme' ) ) ); ?> <span class="arrow">→</span></a>
 			</div>
-			<figure><img src="<?php echo esc_url( fnc_home_media_url( 'm2_image', $fnc_img_dir . 'la-salle.png' ) ); ?>" alt="<?php esc_attr_e( 'Salle plénière du Forum Numérique Congo avant l’ouverture', 'fnc-wordpress-theme' ); ?>" /></figure>
+			<figure><?php echo fnc_theme_image( fnc_home_media_url( 'm2_image', $fnc_img_dir . 'la-salle.png' ), __( 'Salle plénière du Forum Numérique Congo avant l’ouverture', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 		</div>
 	</section>
 
@@ -145,7 +145,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 					endforeach;
 				else :
 					?>
-					<img class="media-cover" src="<?php echo esc_url( $fnc_img_dir . 'le-portrait.png' ); ?>" alt="" aria-hidden="true" />
+					<?php echo fnc_theme_image( $fnc_img_dir . 'le-portrait.png', '', array( 'class' => 'media-cover', 'aria_hidden' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 				<?php endif; ?>
 			</div>
 			<div class="identity">
@@ -200,7 +200,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 
 	<!-- M4 — LE TERRITOIRE -->
 	<section class="moment" id="m4" aria-labelledby="m4-title">
-		<img class="media-cover" src="<?php echo esc_url( fnc_home_media_url( 'm4_image', $fnc_img_dir . 'le-territoire-brazzaville.png' ) ); ?>" alt="" aria-hidden="true" />
+		<?php echo fnc_theme_image( fnc_home_media_url( 'm4_image', $fnc_img_dir . 'le-territoire-brazzaville.png' ), '', array( 'class' => 'media-cover', 'aria_hidden' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="overlay" aria-hidden="true"></div>
 		<div class="inner">
 			<span class="eyebrow"><?php echo esc_html( fnc_home_setting( 'm4_eyebrow', __( 'Le territoire', 'fnc-wordpress-theme' ) ) ); ?></span>
@@ -228,7 +228,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	?>
 	<section class="moment" id="m5" aria-labelledby="m5-title">
 		<div class="grid">
-			<figure><img src="<?php echo esc_url( fnc_home_media_url( 'm5_image', $fnc_img_dir . 'le-pupitre.png' ) ); ?>" alt="<?php esc_attr_e( 'Pupitre du Forum Numérique Congo sur la scène plénière', 'fnc-wordpress-theme' ); ?>" /></figure>
+			<figure><?php echo fnc_theme_image( fnc_home_media_url( 'm5_image', $fnc_img_dir . 'le-pupitre.png' ), __( 'Pupitre du Forum Numérique Congo sur la scène plénière', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<div>
 				<span class="eyebrow"><?php echo esc_html( fnc_home_setting( 'm5_eyebrow', __( 'Programme', 'fnc-wordpress-theme' ) ) ); ?></span>
 				<h2 id="m5-title"><?php echo esc_html( fnc_home_setting( 'm5_title', __( 'Trois jours de travail collectif', 'fnc-wordpress-theme' ) ) ); ?></h2>
@@ -394,7 +394,7 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 	}
 	?>
 	<section class="moment" id="m8" aria-labelledby="m8-title">
-		<img class="media-cover" src="<?php echo esc_url( fnc_home_media_url( 'm8_image', $fnc_img_dir . 'le-badge.png' ) ); ?>" alt="" aria-hidden="true" />
+		<?php echo fnc_theme_image( fnc_home_media_url( 'm8_image', $fnc_img_dir . 'le-badge.png' ), '', array( 'class' => 'media-cover', 'aria_hidden' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="overlay" aria-hidden="true"></div>
 		<div class="decision">
 			<div class="count-label"><?php echo esc_html( fnc_home_setting( 'm8_label', __( 'La prochaine édition', 'fnc-wordpress-theme' ) ) ); ?></div>

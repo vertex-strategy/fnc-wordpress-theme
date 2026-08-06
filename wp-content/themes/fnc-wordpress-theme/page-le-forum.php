@@ -72,7 +72,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 				<p class="president-sign"><b><?php esc_html_e( 'Eugène Rufin BOUYA', 'fnc-wordpress-theme' ); ?></b><span><?php esc_html_e( 'Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?></span></p>
 				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'le-forum/mot-du-president' ) ); ?>"><?php esc_html_e( 'Lire le mot complet', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
 			</div>
-			<figure class="president-photo"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ); ?>" alt="<?php esc_attr_e( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+			<figure class="president-photo"><?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/le-portrait.png', __( 'Eugène Rufin BOUYA, Président du Forum Numérique Congo', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 		</div>
 	</section>
 
@@ -84,7 +84,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 				<h2 class="lines"><?php esc_html_e( 'Comprendre.', 'fnc-wordpress-theme' ); ?><br><?php esc_html_e( 'Rassembler.', 'fnc-wordpress-theme' ); ?><br><span class="muted"><?php esc_html_e( 'Décider ensemble.', 'fnc-wordpress-theme' ); ?></span></h2>
 				<p class="body"><?php esc_html_e( 'Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
-			<figure><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-panel.png' ); ?>" alt="<?php esc_attr_e( 'Panel de discussion au Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+			<figure><?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/le-panel.png', __( 'Panel de discussion au Forum Numérique Congo', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 		</div>
 	</section>
 
@@ -129,7 +129,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 
 	<!-- Territoire -->
 	<section class="territory">
-		<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png' ); ?>" alt="<?php esc_attr_e( 'Brazzaville, République du Congo', 'fnc-wordpress-theme' ); ?>" />
+		<?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png', __( 'Brazzaville, République du Congo', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<span class="eyebrow"><?php esc_html_e( 'Notre ancrage', 'fnc-wordpress-theme' ); ?></span>

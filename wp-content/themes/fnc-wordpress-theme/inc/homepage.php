@@ -404,11 +404,14 @@ function fnc_render_home_hero_media() {
 				esc_attr( $interval * 1000 )
 			);
 			foreach ( $slides as $index => $url ) {
-				printf(
-					'<img class="media-cover hero-slide%1$s" src="%2$s" alt="" %3$s />',
-					0 === $index ? ' is-active' : '',
-					esc_url( $url ),
-					0 === $index ? '' : 'loading="lazy"'
+				echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+					$url,
+					'',
+					array(
+						'class'       => 'media-cover hero-slide' . ( 0 === $index ? ' is-active' : '' ),
+						'eager'       => 0 === $index,
+						'aria_hidden' => true,
+					)
 				);
 			}
 			echo '</div>';
@@ -416,15 +419,20 @@ function fnc_render_home_hero_media() {
 		}
 		// Moins de deux images : pas de slider, on affiche ce qui existe.
 		if ( 1 === count( $slides ) ) {
-			printf( '<img class="media-cover" src="%s" alt="" aria-hidden="true" />', esc_url( $slides[0] ) );
+			echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+				$slides[0],
+				'',
+				array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true )
+			);
 			return;
 		}
 		$mode = 'image';
 	}
 
-	// Mode image (ou repli).
-	printf(
-		'<img class="media-cover" src="%s" alt="" aria-hidden="true" />',
-		esc_url( fnc_home_media_url( 'm1_image', $fallback ) )
+	// Mode image (ou repli). Héros LCP → WebP + eager + fetchpriority via le helper.
+	echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+		fnc_home_media_url( 'm1_image', $fallback ),
+		'',
+		array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true )
 	);
 }

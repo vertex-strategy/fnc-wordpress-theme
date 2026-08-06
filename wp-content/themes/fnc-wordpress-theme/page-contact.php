@@ -84,7 +84,7 @@ $fnc_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'contact' ) :
 				<h2 class="lines"><?php esc_html_e( 'Vous orienter,', 'fnc-wordpress-theme' ); ?><br><?php esc_html_e( 'sans rien promettre', 'fnc-wordpress-theme' ); ?><br><span class="muted"><?php esc_html_e( 'à la légère.', 'fnc-wordpress-theme' ); ?></span></h2>
 				<p class="body"><?php esc_html_e( 'Un bon contact inspire confiance avant de demander quoi que ce soit. Vous trouverez ici les coordonnées officielles et un formulaire pour préciser votre demande — nous l’orientons vers le bon interlocuteur.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
-			<figure><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/les-personnes.png' ); ?>" alt="<?php esc_attr_e( 'Prise de parole au Forum Numérique Congo', 'fnc-wordpress-theme' ); ?>" /></figure>
+			<figure><?php echo fnc_theme_image( get_template_directory_uri() . '/assets/images/les-personnes.png', __( 'Prise de parole au Forum Numérique Congo', 'fnc-wordpress-theme' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 		</div>
 	</section>
 

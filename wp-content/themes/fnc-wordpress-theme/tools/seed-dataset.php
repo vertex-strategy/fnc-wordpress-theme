@@ -639,6 +639,73 @@ foreach ( $data['sessions'] as $s ) {
 }
 fnc_ds_log( '  ✔ ' . count( $data['sessions'] ) . ' sessions reliées (édition + modérateur + intervenants), traductions EN incluses' );
 
+/* ---- 3 bis. Voix mises en avant (carrousel « Les voix ») ----
+ * On promeut quelques intervenants pour que la démo montre le carrousel « en
+ * action ». Contrainte respectée par construction : on ne retient que des
+ * PARTICIPANTS de l'édition ACTIVE (intervenant ou modérateur d'une de ses
+ * sessions), sinon ils n'apparaîtraient pas. Ordre = rang protocolaire (les
+ * plus hautes voix d'abord). Calculé depuis le dataset (aucune dépendance au
+ * runtime), FR + traduction EN. Rejouable : on nettoie d'abord toute promotion. */
+fnc_ds_log( 'Voix mises en avant :' );
+$fnc_featured_max = 4;
+
+// Édition active (legacyId) : celle marquée active dans le dataset.
+$fnc_active_legacy = '';
+foreach ( $data['editions'] as $e ) {
+	if ( ! empty( $e['active'] ) ) {
+		$fnc_active_legacy = $e['legacyId'];
+		break;
+	}
+}
+
+// Participants de l'édition active (legacyIds uniques), triés par rang protocolaire.
+$fnc_proto = array();
+foreach ( $data['speakers'] as $sp ) {
+	$fnc_proto[ $sp['legacyId'] ] = isset( $sp['protocolOrder'] ) ? (int) $sp['protocolOrder'] : 9999;
+}
+$fnc_part_legacies = array();
+if ( '' !== $fnc_active_legacy ) {
+	foreach ( $data['sessions'] as $s ) {
+		if ( ( $s['editionLegacy'] ?? '' ) !== $fnc_active_legacy ) {
+			continue;
+		}
+		if ( ! empty( $s['moderatorLegacy'] ) ) {
+			$fnc_part_legacies[] = $s['moderatorLegacy'];
+		}
+		foreach ( (array) ( $s['speakerLegacyIds'] ?? array() ) as $lg ) {
+			$fnc_part_legacies[] = $lg;
+		}
+	}
+}
+$fnc_part_legacies = array_values( array_unique( $fnc_part_legacies ) );
+usort( $fnc_part_legacies, static function ( $a, $b ) use ( $fnc_proto ) {
+	return ( $fnc_proto[ $a ] ?? 9999 ) <=> ( $fnc_proto[ $b ] ?? 9999 );
+} );
+
+// Nettoyage (rejouable) : retirer toute promotion existante sur les intervenants seedés.
+foreach ( $sp_map as $lg => $pid ) {
+	delete_post_meta( $pid, '_fnc_speaker_home_featured' );
+	delete_post_meta( $pid, '_fnc_speaker_home_featured_order' );
+	if ( isset( $sp_map_en[ $lg ] ) ) {
+		delete_post_meta( $sp_map_en[ $lg ], '_fnc_speaker_home_featured' );
+		delete_post_meta( $sp_map_en[ $lg ], '_fnc_speaker_home_featured_order' );
+	}
+}
+
+$fnc_featured_order = 1;
+foreach ( array_slice( $fnc_part_legacies, 0, $fnc_featured_max ) as $lg ) {
+	if ( isset( $sp_map[ $lg ] ) ) {
+		update_post_meta( $sp_map[ $lg ], '_fnc_speaker_home_featured', 1 );
+		update_post_meta( $sp_map[ $lg ], '_fnc_speaker_home_featured_order', $fnc_featured_order );
+	}
+	if ( isset( $sp_map_en[ $lg ] ) ) {
+		update_post_meta( $sp_map_en[ $lg ], '_fnc_speaker_home_featured', 1 );
+		update_post_meta( $sp_map_en[ $lg ], '_fnc_speaker_home_featured_order', $fnc_featured_order );
+	}
+	$fnc_featured_order++;
+}
+fnc_ds_log( '  ✔ ' . ( $fnc_featured_order - 1 ) . ' voix promues (participants de l’édition active, rang protocolaire).' );
+
 /* ---- 4. Partenaires ---- */
 fnc_ds_log( 'Partenaires :' );
 // Ordre d'affichage des logos (accueil M6 + page Partenaires). Décision MOA :

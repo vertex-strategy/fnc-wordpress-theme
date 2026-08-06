@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.20' );
+define( 'FNC_THEME_VERSION', '1.0.21' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -1051,25 +1051,71 @@ function fnc_speaker_meta_line( $speaker_id ) {
 }
 
 /**
+ * Étoile à 5 branches (polygon SVG) — port PHP du composant `Star` du site Next
+ * (CountryFlag.tsx) : pointe vers le haut, rayon intérieur = 0,4 × rayon externe.
+ *
+ * @param float  $cx
+ * @param float  $cy
+ * @param float  $r
+ * @param string $fill
+ * @return string
+ */
+function fnc_flag_star( $cx, $cy, $r, $fill ) {
+	$pts = array();
+	for ( $i = 0; $i < 5; $i++ ) {
+		$outer = deg2rad( -90 + $i * 72 );
+		$inner = deg2rad( -90 + $i * 72 + 36 );
+		$pts[] = sprintf( '%.2f,%.2f', $cx + $r * cos( $outer ), $cy + $r * sin( $outer ) );
+		$pts[] = sprintf( '%.2f,%.2f', $cx + $r * 0.4 * cos( $inner ), $cy + $r * 0.4 * sin( $inner ) );
+	}
+	return '<polygon points="' . esc_attr( implode( ' ', $pts ) ) . '" fill="' . esc_attr( $fill ) . '"/>';
+}
+
+/**
  * Drapeaux SVG inline des pays representes au Forum — memes pays et memes
- * geometries simplifiees que le composant l’affichage des drapeaux du site du Forum
- * (le site du Forum)/[locale]/intervenants/l’affichage des drapeaux),
- * transposees en PHP puisque zero dependance tierce
- * exclut d'importer un paquet de drapeaux.
+ * geometries que le composant d'affichage des drapeaux du site Next
+ * (intervenants/CountryFlag.tsx), transposees en PHP (zero dependance tierce).
+ * Les elements GENERES par code cote Next (etoiles, bandes US, chakra Inde) sont
+ * reproduits ici par boucle/formule, pas seulement les aplats statiques.
  */
 function fnc_country_flag_svg( $country ) {
 	$country = trim( (string) $country );
-	$flags   = array(
+
+	// États-Unis : 13 bandes alternées + canton bleu (24 × 7 bandes) + grille
+	// d'étoiles en damier 5×5 (une étoile là où (ligne+colonne) est pair).
+	$us = '';
+	for ( $i = 0; $i < 13; $i++ ) {
+		$us .= sprintf( '<rect y="%.4f" width="60" height="%.4f" fill="%s"/>', $i * 40 / 13, 40 / 13, 0 === $i % 2 ? '#B22234' : '#FFFFFF' );
+	}
+	$us .= sprintf( '<rect width="24" height="%.4f" fill="#3C3B6E"/>', ( 40 / 13 ) * 7 );
+	for ( $row = 0; $row < 5; $row++ ) {
+		for ( $col = 0; $col < 5; $col++ ) {
+			if ( 0 !== ( $row + $col ) % 2 ) {
+				continue;
+			}
+			$us .= sprintf( '<circle cx="%.2f" cy="%.2f" r="0.9" fill="#FFFFFF"/>', 3 + $col * 4.5, 2.6 + $row * 3.6 );
+		}
+	}
+
+	// Inde : chakra bleu = cercle + 12 rayons + point central.
+	$inde = '<rect width="60" height="13.34" fill="#FF9933"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#138808"/><circle cx="30" cy="20" r="5.2" fill="none" stroke="#000080" stroke-width="1"/>';
+	for ( $i = 0; $i < 12; $i++ ) {
+		$a     = M_PI / 6 * $i;
+		$inde .= sprintf( '<line x1="30" y1="20" x2="%.2f" y2="%.2f" stroke="#000080" stroke-width="0.5"/>', 30 + 5.2 * cos( $a ), 20 + 5.2 * sin( $a ) );
+	}
+	$inde .= '<circle cx="30" cy="20" r="1.2" fill="#000080"/>';
+
+	$flags = array(
 		'France'        => '<rect width="20" height="40" fill="#002654"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
 		'Belgique'      => '<rect width="20" height="40" fill="#000000"/><rect x="20" width="20" height="40" fill="#FAE042"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
 		'Luxembourg'    => '<rect width="60" height="13.34" fill="#ED2939"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#00A1DE"/>',
-		'Sénégal'       => '<rect width="20" height="40" fill="#00853F"/><rect x="20" width="20" height="40" fill="#FDEF42"/><rect x="40" width="20" height="40" fill="#E31B23"/>',
-		'Cameroun'      => '<rect width="20" height="40" fill="#007A5E"/><rect x="20" width="20" height="40" fill="#CE1126"/><rect x="40" width="20" height="40" fill="#FCD116"/>',
+		'Sénégal'       => '<rect width="20" height="40" fill="#00853F"/><rect x="20" width="20" height="40" fill="#FDEF42"/><rect x="40" width="20" height="40" fill="#E31B23"/>' . fnc_flag_star( 30, 20, 7, '#00853F' ),
+		'Cameroun'      => '<rect width="20" height="40" fill="#007A5E"/><rect x="20" width="20" height="40" fill="#CE1126"/><rect x="40" width="20" height="40" fill="#FCD116"/>' . fnc_flag_star( 30, 20, 6.5, '#FCD116' ),
 		'Congo'         => '<polygon points="0,0 60,0 0,40" fill="#009543"/><polygon points="60,0 60,40 0,40" fill="#DC241F"/><polygon points="0,40 0,26 46,0 60,0 60,14 14,40" fill="#FBDE4A"/>',
-		'RDC'           => '<rect width="60" height="40" fill="#007FFF"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#F7D618" stroke-width="14"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#CE1021" stroke-width="8"/>',
+		'RDC'           => '<rect width="60" height="40" fill="#007FFF"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#F7D618" stroke-width="14"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#CE1021" stroke-width="8"/>' . fnc_flag_star( 10, 9, 6, '#F7D618' ),
 		'Royaume-Uni'   => '<rect width="60" height="40" fill="#012169"/><path d="M0,0 60,40 M60,0 0,40" stroke="#FFFFFF" stroke-width="8"/><path d="M0,0 60,40 M60,0 0,40" stroke="#C8102E" stroke-width="4"/><rect x="24" width="12" height="40" fill="#FFFFFF"/><rect y="14" width="60" height="12" fill="#FFFFFF"/><rect x="26" width="8" height="40" fill="#C8102E"/><rect y="16" width="60" height="8" fill="#C8102E"/>',
-		'États-Unis'    => '<rect width="60" height="40" fill="#B22234"/><rect width="60" height="20" fill="#FFFFFF"/><rect width="24" height="20" fill="#3C3B6E"/>',
-		'Inde'          => '<rect width="60" height="13.34" fill="#FF9933"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#138808"/><circle cx="30" cy="20" r="5.2" fill="none" stroke="#000080" stroke-width="1"/>',
+		'États-Unis'    => $us,
+		'Inde'          => $inde,
 		'Côte d’Ivoire' => '<rect width="20" height="40" fill="#F77F00"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#009E60"/>',
 	);
 

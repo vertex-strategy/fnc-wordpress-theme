@@ -602,8 +602,19 @@ function fnc_footer_columns() {
 function fnc_order_countries( array $countries ) {
 	$order = fnc_parse_country_order();
 	if ( empty( $order ) ) {
+		// Sans réglage d'ordre : tri alphabétique MAIS Congo en tête par défaut
+		// (comme le site Next). Le pays hôte ouvre toujours la frise.
 		sort( $countries );
-		return $countries;
+		$congo = array();
+		$rest  = array();
+		foreach ( $countries as $country ) {
+			if ( fnc_country_key( $country ) === fnc_country_key( 'Congo' ) ) {
+				$congo[] = $country;
+			} else {
+				$rest[] = $country;
+			}
+		}
+		return array_merge( $congo, $rest );
 	}
 
 	// Index des pays présents par clé normalisée (garde le libellé d'origine).

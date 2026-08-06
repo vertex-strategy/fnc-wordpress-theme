@@ -30,6 +30,14 @@ $fnc_archive_url    = get_post_type_archive_link( 'fnc_intervenant' );
 $fnc_current_profil = isset( $_GET['fnc_profil'] ) ? sanitize_title( wp_unslash( $_GET['fnc_profil'] ) ) : '';
 $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $_GET['fnc_pays'] ) ) : '';
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
+// Libellés de FILTRE au pluriel (comme le site Next) : « Officiels / Experts /
+// Hôtes » (« Hôtes » et non « Animateur »). N'affecte que les chips de filtre ;
+// les termes eux-mêmes restent inchangés. Repli sur le nom du terme si inconnu.
+$fnc_profil_labels = array(
+	'official' => __( 'Officiels', 'fnc-wordpress-theme' ),
+	'expert'   => __( 'Experts', 'fnc-wordpress-theme' ),
+	'host'     => __( 'Hôtes', 'fnc-wordpress-theme' ),
+);
 $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' => false ) );
 
 // Panorama : total d'intervenants et frise des pays representes (champ texte
@@ -56,6 +64,8 @@ if ( function_exists( 'fnc_speaker_facets' ) ) {
 		foreach ( $fnc_facets['profils'] as $fnc_pf ) { $fnc_facet_counts[ $fnc_pf['slug'] ] = (int) $fnc_pf['count']; }
 		$fnc_countries = array();
 		foreach ( $fnc_facets['countries'] as $fnc_ct ) { if ( (int) $fnc_ct['count'] > 0 ) { $fnc_countries[] = $fnc_ct['name']; } }
+		// Congo en tête (comme le site Next), pas l'ordre brut des facettes.
+		$fnc_countries     = function_exists( 'fnc_order_countries' ) ? fnc_order_countries( $fnc_countries ) : $fnc_countries;
 		$fnc_country_count = count( $fnc_countries );
 	}
 }
@@ -107,7 +117,7 @@ $fnc_cat_class = static function ( $slug ) {
 							</a>
 							<?php foreach ( $fnc_profils as $fnc_profil ) : ?>
 								<a class="spk-chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_profil' => $fnc_profil->slug, 'fnc_pays' => $fnc_current_pays ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_profil === $fnc_profil->slug ? 'true' : 'false'; ?>">
-									<?php echo esc_html( $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( isset( $fnc_facet_counts[ $fnc_profil->slug ] ) ? $fnc_facet_counts[ $fnc_profil->slug ] : $fnc_profil->count ) ); ?></span>
+									<?php echo esc_html( isset( $fnc_profil_labels[ $fnc_profil->slug ] ) ? $fnc_profil_labels[ $fnc_profil->slug ] : $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( isset( $fnc_facet_counts[ $fnc_profil->slug ] ) ? $fnc_facet_counts[ $fnc_profil->slug ] : $fnc_profil->count ) ); ?></span>
 								</a>
 							<?php endforeach; ?>
 						</div>

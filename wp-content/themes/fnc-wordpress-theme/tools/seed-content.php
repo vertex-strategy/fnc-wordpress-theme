@@ -256,7 +256,8 @@ fnc_seed_page(
 				'l2'      => 'sans rien promettre',
 				'l3'      => 'à la légère.',
 				'body'    => 'Un bon contact inspire confiance avant de demander quoi que ce soit. Vous trouverez ici les coordonnées officielles et un formulaire pour préciser votre demande — nous l’orientons vers le bon interlocuteur.',
-				'image'   => fnc_seed_image( 'le-pupitre.png' ),
+				// Orientation : photo réelle (personne au pupitre), canonique côté Next.
+				'image'   => fnc_seed_image( 'les-personnes.png' ),
 			)
 		),
 		fnc_seed_block(

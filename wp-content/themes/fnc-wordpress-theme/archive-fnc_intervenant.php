@@ -44,13 +44,19 @@ $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' =
 // libre _fnc_speaker_country, pouvant cumuler plusieurs pays separes par « / »).
 $fnc_all_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
 $fnc_total_speakers  = count( $fnc_all_speaker_ids );
-$fnc_countries       = array();
+$fnc_countries      = array();
+$fnc_seen_countries = array();
 foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 	foreach ( fnc_split_countries( get_post_meta( $fnc_speaker_id, '_fnc_speaker_country', true ) ) as $fnc_country ) {
-		$fnc_countries[ $fnc_country ] = true;
+		// Dédup sur la clé NORMALISÉE (« Congo » ≡ « congo »), premier libellé gardé.
+		$fnc_ck = function_exists( 'fnc_country_key' ) ? fnc_country_key( $fnc_country ) : remove_accents( strtolower( $fnc_country ) );
+		if ( ! isset( $fnc_seen_countries[ $fnc_ck ] ) ) {
+			$fnc_seen_countries[ $fnc_ck ] = true;
+			$fnc_countries[]               = $fnc_country;
+		}
 	}
 }
-$fnc_countries     = fnc_order_countries( array_keys( $fnc_countries ) );
+$fnc_countries     = fnc_order_countries( $fnc_countries );
 $fnc_country_count = count( $fnc_countries );
 
 // FNC Core (données du site) fait autorite sur les facettes (total, comptes par profil,

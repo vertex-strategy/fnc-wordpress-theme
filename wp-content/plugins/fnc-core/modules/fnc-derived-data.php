@@ -273,9 +273,15 @@ if ( ! function_exists( 'fnc_edition_countries' ) ) {
 		foreach ( fnc_edition_participants( $edition_id ) as $sid ) {
 			$raw = (string) get_post_meta( $sid, '_fnc_speaker_country', true );
 			foreach ( array_map( 'trim', explode( '/', $raw ) ) as $c ) {
-				if ( '' !== $c && ! isset( $seen[ $c ] ) ) {
-					$seen[ $c ] = true;
-					$list[]     = $c;
+				if ( '' === $c ) {
+					continue;
+				}
+				// Dédup sur la clé NORMALISÉE (« Congo » ≡ « congo »), en gardant le
+				// PREMIER libellé vu pour l'affichage.
+				$key = function_exists( 'fnc_country_key' ) ? fnc_country_key( $c ) : remove_accents( strtolower( $c ) );
+				if ( ! isset( $seen[ $key ] ) ) {
+					$seen[ $key ] = true;
+					$list[]       = $c;
 				}
 			}
 		}
@@ -458,7 +464,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
 		$ids = fnc_edition_participants( $edition_id );
 
 		$profils     = array(); // slug => ['slug','name','count']
-		$country_cnt = array(); // name => count
+		$country_cnt = array(); // clé pays NORMALISÉE => count
 		foreach ( $ids as $sid ) {
 			$terms = get_the_terms( $sid, 'fnc_profil' );
 			if ( is_array( $terms ) ) {
@@ -471,18 +477,24 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
 			}
 			$raw = (string) get_post_meta( $sid, '_fnc_speaker_country', true );
 			foreach ( array_map( 'trim', explode( '/', $raw ) ) as $c ) {
-				if ( '' !== $c ) {
-					$country_cnt[ $c ] = isset( $country_cnt[ $c ] ) ? $country_cnt[ $c ] + 1 : 1;
+				if ( '' === $c ) {
+					continue;
 				}
+				// Compte sur la clé NORMALISÉE (« Congo » ≡ « congo ») pour que le
+				// compteur corresponde à la frise dédupliquée.
+				$ckey                = function_exists( 'fnc_country_key' ) ? fnc_country_key( $c ) : remove_accents( strtolower( $c ) );
+				$country_cnt[ $ckey ] = isset( $country_cnt[ $ckey ] ) ? $country_cnt[ $ckey ] + 1 : 1;
 			}
 		}
 
 		// Pays ordonnés comme la frise (réutilise l'ordre éditorial déjà en place).
+		// Le compte se lit sur la clé normalisée du libellé retenu.
 		$countries = array();
 		foreach ( fnc_edition_countries( $edition_id ) as $name ) {
+			$nkey        = function_exists( 'fnc_country_key' ) ? fnc_country_key( $name ) : remove_accents( strtolower( $name ) );
 			$countries[] = array(
 				'name'  => $name,
-				'count' => isset( $country_cnt[ $name ] ) ? $country_cnt[ $name ] : 0,
+				'count' => isset( $country_cnt[ $nkey ] ) ? $country_cnt[ $nkey ] : 0,
 			);
 		}
 

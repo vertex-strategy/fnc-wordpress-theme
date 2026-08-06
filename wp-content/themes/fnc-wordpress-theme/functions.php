@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.21' );
+define( 'FNC_THEME_VERSION', '1.0.22' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -1051,82 +1051,148 @@ function fnc_speaker_meta_line( $speaker_id ) {
 }
 
 /**
- * Étoile à 5 branches (polygon SVG) — port PHP du composant `Star` du site Next
- * (CountryFlag.tsx) : pointe vers le haut, rayon intérieur = 0,4 × rayon externe.
+ * Code ISO 3166-1 alpha-2 (minuscule) d'un pays à partir de son nom en français
+ * (champ texte libre). Normalisation tolérante (minuscules, accents, apostrophes,
+ * ponctuation) + table nom → ISO couvrant l'Afrique et les partenaires
+ * internationaux. Chaîne vide si le nom ne se mappe pas (aucun mauvais drapeau).
  *
- * @param float  $cx
- * @param float  $cy
- * @param float  $r
- * @param string $fill
- * @return string
+ * @param string $country
+ * @return string Code ISO alpha-2 minuscule, ou '' si inconnu.
  */
-function fnc_flag_star( $cx, $cy, $r, $fill ) {
-	$pts = array();
-	for ( $i = 0; $i < 5; $i++ ) {
-		$outer = deg2rad( -90 + $i * 72 );
-		$inner = deg2rad( -90 + $i * 72 + 36 );
-		$pts[] = sprintf( '%.2f,%.2f', $cx + $r * cos( $outer ), $cy + $r * sin( $outer ) );
-		$pts[] = sprintf( '%.2f,%.2f', $cx + $r * 0.4 * cos( $inner ), $cy + $r * 0.4 * sin( $inner ) );
-	}
-	return '<polygon points="' . esc_attr( implode( ' ', $pts ) ) . '" fill="' . esc_attr( $fill ) . '"/>';
-}
-
-/**
- * Drapeaux SVG inline des pays representes au Forum — memes pays et memes
- * geometries que le composant d'affichage des drapeaux du site Next
- * (intervenants/CountryFlag.tsx), transposees en PHP (zero dependance tierce).
- * Les elements GENERES par code cote Next (etoiles, bandes US, chakra Inde) sont
- * reproduits ici par boucle/formule, pas seulement les aplats statiques.
- */
-function fnc_country_flag_svg( $country ) {
-	$country = trim( (string) $country );
-
-	// États-Unis : 13 bandes alternées + canton bleu (24 × 7 bandes) + grille
-	// d'étoiles en damier 5×5 (une étoile là où (ligne+colonne) est pair).
-	$us = '';
-	for ( $i = 0; $i < 13; $i++ ) {
-		$us .= sprintf( '<rect y="%.4f" width="60" height="%.4f" fill="%s"/>', $i * 40 / 13, 40 / 13, 0 === $i % 2 ? '#B22234' : '#FFFFFF' );
-	}
-	$us .= sprintf( '<rect width="24" height="%.4f" fill="#3C3B6E"/>', ( 40 / 13 ) * 7 );
-	for ( $row = 0; $row < 5; $row++ ) {
-		for ( $col = 0; $col < 5; $col++ ) {
-			if ( 0 !== ( $row + $col ) % 2 ) {
-				continue;
-			}
-			$us .= sprintf( '<circle cx="%.2f" cy="%.2f" r="0.9" fill="#FFFFFF"/>', 3 + $col * 4.5, 2.6 + $row * 3.6 );
-		}
-	}
-
-	// Inde : chakra bleu = cercle + 12 rayons + point central.
-	$inde = '<rect width="60" height="13.34" fill="#FF9933"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#138808"/><circle cx="30" cy="20" r="5.2" fill="none" stroke="#000080" stroke-width="1"/>';
-	for ( $i = 0; $i < 12; $i++ ) {
-		$a     = M_PI / 6 * $i;
-		$inde .= sprintf( '<line x1="30" y1="20" x2="%.2f" y2="%.2f" stroke="#000080" stroke-width="0.5"/>', 30 + 5.2 * cos( $a ), 20 + 5.2 * sin( $a ) );
-	}
-	$inde .= '<circle cx="30" cy="20" r="1.2" fill="#000080"/>';
-
-	$flags = array(
-		'France'        => '<rect width="20" height="40" fill="#002654"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
-		'Belgique'      => '<rect width="20" height="40" fill="#000000"/><rect x="20" width="20" height="40" fill="#FAE042"/><rect x="40" width="20" height="40" fill="#ED2939"/>',
-		'Luxembourg'    => '<rect width="60" height="13.34" fill="#ED2939"/><rect y="13.34" width="60" height="13.33" fill="#FFFFFF"/><rect y="26.67" width="60" height="13.33" fill="#00A1DE"/>',
-		'Sénégal'       => '<rect width="20" height="40" fill="#00853F"/><rect x="20" width="20" height="40" fill="#FDEF42"/><rect x="40" width="20" height="40" fill="#E31B23"/>' . fnc_flag_star( 30, 20, 7, '#00853F' ),
-		'Cameroun'      => '<rect width="20" height="40" fill="#007A5E"/><rect x="20" width="20" height="40" fill="#CE1126"/><rect x="40" width="20" height="40" fill="#FCD116"/>' . fnc_flag_star( 30, 20, 6.5, '#FCD116' ),
-		'Congo'         => '<polygon points="0,0 60,0 0,40" fill="#009543"/><polygon points="60,0 60,40 0,40" fill="#DC241F"/><polygon points="0,40 0,26 46,0 60,0 60,14 14,40" fill="#FBDE4A"/>',
-		'RDC'           => '<rect width="60" height="40" fill="#007FFF"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#F7D618" stroke-width="14"/><line x1="0" y1="42" x2="62" y2="-2" stroke="#CE1021" stroke-width="8"/>' . fnc_flag_star( 10, 9, 6, '#F7D618' ),
-		'Royaume-Uni'   => '<rect width="60" height="40" fill="#012169"/><path d="M0,0 60,40 M60,0 0,40" stroke="#FFFFFF" stroke-width="8"/><path d="M0,0 60,40 M60,0 0,40" stroke="#C8102E" stroke-width="4"/><rect x="24" width="12" height="40" fill="#FFFFFF"/><rect y="14" width="60" height="12" fill="#FFFFFF"/><rect x="26" width="8" height="40" fill="#C8102E"/><rect y="16" width="60" height="8" fill="#C8102E"/>',
-		'États-Unis'    => $us,
-		'Inde'          => $inde,
-		'Côte d’Ivoire' => '<rect width="20" height="40" fill="#F77F00"/><rect x="20" width="20" height="40" fill="#FFFFFF"/><rect x="40" width="20" height="40" fill="#009E60"/>',
-	);
-
-	if ( ! isset( $flags[ $country ] ) ) {
+function fnc_country_iso( $country ) {
+	$k = function_exists( 'remove_accents' ) ? remove_accents( mb_strtolower( trim( (string) $country ) ) ) : mb_strtolower( trim( (string) $country ) );
+	$k = str_replace( array( '’', "'" ), '', $k );
+	$k = preg_replace( '/[^a-z0-9]+/', ' ', $k );
+	$k = trim( (string) preg_replace( '/\s+/', ' ', $k ) );
+	if ( '' === $k ) {
 		return '';
 	}
 
+	$map = array(
+		// Cas piégeux (Congo + international sensible).
+		'congo'                            => 'cg',
+		'republique du congo'              => 'cg',
+		'congo brazzaville'                => 'cg',
+		'rdc'                              => 'cd',
+		'rd congo'                         => 'cd',
+		'republique democratique du congo' => 'cd',
+		'congo kinshasa'                   => 'cd',
+		'etats unis'                       => 'us',
+		'etats unis damerique'             => 'us',
+		'usa'                              => 'us',
+		'royaume uni'                      => 'gb',
+		'uk'                               => 'gb',
+		'grande bretagne'                  => 'gb',
+		'angleterre'                       => 'gb',
+		'cote divoire'                     => 'ci',
+		// Afrique.
+		'afrique du sud'                   => 'za',
+		'algerie'                          => 'dz',
+		'angola'                           => 'ao',
+		'benin'                            => 'bj',
+		'botswana'                         => 'bw',
+		'burkina faso'                     => 'bf',
+		'burundi'                          => 'bi',
+		'cameroun'                         => 'cm',
+		'cap vert'                         => 'cv',
+		'cabo verde'                       => 'cv',
+		'centrafrique'                     => 'cf',
+		'republique centrafricaine'        => 'cf',
+		'comores'                          => 'km',
+		'djibouti'                         => 'dj',
+		'egypte'                           => 'eg',
+		'erythree'                         => 'er',
+		'eswatini'                         => 'sz',
+		'swaziland'                        => 'sz',
+		'ethiopie'                         => 'et',
+		'gabon'                            => 'ga',
+		'gambie'                           => 'gm',
+		'ghana'                            => 'gh',
+		'guinee'                           => 'gn',
+		'guinee bissau'                    => 'gw',
+		'guinee equatoriale'               => 'gq',
+		'kenya'                            => 'ke',
+		'lesotho'                          => 'ls',
+		'liberia'                          => 'lr',
+		'libye'                            => 'ly',
+		'madagascar'                       => 'mg',
+		'malawi'                           => 'mw',
+		'mali'                             => 'ml',
+		'maroc'                            => 'ma',
+		'maurice'                          => 'mu',
+		'ile maurice'                      => 'mu',
+		'mauritanie'                       => 'mr',
+		'mozambique'                       => 'mz',
+		'namibie'                          => 'na',
+		'niger'                            => 'ne',
+		'nigeria'                          => 'ng',
+		'ouganda'                          => 'ug',
+		'rwanda'                           => 'rw',
+		'sao tome et principe'             => 'st',
+		'senegal'                          => 'sn',
+		'seychelles'                       => 'sc',
+		'sierra leone'                     => 'sl',
+		'somalie'                          => 'so',
+		'soudan'                           => 'sd',
+		'soudan du sud'                    => 'ss',
+		'tanzanie'                         => 'tz',
+		'tchad'                            => 'td',
+		'togo'                             => 'tg',
+		'tunisie'                          => 'tn',
+		'zambie'                           => 'zm',
+		'zimbabwe'                         => 'zw',
+		// International.
+		'france'                           => 'fr',
+		'belgique'                         => 'be',
+		'luxembourg'                       => 'lu',
+		'suisse'                           => 'ch',
+		'canada'                           => 'ca',
+		'allemagne'                        => 'de',
+		'espagne'                          => 'es',
+		'italie'                           => 'it',
+		'portugal'                         => 'pt',
+		'pays bas'                         => 'nl',
+		'chine'                            => 'cn',
+		'inde'                             => 'in',
+		'japon'                            => 'jp',
+		'coree du sud'                     => 'kr',
+		'bresil'                           => 'br',
+		'emirats arabes unis'              => 'ae',
+		'arabie saoudite'                  => 'sa',
+		'qatar'                            => 'qa',
+		'turquie'                          => 'tr',
+		'russie'                           => 'ru',
+		'israel'                           => 'il',
+		'singapour'                        => 'sg',
+		'australie'                        => 'au',
+	);
+
+	return isset( $map[ $k ] ) ? $map[ $k ] : '';
+}
+
+/**
+ * Drapeau d'un pays : <img> vers le pack SVG ISO embarqué (assets/flags/{iso}.svg,
+ * ratio 4×3, flag-icons — MIT). Nom → ISO via fnc_country_iso(). Chaîne vide si le
+ * nom ne se mappe pas OU si le fichier est absent (jamais de mauvais drapeau).
+ * L'override éditorial (upload) est appliqué en amont par fnc_flag_markup().
+ *
+ * @param string $country
+ * @return string
+ */
+function fnc_country_flag_svg( $country ) {
+	$country = trim( (string) $country );
+	$iso     = fnc_country_iso( $country );
+	if ( '' === $iso ) {
+		return '';
+	}
+	$rel = '/assets/flags/' . $iso . '.svg';
+	if ( ! is_readable( get_template_directory() . $rel ) ) {
+		return '';
+	}
 	return sprintf(
-		'<svg class="flag-svg" viewBox="0 0 60 40" role="img" aria-label="%s">%s</svg>',
-		esc_attr( $country ),
-		$flags[ $country ]
+		'<img class="flag-svg" src="%s" alt="%s" width="28" height="19" loading="lazy" />',
+		esc_url( get_template_directory_uri() . $rel ),
+		esc_attr( $country )
 	);
 }
 

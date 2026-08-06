@@ -55,7 +55,7 @@ $fnc_interest_options = array(
 ?>
 
 <main id="main">
-	<section class="section">
+	<section class="section linen">
 		<div class="container">
 			<div class="section-head">
 				<div>
@@ -67,7 +67,7 @@ $fnc_interest_options = array(
 		</div>
 	</section>
 
-	<section class="section linen">
+	<section class="section">
 		<div class="container">
 			<div class="section-head">
 				<div>
@@ -87,7 +87,7 @@ $fnc_interest_options = array(
 		</div>
 	</section>
 
-	<section class="section">
+	<section class="section linen">
 		<div class="container">
 			<div class="section-head">
 				<div>
@@ -137,6 +137,17 @@ $fnc_interest_options = array(
 									?>
 									<a class="partner-logo" href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_partner ) ); ?>">
 										<?php echo get_the_post_thumbnail( $fnc_partner, 'medium', array( 'alt' => esc_attr( get_the_title( $fnc_partner ) ) ) ); ?>
+									</a>
+								<?php else :
+									// Repli DA-cohérent (registre RÈGLE 7) : monogramme, jamais une carte nom-seul brute.
+									$fnc_p_words = preg_split( '/\s+/', trim( wp_strip_all_tags( get_the_title( $fnc_partner ) ) ) );
+									$fnc_p_mono  = '';
+									foreach ( array_slice( (array) $fnc_p_words, 0, 2 ) as $fnc_p_w ) {
+										$fnc_p_mono .= mb_strtoupper( mb_substr( $fnc_p_w, 0, 1 ) );
+									}
+									?>
+									<a class="partner-logo partner-logo--mono" href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_partner ) ); ?>">
+										<span aria-hidden="true"><?php echo esc_html( $fnc_p_mono ); ?></span>
 									</a>
 								<?php endif; ?>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>"><?php echo esc_html( get_the_title( $fnc_partner ) ); ?></a></h3>
@@ -192,7 +203,7 @@ $fnc_interest_options = array(
 	</section>
 
 	<!-- Échanger : demande de partenariat -->
-	<section class="section linen">
+	<section class="section">
 		<div class="split media-left">
 			<div>
 				<span class="eyebrow" data-fnc-st="partenaires.cta.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'eyebrow' ) ); ?></span>
@@ -249,7 +260,7 @@ $fnc_interest_options = array(
 				</div>
 
 				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
-				<button class="btn btn-red" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
+				<button class="btn" type="submit" style="background:var(--navy);color:#fff;border-color:var(--navy);"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>

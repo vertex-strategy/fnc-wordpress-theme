@@ -6,7 +6,7 @@
  *              et relations : éditions, intervenants, sessions, publications, partenaires,
  *              actualités). Survit à un changement de thème. Sans dépendance tierce, hors
  *              multilinguisme assuré séparément par Polylang.
- * Version: 1.0.16
+ * Version: 1.0.17
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: Grinso & Associés
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_CONTENT_MODEL_VERSION', '1.0.16' );
+define( 'FNC_CONTENT_MODEL_VERSION', '1.0.17' );
 define( 'FNC_CONTENT_MODEL_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once FNC_CONTENT_MODEL_DIR . 'includes/post-types.php';

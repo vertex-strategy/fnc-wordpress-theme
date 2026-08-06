@@ -149,6 +149,12 @@ Intervenants → *Ajouter*. Renseignez :
   (il ne change **pas** l'ordre : voir ci-dessous),
 - **Portrait** (image mise en avant) et ses **liens** éventuels.
 
+**Drapeaux des pays.** Sur la page Intervenants, le drapeau de chaque pays s'affiche
+**automatiquement** à partir du nom saisi (« France », « Congo », « RDC », « États-Unis »,
+« Côte d'Ivoire »… — la casse et les accents sont indifférents ; un pays écrit de deux façons
+proches ne compte qu'une fois). Aucun réglage à faire. Pour imposer un drapeau précis, téléversez-le
+dans **Personnaliser → FNC → Intervenants** (« Ordre des pays représentés »).
+
 **Ordre d'affichage (partout : annuaire, participants, aperçus).** Deux champs, du plus
 prioritaire au moins prioritaire :
 - **Rang protocolaire** — le plus petit d'abord (les officiels reçoivent un rang bas pour
@@ -222,8 +228,11 @@ page a un **type de page** (colonne latérale) qui détermine ce que vous pouvez
 ### 5.9 Ouvrir les inscriptions & recevoir les demandes
 Dans **Réglages → FNC (fonctionnalités)** :
 - **Inscriptions** : cochez pour **ouvrir** la page d'inscription. Fermée, la page affiche un
-  message honnête et n'accepte aucune demande.
-- **Actualités** : cochez pour **afficher** la rubrique Actualités.
+  message honnête, n'accepte aucune demande, le bouton « S'inscrire » disparaît partout et la page
+  est retirée des moteurs de recherche.
+- **Actualités** : cochez pour **afficher** la rubrique Actualités. Décochée, la liste et les
+  articles renvoient une page « introuvable » et n'apparaissent ni dans les menus ni dans le plan
+  du site.
 
 Les demandes envoyées via les formulaires (contact, inscription, demande de partenariat)
 arrivent dans **Soumissions** (menu de l'administration). Un accusé de réception est envoyé

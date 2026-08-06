@@ -119,8 +119,9 @@ Toutes ces fonctions sont **publiques** (préfixe `fnc_`, gardées `function_exi
   **triés protocolOrder → `_sort_index` → titre**.
 - `fnc_home_voices($count=10, $edition=0)` : **promotion** (`_home_featured` d'abord, triés par
   `_home_featured_order`) puis reste, plafonné.
-- `fnc_edition_countries()` (split `/`, dédup, Congo en tête à défaut d'ordre CMS),
-  `fnc_session_speaker_ids()`, `fnc_current_edition_id()` / `fnc_resolve_active_edition()`.
+- `fnc_edition_countries()` (split `/`, **dédup sur clé normalisée `fnc_country_key`** — «Congo»≡«congo»,
+  premier libellé gardé —, Congo en tête à défaut d'ordre CMS ; `fnc_speaker_facets()` compte les pays
+  sur la même clé normalisée), `fnc_session_speaker_ids()`, `fnc_current_edition_id()` / `fnc_resolve_active_edition()`.
 - **RÈGLE 7** : `fnc_speaker_portrait($id)` ne renvoie l'`<img>` que si `_image_right='obtenu'`
   et non expiré ; sinon le gabarit rend un monogramme (`fnc_speaker_initials()`,
   `fnc_speaker_display_name()`).
@@ -129,9 +130,10 @@ Toutes ces fonctions sont **publiques** (préfixe `fnc_`, gardées `function_exi
 `Organization`+`WebSite` (partout) + `Event` (accueil, si nom & date de début). **Anti-doublon** :
 `fnc_sd_seo_plugin_active()` supprime Organization/WebSite si AIOSEO/Yoast est actif (garde l'Event).
 
-**Feature flags** (`fnc-feature-flags.php`) : `fnc_registration_enabled()` (CTA conditionnel) +
-flag actualités. Bascules d'administration (« Réglages → FNC (fonctionnalités) »), pas des variables
-d'environnement.
+**Feature flags** (`fnc-feature-flags.php`) : `fnc_registration_enabled()` / `fnc_news_enabled()`
+(constante → env → option). Appliqués aux **3 niveaux** : **API** (`fnc_feature_gate_submission` sur
+`fnc_submission_accepts` → inscription fermée refusée), **CTA** (`fnc_registration_cta()`), et **PAGE/SEO**
+(gate côté thème, voir §5). Bascules d'administration (« Réglages → FNC (fonctionnalités) »).
 
 **Consentement / Matomo** (`fnc-consent-matomo.php`) : `fnc_matomo_head()` — file `_paq` dans
 l'ordre `requireCookieConsent → (localStorage 'fnc.consent.analytics') → setDoNotTrack,true →
@@ -160,6 +162,28 @@ accusé de réception, `do_action('fnc_submission_stored')`.
 Chrome & nav (`functions.php`) : `fnc_default_menu_items()` (6 items, ordre du Forum),
 `fnc_menu_is_active()` (`aria-current`, ignore `#`), `fnc_page_url()`/`fnc_archive_url()`,
 `fnc_language_switcher()` (séparateur `|`).
+
+**Feature flags — niveau PAGE + SEO** (`functions.php`) : `fnc_feature_flag_gate()` (`template_redirect`) →
+actualités fermées = **404** (via `404.php` localisé) ; inscription fermée = **noindex** (filtre
+`fnc_force_noindex` lu par `fnc_seo_is_noindex`) + état « fermé » (gabarit + bloc `fnc/form`).
+`fnc_is_registration_page()` ; sitemap natif filtré (`wp_sitemaps_post_types` / `_posts_entries`).
+`is_404()` → noindex.
+
+**hreflang** (`functions.php`) : `fnc_emit_hreflang()` (`wp_head`) — `fr` / `en` / `x-default` via les
+URL de traduction Polylang (émetteur unique du thème).
+
+**Composants d'affichage partagés** (`functions.php`) — réutilisés par plusieurs gabarits :
+`fnc_render_filter_chips()` (chips `.chip` radius 2px, libellés + comptes + compteur ; éditions, ressources),
+`fnc_render_complement_section()` (bande claire « Suite » + blocs-liens bordés ; jamais un callout navy),
+`fnc_render_publication_card()` + `fnc_publication_type_label()` (registre `.pub`, type précis / date /
+action), `fnc_footer_columns()` (colonnes du pied de page, texte éditable ou défaut).
+
+**Drapeaux — pack SVG ISO** (`functions.php` + `assets/flags/`) : `fnc_country_iso($nom)` (mapping tolérant
+nom FR → ISO alpha-2, Congo→cg, RDC→cd, États-Unis→us, Royaume-Uni→gb, Côte d'Ivoire→ci…),
+`fnc_country_flag_svg()` → `<img class="flag-svg" src="assets/flags/{iso}.svg">` (**flag-icons**, MIT, ratio 4×3,
+271 fichiers + `LICENSE` ; vide si non mappé/absent → jamais de mauvais drapeau). `fnc_flag_markup()` applique
+d'abord l'**override éditorial** (upload via l'ordre des pays). `fnc_order_countries()` place **Congo en tête**
+par défaut.
 
 ---
 
@@ -250,16 +274,23 @@ Conventions : préfixe `fnc_` ; toute fonction inter-composant gardée par `func
 
 ## 11. Contraintes & dette connues
 
-- **Zéro dépendance** : champ fichier des ressources et drapeaux de pays = champs **URL**
-  (téléversement Médiathèque puis copie de l'adresse), pas de sélecteur de média ; texte riche des
-  blocs = `wpautop`, pas un éditeur Lexical.
+- **Zéro dépendance** : champ fichier des ressources = champ **URL** (téléversement Médiathèque puis
+  copie de l'adresse), pas de sélecteur de média ; texte riche des blocs = `wpautop`, pas un éditeur
+  Lexical. *(Les drapeaux ne sont plus des champs URL : pack SVG ISO embarqué — voir §5 ; l'upload
+  d'un drapeau par pays reste possible en override éditorial.)*
 - **Statut `archived`** : non public (WordPress n'a pas d'« archivé » natif) ; réglable via
   Modification rapide / éditeur classique (pas d'intégration complète au panneau Gutenberg).
 - **Image OG par défaut** : un visuel du thème seedé ; remplacer par un 1200×630 dédié en prod
-  (ou via l'assistant AIOSEO). `x-default` hreflang non émis par Polylang.
+  (ou via l'assistant AIOSEO). *(hreflang `fr`/`en`/`x-default` désormais émis par le thème,
+  `fnc_emit_hreflang()`.)*
+- **Réserves de contenu (arbitrage MOA en cours)** : lieux des éditions passées **2018/2020/2022**
+  vides (2024 renseigné) ; **slugs de type des publications** du seed (`compte_rendu`,
+  `note_conceptuelle`…) hors registre `fnc_content_model_publication_types()` — l'affichage
+  « humanise » les slugs inconnus (rendu correct), mais l'alignement registre↔seed reste à trancher.
 - **Écarts VOLONTAIRES (MOA)** vs Next : M6 « 3 en tête », slugs de section EN en FR, feature flags
-  en bascules d'administration. Voir `docs/design/wordpress-integration-audit.md` pour l'état
-  d'intégration détaillé (règle par règle).
+  en bascules d'administration, drapeaux via pack ISO (flag-icons) au lieu des SVG dessinés à la main,
+  bouton de soumission de formulaire en navy. Voir `docs/design/wordpress-integration-audit.md` +
+  `docs/design/wordpress-functional-parity-audit.md` pour l'état d'intégration détaillé.
 
 ---
 

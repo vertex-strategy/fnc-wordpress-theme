@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.12
+Version: 1.0.13
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -78,7 +78,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--jaune);outline-offs
 .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08);}
 
 /* ---------- NAVIGATION ---------- */
-.nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px var(--marge);color:#fff;transition:background .4s var(--ease),padding .4s var(--ease),box-shadow .4s var(--ease),color .4s var(--ease);}
+.nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px var(--marge);color:#fff;transition:background .3s var(--ease),padding .3s var(--ease),box-shadow .3s var(--ease),color .3s var(--ease);}
 .nav.solid{background:rgba(255,255,255,.96);backdrop-filter:saturate(120%) blur(8px);-webkit-backdrop-filter:saturate(120%) blur(8px);color:var(--texte-corps);padding-top:13px;padding-bottom:13px;box-shadow:0 1px 0 var(--border),0 8px 30px rgba(20,20,40,.05);}
 .brand{display:flex;align-items:center;gap:12px;position:relative;}
 .brand .mark{width:30px;height:30px;flex:none;display:grid;place-items:center;transition:transform .4s var(--ease);}
@@ -259,7 +259,7 @@ footer{background:linear-gradient(180deg,var(--navy-deep),var(--noir));color:rgb
    plus haut) et le kit CSS prod permute leur opacité selon .nav / .nav.solid. Le
    thème fournit ici la taille de base et la transition de fondu (le kit ne règle
    que la hauteur en état solide et les opacités). */
-.brand-logo{height:44px;width:auto;display:block;transition:opacity .4s var(--ease),height .4s var(--ease);}
+.brand-logo{height:44px;width:auto;display:block;transition:opacity .3s var(--ease),height .3s var(--ease);}
 
 /* ---------- REVEAL (micro-animation, progressif) ---------- */
 body.js-reveal .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0ms);will-change:opacity,transform;}

@@ -11,22 +11,49 @@
 	'use strict';
 
 	var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	var nav = document.getElementById('nav');
+	var nav = document.getElementById('nav') || document.querySelector('.nav');
 	// Pages a bandeau lin (registre C, ex. pages legales) : pas de hero sombre
 	// sous la barre → la nav reste solide en permanence (texte navy lisible).
 	var linenHeader = document.body.classList.contains('linen-header');
+	// Hero sombre sous la barre (accueil #m1, page-head, opening) et son titre :
+	// on solidifie selon la POSITION REELLE du titre, pas un seuil fixe. Le titre
+	// de l'accueil est en bas d'un hero 100dvh (justify:flex-end) → il atteint la
+	// barre AVANT 60 % de defilement ; un seuil fixe laissait le logo blanc sur le
+	// texte blanc et le fond blanc arriver en retard.
+	var darkHero = document.querySelector('#m1, .page-head, .opening');
+	var heading = darkHero ? darkHero.querySelector('h1') : null;
 
 	function onScroll() {
 		if (!nav) {
 			return;
 		}
-		if (linenHeader || window.scrollY > window.innerHeight * 0.6) {
+		// Page a fond clair OU pas de hero sombre → solide d'emblee.
+		if (linenHeader || !darkHero) {
 			nav.classList.add('solid');
-		} else {
-			nav.classList.remove('solid');
+			return;
 		}
+		// Solide des que le titre atteint la barre, avec une marge (hauteur de la
+		// barre + 40px) pour que le fond blanc soit en place AVANT le contact avec
+		// le logo. On teste le haut du titre (ou, a defaut, le bas du hero).
+		var limit = nav.offsetHeight + 40;
+		var el = heading || darkHero;
+		var pos = heading ? el.getBoundingClientRect().top : el.getBoundingClientRect().bottom;
+		nav.classList.toggle('solid', pos <= limit);
 	}
-	window.addEventListener('scroll', onScroll, { passive: true });
+
+	// rAF-throttle (perf) : au plus une passe par frame.
+	var navTicking = false;
+	window.addEventListener('scroll', function () {
+		if (navTicking) {
+			return;
+		}
+		navTicking = true;
+		window.requestAnimationFrame(function () {
+			onScroll();
+			navTicking = false;
+		});
+	}, { passive: true });
+	window.addEventListener('resize', onScroll, { passive: true });
 	onScroll();
 
 	// Menu mobile

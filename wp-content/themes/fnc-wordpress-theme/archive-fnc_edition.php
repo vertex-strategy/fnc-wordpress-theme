@@ -100,24 +100,30 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 				<p><?php esc_html_e( 'Filtrez par moment : l’édition en cours, celles à venir, celles déjà passées.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
-			<?php // Carte blanche de filtre : chips par statut (avec comptes) → ?status=, compteur, encart. ?>
+			<?php // Carte blanche de filtre : COMPOSANT PARTAGÉ (chips par statut + comptes + compteur) + encart. ?>
 			<div class="fnc-card" style="background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px;margin-bottom:32px;">
-				<div class="filters" role="group" aria-label="<?php esc_attr_e( 'Filtrer les éditions par statut', 'fnc-wordpress-theme' ); ?>">
-					<a class="chip" href="<?php echo esc_url( $fnc_editions_url ); ?>" aria-pressed="<?php echo '' === $fnc_cur_status ? 'true' : 'false'; ?>">
-						<?php esc_html_e( 'Toutes', 'fnc-wordpress-theme' ); ?> <span aria-hidden="true">(<?php echo esc_html( $fnc_total ); ?>)</span>
-					</a>
-					<?php foreach ( array( 'current', 'upcoming', 'past' ) as $fnc_st ) : ?>
-						<a class="chip" href="<?php echo esc_url( add_query_arg( 'status', $fnc_st, $fnc_editions_url ) ); ?>" aria-pressed="<?php echo $fnc_cur_status === $fnc_st ? 'true' : 'false'; ?>">
-							<?php echo esc_html( $fnc_list_labels[ $fnc_st ] ); ?> <span aria-hidden="true">(<?php echo esc_html( $fnc_counts[ $fnc_st ] ); ?>)</span>
-						</a>
-					<?php endforeach; ?>
-				</div>
-				<p class="frise-note" role="status" aria-live="polite" style="margin-top:16px;">
-					<?php
-					/* translators: %d: nombre d'éditions affichées. */
-					echo esc_html( sprintf( _n( '%d édition affichée', '%d éditions affichées', count( $fnc_shown ), 'fnc-wordpress-theme' ), count( $fnc_shown ) ) );
-					?>
-				</p>
+				<?php
+				$fnc_chip_options = array();
+				foreach ( array( 'current', 'upcoming', 'past' ) as $fnc_st ) {
+					$fnc_chip_options[ $fnc_st ] = array(
+						'label' => $fnc_list_labels[ $fnc_st ],
+						'count' => (int) $fnc_counts[ $fnc_st ],
+					);
+				}
+				fnc_render_filter_chips(
+					array(
+						'base_url'   => $fnc_editions_url,
+						'param'      => 'status',
+						'current'    => $fnc_cur_status,
+						'all_label'  => __( 'Toutes', 'fnc-wordpress-theme' ),
+						'all_count'  => $fnc_total,
+						'options'    => $fnc_chip_options,
+						'aria_label' => __( 'Filtrer les éditions par statut', 'fnc-wordpress-theme' ),
+						/* translators: %d: nombre d'éditions affichées. */
+						'counter'    => sprintf( _n( '%d édition affichée', '%d éditions affichées', count( $fnc_shown ), 'fnc-wordpress-theme' ), count( $fnc_shown ) ),
+					)
+				);
+				?>
 				<p class="frise-note" style="margin-top:8px;color:var(--texte-tert);">
 					<strong><?php esc_html_e( 'Ce que vous voyez ici', 'fnc-wordpress-theme' ); ?> :</strong>
 					<?php esc_html_e( 'seules les éditions confirmées sont affichées ; les dates, lieux et thèmes apparaissent à mesure qu’ils sont validés.', 'fnc-wordpress-theme' ); ?>
@@ -188,26 +194,20 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 		</div>
 	</section>
 
-	<?php // « De l'édition à la ressource » — bande claire alignée à gauche + 2 blocs-liens bordés (registre Next, pas le callout navy). ?>
-	<section class="section linen">
-		<div class="container">
-			<div class="split">
-				<div>
-					<p class="eyebrow" style="color:var(--navy);"><?php esc_html_e( 'Suite', 'fnc-wordpress-theme' ); ?></p>
-					<h2 class="page-h2" data-fnc-st="editions.cta.title"><?php echo esc_html( fnc_stitle( 'editions', 'cta', 'title' ) ); ?></h2>
-					<p style="color:var(--texte-sec);max-width:46ch;margin-top:14px;"><?php esc_html_e( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
-				</div>
-				<div style="display:grid;gap:16px;align-content:center;">
-					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>" style="justify-content:space-between;border:1px solid var(--border);border-radius:4px;padding:20px 24px;background:#fff;">
-						<?php esc_html_e( 'Voir les publications', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span>
-					</a>
-					<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>" style="justify-content:space-between;border:1px solid var(--border);border-radius:4px;padding:20px 24px;background:#fff;">
-						<?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
+	<?php
+	// COMPOSANT PARTAGÉ : section « complément » (bande claire + blocs-liens bordés).
+	fnc_render_complement_section(
+		array(
+			'eyebrow' => __( 'Suite', 'fnc-wordpress-theme' ),
+			'title'   => fnc_stitle( 'editions', 'cta', 'title' ),
+			'intro'   => __( 'Chaque édition produit des traces utiles : publications, actes, communiqués. Prolongez la lecture, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ),
+			'links'   => array(
+				array( 'label' => __( 'Voir les publications', 'fnc-wordpress-theme' ), 'href' => fnc_archive_url( 'fnc_publication' ) ),
+				array( 'label' => __( 'Contacter l’organisation', 'fnc-wordpress-theme' ), 'href' => fnc_page_url( 'contact' ) ),
+			),
+		)
+	);
+	?>
 </main>
 
 <?php get_footer(); ?>

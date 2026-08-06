@@ -26,29 +26,96 @@ fnc_render_opening_hero(
 	)
 );
 
-$fnc_archive_url      = get_post_type_archive_link( 'fnc_publication' );
-$fnc_current_type     = isset( $_GET['fnc_type'] ) ? sanitize_text_field( wp_unslash( $_GET['fnc_type'] ) ) : '';
-$fnc_search_query     = isset( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : '';
+$fnc_archive_url       = get_post_type_archive_link( 'fnc_publication' );
+$fnc_current_type      = isset( $_GET['fnc_type'] ) ? sanitize_text_field( wp_unslash( $_GET['fnc_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$fnc_search_query      = isset( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $fnc_publication_types = fnc_content_model_publication_types();
-$fnc_current_type     = array_key_exists( $fnc_current_type, $fnc_publication_types ) ? $fnc_current_type : '';
+// La validation du type se fait plus bas, contre les types RÉELLEMENT présents
+// (le seed peut employer des slugs hors registre — cf. réserve MOA).
 
-$fnc_meta_query = array();
-if ( $fnc_current_type ) {
-	$fnc_meta_query[] = array( 'key' => '_fnc_publication_type', 'value' => $fnc_current_type );
-}
+// Libellés PLURIELS pour les chips de filtre (le badge de carte garde le
+// singulier précis). Comme le site Next : « Rapports », « Vidéos »…
+$fnc_type_plural = array(
+	// Slugs du registre.
+	'report'            => __( 'Rapports', 'fnc-wordpress-theme' ),
+	'whitepaper'        => __( 'Livres blancs', 'fnc-wordpress-theme' ),
+	'proceedings'       => __( 'Actes', 'fnc-wordpress-theme' ),
+	'pressRelease'      => __( 'Communiqués', 'fnc-wordpress-theme' ),
+	'noteConceptuelle'  => __( 'Notes conceptuelles', 'fnc-wordpress-theme' ),
+	'video'             => __( 'Vidéos', 'fnc-wordpress-theme' ),
+	'interview'         => __( 'Interviews', 'fnc-wordpress-theme' ),
+	'other'             => __( 'Autres', 'fnc-wordpress-theme' ),
+	// Slugs employés par le seed courant (affichage seulement ; l'alignement
+	// registre/seed reste une décision de contenu — cf. réserve MOA).
+	'compte_rendu'      => __( 'Comptes rendus', 'fnc-wordpress-theme' ),
+	'document_pratique' => __( 'Documents pratiques', 'fnc-wordpress-theme' ),
+	'note_conceptuelle' => __( 'Notes conceptuelles', 'fnc-wordpress-theme' ),
+	'programme'         => __( 'Programmes', 'fnc-wordpress-theme' ),
+);
 
-$fnc_publications = get_posts(
+// On interroge toutes les publications correspondant à la RECHERCHE (sans filtre
+// de type), pour compter par type ET filtrer ensuite en PHP : les comptes des
+// chips reflètent ainsi la recherche courante.
+$fnc_all = get_posts(
 	array(
 		'post_type'      => 'fnc_publication',
 		'posts_per_page' => -1,
 		's'              => $fnc_search_query,
-		'meta_query'     => $fnc_meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- volume faible (vitrine de demonstration).
 	)
 );
+$fnc_type_counts = array();
+foreach ( $fnc_all as $fnc_p ) {
+	$fnc_t = get_post_meta( $fnc_p->ID, '_fnc_publication_type', true );
+	if ( $fnc_t ) {
+		$fnc_type_counts[ $fnc_t ] = isset( $fnc_type_counts[ $fnc_t ] ) ? $fnc_type_counts[ $fnc_t ] + 1 : 1;
+	}
+}
+$fnc_total = count( $fnc_all );
+
+// Validation du filtre : on n'accepte que les types réellement présents.
+if ( '' !== $fnc_current_type && ! isset( $fnc_type_counts[ $fnc_current_type ] ) ) {
+	$fnc_current_type = '';
+}
+
+// Liste affichée : filtrée par type si demandé.
+$fnc_publications = $fnc_current_type
+	? array_values(
+		array_filter(
+			$fnc_all,
+			static function ( $p ) use ( $fnc_current_type ) {
+				return get_post_meta( $p->ID, '_fnc_publication_type', true ) === $fnc_current_type;
+			}
+		)
+	)
+	: $fnc_all;
+
+// Options de chips : tous les types réellement présents (compte > 0), quel que
+// soit leur slug. Ordre : slugs du registre d'abord, puis les autres. Libellé :
+// pluriel connu, sinon libellé du registre, sinon « humanisation » du slug.
+$fnc_chip_label = static function ( $slug ) use ( $fnc_type_plural, $fnc_publication_types ) {
+	if ( isset( $fnc_type_plural[ $slug ] ) ) {
+		return $fnc_type_plural[ $slug ];
+	}
+	if ( isset( $fnc_publication_types[ $slug ] ) ) {
+		return $fnc_publication_types[ $slug ];
+	}
+	return ucfirst( str_replace( array( '_', '-' ), ' ', $slug ) );
+};
+$fnc_chip_options = array();
+foreach ( $fnc_publication_types as $fnc_tv => $fnc_tl ) {
+	if ( ! empty( $fnc_type_counts[ $fnc_tv ] ) ) {
+		$fnc_chip_options[ $fnc_tv ] = array( 'label' => $fnc_chip_label( $fnc_tv ), 'count' => (int) $fnc_type_counts[ $fnc_tv ] );
+	}
+}
+foreach ( $fnc_type_counts as $fnc_tv => $fnc_cnt ) {
+	if ( ! isset( $fnc_chip_options[ $fnc_tv ] ) ) {
+		$fnc_chip_options[ $fnc_tv ] = array( 'label' => $fnc_chip_label( $fnc_tv ), 'count' => (int) $fnc_cnt );
+	}
+}
 ?>
 
 <main id="main">
-	<section class="section">
+	<section class="section linen">
 		<div class="container">
 			<div class="section-head">
 				<div>
@@ -63,7 +130,7 @@ $fnc_publications = get_posts(
 		</div>
 	</section>
 
-	<section class="section linen">
+	<section class="section">
 		<div class="container">
 			<div class="section-head">
 				<div>
@@ -79,60 +146,63 @@ $fnc_publications = get_posts(
 				<?php if ( $fnc_current_type ) : ?>
 					<input type="hidden" name="fnc_type" value="<?php echo esc_attr( $fnc_current_type ); ?>" />
 				<?php endif; ?>
-				<button class="btn btn-soft" type="submit" style="margin-top:10px;"><?php esc_html_e( 'Rechercher', 'fnc-wordpress-theme' ); ?></button>
+				<button class="btn" type="submit" style="margin-top:10px;background:var(--navy);color:#fff;border-color:var(--navy);"><?php esc_html_e( 'Rechercher', 'fnc-wordpress-theme' ); ?></button>
 			</form>
 
-			<div class="toolbar" role="toolbar" aria-label="<?php esc_attr_e( 'Filtrer par type', 'fnc-wordpress-theme' ); ?>">
-				<a class="chip" href="<?php echo esc_url( $fnc_search_query ? add_query_arg( 's', $fnc_search_query, $fnc_archive_url ) : $fnc_archive_url ); ?>" aria-pressed="<?php echo $fnc_current_type ? 'false' : 'true'; ?>"><?php esc_html_e( 'Tous', 'fnc-wordpress-theme' ); ?></a>
-				<?php foreach ( $fnc_publication_types as $fnc_type_value => $fnc_type_label ) : ?>
-					<a class="chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_type' => $fnc_type_value, 's' => $fnc_search_query ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_type === $fnc_type_value ? 'true' : 'false'; ?>"><?php echo esc_html( $fnc_type_label ); ?></a>
-				<?php endforeach; ?>
-			</div>
+			<?php
+			// COMPOSANT PARTAGÉ : chips par type (pluriel + comptes) + compteur.
+			fnc_render_filter_chips(
+				array(
+					'base_url'   => $fnc_archive_url,
+					'param'      => 'fnc_type',
+					'current'    => $fnc_current_type,
+					'all_label'  => __( 'Tous', 'fnc-wordpress-theme' ),
+					'all_count'  => $fnc_total,
+					'options'    => $fnc_chip_options,
+					'preserve'   => array( 's' => $fnc_search_query ),
+					'aria_label' => __( 'Filtrer par type', 'fnc-wordpress-theme' ),
+					/* translators: %d: nombre de publications affichées. */
+					'counter'    => sprintf( _n( '%d publication affichée', '%d publications affichées', count( $fnc_publications ), 'fnc-wordpress-theme' ), count( $fnc_publications ) ),
+				)
+			);
+			?>
 
 			<?php if ( ! empty( $fnc_publications ) ) : ?>
-				<div class="grid grid-3">
-					<?php foreach ( $fnc_publications as $fnc_publication ) : ?>
-						<?php
-						$fnc_type      = get_post_meta( $fnc_publication->ID, '_fnc_publication_type', true );
-						$fnc_media_url = get_post_meta( $fnc_publication->ID, '_fnc_publication_media_url', true );
-						$fnc_is_media  = in_array( $fnc_type, array( 'video', 'interview' ), true );
-						?>
-						<article class="card fnc-card">
-							<p class="card-kicker"><?php echo esc_html( isset( $fnc_publication_types[ $fnc_type ] ) ? $fnc_publication_types[ $fnc_type ] : __( 'Publication', 'fnc-wordpress-theme' ) ); ?></p>
-							<h3><a href="<?php echo esc_url( get_permalink( $fnc_publication ) ); ?>"><?php echo esc_html( get_the_title( $fnc_publication ) ); ?></a></h3>
-							<?php if ( has_excerpt( $fnc_publication ) ) : ?>
-								<p><?php echo esc_html( get_the_excerpt( $fnc_publication ) ); ?></p>
-							<?php endif; ?>
-							<?php if ( $fnc_is_media && $fnc_media_url ) : ?>
-								<p style="margin-top:14px;"><a class="link-more" href="<?php echo esc_url( $fnc_media_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a></p>
-							<?php endif; ?>
-						</article>
-					<?php endforeach; ?>
+				<div class="pubs" style="margin-top:32px;">
+					<?php
+					foreach ( $fnc_publications as $fnc_publication ) {
+						fnc_render_publication_card( $fnc_publication->ID );
+					}
+					?>
 				</div>
 			<?php else : ?>
 				<div class="empty" role="status">
-					<h3><?php esc_html_e( 'Aucune publication validée', 'fnc-wordpress-theme' ); ?></h3>
-					<p><?php esc_html_e( 'L’état vide reste sobre, sans faux contenu.', 'fnc-wordpress-theme' ); ?></p>
+					<?php if ( $fnc_current_type || $fnc_search_query ) : ?>
+						<h3><?php esc_html_e( 'Aucune publication ne correspond', 'fnc-wordpress-theme' ); ?></h3>
+						<p><a class="link-more" href="<?php echo esc_url( $fnc_archive_url ); ?>"><?php esc_html_e( 'Réinitialiser les filtres', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a></p>
+					<?php else : ?>
+						<h3><?php esc_html_e( 'Aucune publication validée', 'fnc-wordpress-theme' ); ?></h3>
+						<p><?php esc_html_e( 'L’état vide reste sobre, sans faux contenu.', 'fnc-wordpress-theme' ); ?></p>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>
 	</section>
 
-	<section class="section">
-		<div class="container">
-			<div class="section-head">
-				<div>
-					<p class="eyebrow" data-fnc-st="ressources.cta.eyebrow"><?php echo esc_html( fnc_stitle( 'ressources', 'cta', 'eyebrow' ) ); ?></p>
-					<h2 data-fnc-st="ressources.cta.title"><?php echo esc_html( fnc_stitle( 'ressources', 'cta', 'title' ) ); ?></h2>
-				</div>
-				<p><?php esc_html_e( 'Les publications nourrissent le dialogue public. Découvrez le rôle du Forum, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ); ?></p>
-			</div>
-			<div class="toolbar" style="gap:28px;margin-top:8px;">
-				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Comprendre le Forum', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
-				<a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
-			</div>
-		</div>
-	</section>
+	<?php
+	// COMPOSANT PARTAGÉ : section « complément » (bande claire + blocs-liens bordés).
+	fnc_render_complement_section(
+		array(
+			'eyebrow' => __( 'Suite', 'fnc-wordpress-theme' ),
+			'title'   => fnc_stitle( 'ressources', 'cta', 'title' ),
+			'intro'   => __( 'Les publications nourrissent le dialogue public. Découvrez le rôle du Forum, ou écrivez-nous pour une ressource officielle.', 'fnc-wordpress-theme' ),
+			'links'   => array(
+				array( 'label' => __( 'Comprendre le Forum', 'fnc-wordpress-theme' ), 'href' => fnc_page_url( 'le-forum' ) ),
+				array( 'label' => __( 'Contacter l’organisation', 'fnc-wordpress-theme' ), 'href' => fnc_page_url( 'contact' ) ),
+			),
+		)
+	);
+	?>
 </main>
 
 <?php get_footer(); ?>

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.15' );
+define( 'FNC_THEME_VERSION', '1.0.16' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -818,6 +818,166 @@ function fnc_render_badge( $label ) {
 		return;
 	}
 	printf( '<span class="badge">%s</span>', esc_html( $label ) );
+}
+
+/**
+ * COMPOSANT PARTAGÉ — chips de filtre par statut/type (liste des éditions,
+ * ressources, etc.). Registre DA unique : `.filters` > `.chip` (radius 2px),
+ * libellés (au pluriel côté appelant) + compte par option, `aria-pressed`,
+ * préservation des autres paramètres d'URL, et compteur « N affichés » optionnel.
+ *
+ * @param array{
+ *   base_url:string, param:string, current:string, all_label:string,
+ *   all_count:?int, options:array<string,array{label:string,count?:int}>,
+ *   preserve:array<string,string>, aria_label:string, counter:string
+ * } $args
+ * @return void
+ */
+function fnc_render_filter_chips( array $args ) {
+	$args     = wp_parse_args(
+		$args,
+		array(
+			'base_url'   => home_url( '/' ),
+			'param'      => 'status',
+			'current'    => '',
+			'all_label'  => __( 'Toutes', 'fnc-wordpress-theme' ),
+			'all_count'  => null,
+			'options'    => array(),
+			'preserve'   => array(),
+			'aria_label' => __( 'Filtrer', 'fnc-wordpress-theme' ),
+			'counter'    => '',
+		)
+	);
+	$base     = $args['base_url'] ? $args['base_url'] : home_url( '/' );
+	$preserve = array_filter( (array) $args['preserve'] );
+
+	echo '<div class="filters" role="group" aria-label="' . esc_attr( $args['aria_label'] ) . '">';
+	printf(
+		'<a class="chip" href="%s" aria-pressed="%s">%s%s</a>',
+		esc_url( $preserve ? add_query_arg( $preserve, $base ) : $base ),
+		'' === $args['current'] ? 'true' : 'false',
+		esc_html( $args['all_label'] ),
+		null !== $args['all_count'] ? ' <span aria-hidden="true">(' . esc_html( $args['all_count'] ) . ')</span>' : ''
+	);
+	foreach ( $args['options'] as $slug => $opt ) {
+		printf(
+			'<a class="chip" href="%s" aria-pressed="%s">%s%s</a>',
+			esc_url( add_query_arg( array_merge( $preserve, array( $args['param'] => $slug ) ), $base ) ),
+			$args['current'] === (string) $slug ? 'true' : 'false',
+			esc_html( $opt['label'] ),
+			isset( $opt['count'] ) ? ' <span aria-hidden="true">(' . esc_html( $opt['count'] ) . ')</span>' : ''
+		);
+	}
+	echo '</div>';
+
+	if ( '' !== $args['counter'] ) {
+		printf(
+			'<p class="frise-note" role="status" aria-live="polite" style="margin-top:16px;">%s</p>',
+			esc_html( $args['counter'] )
+		);
+	}
+}
+
+/**
+ * COMPOSANT PARTAGÉ — section « complément » finale (éditions, ressources…).
+ * Gabarit unique DA : bande CLAIRE alignée à gauche (eyebrow « Suite » + titre +
+ * sous-titre) et blocs-liens BORDÉS à droite. Jamais un callout navy centré ni
+ * des liens inline.
+ *
+ * @param array{eyebrow:string,title:string,intro:string,links:array<int,array{label:string,href:string}>,linen:bool} $args
+ * @return void
+ */
+function fnc_render_complement_section( array $args ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'eyebrow' => __( 'Suite', 'fnc-wordpress-theme' ),
+			'title'   => '',
+			'intro'   => '',
+			'links'   => array(),
+			'linen'   => true,
+		)
+	);
+	?>
+	<section class="section<?php echo $args['linen'] ? ' linen' : ''; ?>">
+		<div class="container">
+			<div class="split">
+				<div>
+					<?php if ( $args['eyebrow'] ) : ?><p class="eyebrow" style="color:var(--navy);"><?php echo esc_html( $args['eyebrow'] ); ?></p><?php endif; ?>
+					<?php if ( $args['title'] ) : ?><h2 class="page-h2"><?php echo esc_html( $args['title'] ); ?></h2><?php endif; ?>
+					<?php if ( $args['intro'] ) : ?><p style="color:var(--texte-sec);max-width:46ch;margin-top:14px;"><?php echo esc_html( $args['intro'] ); ?></p><?php endif; ?>
+				</div>
+				<div style="display:grid;gap:16px;align-content:center;">
+					<?php foreach ( $args['links'] as $fnc_lnk ) : ?>
+						<a class="link-more" href="<?php echo esc_url( $fnc_lnk['href'] ); ?>" style="justify-content:space-between;border:1px solid var(--border);border-radius:4px;padding:20px 24px;background:#fff;">
+							<?php echo esc_html( $fnc_lnk['label'] ); ?> <span class="arrow" aria-hidden="true">→</span>
+						</a>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
+	</section>
+	<?php
+}
+
+/**
+ * Libellé d'affichage d'un type de publication : libellé du registre s'il est
+ * connu, sinon « humanisation » du slug (ex. « compte_rendu » → « Compte rendu »)
+ * pour rester précis même quand le seed emploie des slugs hors registre. Slug
+ * vide → « Publication ».
+ *
+ * @param string $slug
+ * @return string
+ */
+function fnc_publication_type_label( $slug ) {
+	$slug = (string) $slug;
+	if ( '' === $slug ) {
+		return __( 'Publication', 'fnc-wordpress-theme' );
+	}
+	$types = function_exists( 'fnc_content_model_publication_types' ) ? fnc_content_model_publication_types() : array();
+	if ( isset( $types[ $slug ] ) ) {
+		return $types[ $slug ];
+	}
+	return ucfirst( str_replace( array( '_', '-' ), ' ', $slug ) );
+}
+
+/**
+ * COMPOSANT PARTAGÉ — carte de publication (registre `.pub` du kit). Mappe les
+ * bons champs : type PRÉCIS (kind), date, description, et action (« Regarder »
+ * pour vidéo/interview, « Télécharger » si fichier, « Fichier : à confirmer »
+ * sinon).
+ *
+ * @param int $id ID de la publication.
+ * @return void
+ */
+function fnc_render_publication_card( $id ) {
+	$id        = (int) $id;
+	$type      = (string) get_post_meta( $id, '_fnc_publication_type', true );
+	$media_url = (string) get_post_meta( $id, '_fnc_publication_media_url', true );
+	$file_url  = (string) get_post_meta( $id, '_fnc_publication_file', true );
+	$is_media  = in_array( $type, array( 'video', 'interview' ), true );
+	$kind      = fnc_publication_type_label( $type );
+	?>
+	<article class="pub">
+		<div class="body">
+			<p class="kind"><?php echo esc_html( $kind ); ?></p>
+			<h3 class="title"><a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a></h3>
+			<?php if ( has_excerpt( $id ) ) : ?>
+				<p><?php echo esc_html( get_the_excerpt( $id ) ); ?></p>
+			<?php endif; ?>
+			<p class="date"><?php echo esc_html( get_the_date( '', $id ) ); ?></p>
+			<p style="margin-top:12px;">
+				<?php if ( $is_media && $media_url ) : ?>
+					<a class="link-more" href="<?php echo esc_url( $media_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+				<?php elseif ( $file_url ) : ?>
+					<a class="link-more" href="<?php echo esc_url( $file_url ); ?>"><?php esc_html_e( 'Télécharger', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+				<?php else : ?>
+					<span class="tbc"><?php esc_html_e( 'Fichier : à confirmer', 'fnc-wordpress-theme' ); ?></span>
+				<?php endif; ?>
+			</p>
+		</div>
+	</article>
+	<?php
 }
 
 /**

@@ -28,13 +28,7 @@ while ( have_posts() ) :
 	$fnc_ed_is_spec  = get_post_meta( $fnc_ed_id, '_fnc_edition_is_special', true );
 	$fnc_statuses    = fnc_content_model_edition_statuses();
 
-	$fnc_ed_dates = '';
-	if ( $fnc_ed_start ) {
-		$fnc_ed_dates = date_i18n( 'j F Y', strtotime( $fnc_ed_start ) );
-		if ( $fnc_ed_end && $fnc_ed_end !== $fnc_ed_start ) {
-			$fnc_ed_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_ed_end ) );
-		}
-	}
+	$fnc_ed_dates = fnc_format_date_range( $fnc_ed_start, $fnc_ed_end );
 
 	// Libellé de statut (« Édition en cours / À venir / Édition passée »), en
 	// sur-titre du hero — comme le site du Forum.

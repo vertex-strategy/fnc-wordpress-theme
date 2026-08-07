@@ -145,13 +145,7 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 						$fnc_is_special = get_post_meta( $fnc_edition->ID, '_fnc_edition_is_special', true );
 						$fnc_special    = get_post_meta( $fnc_edition->ID, '_fnc_edition_special_note', true );
 
-						$fnc_dates = '';
-						if ( $fnc_start ) {
-							$fnc_dates = date_i18n( 'j F Y', strtotime( $fnc_start ) );
-							if ( $fnc_end && $fnc_end !== $fnc_start ) {
-								$fnc_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_end ) );
-							}
-						}
+						$fnc_dates = fnc_format_date_range( $fnc_start, $fnc_end );
 						?>
 						<li class="frise-item<?php echo $fnc_status ? ' is-' . esc_attr( $fnc_status ) : ''; ?>">
 							<div class="frise-rail" aria-hidden="true"><span class="frise-node"></span></div>

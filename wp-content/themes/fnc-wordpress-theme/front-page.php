@@ -211,19 +211,41 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 
 	<!-- M5 — LE PROGRAMME -->
 	<?php
-	// Sessions de l'edition en cours ; sinon etat « a confirmer ».
+	// Temps forts : sélection CURATÉE par identifiants de session (m5_highlight_ids,
+	// mêmes ids que le Next : j1-allocutions, j1-inaugurale, j1-table-ronde, j1-s1),
+	// dans l'ordre défini, une session absente est ignorée. Repli sur les 4
+	// premières sessions de l'édition en cours si aucune n'est trouvée.
 	$fnc_home_sessions = array();
 	if ( $fnc_home_edition ) {
-		$fnc_home_sessions = get_posts(
-			array(
-				'post_type'      => 'fnc_session',
-				'posts_per_page' => 4,
-				'meta_key'       => '_fnc_session_edition',
-				'meta_value'     => $fnc_home_edition->ID,
-				'orderby'        => 'date',
-				'order'          => 'ASC',
-			)
-		);
+		$fnc_hl_raw = (string) fnc_home_setting( 'm5_highlight_ids', 'j1-allocutions,j1-inaugurale,j1-table-ronde,j1-s1' );
+		$fnc_hl_ids = array_values( array_filter( array_map( 'trim', explode( ',', $fnc_hl_raw ) ) ) );
+		foreach ( $fnc_hl_ids as $fnc_hl ) {
+			$fnc_hit = get_posts(
+				array(
+					'post_type'      => 'fnc_session',
+					'posts_per_page' => 1,
+					'meta_key'       => '_fnc_seed_legacy',
+					'meta_value'     => $fnc_hl,
+					'fields'         => 'ids',
+				)
+			);
+			if ( $fnc_hit ) {
+				$fnc_home_sessions[] = get_post( $fnc_hit[0] );
+			}
+		}
+		// Repli défensif : aucune session curatée trouvée → 4 premières par date.
+		if ( empty( $fnc_home_sessions ) ) {
+			$fnc_home_sessions = get_posts(
+				array(
+					'post_type'      => 'fnc_session',
+					'posts_per_page' => 4,
+					'meta_key'       => '_fnc_session_edition',
+					'meta_value'     => $fnc_home_edition->ID,
+					'orderby'        => 'date',
+					'order'          => 'ASC',
+				)
+			);
+		}
 	}
 	?>
 	<section class="moment" id="m5" aria-labelledby="m5-title">

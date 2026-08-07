@@ -313,6 +313,14 @@ function fnc_homepage_customize_register( $wp_customize ) {
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_title', __( 'Titre', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_date_label', __( 'Libellé de date', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_link', __( 'Lien — libellé', 'fnc-wordpress-theme' ), 'text' );
+	fnc_home_add_field(
+		$wp_customize,
+		'fnc_home_m5',
+		'm5_highlight_ids',
+		__( 'Temps forts — identifiants de sessions (séparés par des virgules)', 'fnc-wordpress-theme' ),
+		'text',
+		'j1-allocutions,j1-inaugurale,j1-table-ronde,j1-s1'
+	);
 
 	/* -------------------------------------------------- M6 */
 	$wp_customize->add_section(

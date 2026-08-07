@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.29' );
+define( 'FNC_THEME_VERSION', '1.0.30' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -736,6 +736,84 @@ function fnc_link_icon_svg( $url, $label = '' ) {
 		return $open . '<path fill="currentColor" d="M17.53 3H20l-5.6 6.4L21 21h-5.15l-4.03-5.27L7.2 21H4.73l5.99-6.85L3.4 3h5.28l3.64 4.82L17.53 3Zm-.9 16.2h1.37L7.44 4.72H5.97L16.63 19.2Z"/></svg>';
 	}
 	return $open . '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 0c2.5 2 3.5 5.5 3.5 9s-1 7-3.5 9c-2.5-2-3.5-5.5-3.5-9s1-7 3.5-9ZM3.5 12h17"/></svg>';
+}
+
+/**
+ * Façade vidéo « click-to-load » (RGPD) : pour une URL YouTube/Vimeo, rend un
+ * bloc poster + bouton lecture qui n'insère l'iframe (nocookie) qu'au clic
+ * (géré par assets/js/main.js). Aucune requête tierce avant l'action de
+ * l'utilisateur. Retourne '' si l'URL n'est pas YouTube/Vimeo (le gabarit
+ * retombe alors sur un lien externe). Parité VideoFacade.tsx.
+ *
+ * @param string $url    URL de la vidéo.
+ * @param string $poster URL d'image d'affiche (optionnelle).
+ * @return string
+ */
+function fnc_video_facade( $url, $poster = '' ) {
+	$url = trim( (string) $url );
+	if ( '' === $url ) {
+		return '';
+	}
+	$provider = '';
+	$id       = '';
+	if ( preg_match( '#(?:youtube(?:-nocookie)?\.com/(?:watch\?v=|embed/)|youtu\.be/)([A-Za-z0-9_-]{6,})#', $url, $m ) ) {
+		$provider = 'youtube';
+		$id       = $m[1];
+	} elseif ( preg_match( '#(?:player\.)?vimeo\.com/(?:video/)?(\d+)#', $url, $m ) ) {
+		$provider = 'vimeo';
+		$id       = $m[1];
+	} else {
+		return '';
+	}
+	$style = $poster ? ' style="background-image:url(' . esc_url( $poster ) . ')"' : '';
+	$play  = '<span class="video-facade__play" aria-hidden="true"><svg viewBox="0 0 68 48" width="68" height="48" focusable="false"><path d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.3.5 34 .5 34 .5S12.7.5 7.4 1.8C4.5 2.6 2.3 4.8 1.5 7.7.2 13 .2 24 .2 24s0 11 1.3 16.3c.8 2.9 3 5.1 5.9 5.9C12.7 47.5 34 47.5 34 47.5s21.3 0 26.6-1.3c2.9-.8 5.1-3 5.9-5.9C67.8 35 67.8 24 67.8 24s0-11-1.3-16.3z" fill="#cc0000"/><path d="M27 34l18-10-18-10z" fill="#ffffff"/></svg></span>';
+	return sprintf(
+		'<div class="video-facade" data-provider="%1$s" data-id="%2$s" role="button" tabindex="0" aria-label="%3$s"%4$s>%5$s</div>',
+		esc_attr( $provider ),
+		esc_attr( $id ),
+		esc_attr__( 'Lire la vidéo', 'fnc-wordpress-theme' ),
+		$style, // déjà échappé.
+		$play
+	);
+}
+
+/**
+ * Formate une date en gardant l'ÉCHEC de parsing : si la valeur est vide OU si
+ * strtotime() échoue (retourne false), on ne rend RIEN (jamais « 1 janv. 1970 »).
+ * Parité avec les helpers Next qui gardent Number.isNaN(new Date(x)).
+ *
+ * @param string $raw Date brute (Y-m-d…), texte libre possible.
+ * @param string $fmt Format wp_date (défaut « j F Y »).
+ * @return string Date localisée, ou chaîne vide si invalide.
+ */
+function fnc_format_date( $raw, $fmt = 'j F Y' ) {
+	$raw = is_string( $raw ) ? trim( $raw ) : '';
+	if ( '' === $raw ) {
+		return '';
+	}
+	$ts = strtotime( $raw );
+	if ( false === $ts ) {
+		return '';
+	}
+	return wp_date( $fmt, $ts );
+}
+
+/**
+ * Plage de dates « début – fin » robuste (chaque borne gardée par fnc_format_date).
+ * Si le début est invalide → rien. Si la fin est invalide/identique → début seul.
+ *
+ * @param string $start
+ * @param string $end
+ * @param string $fmt
+ * @return string
+ */
+function fnc_format_date_range( $start, $end, $fmt = 'j F Y' ) {
+	$s = fnc_format_date( $start, $fmt );
+	if ( '' === $s ) {
+		return '';
+	}
+	$e = ( $end && $end !== $start ) ? fnc_format_date( $end, $fmt ) : '';
+	return '' !== $e ? $s . ' – ' . $e : $s;
 }
 
 /**

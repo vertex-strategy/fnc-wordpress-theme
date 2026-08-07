@@ -129,13 +129,7 @@ fnc_render_opening_hero(
 		$fnc_edition_start    = get_post_meta( $fnc_edition->ID, '_fnc_edition_start_date', true );
 		$fnc_edition_end      = get_post_meta( $fnc_edition->ID, '_fnc_edition_end_date', true );
 		$fnc_edition_location = get_post_meta( $fnc_edition->ID, '_fnc_edition_location', true );
-		$fnc_edition_dates    = '';
-		if ( $fnc_edition_start ) {
-			$fnc_edition_dates = date_i18n( 'j F Y', strtotime( $fnc_edition_start ) );
-			if ( $fnc_edition_end && $fnc_edition_end !== $fnc_edition_start ) {
-				$fnc_edition_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_edition_end ) );
-			}
-		}
+		$fnc_edition_dates = fnc_format_date_range( $fnc_edition_start, $fnc_edition_end );
 		?>
 		<?php if ( $fnc_edition_theme || $fnc_edition_dates || $fnc_edition_location ) : ?>
 			<section class="section" style="padding-bottom:0;">

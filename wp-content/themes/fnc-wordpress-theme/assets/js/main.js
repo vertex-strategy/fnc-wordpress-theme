@@ -200,6 +200,44 @@
 		});
 	});
 
+	// Facades video (YouTube/Vimeo) : click-to-load, iframe NOCOOKIE inseree
+	// uniquement au clic (ou Entree/Espace). Aucune requete tierce avant l'action.
+	document.querySelectorAll('.video-facade').forEach(function (wrap) {
+		if (wrap.dataset.loaded === '1') {
+			return;
+		}
+		var load = function () {
+			if (wrap.dataset.loaded === '1') {
+				return;
+			}
+			var provider = wrap.dataset.provider;
+			var id = wrap.dataset.id;
+			if (!provider || !id) {
+				return;
+			}
+			var src = provider === 'vimeo'
+				? 'https://player.vimeo.com/video/' + encodeURIComponent(id) + '?autoplay=1'
+				: 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0';
+			var frame = document.createElement('iframe');
+			frame.src = src;
+			frame.loading = 'lazy';
+			frame.referrerPolicy = 'strict-origin-when-cross-origin';
+			frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+			frame.setAttribute('allowfullscreen', '');
+			frame.setAttribute('title', wrap.getAttribute('aria-label') || 'Vidéo');
+			wrap.dataset.loaded = '1';
+			wrap.innerHTML = '';
+			wrap.appendChild(frame);
+		};
+		wrap.addEventListener('click', load);
+		wrap.addEventListener('keydown', function (e) {
+			if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+				e.preventDefault();
+				load();
+			}
+		});
+	});
+
 	// Reveal au scroll (amelioration progressive)
 	if (!reduce) {
 		document.body.classList.add('js-reveal');

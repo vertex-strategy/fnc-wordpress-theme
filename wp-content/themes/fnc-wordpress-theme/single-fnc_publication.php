@@ -60,10 +60,21 @@ while ( have_posts() ) :
 
 					<div style="margin-top:28px;">
 						<?php if ( $fnc_is_media && $fnc_p_media ) : ?>
-							<a class="btn btn-red" href="<?php echo esc_url( $fnc_p_media ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?>
-								<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-							</a>
+							<?php
+							// Façade click-to-load (RGPD) pour YouTube/Vimeo : l'iframe nocookie
+							// n'est chargée qu'au clic. Repli lien externe si autre plateforme.
+							$fnc_v_poster = has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_p_id, 'fnc-cover' ) : '';
+							$fnc_facade   = function_exists( 'fnc_video_facade' ) ? fnc_video_facade( $fnc_p_media, $fnc_v_poster ) : '';
+							?>
+							<?php if ( $fnc_facade ) : ?>
+								<?php echo $fnc_facade; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
+								<p style="margin-top:12px;"><a class="link-more" href="<?php echo esc_url( $fnc_p_media ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Ouvrir sur la plateforme', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a></p>
+							<?php else : ?>
+								<a class="btn btn-red" href="<?php echo esc_url( $fnc_p_media ); ?>" target="_blank" rel="noopener noreferrer">
+									<?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?>
+									<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+								</a>
+							<?php endif; ?>
 						<?php elseif ( $fnc_p_file ) : ?>
 							<a class="btn btn-red" href="<?php echo esc_url( $fnc_p_file ); ?>">
 								<?php esc_html_e( 'Télécharger le document', 'fnc-wordpress-theme' ); ?>

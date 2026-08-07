@@ -118,9 +118,11 @@ while ( have_posts() ) :
 					<div class="person-detail__block">
 						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Intervenants', 'fnc-wordpress-theme' ); ?></p>
 						<?php if ( $fnc_s_moderator > 0 ) : ?>
-							<p style="margin-top:12px;font-size:.9rem;color:var(--texte-sec);">
-								<?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?> ·
-								<a href="<?php echo esc_url( get_permalink( $fnc_s_moderator ) ); ?>" style="font-weight:600;color:var(--navy-deep);text-decoration:underline;text-underline-offset:4px;"><?php echo esc_html( fnc_speaker_display_name( $fnc_s_moderator ) ); ?></a>
+							<p style="margin-top:12px;">
+								<a class="mod-badge" href="<?php echo esc_url( get_permalink( $fnc_s_moderator ) ); ?>">
+									<span class="mod-badge__label"><?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?></span>
+									<span class="mod-badge__name"><?php echo esc_html( fnc_speaker_display_name( $fnc_s_moderator ) ); ?></span>
+								</a>
 							</p>
 						<?php endif; ?>
 						<?php if ( ! empty( $fnc_s_speakers ) ) : ?>

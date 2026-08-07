@@ -238,6 +238,31 @@
 		});
 	});
 
+	// Parallax de SORTIE du hero d'accueil (#m1 .hero-inner), parite HomeMotion.tsx.
+	// rAF-throttle, transform/opacity/filter UNIQUEMENT (GPU), listener passif.
+	// Coupe sous prefers-reduced-motion.
+	var heroInner = document.querySelector('#m1 .hero-inner');
+	if (!reduce && heroInner) {
+		var heroTicking = false;
+		var applyHeroParallax = function () {
+			heroTicking = false;
+			var vh = window.innerHeight || 1;
+			var p = Math.min(1, window.scrollY / (vh * 0.68));
+			var e = p * p;
+			heroInner.style.transform = 'translateY(' + (-190 * e).toFixed(2) + 'px) scale(' + (1 - 0.07 * e).toFixed(4) + ')';
+			heroInner.style.opacity = String(Math.max(0, 1 - 1.08 * e));
+			heroInner.style.filter = e > 0.001 ? 'blur(' + (7 * e).toFixed(2) + 'px)' : 'none';
+		};
+		heroInner.style.willChange = 'transform, opacity, filter';
+		window.addEventListener('scroll', function () {
+			if (!heroTicking) {
+				heroTicking = true;
+				window.requestAnimationFrame(applyHeroParallax);
+			}
+		}, { passive: true });
+		applyHeroParallax();
+	}
+
 	// Reveal au scroll (amelioration progressive)
 	if (!reduce) {
 		document.body.classList.add('js-reveal');

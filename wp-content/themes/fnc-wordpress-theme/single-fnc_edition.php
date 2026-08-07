@@ -253,6 +253,77 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php
+		// Partenaires de l'édition (parité partnersByLevel du Next), GROUPÉS PAR
+		// NIVEAU de participation (principal/majeur/officiel/contributeur ; défaut
+		// « À confirmer »). Appartenance = participation pour cette édition OU liste
+		// plate _fnc_partenaire_editions ; niveau = _fnc_partenaire_participations.
+		// Masqué si aucun partenaire (content readiness gate).
+		$fnc_ed_niv_labels  = function_exists( 'fnc_content_model_partner_niveaux' ) ? fnc_content_model_partner_niveaux() : array();
+		$fnc_ed_partners_by = array();
+		$fnc_all_partners   = get_posts(
+			array(
+				'post_type'      => 'fnc_partenaire',
+				'posts_per_page' => -1,
+				'orderby'        => 'meta_value_num title',
+				'meta_key'       => '_fnc_partenaire_sort_index', // phpcs:ignore WordPress.DB.SlowDBQuery
+				'order'          => 'ASC',
+			)
+		);
+		foreach ( $fnc_all_partners as $fnc_pt ) {
+			$fnc_pt_flat = get_post_meta( $fnc_pt->ID, '_fnc_partenaire_editions', true );
+			$fnc_pt_flat = is_array( $fnc_pt_flat ) ? array_map( 'intval', $fnc_pt_flat ) : array();
+			$fnc_pt_part = get_post_meta( $fnc_pt->ID, '_fnc_partenaire_participations', true );
+			$fnc_pt_part = is_array( $fnc_pt_part ) ? $fnc_pt_part : array();
+			$fnc_pt_niv  = null; // null = non-membre de cette édition.
+			foreach ( $fnc_pt_part as $fnc_pp ) {
+				if ( (int) ( $fnc_pp['edition'] ?? 0 ) === $fnc_ed_id ) {
+					$fnc_pt_niv = (string) ( $fnc_pp['niveau'] ?? '' );
+					break;
+				}
+			}
+			if ( null === $fnc_pt_niv && in_array( $fnc_ed_id, $fnc_pt_flat, true ) ) {
+				$fnc_pt_niv = ''; // membre via liste plate, niveau à confirmer.
+			}
+			if ( null === $fnc_pt_niv ) {
+				continue;
+			}
+			$fnc_key = ( '' !== $fnc_pt_niv && isset( $fnc_ed_niv_labels[ $fnc_pt_niv ] ) ) ? $fnc_pt_niv : '__tbc';
+			$fnc_ed_partners_by[ $fnc_key ][] = $fnc_pt;
+		}
+		?>
+		<?php if ( ! empty( $fnc_ed_partners_by ) ) : ?>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Partenaires de l’édition', 'fnc-wordpress-theme' ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<?php
+				$fnc_ed_niv_seq = array( 'principal', 'majeur', 'officiel', 'contributeur', '__tbc' );
+				foreach ( $fnc_ed_niv_seq as $fnc_niv_key ) :
+					if ( empty( $fnc_ed_partners_by[ $fnc_niv_key ] ) ) {
+						continue;
+					}
+					$fnc_niv_label = ( '__tbc' === $fnc_niv_key ) ? __( 'À confirmer', 'fnc-wordpress-theme' ) : $fnc_ed_niv_labels[ $fnc_niv_key ];
+					?>
+					<h3 style="margin:28px 0 14px;color:var(--navy);"><?php echo esc_html( $fnc_niv_label ); ?></h3>
+					<div class="partner-logos">
+						<?php
+						foreach ( $fnc_ed_partners_by[ $fnc_niv_key ] as $fnc_pt ) {
+							$fnc_pt_site  = (string) get_post_meta( $fnc_pt->ID, '_fnc_partenaire_site', true );
+							$fnc_pt_logo  = has_post_thumbnail( $fnc_pt->ID )
+								? get_the_post_thumbnail( $fnc_pt->ID, 'fnc-card', array( 'alt' => esc_attr( get_the_title( $fnc_pt ) ), 'loading' => 'lazy', 'class' => 'partner-logo' ) )
+								: '<span class="partner-name">' . esc_html( get_the_title( $fnc_pt ) ) . '</span>';
+							if ( $fnc_pt_site ) {
+								printf( '<a class="partner-logo-wrap" href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s">%s</a>', esc_url( $fnc_pt_site ), esc_attr( get_the_title( $fnc_pt ) ), $fnc_pt_logo ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé.
+							} else {
+								printf( '<span class="partner-logo-wrap">%s</span>', $fnc_pt_logo ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé.
+							}
+						}
+						?>
+					</div>
+				<?php endforeach; ?>
+			</section>
+		<?php endif; ?>
+
+		<?php
 		// Informations pratiques (mutualisées) — masquées si non renseignées.
 		$fnc_ed_pratique = fnc_render_practical_info( $fnc_ed_id );
 		if ( '' !== trim( $fnc_ed_pratique ) ) :

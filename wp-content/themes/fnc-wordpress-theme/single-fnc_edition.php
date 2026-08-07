@@ -188,6 +188,71 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php
+		// Ressources de l'édition (parité editions/[slug]) : DOCUMENTS d'un côté,
+		// VIDÉOS/interviews AYANT un média de l'autre (façade nocookie #21).
+		// Sections masquées si vides (content readiness gate).
+		$fnc_ed_pubs = get_posts(
+			array(
+				'post_type'      => 'fnc_publication',
+				'posts_per_page' => -1,
+				'meta_key'       => '_fnc_publication_edition', // phpcs:ignore WordPress.DB.SlowDBQuery
+				'meta_value'     => $fnc_ed_id,                 // phpcs:ignore WordPress.DB.SlowDBQuery
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+		$fnc_ed_docs   = array();
+		$fnc_ed_videos = array();
+		foreach ( $fnc_ed_pubs as $fnc_ep ) {
+			$fnc_ep_type  = get_post_meta( $fnc_ep->ID, '_fnc_publication_type', true );
+			$fnc_ep_media = (string) get_post_meta( $fnc_ep->ID, '_fnc_publication_media_url', true );
+			if ( in_array( $fnc_ep_type, array( 'video', 'interview' ), true ) && '' !== $fnc_ep_media ) {
+				$fnc_ed_videos[] = $fnc_ep;
+			} else {
+				$fnc_ed_docs[] = $fnc_ep;
+			}
+		}
+		?>
+		<?php if ( ! empty( $fnc_ed_docs ) ) : ?>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<div class="pubs" style="margin-top:28px;">
+					<?php
+					foreach ( $fnc_ed_docs as $fnc_ep ) {
+						fnc_render_publication_card( $fnc_ep->ID );
+					}
+					?>
+				</div>
+				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>" style="margin-top:24px;display:inline-block;"><?php esc_html_e( 'Toutes les ressources', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+			</section>
+		<?php endif; ?>
+
+		<?php if ( ! empty( $fnc_ed_videos ) ) : ?>
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Vidéos', 'fnc-wordpress-theme' ); ?></span>
+				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+				<div class="retro-gallery" style="margin-top:28px;">
+					<?php foreach ( $fnc_ed_videos as $fnc_ep ) : ?>
+						<?php
+						$fnc_ep_media  = (string) get_post_meta( $fnc_ep->ID, '_fnc_publication_media_url', true );
+						$fnc_ep_poster = has_post_thumbnail( $fnc_ep->ID ) ? get_the_post_thumbnail_url( $fnc_ep->ID, 'fnc-cover' ) : '';
+						$fnc_ep_facade = function_exists( 'fnc_video_facade' ) ? fnc_video_facade( $fnc_ep_media, $fnc_ep_poster ) : '';
+						?>
+						<figure>
+							<?php if ( $fnc_ep_facade ) : ?>
+								<?php echo $fnc_ep_facade; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
+							<?php else : ?>
+								<a class="link-more" href="<?php echo esc_url( $fnc_ep_media ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+							<?php endif; ?>
+							<figcaption style="margin-top:8px;font-size:.9rem;color:var(--texte-sec);"><?php echo esc_html( get_the_title( $fnc_ep ) ); ?></figcaption>
+						</figure>
+					<?php endforeach; ?>
+				</div>
+			</section>
+		<?php endif; ?>
+
+		<?php
 		// Informations pratiques (mutualisées) — masquées si non renseignées.
 		$fnc_ed_pratique = fnc_render_practical_info( $fnc_ed_id );
 		if ( '' !== trim( $fnc_ed_pratique ) ) :

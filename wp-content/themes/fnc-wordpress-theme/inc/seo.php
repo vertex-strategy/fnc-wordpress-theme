@@ -283,7 +283,15 @@ function fnc_head_meta() {
 	}
 	printf( '<meta property="og:site_name" content="%s" />' . "\n", esc_attr( $site_name ) );
 	printf( '<meta property="og:title" content="%s" />' . "\n", esc_attr( $title ) );
-	printf( '<meta property="og:type" content="%s" />' . "\n", is_singular() ? 'article' : 'website' );
+	// og:type = « article » UNIQUEMENT sur le détail des ressources et actualités
+	// (parité Next : ressources/[slug] et actualites/[slug]) ; « website » partout
+	// ailleurs (pages, éditions, intervenants, sessions, partenaires, archives, accueil).
+	$fnc_is_article = is_singular( array( 'fnc_publication', 'fnc_actualite' ) );
+	printf( '<meta property="og:type" content="%s" />' . "\n", $fnc_is_article ? 'article' : 'website' );
+	if ( $fnc_is_article ) {
+		printf( '<meta property="article:published_time" content="%s" />' . "\n", esc_attr( get_post_time( 'c', true ) ) );
+		printf( '<meta property="article:modified_time" content="%s" />' . "\n", esc_attr( get_post_modified_time( 'c', true ) ) );
+	}
 	printf( '<meta property="og:url" content="%s" />' . "\n", esc_url( $url ) );
 	if ( $image ) {
 		printf( '<meta property="og:image" content="%s" />' . "\n", esc_url( $image ) );

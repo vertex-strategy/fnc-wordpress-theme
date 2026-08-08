@@ -436,9 +436,12 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 			<?php if ( '' !== trim( $fnc_m8_venue ) ) : ?>
 				<p class="count-label" style="margin-top:16px;margin-bottom:0;opacity:.85;"><?php echo esc_html( $fnc_m8_venue ); ?></p>
 			<?php endif; ?>
-			<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?>
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-			</a>
+			<?php // CTA d'inscription (M8) : n'apparaît QUE si les inscriptions sont ouvertes (parité Next). ?>
+			<?php if ( ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled() ) : ?>
+				<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?>
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+				</a>
+			<?php endif; ?>
 		</div>
 		<svg class="pcb" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
 			<path class="line-r" d="M0 40 H420 L470 70 H820 L860 40 H1200"/>

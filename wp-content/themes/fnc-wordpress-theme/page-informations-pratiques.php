@@ -72,7 +72,13 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 	<section class="callout">
 		<h2 data-fnc-st="infos-pratiques.cta.title"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville.', 'fnc-wordpress-theme' ); ?></p>
-		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+		<?php
+		// Bascule du CTA selon l'ouverture des inscriptions (parité Next) :
+		// ouvertes → « S'inscrire » → /inscription ; fermées → « Découvrir l'édition »
+		// → hub de l'édition en cours.
+		$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();
+		?>
+		<a class="btn btn-red" href="<?php echo esc_url( $fnc_reg_open ? fnc_page_url( 'inscription' ) : fnc_page_url( 'edition-en-cours' ) ); ?>"><?php echo esc_html( $fnc_reg_open ? __( 'S’inscrire', 'fnc-wordpress-theme' ) : __( 'Découvrir l’édition', 'fnc-wordpress-theme' ) ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</a>
 	</section>

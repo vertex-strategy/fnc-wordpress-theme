@@ -187,6 +187,16 @@ function fnc_handle_submission() {
 		fnc_submission_flash_redirect( $redirect, $type, array( '_form' => 'store' ), array(), $data );
 	}
 
+	// Rattachement AUTOMATIQUE de l'inscription à l'édition active (parité Next :
+	// resolveActiveEdition = en cours → à venir). L'utilisateur ne choisit pas ;
+	// la demande n'est jamais orpheline. #4 audit inscription.
+	if ( 'inscription' === $type && function_exists( 'fnc_registration_edition_id' ) ) {
+		$fnc_reg_ed = fnc_registration_edition_id();
+		if ( $fnc_reg_ed ) {
+			update_post_meta( $post_id, 'edition', $fnc_reg_ed );
+		}
+	}
+
 	// Accusé de réception best-effort — la demande est déjà enregistrée.
 	$sent = fnc_submission_send_ack( $type, $data );
 	update_post_meta( $post_id, 'acknowledgement', $sent ? 'sent' : 'not-delivered' );

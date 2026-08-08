@@ -35,10 +35,41 @@ if ( ! defined( 'ABSPATH' ) ) {
  * (édition active + compte à rebours)
  * ======================================================================== */
 
+if ( ! function_exists( 'fnc_resolve_current_edition' ) ) {
+	/**
+	 * Édition EN COURS (status='current') UNIQUEMENT — jamais de repli « à venir ».
+	 * Départage DÉTERMINISTE par année DÉCROISSANTE si plusieurs éditions sont
+	 * marquées « en cours » (la plus récente gagne). Vues current-only : accueil,
+	 * hub, agenda, participants, voix, infos-pratiques, JSON-LD. Null si aucune.
+	 *
+	 * @return WP_Post|null
+	 */
+	function fnc_resolve_current_edition() {
+		static $cache = false;
+		if ( false !== $cache ) {
+			return $cache;
+		}
+		$current = get_posts( array(
+			'post_type'      => 'fnc_edition',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'meta_key'       => '_fnc_edition_year',
+			'orderby'        => 'meta_value_num',
+			'order'          => 'DESC',
+			'meta_query'     => array(
+				array( 'key' => '_fnc_edition_status', 'value' => 'current' ),
+			),
+			'no_found_rows'  => true,
+		) );
+		return $cache = ( ! empty( $current ) ? $current[0] : null );
+	}
+}
+
 if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 	/**
-	 * Édition active = l'édition « en cours » ; à défaut, la prochaine « à venir »
-	 * (année la plus proche). L'utilisateur ne choisit jamais l'édition.
+	 * Édition active AVEC REPLI : « en cours », à défaut la prochaine « à venir »
+	 * (année la plus proche). RÉSERVÉE au rattachement d'inscription (parité
+	 * resolveActiveEdition du Next) — PAS aux vitrines current-only.
 	 *
 	 * @return WP_Post|null
 	 */
@@ -47,21 +78,10 @@ if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 		if ( false !== $cache ) {
 			return $cache;
 		}
-
-		// 1) « en cours »
-		$current = get_posts( array(
-			'post_type'      => 'fnc_edition',
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'meta_key'       => '_fnc_edition_status',
-			'meta_value'     => 'current',
-			'no_found_rows'  => true,
-		) );
-		if ( ! empty( $current ) ) {
-			return $cache = $current[0];
+		$current = fnc_resolve_current_edition();
+		if ( $current ) {
+			return $cache = $current;
 		}
-
-		// 2) à défaut, la prochaine « à venir » (année croissante)
 		$upcoming = get_posts( array(
 			'post_type'      => 'fnc_edition',
 			'post_status'    => 'publish',
@@ -74,14 +94,21 @@ if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 			),
 			'no_found_rows'  => true,
 		) );
-
 		return $cache = ( ! empty( $upcoming ) ? $upcoming[0] : null );
 	}
 }
 
 if ( ! function_exists( 'fnc_current_edition_id' ) ) {
-	/** ID de l'édition active (0 si aucune). */
+	/** ID de l'édition EN COURS (current-strict ; 0 si aucune). Vues current-only. */
 	function fnc_current_edition_id() {
+		$ed = fnc_resolve_current_edition();
+		return $ed ? (int) $ed->ID : 0;
+	}
+}
+
+if ( ! function_exists( 'fnc_registration_edition_id' ) ) {
+	/** ID pour le RATTACHEMENT d'inscription : en cours → à venir (repli). */
+	function fnc_registration_edition_id() {
 		$ed = fnc_resolve_active_edition();
 		return $ed ? (int) $ed->ID : 0;
 	}

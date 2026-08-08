@@ -149,10 +149,12 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 	 * @return array|null
 	 */
 	function fnc_sd_event() {
-		if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
-			return null; // « Données du site » requises pour l'édition active.
+		if ( ! function_exists( 'fnc_resolve_current_edition' ) ) {
+			return null; // « Données du site » requises pour l'édition en cours.
 		}
-		$ed = fnc_resolve_active_edition();
+		// JSON-LD Event de l'accueil = édition EN COURS (current-strict), jamais un
+		// repli « à venir » (parité : l'événement n'existe que s'il est « en cours »).
+		$ed = fnc_resolve_current_edition();
 		if ( ! $ed ) {
 			return null;
 		}

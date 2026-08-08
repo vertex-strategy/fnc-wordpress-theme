@@ -197,13 +197,14 @@ while ( have_posts() ) :
 		}
 		?>
 
+		<?php if ( 'current' !== $fnc_ed_status ) : // #3 : rétrospective JAMAIS pour l'édition en cours (sa fiche = hub/agenda ; parité editions/[slug]:83). ?>
 		<?php if ( ! empty( $fnc_ed_figures ) ) : ?>
 			<section class="section">
 				<span class="eyebrow"><?php esc_html_e( 'Chiffres clés', 'fnc-wordpress-theme' ); ?></span>
 				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
 				<div class="stat-line" style="margin-top:24px;">
 					<?php foreach ( $fnc_ed_figures as $fnc_fig ) : ?>
-						<?php if ( ! empty( $fnc_fig['value'] ) ) : ?>
+						<?php if ( ! empty( $fnc_fig['value'] ) && ! empty( $fnc_fig['label'] ) ) : // #4a : value ET label requis. ?>
 							<div class="stat">
 								<b style="color:var(--navy);"><?php echo esc_html( $fnc_fig['value'] ); ?></b>
 								<?php if ( ! empty( $fnc_fig['label'] ) ) : ?><span style="color:var(--texte-tert);"><?php echo esc_html( $fnc_fig['label'] ); ?></span><?php endif; ?>
@@ -287,12 +288,21 @@ while ( have_posts() ) :
 				<span class="eyebrow"><?php esc_html_e( 'Galerie', 'fnc-wordpress-theme' ); ?></span>
 				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
 				<div class="retro-gallery" style="margin-top:28px;">
-					<?php foreach ( $fnc_ed_gallery as $fnc_g_url ) : ?>
-						<figure><?php echo fnc_theme_image( $fnc_g_url, '' ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
+					<?php foreach ( $fnc_ed_gallery as $fnc_g_item ) : ?>
+						<?php
+						// #4b : chaque média exige un texte alternatif (a11y) — sans alt, écarté.
+						$fnc_g_url = is_array( $fnc_g_item ) ? (string) ( $fnc_g_item['url'] ?? '' ) : '';
+						$fnc_g_alt = is_array( $fnc_g_item ) ? (string) ( $fnc_g_item['alt'] ?? '' ) : '';
+						if ( '' === $fnc_g_url || '' === $fnc_g_alt ) {
+							continue;
+						}
+						?>
+						<figure><?php echo fnc_theme_image( $fnc_g_url, $fnc_g_alt ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 					<?php endforeach; ?>
 				</div>
 			</section>
 		<?php endif; ?>
+		<?php endif; // #3 fin rétrospective (affichée uniquement pour une édition NON en cours). ?>
 
 		<?php
 		// Informations pratiques (mutualisées) — masquées si non renseignées.

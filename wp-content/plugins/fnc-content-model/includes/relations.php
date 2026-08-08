@@ -471,7 +471,17 @@ function fnc_content_model_render_edition_retro_meta_box( $post ) {
 			)
 		)
 		: '';
-	$gallery_text = is_array( $gallery ) ? implode( "\n", $gallery ) : '';
+	$gallery_text = is_array( $gallery )
+		? implode(
+			"\n",
+			array_map(
+				static function ( $g ) {
+					return is_array( $g ) ? trim( ( $g['url'] ?? '' ) . '|' . ( $g['alt'] ?? '' ), '|' ) : (string) $g;
+				},
+				$gallery
+			)
+		)
+		: '';
 
 	echo '<p class="description">' . esc_html__( 'À renseigner pour les éditions passées : ce contenu s’affiche en bas de la fiche de l’édition (bilan, chiffres, galerie).', 'fnc-content-model' ) . '</p>';
 
@@ -481,9 +491,9 @@ function fnc_content_model_render_edition_retro_meta_box( $post ) {
 	echo '<p><label for="fnc_edition_figures"><strong>' . esc_html__( 'Chiffres clés (un par ligne, format « Valeur|Libellé »)', 'fnc-content-model' ) . '</strong></label><br />';
 	printf( '<textarea id="fnc_edition_figures" name="fnc_edition_figures" rows="4" style="width:100%%;" placeholder="1 200|Participants&#10;54|Pays représentés">%s</textarea></p>', esc_textarea( $figures_text ) );
 
-	echo '<p><label for="fnc_edition_gallery"><strong>' . esc_html__( 'Galerie rétrospective (une URL d’image par ligne)', 'fnc-content-model' ) . '</strong></label><br />';
-	printf( '<textarea id="fnc_edition_gallery" name="fnc_edition_gallery" rows="4" style="width:100%%;" placeholder="https://…/photo-1.jpg">%s</textarea></p>', esc_textarea( $gallery_text ) );
-	echo '<p class="description">' . esc_html__( 'Téléversez les images dans la Médiathèque puis collez ici leur adresse (une par ligne). Aucun sélecteur média : le plugin reste sans dépendance JavaScript.', 'fnc-content-model' ) . '</p>';
+	echo '<p><label for="fnc_edition_gallery"><strong>' . esc_html__( 'Galerie rétrospective (une image par ligne, format « URL|texte alternatif »)', 'fnc-content-model' ) . '</strong></label><br />';
+	printf( '<textarea id="fnc_edition_gallery" name="fnc_edition_gallery" rows="4" style="width:100%%;" placeholder="https://…/photo-1.jpg|Plénière d’ouverture">%s</textarea></p>', esc_textarea( $gallery_text ) );
+	echo '<p class="description">' . esc_html__( 'Téléversez les images dans la Médiathèque puis collez ici leur adresse ET un texte alternatif, séparés par « | » (un média par ligne). Le texte alternatif est OBLIGATOIRE (accessibilité) : une ligne sans alt est ignorée. Aucun sélecteur média : le plugin reste sans dépendance JavaScript.', 'fnc-content-model' ) . '</p>';
 }
 
 function fnc_content_model_render_publication_meta_box( $post ) {
@@ -838,13 +848,20 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 		}
 		update_post_meta( $post_id, FNC_META_EDITION_FIGURES, $figures );
 
-		// Galerie : une URL par ligne -> [ url, … ].
+		// Galerie : « URL|texte alternatif » par ligne -> [ {url,alt}, … ].
+		// #4b : l'alt est OBLIGATOIRE (a11y) — une ligne sans alt est ignorée.
 		$gallery_raw = isset( $_POST['fnc_edition_gallery'] ) ? (string) wp_unslash( $_POST['fnc_edition_gallery'] ) : '';
 		$gallery     = array();
 		foreach ( preg_split( '/\r\n|\r|\n/', $gallery_raw ) as $line ) {
-			$line = esc_url_raw( trim( $line ) );
-			if ( '' !== $line ) {
-				$gallery[] = $line;
+			$line = trim( $line );
+			if ( '' === $line ) {
+				continue;
+			}
+			$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+			$url   = esc_url_raw( $parts[0] ?? '' );
+			$alt   = isset( $parts[1] ) ? sanitize_text_field( $parts[1] ) : '';
+			if ( '' !== $url && '' !== $alt ) {
+				$gallery[] = array( 'url' => $url, 'alt' => $alt );
 			}
 		}
 		update_post_meta( $post_id, FNC_META_EDITION_GALLERY, $gallery );

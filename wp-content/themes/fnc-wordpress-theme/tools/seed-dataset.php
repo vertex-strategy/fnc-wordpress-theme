@@ -337,13 +337,15 @@ function fnc_ds_upsert( $post_type, $legacy, $title, $content = '', $slug = '' )
 		'post_content' => $content,
 		'post_status'  => 'publish',
 	);
-	if ( $slug ) {
-		$arr['post_name'] = $slug;
-	}
 	if ( $id ) {
 		$arr['ID'] = $id;
+		// post_name NON modifié à l'update : les slugs (URL) restent STABLES à
+		// travers les re-seeds (#4c — pas de churn d'URL sur l'existant).
 		wp_update_post( $arr );
 	} else {
+		if ( $slug ) {
+			$arr['post_name'] = $slug;
+		}
 		$id = (int) wp_insert_post( $arr );
 		update_post_meta( $id, '_fnc_seed_legacy', $legacy );
 	}
@@ -519,7 +521,10 @@ fnc_ds_ensure_pages();
 /* ---- 1. Éditions ---- */
 fnc_ds_log( 'Éditions :' );
 foreach ( $data['editions'] as $e ) {
-	$id = fnc_ds_upsert( 'fnc_edition', $e['legacyId'], $e['title'], '', $e['slug'] );
+	// #4c : slug d'édition DÉRIVÉ DU TITRE (jamais préfixé par l'année ; parité
+	// slugField('title') du Next). N'affecte que les NOUVELLES éditions (l'upsert
+	// ne modifie plus le post_name des éditions déjà créées → URL stables).
+	$id = fnc_ds_upsert( 'fnc_edition', $e['legacyId'], $e['title'], '', sanitize_title( $e['title'] ) );
 	fnc_ds_meta( $id, array(
 		'_fnc_edition_year'       => $e['year'],
 		'_fnc_edition_status'     => $e['status'],

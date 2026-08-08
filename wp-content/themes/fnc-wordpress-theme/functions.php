@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.33' );
+define( 'FNC_THEME_VERSION', '1.0.34' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -495,9 +495,19 @@ function fnc_archive_url( $post_type ) {
  * @return array Liste de [url, libelle].
  */
 function fnc_default_menu_items() {
+	// Libellé « Édition {année} » DÉRIVÉ de l'édition active (jamais l'année en dur).
+	$fnc_ec_year  = '';
+	if ( function_exists( 'fnc_current_edition_id' ) ) {
+		$fnc_ec_id = fnc_current_edition_id();
+		if ( $fnc_ec_id ) {
+			$fnc_ec_year = (string) get_post_meta( $fnc_ec_id, '_fnc_edition_year', true );
+		}
+	}
+	/* translators: %s: année de l'édition active. */
+	$fnc_ec_label = $fnc_ec_year ? sprintf( __( 'Édition %s', 'fnc-wordpress-theme' ), $fnc_ec_year ) : __( 'Édition en cours', 'fnc-wordpress-theme' );
 	return array(
 		array( fnc_page_url( 'le-forum' ), __( 'Le Forum', 'fnc-wordpress-theme' ) ),
-		array( fnc_page_url( 'edition-en-cours' ), __( 'Édition 2027', 'fnc-wordpress-theme' ) ),
+		array( fnc_page_url( 'edition-en-cours' ), $fnc_ec_label ),
 		array( fnc_archive_url( 'fnc_edition' ), __( 'Éditions', 'fnc-wordpress-theme' ) ),
 		array( fnc_archive_url( 'fnc_publication' ), __( 'Ressources', 'fnc-wordpress-theme' ) ),
 		array( fnc_page_url( 'partenaires' ), __( 'Partenaires', 'fnc-wordpress-theme' ) ),

@@ -17,6 +17,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * `image` = nom de fichier dans assets/images/ (repli si aucune image choisie).
  */
 function fnc_hero_registry() {
+	// Titre par défaut du hub « Édition en cours » : année DÉRIVÉE de l'édition
+	// active (jamais en dur). Repli neutre si aucune édition résoluble.
+	$fnc_ec_year  = '';
+	if ( function_exists( 'fnc_current_edition_id' ) ) {
+		$fnc_ec_id = fnc_current_edition_id();
+		if ( $fnc_ec_id ) {
+			$fnc_ec_year = (string) get_post_meta( $fnc_ec_id, '_fnc_edition_year', true );
+		}
+	}
+	/* translators: %s: année de l'édition active. */
+	$fnc_ec_title = $fnc_ec_year ? sprintf( __( 'Édition %s', 'fnc-wordpress-theme' ), $fnc_ec_year ) : __( 'Édition en cours', 'fnc-wordpress-theme' );
 	return array(
 		'intervenants'   => array(
 			'label'   => __( 'Intervenants', 'fnc-wordpress-theme' ),
@@ -77,7 +88,7 @@ function fnc_hero_registry() {
 		'edition-en-cours' => array(
 			'label'   => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 			'eyebrow' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
-			'title'   => __( 'Édition 2027', 'fnc-wordpress-theme' ),
+			'title'   => $fnc_ec_title,
 			'intro'   => __( 'Trois jours de travail collectif autour de la souveraineté numérique. Voici tout ce qu’il faut pour préparer votre participation.', 'fnc-wordpress-theme' ),
 			'image'   => 'edition-en-cours.jpeg',
 		),

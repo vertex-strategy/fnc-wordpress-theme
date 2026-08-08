@@ -235,6 +235,98 @@ fnc_seed_acf_page(
 	$fnc_seed_force
 );
 
+/* ---- Le Forum (composition BLOCS Gutenberg — rendu sans dépendance ACF) ----
+ * Compose la page en blocs fnc/* pour que le rendu vienne du CMS (jamais du
+ * gabarit démo en dur). Coexiste avec la composition ACF ci-dessus : le gabarit
+ * essaie l'ACF d'abord, puis les blocs — donc si ACF Pro est absent, ce sont ces
+ * blocs qui s'affichent. */
+fnc_seed_page(
+	'le-forum',
+	array(
+		fnc_seed_block( 'inst-hero', array(
+			'image'      => fnc_seed_image( 'le-forum.png' ),
+			'breadcrumb' => 'Le Forum',
+			'eyebrow'    => 'Ce que nous sommes',
+			'titleA'     => 'Une institution,',
+			'titleB'     => 'pas un évènement.',
+			'intro'      => '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. »',
+		) ),
+		fnc_seed_block( 'inst-president', array(
+			'eyebrow'  => 'Le mot du Président',
+			'photo'    => fnc_seed_image( 'eugene-rufin-bouya.jpeg' ),
+			'name'     => 'Eugène Rufin BOUYA',
+			'role'     => 'Président du Forum Numérique Congo',
+			'excerpt'  => 'Le numérique n’est plus seulement un outil d’innovation ; il est devenu un levier de puissance, de compétitivité, de souveraineté et de régulation.',
+			'ctaLabel' => 'Lire le mot complet',
+			'ctaHref'  => '/le-forum/mot-du-president',
+		) ),
+		fnc_seed_block( 'inst-split', array(
+			'eyebrow' => 'Notre mission',
+			'l1'      => 'Comprendre.',
+			'l2'      => 'Rassembler.',
+			'l3'      => 'Décider ensemble.',
+			'body'    => 'Le Forum réunit institutions, entreprises, chercheurs et société civile pour transformer une ambition nationale en trajectoire numérique lisible. Un rendez-vous majeur tous les deux ans, un travail continu entre les éditions.',
+			'image'   => fnc_seed_image( 'les-personnes.png' ),
+		) ),
+		fnc_seed_block( 'inst-objectives', array(
+			'eyebrow' => 'Nos objectifs',
+			'title'   => 'Ce que le Forum rend possible',
+			'items'   => array(
+				array( 't' => 'Comprendre', 'd' => 'Éclairer les enjeux du numérique pour l’Afrique centrale, sans jargon ni importation de modèles.' ),
+				array( 't' => 'Dialoguer', 'd' => 'Créer un espace de parole partagé entre décideurs publics, acteurs privés et citoyens.' ),
+				array( 't' => 'Coopérer', 'd' => 'Faire émerger des coopérations concrètes, régionales et durables.' ),
+				array( 't' => 'Décider', 'd' => 'Transformer les échanges en décisions et en engagements traçables.' ),
+			),
+		) ),
+		fnc_seed_block( 'inst-manifesto', array(
+			'image'     => fnc_seed_image( 'le-fleuve.png' ),
+			'eyebrow'   => 'Notre ancrage',
+			'manifestA' => 'Depuis Brazzaville,',
+			'manifestB' => 'au cœur du Bassin du Congo.',
+			'sub'       => 'Une parole ancrée dans son territoire, tournée vers toute l’Afrique centrale.',
+		) ),
+		fnc_seed_block( 'inst-callout', array(
+			'title'    => 'Participer au Forum',
+			'desc'     => 'Rejoignez la prochaine édition du Forum, aux côtés des décideurs, experts et de la société civile.',
+			'ctaLabel' => 'Réserver votre place',
+			'ctaHref'  => '/inscription',
+		) ),
+	),
+	$fnc_seed_force,
+	'institutional'
+);
+
+/* ---- Le mot du Président (composition BLOCS Gutenberg) ---- */
+fnc_seed_page(
+	'le-forum/mot-du-president',
+	array(
+		fnc_seed_block( 'inst-hero', array(
+			'image'      => fnc_seed_image( 'le-pupitre.png' ),
+			'breadcrumb' => 'Le mot du Président',
+			'eyebrow'    => 'Le Président du Forum',
+			'titleA'     => 'Le mot du Président',
+			'intro'      => '« Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale. Entre les éditions, nous transformons une ambition nationale en trajectoire concrète, au service des Congolais. »',
+		) ),
+		fnc_seed_block( 'inst-president', array(
+			'photo'   => fnc_seed_image( 'eugene-rufin-bouya.jpeg' ),
+			'name'    => 'Eugène Rufin BOUYA',
+			'role'    => 'Président du Forum Numérique Congo',
+			'message' => '<p>Le Forum Numérique Congo installe un espace permanent de dialogue, de coopération et de décision autour du numérique en Afrique centrale.</p>'
+				. '<p>Entre les éditions, nous poursuivons un travail continu : réunir les institutions, les entreprises, les chercheurs et la société civile pour transformer une ambition nationale en trajectoire numérique lisible et partagée.</p>'
+				. '<p>Notre conviction est simple : le numérique n’est pas une fin, mais un moyen — celui de rendre nos services publics plus accessibles, nos entreprises plus compétitives et notre jeunesse mieux outillée.</p>'
+				. '<p>Je vous invite à rejoindre cette dynamique, depuis Brazzaville, au cœur du Bassin du Congo, et tournée vers toute l’Afrique centrale.</p>',
+		) ),
+		fnc_seed_block( 'inst-callout', array(
+			'title'    => 'Rejoignez le Forum',
+			'desc'     => 'La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue.',
+			'ctaLabel' => 'S’inscrire',
+			'ctaHref'  => '/inscription',
+		) ),
+	),
+	$fnc_seed_force,
+	'institutional'
+);
+
 /* ---- Contact (héros + orientation + coordonnées + formulaire) ---- */
 fnc_seed_page(
 	'contact',

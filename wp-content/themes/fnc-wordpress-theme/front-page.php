@@ -17,15 +17,10 @@ get_header();
 $fnc_img_dir = get_template_directory_uri() . '/assets/images/';
 
 // Edition en cours : sert au programme (M5) et au compte a rebours (M8).
-$fnc_home_edition = get_posts(
-	array(
-		'post_type'      => 'fnc_edition',
-		'posts_per_page' => 1,
-		'meta_key'       => '_fnc_edition_active',
-		'meta_value'     => '1',
-	)
-);
-$fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
+// Source UNIQUE = le résolveur (status='current', sinon prochaine 'upcoming'),
+// aligné avec participants/carrousel/annuaire (plus de double lecture meta).
+$fnc_home_edition_id = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+$fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) : null;
 ?>
 
 <main id="main">
@@ -39,6 +34,16 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 			<div class="kicker">
 				<?php if ( fnc_home_setting( 'm1_place', 'Brazzaville · République du Congo' ) ) : ?>
 					<span class="place"><?php echo esc_html( fnc_home_setting( 'm1_place', 'Brazzaville · République du Congo' ) ); ?></span>
+				<?php endif; ?>
+				<?php
+				// 3e .place du kicker = LIEU précis (parité Next page.tsx:136-138) :
+				// réglage m1_venue, sinon lieu de l'édition active. Masqué si vide.
+				$fnc_m1_venue = (string) fnc_home_setting( 'm1_venue' );
+				if ( '' === trim( $fnc_m1_venue ) && $fnc_home_edition ) {
+					$fnc_m1_venue = (string) get_post_meta( $fnc_home_edition->ID, '_fnc_edition_location', true );
+				}
+				if ( '' !== trim( $fnc_m1_venue ) ) : ?>
+					<span class="place"><?php echo esc_html( $fnc_m1_venue ); ?></span>
 				<?php endif; ?>
 				<span class="place">
 					<?php $fnc_m1_dates = fnc_home_setting( 'm1_dates' ) ?: fnc_edition_dates_label(); ?>
@@ -436,8 +441,8 @@ $fnc_home_edition = ! empty( $fnc_home_edition ) ? $fnc_home_edition[0] : null;
 			</a>
 		</div>
 		<svg class="pcb" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
-			<path class="r" d="M0 40 H420 L470 70 H820 L860 40 H1200"/>
-			<path class="y" d="M0 90 H300 L340 60 H700 L740 92 H1200"/>
+			<path class="line-r" d="M0 40 H420 L470 70 H820 L860 40 H1200"/>
+			<path class="line-y" d="M0 90 H300 L340 60 H700 L740 92 H1200"/>
 			<circle class="node" cx="860" cy="40" r="4" fill="#CC2222"/>
 			<circle class="node node-y" cx="740" cy="92" r="4" fill="#F5C000"/>
 		</svg>

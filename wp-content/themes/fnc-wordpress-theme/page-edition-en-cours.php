@@ -31,27 +31,10 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 	return;
 }
 
-$fnc_active_edition = get_posts(
-	array(
-		'post_type'      => 'fnc_edition',
-		'posts_per_page' => 1,
-		'meta_key'       => '_fnc_edition_active',
-		'meta_value'     => '1',
-	)
-);
-
-if ( empty( $fnc_active_edition ) ) {
-	$fnc_active_edition = get_posts(
-		array(
-			'post_type'      => 'fnc_edition',
-			'posts_per_page' => 1,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		)
-	);
-}
-
-$fnc_edition = ! empty( $fnc_active_edition ) ? $fnc_active_edition[0] : null;
+// Source UNIQUE = le résolveur (status='current', sinon prochaine 'upcoming'),
+// aligné avec le reste du site (plus de double lecture _fnc_edition_active).
+$fnc_edition_id = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+$fnc_edition    = $fnc_edition_id ? get_post( $fnc_edition_id ) : null;
 
 $fnc_sessions       = array();
 $fnc_speaker_ids    = array();
@@ -107,7 +90,10 @@ fnc_render_opening_hero(
 		'title'      => $fnc_route_h['title'],
 		'intro'      => $fnc_route_h['intro'],
 		'image'      => $fnc_route_h['image'],
-		'image_alt'  => __( 'Édition 2027 du Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'image_alt'  => ( $fnc_edition && get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true ) )
+			/* translators: %s: année de l'édition. */
+			? sprintf( __( 'Édition %s du Forum Numérique Congo', 'fnc-wordpress-theme' ), (string) get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true ) )
+			: __( 'Édition en cours du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 	)
 );

@@ -21,7 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fnc_home_setting( $key, $default = '' ) {
 	$value = get_theme_mod( 'fnc_home_' . $key, $default );
-	return ( '' === $value || null === $value ) ? $default : $value;
+	if ( '' === $value || null === $value ) {
+		return $default;
+	}
+	// Bilingue (Polylang) : le TEXTE éditorial de l'accueil (M1–M8 : sur-titres,
+	// titres, taglines, manifeste, libellés CTA) est enregistré comme chaîne
+	// traduisible et renvoyé dans la langue courante — FR ≠ EN. On EXCLUT les
+	// clés non textuelles (médias, URL, nombres, réglages techniques).
+	if ( is_string( $value ) && '' !== $value
+		&& ! preg_match( '/(_image|_video|_poster|_url|_count|_interval|_type|_ids|_side)$/', $key )
+		&& false === strpos( $key, 'slide_' )
+		&& function_exists( 'pll_register_string' ) && function_exists( 'pll__' ) ) {
+		pll_register_string( 'fnc_home_' . $key, $value, 'FNC Accueil', true );
+		$value = pll__( $value );
+	}
+	return $value;
 }
 
 /**
@@ -250,6 +264,7 @@ function fnc_homepage_customize_register( $wp_customize ) {
 
 	// -- Contenu éditorial M1
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_place', __( 'Lieu (kicker)', 'fnc-wordpress-theme' ), 'text', 'Brazzaville · République du Congo' );
+	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_venue', __( 'Lieu précis (kicker, 2e ligne)', 'fnc-wordpress-theme' ), 'text', '' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_dates', __( 'Dates (kicker)', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_title_line1', __( 'Titre — ligne 1', 'fnc-wordpress-theme' ), 'text', 'Forum' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_title_line2', __( 'Titre — ligne 2 (fine)', 'fnc-wordpress-theme' ), 'text', 'Numérique' );

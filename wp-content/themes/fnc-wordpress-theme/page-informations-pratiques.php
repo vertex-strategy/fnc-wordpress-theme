@@ -44,15 +44,8 @@ fnc_render_opening_hero(
 );
 
 // Edition en cours : porteuse des rubriques pratiques.
-$fnc_ip_edition = get_posts(
-	array(
-		'post_type'      => 'fnc_edition',
-		'posts_per_page' => 1,
-		'meta_key'       => '_fnc_edition_active',
-		'meta_value'     => '1',
-	)
-);
-$fnc_ip_edition   = ! empty( $fnc_ip_edition ) ? $fnc_ip_edition[0] : null;
+$fnc_ip_edition_id = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+$fnc_ip_edition    = $fnc_ip_edition_id ? get_post( $fnc_ip_edition_id ) : null;
 $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition ) : '';
 ?>
 

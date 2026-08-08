@@ -374,6 +374,103 @@ if ( ! function_exists( 'fnc_speaker_portrait' ) ) {
 }
 
 /* ==========================================================================
+ * M1 — Protection d'accès aux MÉDIAS non diffusables (droit à l'image / brouillons)
+ *
+ * La garde d'AFFICHAGE (fnc_speaker_portrait → monogramme) n'empêche pas d'ATTEINDRE le
+ * FICHIER : une attachment reste servie depuis /wp-content/uploads et listée par l'API
+ * REST média. On restreint donc, pour les visiteurs NON habilités :
+ *   (a) le portrait d'un intervenant dont le droit à l'image n'est pas obtenu / a expiré ;
+ *   (b) tout média rattaché à un contenu NON publié (brouillon / en attente / privé).
+ *
+ * Couverture PHP : masquage en REST (source_url / guid / media_details retirés) + 404 sur
+ * la page d'attachment. ⚠️ L'accès DIRECT au fichier (URL uploads devinée) relève du
+ * serveur web — voir INSTALL.md (règle .htaccess / nginx) : PHP ne peut pas l'intercepter.
+ * ======================================================================== */
+if ( ! function_exists( 'fnc_attachment_is_restricted' ) ) {
+	function fnc_attachment_is_restricted( $att_id ) {
+		$att_id = (int) $att_id;
+		$att    = get_post( $att_id );
+		if ( ! $att || 'attachment' !== $att->post_type ) {
+			return false;
+		}
+		// (a) Portrait utilisé comme image à la une d'un intervenant sans droit acquis.
+		//     Le lien se fait par la méta `_thumbnail_id`, PAS par post_parent (un portrait
+		//     déposé dans la médiathèque a souvent post_parent=0) → recherche inverse.
+		if ( function_exists( 'fnc_speaker_image_allowed' ) ) {
+			$owners = get_posts(
+				array(
+					'post_type'   => 'fnc_intervenant',
+					'post_status' => 'any',
+					'numberposts' => -1,
+					'fields'      => 'ids',
+					'meta_key'    => '_thumbnail_id',   // phpcs:ignore WordPress.DB.SlowDBQuery -- lookup ciblé hors chemin chaud (REST média / page attachment).
+					'meta_value'  => (string) $att_id,  // phpcs:ignore WordPress.DB.SlowDBQuery
+				)
+			);
+			// Conservateur : si UN SEUL intervenant utilisant ce fichier n'a pas le droit
+			// à l'image, le fichier est restreint (un portrait ne devrait pas être partagé ;
+			// en cas de partage, on protège par défaut).
+			foreach ( $owners as $owner_id ) {
+				if ( ! fnc_speaker_image_allowed( (int) $owner_id ) ) {
+					return true;
+				}
+			}
+		}
+
+		// (b) Média rattaché (post_parent) à un contenu NON publié (brouillon/en attente/privé).
+		$parent_id = (int) $att->post_parent;
+		if ( $parent_id ) {
+			$parent = get_post( $parent_id );
+			if ( $parent && 'publish' !== $parent->post_status ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+// Masque l'URL de fichier des médias restreints dans l'API REST (visiteurs non habilités).
+add_filter(
+	'rest_prepare_attachment',
+	function ( $response, $post ) {
+		if ( ! ( $response instanceof WP_REST_Response ) ) {
+			return $response;
+		}
+		if ( current_user_can( 'edit_post', $post->ID ) ) {
+			return $response; // Éditeur / Admin : accès légitime.
+		}
+		if ( ! fnc_attachment_is_restricted( $post->ID ) ) {
+			return $response;
+		}
+		$data = $response->get_data();
+		foreach ( array( 'source_url', 'guid', 'media_details', 'description', 'caption' ) as $fnc_k ) {
+			unset( $data[ $fnc_k ] );
+		}
+		$response->set_data( $data );
+		return $response;
+	},
+	10,
+	2
+);
+
+// 404 sur la page d'attachment d'un média restreint (visiteurs non habilités).
+add_action(
+	'template_redirect',
+	function () {
+		if ( ! is_attachment() ) {
+			return;
+		}
+		$fnc_att_id = get_queried_object_id();
+		if ( $fnc_att_id && fnc_attachment_is_restricted( $fnc_att_id ) && ! current_user_can( 'edit_post', $fnc_att_id ) ) {
+			global $wp_query;
+			$wp_query->set_404();
+			status_header( 404 );
+			nocache_headers();
+		}
+	}
+);
+
+/* ==========================================================================
  * AGENDA — sessions groupées par jour (jour puis horaire)
  * (sessions groupées par jour, triées par horaire.)
  * Dérivation PURE : renvoie une structure prête, ZÉRO rendu (la scénographie —

@@ -95,6 +95,34 @@ Deux menus apparaissent : **Réglages → FNC** (contenu du site) et
 **Réglages → FNC (fonctionnalités)** (ouverture des inscriptions, affichage des actualités).
 La suite — création des contenus, liaisons, traductions — est décrite pas à pas dans `GUIDE.md`.
 
+## Durcissement serveur (recommandé)
+
+Le template applique déjà, côté PHP, les protections d'accès aux données (API REST verrouillée
+sur les demandes de formulaire, masquage REST des portraits non consentis et des médias de
+contenus non publiés, 404 sur leur page d'attachment). Deux protections relèvent toutefois de
+la **configuration serveur** et ne peuvent pas être assurées par PHP seul :
+
+- **Accès direct aux fichiers média (droit à l'image / brouillons).** PHP masque ces médias
+  dans l'API REST, mais l'URL directe d'un fichier dans `/wp-content/uploads/` reste servie par
+  le serveur web. Pour une protection complète des portraits **sans droit à l'image acquis** et
+  des fichiers de **contenus non publiés**, servez les médias sensibles derrière une règle
+  serveur (ou un stockage non public). À défaut, considérez qu'une URL exacte devinée reste
+  atteignable — c'est la limite documentée, identique à la référence.
+
+- **Anti-abus derrière un CDN / reverse-proxy.** Le rate-limit des formulaires s'appuie sur
+  l'IP réseau (`REMOTE_ADDR`), **non falsifiable**. Derrière un proxy (Cloudflare, etc.),
+  `REMOTE_ADDR` devient l'IP du proxy → tous les visiteurs partagent le même compteur. Pour
+  restaurer la vraie IP, **et uniquement si votre proxy réécrit l'en-tête client** (sinon vous
+  rouvrez la falsification), ajoutez dans `wp-config.php` :
+
+  ```php
+  define( 'FNC_TRUSTED_PROXY', true );
+  // en-tête posé par VOTRE proxy de confiance (préférez un en-tête dédié non-spoofable) :
+  add_filter( 'fnc_client_ip_header', function () { return 'HTTP_CF_CONNECTING_IP'; } );
+  ```
+
+  Sans proxy de confiance, laissez la configuration par défaut (aucune de ces lignes).
+
 ---
 
 *Template **Forum Numérique Congo** — thème + extensions « FNC Content Model » et « FNC Core ».*

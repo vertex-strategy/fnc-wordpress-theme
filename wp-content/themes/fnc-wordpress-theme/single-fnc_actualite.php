@@ -26,7 +26,7 @@ while ( have_posts() ) :
 		<div class="container reading">
 			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <a href="<?php echo esc_url( fnc_archive_url( 'fnc_actualite' ) ); ?>"><?php esc_html_e( 'Actualités', 'fnc-wordpress-theme' ); ?></a></p>
 			<p class="page-eyebrow text-navy"><?php echo esc_html( get_the_date() ); ?><?php if ( $fnc_ac_cats && ! is_wp_error( $fnc_ac_cats ) ) { echo ' · ' . esc_html( $fnc_ac_cats[0]->name ); } ?></p>
-			<h1 class="page-h2"><?php the_title(); ?></h1>
+			<h1 class="page-h2"><?php echo esc_html( get_the_title() ); ?></h1>
 			<?php if ( has_excerpt() ) : ?>
 				<p class="intro"><?php echo esc_html( get_the_excerpt() ); ?></p>
 			<?php endif; ?>

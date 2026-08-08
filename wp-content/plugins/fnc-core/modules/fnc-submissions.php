@@ -271,10 +271,45 @@ function fnc_submission_rate_limited( $type ) {
 	return false;
 }
 
+/**
+ * IP cliente pour l'anti-abus (rate-limit).
+ *
+ * Par défaut : REMOTE_ADDR uniquement — la source la plus fiable, NON falsifiable par
+ * le client. On ne lit JAMAIS d'en-tête `X-Forwarded-For`/`Client-IP` par défaut, car
+ * ils sont librement forgeables (contournement trivial du seau).
+ *
+ * Derrière un CDN/reverse-proxy de confiance, REMOTE_ADDR devient l'IP du proxy → tous
+ * les visiteurs partagent alors le même seau (risque d'auto-DoS du formulaire). Pour
+ * restaurer la vraie IP, activez EXPLICITEMENT la confiance proxy, et UNIQUEMENT si votre
+ * proxy réécrit/nettoie l'en-tête client (sinon vous rouvrez la falsification) :
+ *
+ *   define( 'FNC_TRUSTED_PROXY', true );                       // wp-config.php
+ *   add_filter( 'fnc_client_ip_header', fn() => 'HTTP_CF_CONNECTING_IP' ); // en-tête non-spoofable du CDN
+ *
+ * `fnc_client_ip_header` par défaut = `HTTP_X_FORWARDED_FOR` (on prend alors la 1re IP
+ * valide de la liste). Préférez un en-tête dédié du CDN (ex. CF-Connecting-IP) quand il existe.
+ */
 function fnc_client_ip() {
-	// Derrière un reverse-proxy (Cloudflare…), REMOTE_ADDR est le proxy. Adapter au besoin.
-	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? wp_unslash( $_SERVER['REMOTE_ADDR'] ) : '0.0.0.0';
-	return sanitize_text_field( $ip );
+	$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
+
+	$trusted = apply_filters( 'fnc_behind_trusted_proxy', defined( 'FNC_TRUSTED_PROXY' ) && FNC_TRUSTED_PROXY );
+	if ( ! $trusted ) {
+		return $remote; // Cas par défaut : IP réseau réelle, non falsifiable.
+	}
+
+	$header = apply_filters( 'fnc_client_ip_header', 'HTTP_X_FORWARDED_FOR' );
+	if ( empty( $_SERVER[ $header ] ) ) {
+		return $remote;
+	}
+
+	$raw = sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) );
+	foreach ( explode( ',', $raw ) as $candidate ) {
+		$candidate = trim( $candidate );
+		if ( filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
+			return $candidate; // 1re IP valide = client d'origine (proxy de confiance requis).
+		}
+	}
+	return $remote;
 }
 
 /** Locale courante (Polylang si présent, sinon fr). */

@@ -5,10 +5,12 @@
  *              formulaires, données du site, données structurées SEO, consentement &
  *              mesure d'audience, options d'affichage, édition des pages). Survit à un
  *              changement de thème.
- * Version: 1.0.38
+ * Version: 1.0.39
  * Author: Grinso & Associés
  * Author URI: https://www.grinso.io
  * Requires PHP: 7.4
+ * Text Domain: fnc
+ * Domain Path: /languages
  * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
  *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
@@ -33,8 +35,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_CORE_VERSION', '1.0.25' );
+define( 'FNC_CORE_VERSION', '1.0.39' );
 define( 'FNC_CORE_DIR', plugin_dir_path( __FILE__ ) );
+
+/*
+ * i18n : chargement du domaine de traduction « fnc » (utilisé par les chaînes admin des
+ * modules). Hook « init » conforme aux recommandations WP 6.7+. Le dossier /languages
+ * peut être vide aujourd'hui — le chargement reste inoffensif et prêt pour les .mo à venir.
+ */
+add_action(
+	'init',
+	function () {
+		load_plugin_textdomain( 'fnc', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
+);
 
 /*
  * Ordre logique : les réglages (accesseurs) avant leurs consommateurs. Non critique en

@@ -51,7 +51,7 @@ fnc_render_opening_hero(
 									· <?php echo esc_html( $fnc_ac_cats[0]->name ); ?>
 								<?php endif; ?>
 							</p>
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+							<h3><a href="<?php the_permalink(); ?>"><?php echo esc_html( get_the_title() ); ?></a></h3>
 							<?php if ( has_excerpt() ) : ?>
 								<p><?php echo esc_html( get_the_excerpt() ); ?></p>
 							<?php endif; ?>

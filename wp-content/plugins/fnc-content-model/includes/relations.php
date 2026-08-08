@@ -209,8 +209,11 @@ function fnc_content_model_register_meta() {
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_SORT_INDEX, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_HOME_FEATURED, array( 'type' => 'boolean', 'single' => true, 'show_in_rest' => true ) );
 	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_HOME_FEATURED_ORDER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => true ) );
-	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_RIGHT, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
-	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_EXPIRES, array( 'type' => 'string', 'single' => true, 'show_in_rest' => true ) );
+	// Champs de GOUVERNANCE interne du droit à l'image : usage serveur uniquement
+	// (rendu / RÈGLE 7), jamais consommés par l'éditeur de blocs. NON exposés en REST
+	// pour ne pas divulguer l'état de consentement d'un intervenant à un visiteur anonyme.
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_RIGHT, array( 'type' => 'string', 'single' => true, 'show_in_rest' => false ) );
+	register_post_meta( 'fnc_intervenant', FNC_META_SPEAKER_IMAGE_EXPIRES, array( 'type' => 'string', 'single' => true, 'show_in_rest' => false ) );
 	register_post_meta(
 		'fnc_intervenant',
 		FNC_META_SPEAKER_LINKS,
@@ -809,7 +812,13 @@ function fnc_content_model_save_relations( $post_id, $post ) {
 				)
 			);
 			foreach ( $other_editions as $other_id ) {
-				update_post_meta( $other_id, FNC_META_EDITION_ACTIVE, '' );
+				// Contrôle de capacité PAR OBJET : ne jamais écrire la méta d'une édition
+				// que l'utilisateur courant n'a pas le droit d'éditer (anti-écriture
+				// horizontale). L'exclusivité « une seule édition active » ne doit pas
+				// permettre d'altérer l'état d'objets tiers hors périmètre de l'auteur.
+				if ( current_user_can( 'edit_post', $other_id ) ) {
+					update_post_meta( $other_id, FNC_META_EDITION_ACTIVE, '' );
+				}
 			}
 			update_post_meta( $post_id, FNC_META_EDITION_ACTIVE, '1' );
 		} else {

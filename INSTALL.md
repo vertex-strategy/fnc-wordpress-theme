@@ -64,6 +64,31 @@ contenu est destiné à être remplacé par les informations réelles ; supprime
 > ```
 > Puis vider le cache : `wp cache flush`.
 
+### Après un import (ou une mise à jour) : régénérer les miniatures
+
+Le thème génère des tailles d'image dédiées (carte, couverture et **image de
+partage social 1200×630**) et sert des images **WebP** allégées. Après l'import de
+démonstration — ou après une mise à jour depuis une version antérieure —
+**régénérez les miniatures** pour que ces tailles s'appliquent aux médias déjà en
+base :
+
+- avec une extension type **« Regenerate Thumbnails »**, ou
+- en WP-CLI : `wp media regenerate --yes`.
+
+### Mettre à jour le kit (version existante)
+
+1. Réinstallez le thème et les extensions (mêmes étapes) et **réactivez FNC Content
+   Model et FNC Core**.
+2. **Permaliens** : Réglages → Permaliens → *Enregistrer les modifications* (régénère
+   les règles de réécriture — utile au plan de site XML).
+3. **Miniatures** : régénérez-les (voir ci-dessus).
+4. *(Uniquement si vous utilisez le contenu de démonstration)* relancez l'import en
+   mode **force** pour recomposer les pages institutionnelles et les mises en avant :
+   ```bash
+   wp eval-file wp-content/themes/fnc-wordpress-theme/tools/seed-content.php force
+   wp cache flush
+   ```
+
 ## Après l'installation
 
 Deux menus apparaissent : **Réglages → FNC** (contenu du site) et

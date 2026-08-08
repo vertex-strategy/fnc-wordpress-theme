@@ -144,11 +144,18 @@ le **statut** sur **En cours**. La **description générale** se saisit dans l'�
 → La page d'accueil, le compte à rebours et le hub « Édition en cours » se mettent à jour.
 
 **Rétrospective (édition passée).** Le panneau **« Rétrospective (édition passée) »** (sous
-l'éditeur) affiche, en bas de la fiche de l'édition :
+l'éditeur) alimente le bas de la fiche de l'édition. Ces sections ne s'affichent **que pour une
+édition « passée »** — une édition **« en cours »** ne montre jamais sa rétrospective (sa fiche
+renvoie au hub / à l'agenda). Chaque section est masquée si elle est vide :
 - **Bilan / rétrospective** — texte libre ;
-- **Chiffres clés** — une ligne par chiffre au format `Valeur|Libellé` (ex. `1 200|Participants`) ;
-- **Galerie** — une **URL d'image** par ligne (téléversez d'abord dans la Médiathèque, puis collez
-  l'adresse). Laissé vide, le bloc ne s'affiche pas.
+- **Chiffres clés** — une ligne par chiffre au format `Valeur|Libellé` (ex. `1 200|Participants`).
+  **La valeur ET le libellé sont requis** : une ligne incomplète est ignorée ;
+- **Galerie** — une image par ligne au format **`URL|texte alternatif`**
+  (ex. `https://…/photo.jpg|Plénière d'ouverture` ; téléversez d'abord dans la Médiathèque).
+  Le **texte alternatif est obligatoire** (accessibilité) : une ligne sans alt est ignorée.
+
+  *(La fiche d'une édition passée affiche aussi automatiquement, s'ils existent, ses **partenaires
+  par niveau**, ses **ressources** et ses **vidéos** liées — rien à saisir ici, c'est dérivé.)*
 
 ### 5.2 Ajouter un intervenant
 Intervenants → *Ajouter*. Renseignez :
@@ -284,6 +291,13 @@ deux langues.
 > modification de structure côté français n'est **pas** reportée automatiquement — reprenez
 > la traduction si vous changez l'ossature. *(L'ordre éditorial des listes — intervenants,
 > partenaires — est, lui, synchronisé automatiquement entre les langues.)*
+
+> **Textes de la page d'accueil (sections M1–M8).** Les sur-titres, titres, taglines, manifeste
+> et libellés de boutons de l'accueil se saisissent dans **Apparence → Personnaliser** (réglages
+> FNC de la page d'accueil). Leur **traduction anglaise** se fait dans **Réglages → Langues →
+> Traductions de chaînes** (Polylang), groupe **« FNC Accueil »** : le français saisi au
+> Personnalisateur y apparaît, avec sa colonne anglaise à compléter. *(La chaîne à traduire
+> apparaît dans la liste dès que la page d'accueil a été affichée au moins une fois.)*
 
 ---
 

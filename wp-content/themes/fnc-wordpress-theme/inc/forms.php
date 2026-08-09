@@ -196,7 +196,7 @@ function fnc_render_submission_form( $type ) {
 		</div>
 
 		<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
-		<button class="btn" type="submit"><?php echo esc_html( $cfg['submit'] ); ?>
+		<button class="btn form-submit" type="submit"><?php echo esc_html( $cfg['submit'] ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</button>
 	</form>

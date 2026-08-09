@@ -37,12 +37,27 @@ function fnc_ds_log( $m ) {
 /** Langue par défaut (Polylang) posée sur un contenu créé par code. */
 function fnc_ds_language( $post_id ) {
 	if ( function_exists( 'pll_set_post_language' ) && function_exists( 'pll_get_post_language' ) && ! pll_get_post_language( $post_id ) ) {
-		pll_set_post_language( $post_id, function_exists( 'pll_default_language' ) ? pll_default_language() : 'fr' );
+		pll_set_post_language( $post_id, fnc_ds_def_lang() );
 	}
 }
 
-/** Langue par défaut résolue (repli « fr » si Polylang absent). */
+/**
+ * Langue PRIMAIRE du contenu de démonstration.
+ *
+ * Le jeu de démo est rédigé en français (les traductions EN sont dérivées) : on
+ * ancre donc la langue primaire sur « fr » DÈS QU'elle existe dans Polylang, quelle
+ * que soit la langue « par défaut » choisie à l'installation. Sans cet ancrage, si
+ * l'admin fixe l'anglais par défaut, tout le contenu « FR » serait étiqueté « en » et
+ * entrerait en collision avec ses propres traductions → pages vides selon la langue.
+ * Repli : la vraie langue par défaut de Polylang (ou « fr » si Polylang est absent).
+ */
 function fnc_ds_def_lang() {
+	if ( function_exists( 'pll_languages_list' ) ) {
+		$langs = (array) pll_languages_list();
+		if ( in_array( 'fr', $langs, true ) ) {
+			return 'fr';
+		}
+	}
 	return function_exists( 'pll_default_language' ) ? pll_default_language() : 'fr';
 }
 
@@ -803,6 +818,23 @@ foreach ( $data['publications'] as $p ) {
 	}
 }
 	fnc_ds_log( '  ✔ ' . count( $data['publications'] ) . ' publications (traductions EN incluses)' );
+
+	/* ---- 6. Pages éditoriales composées en blocs (FR + EN) ---- */
+	// Compose le-forum / mot-du-président / contact / inscription en blocs FNC, dans
+	// LES DEUX langues (indépendamment de la langue par défaut). Sans cette étape,
+	// l'importateur ne posait aucun contenu éditorial → pages « en préparation ».
+	$fnc_ed_seed = __DIR__ . '/seed-content.php';
+	if ( is_readable( $fnc_ed_seed ) ) {
+		require_once $fnc_ed_seed;
+		if ( function_exists( 'fnc_seed_run_editorial' ) ) {
+			fnc_ds_log( 'Pages éditoriales (blocs, FR + EN) :' );
+			foreach ( (array) fnc_seed_run_editorial( true ) as $line ) {
+				fnc_ds_log( $line );
+			}
+		}
+	} else {
+		fnc_ds_log( '⚠ seed-content.php introuvable — pages éditoriales non composées.' );
+	}
 
 	fnc_ds_log( 'Terminé.' );
 

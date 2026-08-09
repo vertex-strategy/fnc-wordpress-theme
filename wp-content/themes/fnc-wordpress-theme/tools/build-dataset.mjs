@@ -132,16 +132,40 @@ async function main() {
   }));
 
   // --- Partenaires (frontmatter) ---
+  // #10 — rattachements partenaire↔édition PAR NIVEAU (fait curaté MOA, ABSENT des
+  // sources markdown). Organisateurs (GUOT, Grinso) = « principal » sur toutes les
+  // éditions ; sponsor officiel par édition = « officiel » (Coraf 2018→2024, SNPC 2027).
+  // Niveaux valides : principal | majeur | officiel | contributeur. Éditions par legacyId.
+  const ALL_EDITIONS = [
+    '2018-dematerialisation-gouvernance',
+    '2020-transformation-digitale',
+    '2022-innovation-donnee',
+    '2024-intelligence-artificielle',
+    '2027-souverainete-numerique',
+  ];
+  const PARTNER_PARTICIPATIONS = {
+    guot: ALL_EDITIONS.map((e) => ({ edition: e, niveau: 'principal' })),
+    grinso: ALL_EDITIONS.map((e) => ({ edition: e, niveau: 'principal' })),
+    coraf: [
+      '2018-dematerialisation-gouvernance',
+      '2020-transformation-digitale',
+      '2022-innovation-donnee',
+      '2024-intelligence-artificielle',
+    ].map((e) => ({ edition: e, niveau: 'officiel' })),
+    snpc: [{ edition: '2027-souverainete-numerique', niveau: 'officiel' }],
+  };
   const partners = [];
   for (const f of mdFiles('docs/sources/content-migration/05-partenaires')) {
     const fm = frontmatter(path.join(SRC, 'docs/sources/content-migration/05-partenaires', f));
     if (!fm.name) continue;
+    const legacyId = fm.slug || f.replace(/\.md$/, '');
     partners.push({
-      legacyId: fm.slug || f.replace(/\.md$/, ''),
+      legacyId,
       name: fm.name,
       type: fm.partner_type || 'soutien',
       website: fm.website_url || '',
       description: fm.description || '',
+      participations: PARTNER_PARTICIPATIONS[legacyId] || [],
     });
   }
 

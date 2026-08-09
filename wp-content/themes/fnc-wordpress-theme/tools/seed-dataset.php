@@ -733,6 +733,25 @@ foreach ( $data['partners'] as $p ) {
 		wp_set_object_terms( $id, array( $term ), 'fnc_niveau_partenariat', false );
 	}
 
+	// #10 — rattachements partenaire↔édition PAR NIVEAU (participations). Chaque
+	// entrée { edition: legacyId, niveau } est résolue vers l'ID d'édition FR via
+	// $ed_map. On écrit TOUJOURS la méta (tableau vide si aucun rattachement) →
+	// idempotent, et on retire un ancien rattachement supprimé du dataset. On tient
+	// aussi à jour le repli plat _fnc_partenaire_editions (mêmes éditions).
+	$fnc_part_fr = array();
+	$fnc_eds_fr  = array();
+	if ( ! empty( $p['participations'] ) && is_array( $p['participations'] ) ) {
+		foreach ( $p['participations'] as $pp ) {
+			$el = isset( $pp['edition'] ) ? (string) $pp['edition'] : '';
+			if ( '' !== $el && isset( $ed_map[ $el ] ) ) {
+				$fnc_part_fr[] = array( 'edition' => (int) $ed_map[ $el ], 'niveau' => sanitize_key( isset( $pp['niveau'] ) ? $pp['niveau'] : '' ) );
+				$fnc_eds_fr[]  = (int) $ed_map[ $el ];
+			}
+		}
+	}
+	update_post_meta( $id, '_fnc_partenaire_participations', $fnc_part_fr );
+	update_post_meta( $id, '_fnc_partenaire_editions', $fnc_eds_fr );
+
 	// Traduction EN : le dataset n'a pas de nom/description EN de partenaire (nom
 	// propre + logo partagés). On crée le pendant EN pour que le bloc « communauté »
 	// et la page Partenaires s'affichent en EN ; site, ordre, logo et niveau copiés.
@@ -740,6 +759,22 @@ foreach ( $data['partners'] as $p ) {
 	if ( $en ) {
 		fnc_ds_copy_meta( $id, $en, array( '_fnc_partenaire_site', '_fnc_partenaire_sort_index', '_thumbnail_id' ) );
 		fnc_ds_copy_terms( $id, $en, 'fnc_niveau_partenariat' );
+		// Participations EN : mêmes rattachements, mais pointant vers les ÉDITIONS EN
+		// ($ed_map_en) — sinon la section « Partenaires de l'édition » de /en/ (qui
+		// filtre sur l'ID de l'édition EN courante) ne les verrait pas.
+		$fnc_part_en = array();
+		$fnc_eds_en  = array();
+		if ( ! empty( $p['participations'] ) && is_array( $p['participations'] ) ) {
+			foreach ( $p['participations'] as $pp ) {
+				$el = isset( $pp['edition'] ) ? (string) $pp['edition'] : '';
+				if ( '' !== $el && isset( $ed_map_en[ $el ] ) ) {
+					$fnc_part_en[] = array( 'edition' => (int) $ed_map_en[ $el ], 'niveau' => sanitize_key( isset( $pp['niveau'] ) ? $pp['niveau'] : '' ) );
+					$fnc_eds_en[]  = (int) $ed_map_en[ $el ];
+				}
+			}
+		}
+		update_post_meta( $en, '_fnc_partenaire_participations', $fnc_part_en );
+		update_post_meta( $en, '_fnc_partenaire_editions', $fnc_eds_en );
 	}
 }
 fnc_ds_log( '  ✔ ' . count( $data['partners'] ) . ' partenaires (traductions EN incluses)' );

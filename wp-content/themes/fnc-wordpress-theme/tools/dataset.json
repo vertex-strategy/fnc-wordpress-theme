@@ -936,196 +936,288 @@
       "name": "Alliance Africaine pour le Commerce Électronique (AACE)",
       "type": "institutionnel",
       "website": "",
-      "description": "Co-organisateur de la Conférence Internationale sur les Guichets Uniques (volet Single Window)."
+      "description": "Co-organisateur de la Conférence Internationale sur les Guichets Uniques (volet Single Window).",
+      "participations": []
     },
     {
       "legacyId": "aconoq",
       "name": "ACONOQ",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "acsi",
       "name": "ACSI",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "aden",
       "name": "ADEN",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "akhon",
       "name": "AKHON",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "arpce",
       "name": "ARPCE",
       "type": "soutien",
       "website": "",
-      "description": "Agence de Régulation des Postes et des Communications Électroniques. Rôle a_confirmer."
+      "description": "Agence de Régulation des Postes et des Communications Électroniques. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "autonome-port-pointe-noire",
       "name": "Port Autonome de Pointe-Noire",
       "type": "soutien",
       "website": "",
-      "description": "Autorité portuaire (à confirmer). Rôle a_confirmer."
+      "description": "Autorité portuaire (à confirmer). Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "bim-e-solutions",
       "name": "BIM e-solutions",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "bpc",
       "name": "BPC",
       "type": "soutien",
       "website": "",
-      "description": "Banque (à confirmer). Rôle/niveau a_confirmer."
+      "description": "Banque (à confirmer). Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "burotec",
       "name": "Burotec",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "burotop-iris",
       "name": "Burotop Iris",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "congo-telecom",
       "name": "Congo Telecom",
       "type": "soutien",
       "website": "",
-      "description": "Opérateur de télécommunications. Rôle/niveau a_confirmer."
+      "description": "Opérateur de télécommunications. Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "conseil-congolais-des-chargeurs",
       "name": "Conseil Congolais des Chargeurs",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "coraf",
       "name": "CORAF",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire ayant accompagné l'édition 2024. Rôle a_confirmer."
+      "description": "Partenaire ayant accompagné l'édition 2024. Rôle a_confirmer.",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "officiel"
+        }
+      ]
     },
     {
       "legacyId": "grinso",
       "name": "Cabinet GRINSO & Associés",
       "type": "organisateur",
       "website": "",
-      "description": "Cabinet co-organisateur du Forum, en collaboration avec le GUOT."
+      "description": "Cabinet co-organisateur du Forum, en collaboration avec le GUOT.",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "principal"
+        }
+      ]
     },
     {
       "legacyId": "guce",
       "name": "GUCE",
       "type": "soutien",
       "website": "",
-      "description": "Guichet Unique du Commerce Extérieur. Partenaire 2024. Rôle a_confirmer."
+      "description": "Guichet Unique du Commerce Extérieur. Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "guot",
       "name": "Guichet Unique des Opérations Transfrontalières (GUOT)",
       "type": "organisateur",
       "website": "",
-      "description": "Organisateur principal du Forum Numérique Congo. Structure à l'initiative de l'évènement (DG : Eugène Rufin BOUYA)."
+      "description": "Organisateur principal du Forum Numérique Congo. Structure à l'initiative de l'évènement (DG : Eugène Rufin BOUYA).",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "principal"
+        }
+      ]
     },
     {
       "legacyId": "hariom-travels",
       "name": "Hariom Travels",
       "type": "soutien",
       "website": "",
-      "description": "Agence de voyage. Partenaire 2024. Rôle a_confirmer."
+      "description": "Agence de voyage. Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "ilogs",
       "name": "ILOGS",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "istock",
       "name": "iStock",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "kpmg",
       "name": "KPMG",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "lcb",
       "name": "LCB",
       "type": "soutien",
       "website": "",
-      "description": "La Congolaise de Banque (à confirmer). Partenaire 2024. Rôle a_confirmer."
+      "description": "La Congolaise de Banque (à confirmer). Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "ragec",
       "name": "RAgec",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "silicon-connect",
       "name": "Silicon Connect",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "skytech-congo",
       "name": "Skytech Congo",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "snpc",
       "name": "SNPC (Société Nationale des Pétroles du Congo)",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer."
+      "description": "Rôle/niveau a_confirmer.",
+      "participations": [
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "officiel"
+        }
+      ]
     },
     {
       "legacyId": "socotram",
       "name": "SOCOTRAM",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer."
+      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "participations": []
     },
     {
       "legacyId": "tv-congo",
       "name": "TV Congo",
       "type": "soutien",
       "website": "",
-      "description": "Média (à confirmer). Rôle a_confirmer."
+      "description": "Média (à confirmer). Rôle a_confirmer.",
+      "participations": []
     }
   ],
   "publications": [

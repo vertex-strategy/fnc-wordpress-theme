@@ -30,6 +30,19 @@ $fnc_archive_url    = get_post_type_archive_link( 'fnc_intervenant' );
 $fnc_current_profil = isset( $_GET['fnc_profil'] ) ? sanitize_title( wp_unslash( $_GET['fnc_profil'] ) ) : '';
 $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $_GET['fnc_pays'] ) ) : '';
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
+// Ordre des filtres aligné sur Next : Officiels · Experts · Hôtes (et non l'ordre
+// alphabétique par défaut des termes). Tout slug hors barème passe en fin de liste.
+if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) {
+	$fnc_profil_order = array( 'official' => 0, 'expert' => 1, 'host' => 2 );
+	usort(
+		$fnc_profils,
+		static function ( $a, $b ) use ( $fnc_profil_order ) {
+			$oa = isset( $fnc_profil_order[ $a->slug ] ) ? $fnc_profil_order[ $a->slug ] : 99;
+			$ob = isset( $fnc_profil_order[ $b->slug ] ) ? $fnc_profil_order[ $b->slug ] : 99;
+			return $oa <=> $ob;
+		}
+	);
+}
 // Libellés de FILTRE au pluriel (comme le site Next) : « Officiels / Experts /
 // Hôtes » (« Hôtes » et non « Animateur »). N'affecte que les chips de filtre ;
 // les termes eux-mêmes restent inchangés. Repli sur le nom du terme si inconnu.
@@ -170,7 +183,7 @@ $fnc_cat_class = static function ( $slug ) {
 							?>
 							<a class="spk" href="<?php the_permalink(); ?>">
 								<?php if ( $fnc_sp_profil ) : ?>
-									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( $fnc_sp_profil->name ); ?></span>
+									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( isset( $fnc_profil_labels[ $fnc_sp_profil->slug ] ) ? $fnc_profil_labels[ $fnc_sp_profil->slug ] : $fnc_sp_profil->name ); ?></span>
 								<?php endif; ?>
 								<div class="ph">
 									<?php

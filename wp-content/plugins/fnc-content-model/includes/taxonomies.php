@@ -63,7 +63,13 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Le PROFIL est un CHOIX UNIQUE (Officiel / Expert / Animateur). La boîte de
+			// tags par défaut laissait cumuler plusieurs profils → l'ajout d'un nouveau
+			// n'enlevait pas l'ancien, le statut ne changeait pas à l'écran. On la
+			// remplace par une métabox à boutons radio (relations.php) et on retire le
+			// panneau REST de l'éditeur de blocs pour éviter une double saisie.
+			'show_in_rest'      => false,
+			'meta_box_cb'       => 'fnc_cm_single_term_meta_box',
 			'rewrite'           => array( 'slug' => 'profil-intervenant' ),
 		)
 	);
@@ -110,7 +116,10 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Type de partenaire = CHOIX UNIQUE (même problème que le profil) : métabox
+			// radio à la place de la boîte de tags, panneau REST retiré (double saisie).
+			'show_in_rest'      => false,
+			'meta_box_cb'       => 'fnc_cm_single_term_meta_box',
 			'rewrite'           => array( 'slug' => 'niveau-partenariat' ),
 		)
 	);

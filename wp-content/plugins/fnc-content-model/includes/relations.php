@@ -1076,3 +1076,100 @@ function fnc_content_model_publication_admin_notice() {
 	);
 }
 add_action( 'admin_notices', 'fnc_content_model_publication_admin_notice' );
+
+/* ==========================================================================
+ * STATUTS À CHOIX UNIQUE — métabox radio générique
+ *
+ * Certaines taxonomies portent un STATUT UNIQUE : le PROFIL d'un intervenant
+ * (`fnc_profil` : Officiel/Expert/Animateur) et le TYPE d'un partenaire
+ * (`fnc_niveau_partenariat` : Institutionnel/Organisateur/Soutien/Sponsor).
+ * La boîte de tags par défaut permettait d'en CUMULER plusieurs : ajouter un
+ * nouveau statut n'enlevait pas l'ancien, l'objet gardait deux termes et le badge
+ * continuait d'afficher le premier → « le statut ne change pas à l'écran ».
+ * Cette métabox impose UN SEUL terme et REMPLACE le précédent. Fonctionne en
+ * éditeur classique ET blocs (métabox legacy postée à l'enregistrement), sans JS.
+ * ======================================================================== */
+
+/** Taxonomies mono-valeur gérées + ordre d'affichage stable des options. */
+if ( ! function_exists( 'fnc_cm_single_term_taxonomies' ) ) {
+	function fnc_cm_single_term_taxonomies() {
+		return array(
+			'fnc_profil'             => array( 'official' => 0, 'expert' => 1, 'host' => 2 ),
+			'fnc_niveau_partenariat' => array( 'institutionnel' => 0, 'organisateur' => 1, 'soutien' => 2, 'sponsor' => 3 ),
+		);
+	}
+}
+
+/** Rendu de la métabox radio (choix unique). $box['args']['taxonomy'] fourni par WP. */
+if ( ! function_exists( 'fnc_cm_single_term_meta_box' ) ) {
+	function fnc_cm_single_term_meta_box( $post, $box ) {
+		$taxonomy = isset( $box['args']['taxonomy'] ) ? (string) $box['args']['taxonomy'] : '';
+		if ( '' === $taxonomy ) {
+			return;
+		}
+		$terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => false ) );
+		if ( is_wp_error( $terms ) || empty( $terms ) ) {
+			echo '<p>' . esc_html__( 'Aucune option disponible.', 'fnc-content-model' ) . '</p>';
+			return;
+		}
+		$orders = fnc_cm_single_term_taxonomies();
+		$order  = isset( $orders[ $taxonomy ] ) ? $orders[ $taxonomy ] : array();
+		usort(
+			$terms,
+			static function ( $a, $b ) use ( $order ) {
+				$oa = isset( $order[ $a->slug ] ) ? $order[ $a->slug ] : 99;
+				$ob = isset( $order[ $b->slug ] ) ? $order[ $b->slug ] : 99;
+				return ( $oa === $ob ) ? strcmp( $a->name, $b->name ) : ( $oa <=> $ob );
+			}
+		);
+		$assigned = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+		$current  = ( ! is_wp_error( $assigned ) && ! empty( $assigned ) ) ? (int) $assigned[0] : 0;
+		wp_nonce_field( 'fnc_cm_single_term_' . $taxonomy, 'fnc_cm_single_term_nonce_' . $taxonomy );
+		$field = 'fnc_cm_single_term_' . $taxonomy;
+		echo '<p style="margin:0 0 10px;color:#50575e;">' . esc_html__( 'Choix unique (remplace le précédent).', 'fnc-content-model' ) . '</p>';
+		echo '<ul style="margin:0;">';
+		printf(
+			'<li style="margin:0 0 6px;"><label><input type="radio" name="%s" value="0" %s> <em>%s</em></label></li>',
+			esc_attr( $field ),
+			checked( $current, 0, false ),
+			esc_html__( 'Aucun', 'fnc-content-model' )
+		);
+		foreach ( $terms as $t ) {
+			printf(
+				'<li style="margin:0 0 6px;"><label><input type="radio" name="%s" value="%d" %s> %s</label></li>',
+				esc_attr( $field ),
+				(int) $t->term_id,
+				checked( $current, (int) $t->term_id, false ),
+				esc_html( $t->name )
+			);
+		}
+		echo '</ul>';
+	}
+}
+
+/** Sauvegarde : pour chaque taxonomie mono-valeur, REMPLACE par le terme choisi. */
+if ( ! function_exists( 'fnc_cm_single_term_save' ) ) {
+	function fnc_cm_single_term_save( $post_id ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+		$post_type = get_post_type( $post_id );
+		foreach ( array_keys( fnc_cm_single_term_taxonomies() ) as $taxonomy ) {
+			$nonce_name = 'fnc_cm_single_term_nonce_' . $taxonomy;
+			if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST[ $nonce_name ] ) ), 'fnc_cm_single_term_' . $taxonomy ) ) {
+				continue;
+			}
+			if ( ! is_object_in_taxonomy( $post_type, $taxonomy ) ) {
+				continue;
+			}
+			$field   = 'fnc_cm_single_term_' . $taxonomy;
+			$term_id = isset( $_POST[ $field ] ) ? (int) $_POST[ $field ] : 0;
+			// `false` en 4e argument = REMPLACE tous les termes existants (choix unique).
+			wp_set_object_terms( $post_id, $term_id > 0 ? array( $term_id ) : array(), $taxonomy, false );
+		}
+	}
+}
+add_action( 'save_post', 'fnc_cm_single_term_save' );

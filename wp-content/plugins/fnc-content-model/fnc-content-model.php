@@ -6,7 +6,7 @@
  *              et relations : éditions, intervenants, sessions, publications, partenaires,
  *              actualités). Survit à un changement de thème. Sans dépendance tierce, hors
  *              multilinguisme assuré séparément par Polylang.
- * Version: 1.0.39
+ * Version: 1.0.48
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: Grinso & Associés

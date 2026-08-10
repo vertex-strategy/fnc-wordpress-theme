@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.42
+Version: 1.0.43
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -547,6 +547,15 @@ form.card{border-radius:8px;box-shadow:0 16px 32px rgba(38,34,78,.06);padding:24
 @media(min-width:640px){.complement-links{grid-template-columns:1fr 1fr;}}
 .complement-link{display:flex;width:100%;align-items:center;justify-content:space-between;min-height:56px;border:1px solid var(--border);border-radius:4px;padding:0 20px;background:#fff;font-size:.9rem;font-weight:700;color:var(--navy-deep,#12122b);}
 .complement-link:hover{border-color:var(--navy-deep,#12122b);}
+
+/* Rétrospective d'édition — Chiffres clés en cartes (parité Next : grid 4 col, carte
+   blanche bordée, valeur serif navy-deep, label gris). */
+.retro-stats{display:grid;gap:16px;grid-template-columns:1fr;margin-top:24px;}
+@media(min-width:640px){.retro-stats{grid-template-columns:1fr 1fr;}}
+@media(min-width:1024px){.retro-stats{grid-template-columns:repeat(4,minmax(0,1fr));}}
+.retro-stat{border:1px solid var(--border);border-radius:8px;background:#fff;padding:20px;}
+.retro-stat b{display:block;font-family:var(--serif);font-weight:400;font-size:1.9rem;line-height:1.1;color:var(--navy-deep,#12122b);}
+.retro-stat span{display:block;margin-top:8px;font-size:.875rem;color:var(--texte-sec);}
 
 /* Frise des pays representes (intervenants), avec drapeaux inline. */
 .flag-block{margin-top:28px;}

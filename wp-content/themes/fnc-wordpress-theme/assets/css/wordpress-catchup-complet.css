@@ -615,6 +615,16 @@ textarea {
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--rouge);
 }
 
+/* Bouton « retour » de la fiche intervenant : il vit dans une section claire (linen),
+   donc le variant ghost CLAIR (texte blanc) devenait illisible. On force le variant
+   sombre lisible (parité Next : bordure + fond blanc + texte navy). */
+.person-detail__back .btn {
+  color: var(--navy-deep);
+  border-color: var(--border);
+  background: #fff;
+}
+.person-detail__back .btn:hover { border-color: var(--navy-deep); background: var(--linen); }
+
 .field .help {
   font-size: 0.8rem;
   color: var(--texte-tert);

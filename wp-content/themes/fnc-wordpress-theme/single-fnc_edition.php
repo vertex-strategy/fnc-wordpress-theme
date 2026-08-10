@@ -199,16 +199,16 @@ while ( have_posts() ) :
 
 		<?php if ( 'current' !== $fnc_ed_status ) : // #3 : rétrospective JAMAIS pour l'édition en cours (sa fiche = hub/agenda ; parité editions/[slug]:83). ?>
 		<?php if ( ! empty( $fnc_ed_figures ) ) : ?>
-			<section class="section">
-				<span class="eyebrow"><?php esc_html_e( 'Chiffres clés', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
-				<div class="stat-line" style="margin-top:24px;">
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Chiffres clés', 'fnc-wordpress-theme' ); ?></h2>
+				<div class="retro-stats">
 					<?php foreach ( $fnc_ed_figures as $fnc_fig ) : ?>
 						<?php if ( ! empty( $fnc_fig['value'] ) && ! empty( $fnc_fig['label'] ) ) : // #4a : value ET label requis. ?>
-							<div class="stat">
-								<b style="color:var(--navy);"><?php echo esc_html( $fnc_fig['value'] ); ?></b>
-								<?php if ( ! empty( $fnc_fig['label'] ) ) : ?><span style="color:var(--texte-tert);"><?php echo esc_html( $fnc_fig['label'] ); ?></span><?php endif; ?>
-							</div>
+							<article class="retro-stat">
+								<b><?php echo esc_html( $fnc_fig['value'] ); ?></b>
+								<span><?php echo esc_html( $fnc_fig['label'] ); ?></span>
+							</article>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
@@ -216,17 +216,17 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php if ( $fnc_ed_review ) : ?>
-			<section class="section linen">
-				<span class="eyebrow"><?php esc_html_e( 'Bilan', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
-				<div class="prose-legal" style="margin-top:24px;"><?php echo wp_kses_post( wpautop( $fnc_ed_review ) ); ?></div>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Bilan', 'fnc-wordpress-theme' ); ?></h2>
+				<div class="prose-legal" style="margin-top:24px;max-width:48ch;"><?php echo wp_kses_post( wpautop( $fnc_ed_review ) ); ?></div>
 			</section>
 		<?php endif; ?>
 
 		<?php if ( ! empty( $fnc_ed_partners_by ) ) : ?>
-			<section class="section">
-				<span class="eyebrow"><?php esc_html_e( 'Partenaires de l’édition', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Partenaires de l’édition', 'fnc-wordpress-theme' ); ?></h2>
 				<?php foreach ( array( 'principal', 'majeur', 'officiel', 'contributeur', '__tbc' ) as $fnc_niv_key ) : ?>
 					<?php if ( empty( $fnc_ed_partners_by[ $fnc_niv_key ] ) ) { continue; } ?>
 					<?php $fnc_niv_label = ( '__tbc' === $fnc_niv_key ) ? __( 'À confirmer', 'fnc-wordpress-theme' ) : $fnc_ed_niv_labels[ $fnc_niv_key ]; ?>
@@ -249,9 +249,9 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php if ( ! empty( $fnc_ed_docs ) ) : ?>
-			<section class="section linen">
-				<span class="eyebrow"><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></h2>
 				<div class="pubs" style="margin-top:28px;">
 					<?php foreach ( $fnc_ed_docs as $fnc_ep ) { fnc_render_publication_card( $fnc_ep->ID ); } ?>
 				</div>
@@ -260,9 +260,9 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php if ( ! empty( $fnc_ed_videos ) ) : ?>
-			<section class="section">
-				<span class="eyebrow"><?php esc_html_e( 'Vidéos', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+			<section class="section linen">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Vidéos', 'fnc-wordpress-theme' ); ?></h2>
 				<div class="retro-gallery" style="margin-top:28px;">
 					<?php foreach ( $fnc_ed_videos as $fnc_ep ) : ?>
 						<?php
@@ -284,9 +284,9 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<?php if ( ! empty( $fnc_ed_gallery ) ) : ?>
-			<section class="section linen">
-				<span class="eyebrow"><?php esc_html_e( 'Galerie', 'fnc-wordpress-theme' ); ?></span>
-				<div class="rule" aria-hidden="true" style="margin-top:12px;"></div>
+			<section class="section">
+				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
+				<h2><?php esc_html_e( 'Galerie', 'fnc-wordpress-theme' ); ?></h2>
 				<div class="retro-gallery" style="margin-top:28px;">
 					<?php foreach ( $fnc_ed_gallery as $fnc_g_item ) : ?>
 						<?php

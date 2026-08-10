@@ -89,7 +89,7 @@ $fnc_cat_class = static function ( $slug ) {
 <main id="main">
 	<section class="section linen intervenants-panorama">
 		<div class="container">
-			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+			<span class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></span>
 
 			<div class="stat-line">
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_total_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>

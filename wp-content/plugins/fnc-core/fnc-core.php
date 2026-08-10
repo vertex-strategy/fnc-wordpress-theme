@@ -5,7 +5,7 @@
  *              formulaires, données du site, données structurées SEO, consentement &
  *              mesure d'audience, options d'affichage, édition des pages). Survit à un
  *              changement de thème.
- * Version: 1.0.39
+ * Version: 1.0.49
  * Author: Grinso & Associés
  * Author URI: https://www.grinso.io
  * Requires PHP: 7.4
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_CORE_VERSION', '1.0.39' );
+define( 'FNC_CORE_VERSION', '1.0.49' );
 define( 'FNC_CORE_DIR', plugin_dir_path( __FILE__ ) );
 
 /*

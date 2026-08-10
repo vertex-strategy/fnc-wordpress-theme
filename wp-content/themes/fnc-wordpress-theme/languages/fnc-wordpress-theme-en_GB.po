@@ -2587,3 +2587,27 @@ msgid "%d pays"
 msgid_plural "%d pays"
 msgstr[0] "%d country"
 msgstr[1] "%d countries"
+
+#: 404.php
+msgid "Erreur 404"
+msgstr "Error 404"
+
+#: 404.php
+msgid "Page non trouvée"
+msgstr "Page not found"
+
+#: 404.php
+msgid "La page demandée n’existe pas ou n’est plus disponible."
+msgstr "The requested page does not exist or is no longer available."
+
+#: 404.php
+msgid "Retour à l’accueil"
+msgstr "Back to home"
+
+#: 404.php
+msgid "Voir les éditions"
+msgstr "View editions"
+
+#: functions.php
+msgid "Le texte juridique officiel sera publié après validation."
+msgstr "The official legal text will be published after validation."

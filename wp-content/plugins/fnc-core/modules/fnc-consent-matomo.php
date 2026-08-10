@@ -194,10 +194,23 @@ JS;
 	}
 }
 
+if ( ! function_exists( 'fnc_consent_ui_enabled' ) ) {
+	/**
+	 * Faut-il AFFICHER le bandeau + le bouton de consentement ? DÉCOUPLÉ de la mesure :
+	 * l'UI de consentement s'affiche par défaut (démo/vitrine — le visiteur voit
+	 * l'expérience CNIL), même sans Matomo configuré. La MESURE réelle, elle, reste
+	 * conditionnée à `fnc_matomo_is_enabled()` (voir fnc_matomo_head). Filtrable :
+	 *   add_filter( 'fnc_consent_ui_enabled', '__return_false' ); // masquer partout
+	 */
+	function fnc_consent_ui_enabled() {
+		return (bool) apply_filters( 'fnc_consent_ui_enabled', true );
+	}
+}
+
 if ( ! function_exists( 'fnc_consent_banner' ) ) {
 	function fnc_consent_banner() {
-		if ( ! fnc_matomo_is_enabled() ) {
-			return; // pas de mesure → pas de bandeau.
+		if ( ! fnc_consent_ui_enabled() ) {
+			return; // UI de consentement désactivée (filtre).
 		}
 		$s      = fnc_consent_strings();
 		$policy = fnc_privacy_url();
@@ -239,7 +252,7 @@ if ( ! function_exists( 'fnc_consent_reopen_button' ) ) {
 	 * @return string
 	 */
 	function fnc_consent_reopen_button( $label = '' ) {
-		if ( ! fnc_matomo_is_enabled() ) {
+		if ( ! fnc_consent_ui_enabled() ) {
 			return '';
 		}
 		$s     = fnc_consent_strings();

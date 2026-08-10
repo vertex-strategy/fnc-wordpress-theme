@@ -100,7 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span><?php printf( esc_html__( '© %1$s %2$s', 'fnc-wordpress-theme' ), esc_html( gmdate( 'Y' ) ), esc_html( $fnc_copyright_name ) ); ?></span>
 		<span>
 			<a href="<?php echo esc_url( fnc_page_url( 'mentions-legales' ) ); ?>"><?php esc_html_e( 'Mentions légales', 'fnc-wordpress-theme' ); ?></a>
-			· <a href="<?php echo esc_url( fnc_page_url( 'politique-confidentialite' ) ); ?>"><?php esc_html_e( 'Confidentialité', 'fnc-wordpress-theme' ); ?></a>
+			· <a href="<?php echo esc_url( fnc_page_url( 'politique-confidentialite' ) ); ?>"><?php esc_html_e( 'Politique de confidentialité', 'fnc-wordpress-theme' ); ?></a>
 			<?php
 			// Bouton de reouverture du consentement (le consentement) : visible seulement
 			// si la mesure d'audience est active. Le separateur ne s'affiche que si le

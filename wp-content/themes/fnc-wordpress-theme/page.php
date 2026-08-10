@@ -40,7 +40,16 @@ while ( have_posts() ) :
 		<main id="main">
 			<section class="section">
 				<div class="container reading prose-legal">
-					<?php the_content(); ?>
+					<?php
+					// Repli fidèle au Next : si aucun contenu réel n'est publié (page
+					// créée vide), afficher le message d'attente plutôt qu'un corps
+					// vide — le texte juridique n'est jamais inventé (RÈGLE 4).
+					if ( '' === trim( wp_strip_all_tags( get_the_content() ) ) ) {
+						echo '<p>' . esc_html( fnc_legal_pending_text() ) . '</p>';
+					} else {
+						the_content();
+					}
+					?>
 				</div>
 			</section>
 			<?php fnc_render_cta_band(); ?>

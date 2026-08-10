@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.47' );
+define( 'FNC_THEME_VERSION', '1.0.49' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -991,6 +991,18 @@ function fnc_render_legal_header( $title, $updated_label, $breadcrumb = '' ) {
 			'description' => $updated_label,
 		)
 	);
+}
+
+/**
+ * Repli « à confirmer » des pages légales — fidèle au site Next : le texte
+ * juridique n'est jamais inventé (RÈGLE 4). Tant qu'aucun contenu réel n'est
+ * publié, la page affiche le même message d'attente que le site du Forum
+ * (namespace next-intl `pages.legal.pending`), au lieu d'un corps vide.
+ *
+ * @return string Le message d'attente localisé (FR/EN via le domaine de traduction).
+ */
+function fnc_legal_pending_text() {
+	return __( 'Le texte juridique officiel sera publié après validation.', 'fnc-wordpress-theme' );
 }
 
 /**

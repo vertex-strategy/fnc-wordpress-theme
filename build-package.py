@@ -22,7 +22,7 @@ import shutil
 import zipfile
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-VERSION = '1.0.48'
+VERSION = '1.0.49'
 DIST = os.path.join(ROOT, 'dist')
 STAGING = os.path.join(DIST, f'forum-numerique-congo-template-{VERSION}')
 

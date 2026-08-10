@@ -102,14 +102,7 @@ while ( have_posts() ) :
 								<p class="person-detail__org"><?php echo esc_html( $fnc_i_org ); ?></p>
 							<?php endif; ?>
 							<?php if ( $fnc_i_country ) : ?>
-								<p class="person-detail__country">
-									<?php foreach ( fnc_split_countries( $fnc_i_country ) as $fnc_c ) : ?>
-										<span class="flag-chip" style="margin-right:8px;">
-											<?php echo fnc_flag_markup( $fnc_c ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup construit et echappe par le helper. ?>
-											<span><?php echo esc_html( $fnc_c ); ?></span>
-										</span>
-									<?php endforeach; ?>
-								</p>
+								<p class="person-detail__country"><?php echo esc_html( $fnc_i_country ); ?></p>
 							<?php endif; ?>
 						</div>
 
@@ -125,7 +118,7 @@ while ( have_posts() ) :
 											continue;
 										}
 										?>
-										<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo fnc_link_icon_svg( $fnc_link_url, $fnc_link_label ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG statique inline. ?><span><?php echo esc_html( $fnc_link_label ); ?></span></a></li>
+										<li><a href="<?php echo esc_url( $fnc_link_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $fnc_link_label ); ?></a></li>
 									<?php endforeach; ?>
 								</ul>
 							</div>

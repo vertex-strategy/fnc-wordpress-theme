@@ -252,10 +252,19 @@ while ( have_posts() ) :
 			<section class="section">
 				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
 				<h2><?php esc_html_e( 'Ressources', 'fnc-wordpress-theme' ); ?></h2>
-				<div class="pubs" style="margin-top:28px;">
-					<?php foreach ( $fnc_ed_docs as $fnc_ep ) { fnc_render_publication_card( $fnc_ep->ID ); } ?>
+				<div class="retro-docs">
+					<?php foreach ( $fnc_ed_docs as $fnc_ep ) : ?>
+						<?php
+						$fnc_ep_type = function_exists( 'fnc_publication_type_label' ) ? fnc_publication_type_label( get_post_meta( $fnc_ep->ID, '_fnc_publication_type', true ) ) : '';
+						$fnc_ep_desc = has_excerpt( $fnc_ep ) ? get_the_excerpt( $fnc_ep ) : wp_trim_words( wp_strip_all_tags( (string) $fnc_ep->post_content ), 32 );
+						?>
+						<article class="retro-doc">
+							<?php if ( $fnc_ep_type ) : ?><p class="retro-doc-type"><?php echo esc_html( $fnc_ep_type ); ?></p><?php endif; ?>
+							<h3><a href="<?php echo esc_url( get_permalink( $fnc_ep ) ); ?>"><?php echo esc_html( get_the_title( $fnc_ep ) ); ?></a></h3>
+							<?php if ( $fnc_ep_desc ) : ?><p><?php echo esc_html( $fnc_ep_desc ); ?></p><?php endif; ?>
+						</article>
+					<?php endforeach; ?>
 				</div>
-				<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_publication' ) ); ?>" style="margin-top:24px;display:inline-block;"><?php esc_html_e( 'Toutes les ressources', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
 			</section>
 		<?php endif; ?>
 

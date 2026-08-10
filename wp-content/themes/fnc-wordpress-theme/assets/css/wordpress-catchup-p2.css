@@ -76,6 +76,39 @@ h2, h3, .opening h1, .frise-title, .split .lines { text-wrap: balance; }
 
 /* ========== FRISE DES ÉDITIONS (19) ========== */
 
+/* Base UNIFIÉE (parité Next globals.css) : grille 44px, nœud = cercle rouge creux
+   positionné en absolu sur la trace, pas de bordures de lignes. */
+.frise { list-style: none; margin: 0; padding: 0; position: relative; }
+.frise-item { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: clamp(16px, 2.5vw, 30px); padding: 24px 0; }
+.frise-rail { position: relative; display: block; }
+.frise-node {
+  position: absolute;
+  left: 12px;
+  top: 25px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--linen);
+  border: 2px solid var(--rouge);
+  z-index: 2;
+}
+.frise-item.is-current .frise-node { background: var(--jaune); border-color: var(--jaune); box-shadow: 0 0 0 5px rgba(245, 192, 0, 0.16); }
+.frise-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.frise-year { font-variant-numeric: tabular-nums; font-weight: 700; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1; letter-spacing: -0.02em; color: var(--navy); }
+.frise-title { font-weight: 700; color: var(--navy-deep); font-size: clamp(1.1rem, 2vw, 1.45rem); letter-spacing: -0.01em; margin: 10px 0 6px; }
+.frise-title a { color: inherit; text-decoration: none; }
+.frise-title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.frise-theme { font-family: var(--serif); font-style: italic; color: var(--texte-corps); font-size: 1.02rem; line-height: 1.5; max-width: 52ch; margin: 0; }
+.frise-meta { margin-top: 14px; font-size: 0.85rem; color: var(--texte-sec); }
+.frise-meta b { color: var(--navy); font-weight: 600; }
+.frise-note { margin-top: 12px; border-left: 2px solid var(--jaune); padding-left: 16px; font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); }
+.frise-more { display: inline-flex; align-items: center; gap: 9px; margin-top: 16px; font-size: 0.88rem; font-weight: 600; color: var(--navy); }
+@media (max-width: 560px) {
+  .frise-item { grid-template-columns: 34px 1fr; gap: 14px; }
+  .frise-rail::before { left: 16px; }
+  .frise-node { left: 7px; }
+}
+
 /* La trace continue derrière les nœuds */
 .frise-rail::before {
   content: '';

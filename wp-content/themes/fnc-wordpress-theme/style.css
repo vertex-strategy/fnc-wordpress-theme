@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.41
+Version: 1.0.42
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -536,22 +536,17 @@ form.card{border-radius:8px;box-shadow:0 16px 32px rgba(38,34,78,.06);padding:24
    Réf. Next : rounded-sm border bg-linen px-3 py-1 text-xs font-bold uppercase text-navy. */
 .badge{display:inline-flex;align-items:center;min-height:26px;padding:4px 12px;border:1px solid var(--border);border-radius:2px;background:var(--linen);color:var(--navy);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:normal;}
 
-/* Frise chronologique des editions (remplace la grille de cartes). */
-.frise{border-top:1px solid var(--border);}
-.frise-item{display:grid;grid-template-columns:56px 1fr;gap:20px;padding:32px 0;border-bottom:1px solid var(--border);}
-.frise-item.is-current .frise-node{background:var(--jaune);box-shadow:0 0 0 5px rgba(245,192,0,.22);}
-.frise-rail{display:flex;justify-content:center;padding-top:6px;}
-.frise-node{width:13px;height:13px;border-radius:50%;background:var(--navy);}
-.frise-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:8px;}
-.frise-year{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;color:var(--navy);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
-.frise-title{font-size:1.25rem;color:var(--texte-corps);margin-bottom:4px;}
-.frise-title a{text-decoration:underline;text-underline-offset:3px;}
-.frise-theme{font-family:var(--serif);font-style:italic;color:var(--texte-sec);margin-bottom:8px;}
-.frise-meta{color:var(--texte-sec);font-size:.92rem;}
-.frise-meta b{color:var(--texte-corps);}
-.frise-note{margin-top:8px;padding-left:14px;border-left:2px solid var(--jaune);color:var(--texte-sec);font-size:.9rem;}
-.frise-more{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-weight:700;font-size:.9rem;color:var(--navy);}
-@media (max-width:560px){.frise-item{grid-template-columns:1fr;}.frise-rail{display:none;}}
+/* Frise chronologique des éditions : styles UNIFIÉS et alignés sur Next dans
+   assets/css/wordpress-catchup-p2.css (chargé après style.css). L'ancien bloc ici
+   (points navy centrés, lignes à bordure) a été retiré — il entrait en conflit avec
+   la version Next (nœuds cercles rouges + trace verticale dégradée). */
+
+/* Section « complément » (De l'édition à la ressource, etc.) : blocs-liens en
+   DEUX colonnes dès 640px (parité Next : grid gap-3 self-start sm:grid-cols-2). */
+.complement-links{display:grid;gap:12px;align-self:start;grid-template-columns:1fr;}
+@media(min-width:640px){.complement-links{grid-template-columns:1fr 1fr;}}
+.complement-link{display:flex;width:100%;align-items:center;justify-content:space-between;min-height:56px;border:1px solid var(--border);border-radius:4px;padding:0 20px;background:#fff;font-size:.9rem;font-weight:700;color:var(--navy-deep,#12122b);}
+.complement-link:hover{border-color:var(--navy-deep,#12122b);}
 
 /* Frise des pays representes (intervenants), avec drapeaux inline. */
 .flag-block{margin-top:28px;}

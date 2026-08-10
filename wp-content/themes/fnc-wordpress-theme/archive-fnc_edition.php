@@ -152,7 +152,7 @@ $fnc_editions_url = get_post_type_archive_link( 'fnc_edition' );
 							<div class="frise-body">
 								<div class="frise-head">
 									<span class="frise-year"><?php echo esc_html( $fnc_year ? $fnc_year : get_the_date( 'Y', $fnc_edition ) ); ?></span>
-									<?php fnc_render_badge( isset( $fnc_list_labels[ $fnc_status ] ) ? $fnc_list_labels[ $fnc_status ] : __( 'Statut à confirmer', 'fnc-wordpress-theme' ) ); ?>
+									<p class="frise-badge"><span class="frise-dot" aria-hidden="true"></span><?php echo esc_html( isset( $fnc_list_labels[ $fnc_status ] ) ? $fnc_list_labels[ $fnc_status ] : __( 'Statut à confirmer', 'fnc-wordpress-theme' ) ); ?></p>
 								</div>
 								<h3 class="frise-title"><a href="<?php echo esc_url( get_permalink( $fnc_edition ) ); ?>"><?php echo esc_html( get_the_title( $fnc_edition ) ); ?></a></h3>
 								<?php if ( $fnc_theme ) : ?>

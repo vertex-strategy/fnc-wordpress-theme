@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.41' );
+define( 'FNC_THEME_VERSION', '1.0.42' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -1127,9 +1127,9 @@ function fnc_render_complement_section( array $args ) {
 					<?php if ( $args['title'] ) : ?><h2 class="page-h2"><?php echo esc_html( $args['title'] ); ?></h2><?php endif; ?>
 					<?php if ( $args['intro'] ) : ?><p style="color:var(--texte-sec);max-width:46ch;margin-top:14px;"><?php echo esc_html( $args['intro'] ); ?></p><?php endif; ?>
 				</div>
-				<div style="display:grid;gap:16px;align-content:center;">
+				<div class="complement-links">
 					<?php foreach ( $args['links'] as $fnc_lnk ) : ?>
-						<a class="link-more" href="<?php echo esc_url( $fnc_lnk['href'] ); ?>" style="justify-content:space-between;border:1px solid var(--border);border-radius:4px;padding:20px 24px;background:#fff;">
+						<a class="link-more complement-link" href="<?php echo esc_url( $fnc_lnk['href'] ); ?>">
 							<?php echo esc_html( $fnc_lnk['label'] ); ?> <span class="arrow" aria-hidden="true">→</span>
 						</a>
 					<?php endforeach; ?>

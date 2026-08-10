@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.44
+Version: 1.0.45
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -564,6 +564,25 @@ form.card{border-radius:8px;box-shadow:0 16px 32px rgba(38,34,78,.06);padding:24
 .retro-doc h3 a{color:inherit;text-decoration:none;}
 .retro-doc h3 a:hover{text-decoration:underline;text-underline-offset:3px;}
 .retro-doc p{margin-top:8px;color:var(--texte-sec);font-size:.95rem;line-height:1.6;}
+/* Rétro — Partenaires : 2 colonnes + cartes plates (parité Next md:grid-cols-2). */
+.retro-partners-grid{display:grid;gap:16px;grid-template-columns:1fr;margin-top:14px;}
+@media(min-width:768px){.retro-partners-grid{grid-template-columns:1fr 1fr;}}
+.retro-partner-card{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:8px;background:#fff;padding:20px;}
+.retro-partner-card h4{font-family:var(--serif);font-weight:400;color:var(--navy-deep,#12122b);font-size:1.25rem;line-height:1.25;margin:0;}
+.retro-partner-card p{margin-top:10px;color:var(--texte-sec);font-size:.95rem;line-height:1.6;}
+.retro-partner-card a{margin-top:12px;align-self:flex-start;color:var(--navy-deep,#12122b);text-decoration:underline;text-underline-offset:3px;font-size:.9rem;font-weight:600;}
+/* Rétro — Vidéos : 2 colonnes 16:9 (parité Next lg:grid-cols-2). */
+.retro-videos{display:grid;gap:24px;grid-template-columns:1fr;margin-top:24px;}
+@media(min-width:1024px){.retro-videos{grid-template-columns:1fr 1fr;}}
+.retro-videos .video-facade{aspect-ratio:16/9;height:auto;}
+/* Rétro — Galerie : max 3 colonnes en cartes bordées (parité Next). */
+.retro-gallery-grid{display:grid;gap:16px;grid-template-columns:1fr;margin-top:24px;}
+@media(min-width:640px){.retro-gallery-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:1024px){.retro-gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.retro-gallery-grid figure{margin:0;overflow:hidden;border:1px solid var(--border);border-radius:8px;background:#fff;}
+.retro-gallery-grid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;}
+/* Tags de session = puce Next (casse normale, fond blanc, coins 4px). */
+.session-tag{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:4px;background:#fff;padding:4px 12px;font-size:.875rem;color:var(--navy-deep,#12122b);}
 
 /* Frise des pays representes (intervenants), avec drapeaux inline. */
 .flag-block{margin-top:28px;}

@@ -54,7 +54,7 @@ while ( have_posts() ) :
 			'lead'       => get_post_meta( $fnc_i_id, '_fnc_speaker_role', true ), // Fonction, comme le site du Forum.
 			'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',
 			'image_alt'  => '',
-			'breadcrumb' => $fnc_i_name,
+			'breadcrumb' => '<a href="' . esc_url( fnc_archive_url( 'fnc_intervenant' ) ) . '">' . esc_html__( 'Intervenants', 'fnc-wordpress-theme' ) . '</a> · ' . esc_html( $fnc_i_name ),
 		)
 	);
 	?>
@@ -185,7 +185,7 @@ while ( have_posts() ) :
 
 				</div>
 
-				<div class="person-detail__back" style="margin-top:48px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+				<div class="person-detail__back" style="margin-top:40px;border-top:1px solid var(--border);padding-top:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
 					<a class="btn btn-ghost" href="<?php echo esc_url( fnc_archive_url( 'fnc_intervenant' ) ); ?>">← <?php esc_html_e( 'Tous les intervenants', 'fnc-wordpress-theme' ); ?></a>
 					<a class="link-more" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>"><?php esc_html_e( 'Voir le programme', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>
 				</div>

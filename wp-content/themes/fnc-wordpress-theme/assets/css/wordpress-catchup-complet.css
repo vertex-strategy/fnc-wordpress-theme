@@ -625,6 +625,11 @@ textarea {
 }
 .person-detail__back .btn:hover { border-color: var(--navy-deep); background: var(--linen); }
 
+/* Rythme vertical GLOBAL aligné sur Next (globals.css) : sections un peu plus
+   resserrées que l'ancien thème. S'applique à toutes les pages. */
+.section { padding: clamp(48px, 8vh, 96px) var(--marge); }
+.callout { padding: clamp(44px, 7vh, 80px) var(--marge); }
+
 .field .help {
   font-size: 0.8rem;
   color: var(--texte-tert);

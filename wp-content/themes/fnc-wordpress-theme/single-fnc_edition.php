@@ -230,17 +230,17 @@ while ( have_posts() ) :
 				<?php foreach ( array( 'principal', 'majeur', 'officiel', 'contributeur', '__tbc' ) as $fnc_niv_key ) : ?>
 					<?php if ( empty( $fnc_ed_partners_by[ $fnc_niv_key ] ) ) { continue; } ?>
 					<?php $fnc_niv_label = ( '__tbc' === $fnc_niv_key ) ? __( 'À confirmer', 'fnc-wordpress-theme' ) : $fnc_ed_niv_labels[ $fnc_niv_key ]; ?>
-					<h3 style="margin:28px 0 14px;color:var(--navy);"><?php echo esc_html( $fnc_niv_label ); ?></h3>
-					<div class="grid grid-3">
+					<p class="page-eyebrow" style="color:var(--rouge);margin:22px 0 12px;"><?php echo esc_html( $fnc_niv_label ); ?></p>
+					<div class="retro-partners-grid">
 						<?php foreach ( $fnc_ed_partners_by[ $fnc_niv_key ] as $fnc_pt ) : ?>
 							<?php
 							$fnc_pt_site = (string) get_post_meta( $fnc_pt->ID, '_fnc_partenaire_site', true );
 							$fnc_pt_desc = has_excerpt( $fnc_pt ) ? get_the_excerpt( $fnc_pt ) : wp_trim_words( wp_strip_all_tags( (string) $fnc_pt->post_content ), 28 );
 							?>
-							<article class="card fnc-card">
-								<h4 style="font-family:var(--serif);color:var(--navy-deep);font-size:1.2rem;line-height:1.25;"><?php echo esc_html( get_the_title( $fnc_pt ) ); ?></h4>
-								<?php if ( $fnc_pt_desc ) : ?><p style="color:var(--texte-sec);margin-top:10px;font-size:.95rem;"><?php echo esc_html( $fnc_pt_desc ); ?></p><?php endif; ?>
-								<?php if ( $fnc_pt_site ) : ?><a class="link-more" href="<?php echo esc_url( $fnc_pt_site ); ?>" target="_blank" rel="noopener noreferrer" style="margin-top:12px;display:inline-block;"><?php esc_html_e( 'Voir le site', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a><?php endif; ?>
+							<article class="retro-partner-card">
+								<h4><?php echo esc_html( get_the_title( $fnc_pt ) ); ?></h4>
+								<?php if ( $fnc_pt_desc ) : ?><p><?php echo esc_html( $fnc_pt_desc ); ?></p><?php endif; ?>
+								<?php if ( $fnc_pt_site ) : ?><a href="<?php echo esc_url( $fnc_pt_site ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Voir le site', 'fnc-wordpress-theme' ); ?></a><?php endif; ?>
 							</article>
 						<?php endforeach; ?>
 					</div>
@@ -272,21 +272,18 @@ while ( have_posts() ) :
 			<section class="section linen">
 				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
 				<h2><?php esc_html_e( 'Vidéos', 'fnc-wordpress-theme' ); ?></h2>
-				<div class="retro-gallery" style="margin-top:28px;">
+				<div class="retro-videos">
 					<?php foreach ( $fnc_ed_videos as $fnc_ep ) : ?>
 						<?php
 						$fnc_ep_media  = (string) get_post_meta( $fnc_ep->ID, '_fnc_publication_media_url', true );
 						$fnc_ep_poster = has_post_thumbnail( $fnc_ep->ID ) ? get_the_post_thumbnail_url( $fnc_ep->ID, 'fnc-cover' ) : '';
 						$fnc_ep_facade = function_exists( 'fnc_video_facade' ) ? fnc_video_facade( $fnc_ep_media, $fnc_ep_poster ) : '';
 						?>
-						<figure>
-							<?php if ( $fnc_ep_facade ) : ?>
-								<?php echo $fnc_ep_facade; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
-							<?php else : ?>
-								<a class="link-more" href="<?php echo esc_url( $fnc_ep_media ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
-							<?php endif; ?>
-							<figcaption style="margin-top:8px;font-size:.9rem;color:var(--texte-sec);"><?php echo esc_html( get_the_title( $fnc_ep ) ); ?></figcaption>
-						</figure>
+						<?php if ( $fnc_ep_facade ) : ?>
+							<?php echo $fnc_ep_facade; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
+						<?php else : ?>
+							<a class="link-more" href="<?php echo esc_url( $fnc_ep_media ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Regarder', 'fnc-wordpress-theme' ); ?> <span class="arrow" aria-hidden="true">→</span></a>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
 			</section>
@@ -296,7 +293,7 @@ while ( have_posts() ) :
 			<section class="section">
 				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
 				<h2><?php esc_html_e( 'Galerie', 'fnc-wordpress-theme' ); ?></h2>
-				<div class="retro-gallery" style="margin-top:28px;">
+				<div class="retro-gallery-grid">
 					<?php foreach ( $fnc_ed_gallery as $fnc_g_item ) : ?>
 						<?php
 						// #4b : chaque média exige un texte alternatif (a11y) — sans alt, écarté.

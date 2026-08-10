@@ -192,8 +192,11 @@ $fnc_cat_class = static function ( $slug ) {
 									?>
 								</div>
 								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></div>
-								<?php if ( $fnc_sp_desc ) : ?>
-									<div class="r"><?php echo esc_html( $fnc_sp_desc ); ?></div>
+								<?php if ( $fnc_sp_role ) : ?>
+									<div class="r"><?php echo esc_html( $fnc_sp_role ); ?></div>
+								<?php endif; ?>
+								<?php if ( $fnc_sp_org ) : ?>
+									<div class="o"><?php echo esc_html( $fnc_sp_org ); ?></div>
 								<?php endif; ?>
 								<?php if ( $fnc_sp_country ) : ?>
 									<span class="c"><?php echo esc_html( $fnc_sp_country ); ?></span>

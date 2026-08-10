@@ -106,7 +106,7 @@ while ( have_posts() ) :
 						<ol style="margin-top:16px;max-width:42rem;list-style:none;padding:0;display:grid;gap:12px;">
 							<?php foreach ( $fnc_s_objectifs as $fnc_oi => $fnc_obj ) : ?>
 								<li style="display:flex;gap:16px;line-height:1.7;">
-									<span aria-hidden="true" style="font-family:var(--serif);font-weight:500;color:var(--rouge);"><?php echo esc_html( ( $fnc_oi + 1 ) . '.' ); ?></span>
+									<span aria-hidden="true" style="font-family:var(--serif);font-weight:500;color:var(--rouge);font-size:1.25rem;line-height:1.6;"><?php echo esc_html( sprintf( '%02d', $fnc_oi + 1 ) ); ?></span>
 									<span><?php echo esc_html( $fnc_obj ); ?></span>
 								</li>
 							<?php endforeach; ?>
@@ -135,7 +135,7 @@ while ( have_posts() ) :
 						<p class="page-eyebrow text-navy"><?php esc_html_e( 'Tags', 'fnc-wordpress-theme' ); ?></p>
 						<ul style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;">
 							<?php foreach ( $fnc_s_tags as $fnc_tag ) : ?>
-								<li><span class="badge"><?php echo esc_html( $fnc_tag->name ); ?></span></li>
+								<li><span class="session-tag"><?php echo esc_html( $fnc_tag->name ); ?></span></li>
 							<?php endforeach; ?>
 						</ul>
 					</div>
@@ -173,7 +173,7 @@ while ( have_posts() ) :
 					</div>
 				<?php endif; ?>
 
-				<div class="person-detail__back" style="margin-top:48px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+				<div class="person-detail__back" style="margin-top:40px;border-top:1px solid var(--border);padding-top:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
 					<a class="btn btn-ghost" href="<?php echo esc_url( fnc_archive_url( 'fnc_session' ) ); ?>">← <?php esc_html_e( 'Retour au programme', 'fnc-wordpress-theme' ); ?></a>
 					<?php if ( $fnc_s_edition > 0 ) : ?>
 						<a class="link-more" href="<?php echo esc_url( get_permalink( $fnc_s_edition ) ); ?>"><?php esc_html_e( 'Voir l’édition', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a>

@@ -120,13 +120,14 @@ $fnc_type_class = static function ( $slug ) {
 							$fnc_room      = get_post_meta( $fnc_session_id, '_fnc_session_room', true );
 							$fnc_moderator = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
 							?>
+							<?php $fnc_decorative = in_array( $fnc_type, array( 'pause', 'logistique' ), true ); // parité Next : sessions décoratives sans badge ni lien. ?>
 							<div class="sess">
 								<div class="when"><?php echo esc_html( $fnc_time ? $fnc_time : '—' ); ?></div>
 								<div>
-									<?php if ( $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
+									<?php if ( ! $fnc_decorative && $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
 										<span class="type <?php echo esc_attr( $fnc_type_class( $fnc_type ) ); ?>"><?php echo esc_html( $fnc_session_types[ $fnc_type ] ); ?></span>
 									<?php endif; ?>
-									<div class="s-title"><a href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a></div>
+									<div class="s-title"><?php if ( $fnc_decorative ) : ?><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?><?php else : ?><a class="s-title-link" href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a><?php endif; ?></div>
 									<?php
 									if ( $fnc_moderator > 0 ) :
 										$fnc_mod_org  = get_post_meta( $fnc_moderator, '_fnc_speaker_org', true );

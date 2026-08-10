@@ -46,7 +46,7 @@ while ( have_posts() ) :
 			'intro'      => $fnc_ed_theme ? '« ' . $fnc_ed_theme . ' »' : '',
 			'image'      => has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_ed_id, 'full' ) : get_template_directory_uri() . '/assets/images/le-programme.png',
 			'image_alt'  => '',
-			'breadcrumb' => get_the_title(),
+			'breadcrumb' => '<a href="' . esc_url( get_post_type_archive_link( 'fnc_edition' ) ) . '">' . esc_html__( 'Éditions', 'fnc-wordpress-theme' ) . '</a> · ' . esc_html( $fnc_ed_year ? $fnc_ed_year : get_the_title() ),
 		)
 	);
 	?>
@@ -219,7 +219,7 @@ while ( have_posts() ) :
 			<section class="section">
 				<span class="eyebrow"><?php esc_html_e( 'Rétrospective', 'fnc-wordpress-theme' ); ?></span>
 				<h2><?php esc_html_e( 'Bilan', 'fnc-wordpress-theme' ); ?></h2>
-				<div class="prose-legal" style="margin-top:24px;max-width:48ch;"><?php echo wp_kses_post( wpautop( $fnc_ed_review ) ); ?></div>
+				<div class="prose-legal" style="margin-top:24px;max-width:48ch;font-size:1.125rem;line-height:2;"><?php echo wp_kses_post( wpautop( $fnc_ed_review ) ); ?></div>
 			</section>
 		<?php endif; ?>
 

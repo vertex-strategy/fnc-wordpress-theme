@@ -420,8 +420,10 @@ textarea {
 .person-detail__links ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
 .person-detail__links a { font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); text-decoration: underline; text-underline-offset: 4px; }
 .person-detail__links a:hover { color: var(--rouge); }
-.person-detail__block { border-top: 1px solid var(--border); padding-top: 26px; margin-top: 30px; }
+.person-detail__block { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 40px; }
 .person-detail__block:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+/* Corps de lecture (bio / description) = parité Next : ~42rem, 1.125rem, interligne 2. */
+.person-detail__block .prose-legal { max-width: 42rem; font-size: 1.125rem; line-height: 2; }
 
 /* ---------- PROGRAMME ---------- */
 .day-tabs {
@@ -629,6 +631,10 @@ textarea {
    resserrées que l'ancien thème. S'applique à toutes les pages. */
 .section { padding: clamp(48px, 8vh, 96px) var(--marge); }
 .callout { padding: clamp(44px, 7vh, 80px) var(--marge); }
+
+/* Métriques de bouton alignées sur Next (padding/taille) ; on conserve une hauteur
+   mini de 48px pour la cible tactile (a11y), au lieu de la retirer complètement. */
+.btn { padding: 14px 26px; font-size: 0.95rem; min-height: 48px; }
 
 .field .help {
   font-size: 0.8rem;

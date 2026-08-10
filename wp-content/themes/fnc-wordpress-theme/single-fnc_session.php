@@ -107,7 +107,7 @@ while ( have_posts() ) :
 							<?php foreach ( $fnc_s_objectifs as $fnc_oi => $fnc_obj ) : ?>
 								<li style="display:flex;gap:16px;line-height:1.7;">
 									<span aria-hidden="true" style="font-family:var(--serif);font-weight:500;color:var(--rouge);font-size:1.25rem;line-height:1.6;"><?php echo esc_html( sprintf( '%02d', $fnc_oi + 1 ) ); ?></span>
-									<span><?php echo esc_html( $fnc_obj ); ?></span>
+									<span style="font-size:1.125rem;line-height:1.8;"><?php echo esc_html( $fnc_obj ); ?></span>
 								</li>
 							<?php endforeach; ?>
 						</ol>

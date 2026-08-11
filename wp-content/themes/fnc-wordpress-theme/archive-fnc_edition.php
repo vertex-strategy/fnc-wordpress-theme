@@ -36,7 +36,7 @@ $fnc_editions = get_posts(
 );
 $fnc_statuses = fnc_content_model_edition_statuses();
 
-// Libellés de liste (front) : « Passées » au pluriel comme le site Next, pour
+// Libellés de liste (front) : « Passées » au pluriel, pour
 // les chips ET le badge de la frise (le libellé de statut admin reste au
 // singulier). Ordre d'affichage : En cours · À venir · Passées.
 $fnc_list_labels = array(
@@ -55,7 +55,7 @@ foreach ( $fnc_editions as $fnc_e ) {
 }
 $fnc_total = count( $fnc_editions );
 
-// Filtre ?status= (comme le site Next). Valeur inconnue → « toutes ».
+// Filtre ?status=. Valeur inconnue → « toutes ».
 $fnc_cur_status = isset( $_GET['status'] ) ? sanitize_key( wp_unslash( $_GET['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 if ( ! in_array( $fnc_cur_status, array( 'current', 'upcoming', 'past' ), true ) ) {
 	$fnc_cur_status = '';

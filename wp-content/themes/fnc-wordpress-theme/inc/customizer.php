@@ -352,7 +352,7 @@ function fnc_country_flag_map() {
 /**
  * Analyse le réglage « Groupes de liens du pied de page ».
  *
- * Modèle Payload répliqué (footerLinkGroups) : une liste ORDONNÉE de groupes,
+ * Groupes de liens du pied de page (footerLinkGroups) : une liste ORDONNÉE de groupes,
  * chacun portant un titre, un « genre » (kind) et une liste de liens ordonnés.
  * Choix zéro-dépendance (comme « Ordre des pays » et « Contacts presse ») : un
  * format texte administrable sans plugin de champs ni JavaScript.
@@ -603,7 +603,7 @@ function fnc_order_countries( array $countries ) {
 	$order = fnc_parse_country_order();
 	if ( empty( $order ) ) {
 		// Sans réglage d'ordre : tri alphabétique MAIS Congo en tête par défaut
-		// (comme le site Next). Le pays hôte ouvre toujours la frise.
+		// Le pays hôte ouvre toujours la frise.
 		sort( $countries );
 		$congo = array();
 		$rest  = array();

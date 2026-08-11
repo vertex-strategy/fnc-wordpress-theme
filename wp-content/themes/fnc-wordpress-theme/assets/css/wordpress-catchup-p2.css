@@ -76,7 +76,7 @@ h2, h3, .opening h1, .frise-title, .split .lines { text-wrap: balance; }
 
 /* ========== FRISE DES ÉDITIONS (19) ========== */
 
-/* Base UNIFIÉE (parité Next globals.css) : grille 44px, nœud = cercle rouge creux
+/* Base unifiée de la charte : grille 44px, nœud = cercle rouge creux
    positionné en absolu sur la trace, pas de bordures de lignes. */
 .frise { list-style: none; margin: 0; padding: 0; position: relative; }
 .frise-item { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: clamp(16px, 2.5vw, 30px); padding: 24px 0; }

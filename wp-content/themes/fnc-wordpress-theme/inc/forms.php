@@ -27,7 +27,7 @@ function fnc_submission_form_config( $type ) {
 			'help'    => __( 'Préciser le sujet nous aide à orienter votre demande dès l’ouverture du canal officiel.', 'fnc-wordpress-theme' ),
 			'submit'  => __( 'Envoyer la demande', 'fnc-wordpress-theme' ),
 			'fields'  => array(
-				// Disposition alignée sur le site Next : Nom* / Organisation sur une
+				// Disposition : Nom* / Organisation sur une
 				// ligne, puis Email*, Sujet* et Message* chacun en PLEINE LARGEUR.
 				array( 'name' => 'name', 'label' => __( 'Nom', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => true ),
 				array( 'name' => 'organization', 'label' => __( 'Organisation', 'fnc-wordpress-theme' ), 'type' => 'text', 'required' => false ),
@@ -116,9 +116,12 @@ function fnc_render_form_field( $type, $index, array $field, $flash, $focus_name
 	$err_code = function_exists( 'fnc_field_error' ) ? fnc_field_error( $flash, $name ) : '';
 	$invalid  = $err_code ? 'true' : 'false';
 	$err_id   = $id . '-error';
-	// aria-describedby relie le champ à son message d'erreur (a11y), autofocus
-	// place le curseur sur le 1er champ invalide (parité ContactForm.tsx).
-	$describe = $err_code ? ' aria-describedby="' . esc_attr( $err_id ) . '"' : '';
+	$help_id  = 'fnc-' . $type . '-help';
+	// aria-describedby relie TOUJOURS le champ au texte d'aide du formulaire
+	// (« les champs obligatoires… »), et en plus à son message d'erreur quand il
+	// existe (a11y : la consigne est restituée hors état d'erreur, pas seulement
+	// quand une erreur survient). autofocus place le curseur sur le 1er invalide.
+	$describe = ' aria-describedby="' . esc_attr( $err_code ? $help_id . ' ' . $err_id : $help_id ) . '"';
 	$focus    = ( '' !== $focus_name && $name === $focus_name ) ? ' autofocus' : '';
 
 	ob_start();
@@ -195,7 +198,7 @@ function fnc_render_submission_form( $type ) {
 			?>
 		</div>
 
-		<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
+		<p class="help" id="<?php echo esc_attr( 'fnc-' . $type . '-help' ); ?>"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
 		<button class="btn form-submit" type="submit"><?php echo esc_html( $cfg['submit'] ); ?>
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 		</button>

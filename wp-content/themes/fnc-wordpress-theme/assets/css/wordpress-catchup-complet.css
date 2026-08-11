@@ -9,7 +9,7 @@
 
 :root {
   /* Tokens DA référencés par ce fichier, absents du thème et sans
-     fallback inline — valeurs reprises telles quelles de globals.css. */
+     fallback inline — valeurs reprises telles quelles de la charte. */
   --surface: #f2f2f5;
   --display-page: clamp(2rem, 4.4vw, 3.9rem);
   --color-background: #ffffff;
@@ -19,7 +19,7 @@
 /* ---------- Base DA-D (dé-encapsulée de @layer base) ----------
    Les directives @tailwind (build-time) et le wrapper @layer ont été retirés :
    ils n'ont aucun sens dans une CSS servie telle quelle, et @layer abaisserait
-   la priorité de cascade. Le :root de globals.css n'est PAS repris ici — le
+   la priorité de cascade. Le :root de la charte n'est PAS repris ici — le
    thème définit déjà ces tokens, et les 4 manquants sont déclarés en tête.
    NOTE : la règle `body` ci-dessous impose fond/couleur/police du site du Forum ;
    si le thème les gère déjà, elle est redondante (sans risque). */
@@ -422,7 +422,7 @@ textarea {
 .person-detail__links a:hover { color: var(--rouge); }
 .person-detail__block { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 40px; }
 .person-detail__block:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
-/* Corps de lecture (bio / description) = parité Next : ~42rem, 1.125rem, interligne 2. */
+/* Corps de lecture (bio / description) : ~42rem, 1.125rem, interligne 2. */
 .person-detail__block .prose-legal { max-width: 42rem; font-size: 1.125rem; line-height: 2; }
 
 /* ---------- PROGRAMME ---------- */
@@ -608,7 +608,7 @@ textarea {
   transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
 }
 
-/* Focus = parité Next : bordure navy foncé + anneau rouge décalé (ring-2 ring-rouge ring-offset-2). */
+/* Focus : bordure navy foncé + anneau rouge décalé (ring-2 ring-rouge ring-offset-2). */
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
@@ -619,7 +619,7 @@ textarea {
 
 /* Bouton « retour » de la fiche intervenant : il vit dans une section claire (linen),
    donc le variant ghost CLAIR (texte blanc) devenait illisible. On force le variant
-   sombre lisible (parité Next : bordure + fond blanc + texte navy). */
+   sombre lisible (bordure + fond blanc + texte navy). */
 .person-detail__back .btn {
   color: var(--navy-deep);
   border-color: var(--border);
@@ -627,12 +627,12 @@ textarea {
 }
 .person-detail__back .btn:hover { border-color: var(--navy-deep); background: var(--linen); }
 
-/* Rythme vertical GLOBAL aligné sur Next (globals.css) : sections un peu plus
+/* Rythme vertical GLOBAL aligné sur la charte : sections un peu plus
    resserrées que l'ancien thème. S'applique à toutes les pages. */
 .section { padding: clamp(48px, 8vh, 96px) var(--marge); }
 .callout { padding: clamp(44px, 7vh, 80px) var(--marge); }
 
-/* Métriques de bouton alignées sur Next (padding/taille) ; on conserve une hauteur
+/* Métriques de bouton alignées sur la charte (padding/taille) ; on conserve une hauteur
    mini de 48px pour la cible tactile (a11y), au lieu de la retirer complètement. */
 .btn { padding: 14px 26px; font-size: 0.95rem; min-height: 48px; }
 
@@ -814,7 +814,7 @@ textarea {
 /* Hero (#m1) — entrée cinématographique en CSS PUR (montée + fondu + flou qui se
    lève), en cascade. Fiable au chargement, contrairement au reveal JS qui « claque »
    pour le contenu déjà à l'écran (l'IntersectionObserver se déclenche avant le 1er
-   paint). Le hero est donc EXCLU du reveal JS (voir HomeMotion). */
+   paint). Le hero est donc EXCLU du reveal JS. */
 #m1 .hero-inner > * { animation: hero-enter 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
 #m1 .hero-inner > *:nth-child(1) { animation-delay: 0.15s; }
@@ -1155,14 +1155,14 @@ textarea {
 
 .consent-reopen:focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
 
-/* ── Transition de page cinématographique — « dip » navy (RouteTransition) ─────
-   Les View Transitions natives ne s'enclenchent pas sur la navigation cliente de
-   l'App Router (le flag `experimental.viewTransition` n'expose que le composant
-   React expérimental, indisponible ici). On produit donc l'enchaînement nous-mêmes,
+/* ── Transition de page cinématographique — « dip » navy ─────
+   Les View Transitions natives du navigateur ne s'enclenchent pas de façon fiable
+   sur la navigation cliente (support partiel, indisponible ici).
+   On produit donc l'enchaînement nous-mêmes,
    robuste en dev ET en prod : à chaque changement de route, un voile navy fond très
    brièvement puis se retire — un « fondu au bleu » de cinéma, registre DA. Un filet
    PCB (rouge/jaune) trace sur le voile comme signature. `pointer-events: none` →
-   ne bloque JAMAIS l'input. Piloté par `RouteTransition` (skip au 1ᵉʳ rendu,
+   ne bloque JAMAIS l'input. Piloté par le script de transition (skip au 1ᵉʳ rendu,
    coupé en prefers-reduced-motion). */
 .route-dip {
   position: fixed;

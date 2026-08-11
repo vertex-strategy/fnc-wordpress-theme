@@ -34,7 +34,7 @@ $fnc_publication_types = fnc_content_model_publication_types();
 // (le seed peut employer des slugs hors registre — cf. réserve MOA).
 
 // Libellés PLURIELS pour les chips de filtre (le badge de carte garde le
-// singulier précis). Comme le site Next : « Rapports », « Vidéos »…
+// singulier précis) : « Rapports », « Vidéos »…
 $fnc_type_plural = array(
 	// Slugs du registre.
 	'report'            => __( 'Rapports', 'fnc-wordpress-theme' ),

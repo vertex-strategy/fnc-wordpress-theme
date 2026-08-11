@@ -52,7 +52,7 @@ if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
 <main id="main">
 	<?php
 	// Aucune section ACF ni bloc FNC : état NEUTRE « en préparation »
-	// (parité Next « non publié »). Jamais de contenu de démonstration en dur.
+	// (état « non publié »). Jamais de contenu de démonstration en dur.
 	fnc_render_pagehead(
 		array(
 			'eyebrow'    => __( 'Le Forum', 'fnc-wordpress-theme' ),

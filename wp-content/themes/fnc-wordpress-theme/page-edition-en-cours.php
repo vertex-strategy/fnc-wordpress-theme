@@ -71,7 +71,7 @@ if ( $fnc_edition ) {
 	$fnc_speaker_ids = array_unique( $fnc_speaker_ids );
 }
 
-// Aperçus alignés sur le site Next : les PARTICIPANTS (ordre protocolaire
+// Aperçus : les PARTICIPANTS (ordre protocolaire
 // protocol_order → sort_index, modérateurs inclus) et le nombre de PAYS
 // proviennent des mêmes fonctions dérivées que la page /intervenants — et non
 // de l'union brute des _fnc_session_speakers (qui exclut les modérateurs et
@@ -120,7 +120,7 @@ fnc_render_opening_hero(
 		<?php if ( $fnc_edition_theme || $fnc_edition_dates || $fnc_edition_location ) : ?>
 			<section class="section" style="padding-bottom:0;">
 				<div class="container">
-					<?php // Édition provisoire : bandeau « programme provisoire » (comme le site Next). ?>
+					<?php // Édition provisoire : bandeau « programme provisoire ». ?>
 					<p class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></p>
 					<?php if ( $fnc_edition_theme ) : ?>
 						<p class="frise-theme" style="font-size:1.15rem;"><?php echo esc_html( $fnc_edition_theme ); ?></p>
@@ -164,7 +164,7 @@ fnc_render_opening_hero(
 					</div>
 				</div>
 				<?php
-				// Aperçu Jour 1, aligné sur le site Next : on EXCLUT la logistique et
+				// Aperçu Jour 1 : on EXCLUT la logistique et
 				// les pauses (inscription, déjeuner…), puis on prend les 4 premières
 				// sessions « de fond ».
 				$fnc_first_day     = $fnc_edition ? array_key_first( $fnc_sessions_by_day ) : null;
@@ -203,7 +203,7 @@ fnc_render_opening_hero(
 						<?php
 						foreach ( array_slice( $fnc_day1, 0, 4 ) as $fnc_session ) :
 							$fnc_type  = get_post_meta( $fnc_session->ID, '_fnc_session_type', true );
-							// Heure de DÉBUT simple (pas la plage), comme le site Next.
+							// Heure de DÉBUT simple (pas la plage).
 							$fnc_start = get_post_meta( $fnc_session->ID, '_fnc_session_start', true );
 							$fnc_start = $fnc_start ? $fnc_start : ( get_post_meta( $fnc_session->ID, '_fnc_session_time', true ) ?: '—' );
 							// Sous-titre : « Modération : … » sinon le type, puis « · N intervenants ».

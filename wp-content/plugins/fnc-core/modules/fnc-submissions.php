@@ -187,8 +187,8 @@ function fnc_handle_submission() {
 		fnc_submission_flash_redirect( $redirect, $type, array( '_form' => 'store' ), array(), $data );
 	}
 
-	// Rattachement AUTOMATIQUE de l'inscription à l'édition active (parité Next :
-	// resolveActiveEdition = en cours → à venir). L'utilisateur ne choisit pas ;
+	// Rattachement AUTOMATIQUE de l'inscription à l'édition active (résolution :
+	// en cours → à venir). L'utilisateur ne choisit pas ;
 	// la demande n'est jamais orpheline. #4 audit inscription.
 	if ( 'inscription' === $type && function_exists( 'fnc_registration_edition_id' ) ) {
 		$fnc_reg_ed = fnc_registration_edition_id();

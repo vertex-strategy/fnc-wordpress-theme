@@ -73,7 +73,7 @@ $fnc_ip_rubriques = $fnc_ip_edition ? fnc_render_practical_info( $fnc_ip_edition
 		<h2 data-fnc-st="infos-pratiques.cta.title"><?php echo esc_html( fnc_stitle( 'infos-pratiques', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'Rejoignez la prochaine édition du Forum Numérique Congo à Brazzaville.', 'fnc-wordpress-theme' ); ?></p>
 		<?php
-		// Bascule du CTA selon l'ouverture des inscriptions (parité Next) :
+		// Bascule du CTA selon l'ouverture des inscriptions :
 		// ouvertes → « S'inscrire » → /inscription ; fermées → « Découvrir l'édition »
 		// → hub de l'édition en cours.
 		$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();

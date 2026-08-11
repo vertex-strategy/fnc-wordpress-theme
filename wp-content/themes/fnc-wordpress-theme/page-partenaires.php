@@ -211,7 +211,7 @@ $fnc_interest_options = array(
 				<p class="body"><?php esc_html_e( 'Vous représentez une institution ou une entreprise ? Contactez l’organisation pour construire un partenariat adapté.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
-			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>">
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>" aria-describedby="fnc-partenariat-help">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation.', 'fnc-wordpress-theme' ); ?></p>
 
@@ -259,7 +259,7 @@ $fnc_interest_options = array(
 					</div>
 				</div>
 
-				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
+				<p class="help" id="fnc-partenariat-help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
 				<button class="btn" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>

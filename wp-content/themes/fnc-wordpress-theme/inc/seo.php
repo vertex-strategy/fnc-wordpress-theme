@@ -284,7 +284,7 @@ function fnc_head_meta() {
 	printf( '<meta property="og:site_name" content="%s" />' . "\n", esc_attr( $site_name ) );
 	printf( '<meta property="og:title" content="%s" />' . "\n", esc_attr( $title ) );
 	// og:type = « article » UNIQUEMENT sur le détail des ressources et actualités
-	// (parité Next : ressources/[slug] et actualites/[slug]) ; « website » partout
+	// (routes ressources/[slug] et actualites/[slug]) ; « website » partout
 	// ailleurs (pages, éditions, intervenants, sessions, partenaires, archives, accueil).
 	$fnc_is_article = is_singular( array( 'fnc_publication', 'fnc_actualite' ) );
 	printf( '<meta property="og:type" content="%s" />' . "\n", $fnc_is_article ? 'article' : 'website' );
@@ -311,7 +311,7 @@ add_action( 'wp_head', 'fnc_head_meta', 5 );
  * @return array<string,mixed>
  */
 function fnc_filter_robots( $robots ) {
-	// Page introuvable (404) : jamais indexée (parité avec le catch-all Next).
+	// Page introuvable (404) : jamais indexée.
 	if ( is_404() ) {
 		$robots['noindex']  = true;
 		$robots['nofollow'] = true;
@@ -353,7 +353,7 @@ add_filter( 'wp_robots', 'fnc_filter_robots' );
 /**
  * robots.txt : interdit l'admin et l'API REST aux robots, et pointe le sitemap.
  * Idempotent (n'ajoute chaque directive que si absente), pour ne pas doublonner
- * ce que le cœur WordPress émet déjà. Aligné sur src/app/robots.ts.
+ * ce que le cœur WordPress émet déjà. Aligné sur la politique robots du site.
  *
  * @param string $output
  * @param bool   $public
@@ -382,7 +382,7 @@ add_filter( 'robots_txt', 'fnc_robots_txt', 10, 2 );
 /**
  * Redirection 301 des anciennes URL /publications(/…) vers /ressources(/…).
  * Le CPT a été renommé (slug « ressources ») ; on préserve le préfixe de langue
- * (/en) et la chaîne de requête. Aligné sur la règle 301 de next.config.ts.
+ * (/en) et la chaîne de requête. Aligné sur la règle 301 de redirection du site.
  */
 function fnc_redirect_legacy_publications() {
 	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {

@@ -30,7 +30,7 @@ $fnc_archive_url    = get_post_type_archive_link( 'fnc_intervenant' );
 $fnc_current_profil = isset( $_GET['fnc_profil'] ) ? sanitize_title( wp_unslash( $_GET['fnc_profil'] ) ) : '';
 $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $_GET['fnc_pays'] ) ) : '';
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
-// Ordre des filtres aligné sur Next : Officiels · Experts · Hôtes (et non l'ordre
+// Ordre des filtres : Officiels · Experts · Hôtes (et non l'ordre
 // alphabétique par défaut des termes). Tout slug hors barème passe en fin de liste.
 if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) {
 	$fnc_profil_order = array( 'official' => 0, 'expert' => 1, 'host' => 2 );
@@ -43,7 +43,7 @@ if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) {
 		}
 	);
 }
-// Libellés de FILTRE au pluriel (comme le site Next) : « Officiels / Experts /
+// Libellés de FILTRE au pluriel : « Officiels / Experts /
 // Hôtes » (« Hôtes » et non « Animateur »). N'affecte que les chips de filtre ;
 // les termes eux-mêmes restent inchangés. Repli sur le nom du terme si inconnu.
 $fnc_profil_labels = array(
@@ -83,7 +83,7 @@ if ( function_exists( 'fnc_speaker_facets' ) ) {
 		foreach ( $fnc_facets['profils'] as $fnc_pf ) { $fnc_facet_counts[ $fnc_pf['slug'] ] = (int) $fnc_pf['count']; }
 		$fnc_countries = array();
 		foreach ( $fnc_facets['countries'] as $fnc_ct ) { if ( (int) $fnc_ct['count'] > 0 ) { $fnc_countries[] = $fnc_ct['name']; } }
-		// Congo en tête (comme le site Next), pas l'ordre brut des facettes.
+		// Congo en tête, pas l'ordre brut des facettes.
 		$fnc_countries     = function_exists( 'fnc_order_countries' ) ? fnc_order_countries( $fnc_countries ) : $fnc_countries;
 		$fnc_country_count = count( $fnc_countries );
 	}

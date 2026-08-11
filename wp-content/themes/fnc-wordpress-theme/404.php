@@ -2,7 +2,7 @@
 /**
  * Forum Numérique Congo — page « introuvable » (404).
  *
- * Reproduit la signature du site Next (src/app/(frontend)/[locale]/not-found.tsx) :
+ * Reproduit la signature 404 de la charte (héros pleine page « Les portes ») :
  * héros cinématographique `.opening` plein cadre avec la photographie « Les portes »
  * (portes de la plénière entrouvertes — métaphore de la page qu'on ne trouve pas),
  * overlay, fil d'Ariane, eyebrow, chapô et deux actions. Le bloc remplit la hauteur
@@ -33,7 +33,7 @@ $fnc_404_image = get_template_directory_uri() . '/assets/images/les-portes.png';
 	<?php
 	// paddingBottom explicite : le contenu est ancré en bas (.opening = flex-end)
 	// et le filet PCB occupe les 60px du bas — sans ce dégagement, les boutons
-	// chevauchent la frise (même valeur que le Next).
+	// chevauchent la frise.
 	?>
 	<header class="opening flex-1" style="padding-bottom:clamp(88px,11vh,124px);">
 		<?php echo fnc_theme_image( $fnc_404_image, '', array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>

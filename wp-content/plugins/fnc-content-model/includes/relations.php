@@ -41,14 +41,14 @@ const FNC_META_EDITION_END_DATE     = '_fnc_edition_end_date';
 const FNC_META_EDITION_LOCATION     = '_fnc_edition_location';
 const FNC_META_EDITION_IS_SPECIAL   = '_fnc_edition_is_special';
 const FNC_META_EDITION_SPECIAL_NOTE = '_fnc_edition_special_note';
-// Rétrospective (édition passée) — aligné sur Editions.review/keyFigures/gallery du Next.
+// Rétrospective (édition passée) — bilan, chiffres clés et galerie.
 const FNC_META_EDITION_REVIEW       = '_fnc_edition_review';   // bilan (texte multi-ligne)
 const FNC_META_EDITION_FIGURES      = '_fnc_edition_figures';  // chiffres clés : [ {value,label} ]
 const FNC_META_EDITION_GALLERY      = '_fnc_edition_gallery';  // galerie : [ url, … ]
 
 // --- Intervenants ---------------------------------------------------------
 const FNC_META_SPEAKER_TITLE          = '_fnc_speaker_title';
-// Fonction / rôle (intitulé de poste) — aligné sur Speakers.role du Next, rendu dans 7 gabarits.
+// Fonction / rôle (intitulé de poste) — rendu dans 7 gabarits.
 const FNC_META_SPEAKER_ROLE           = '_fnc_speaker_role';
 const FNC_META_SPEAKER_ORG            = '_fnc_speaker_org';
 const FNC_META_SPEAKER_COUNTRY        = '_fnc_speaker_country';
@@ -451,8 +451,7 @@ function fnc_content_model_render_edition_meta_box( $post ) {
 
 /**
  * Méta-box « Rétrospective » (colonne principale) : bilan, chiffres clés et
- * galerie d'une édition passée — repris de Editions.review/keyFigures/gallery
- * du site de référence. Sans dépendance ni JavaScript d'administration
+ * galerie d'une édition passée. Sans dépendance ni JavaScript d'administration
  * (galerie = URLs collées depuis la Médiathèque, même parti pris que le champ
  * « Fichier à télécharger » des publications).
  */
@@ -996,8 +995,8 @@ function fnc_content_model_is_pdf_url( $url ) {
 }
 
 /**
- * Validation du fichier de publication a la PUBLICATION — alignee sur Payload
- * (Publications.ts) : validation PDF *conditionnelle*, jamais fichier obligatoire.
+ * Validation du fichier de publication a la PUBLICATION :
+ * validation PDF *conditionnelle*, jamais fichier obligatoire.
  *
  * Regle :
  *   - Une publication PEUT etre publiee SANS fichier (pas de blocage sur vide).
@@ -1006,7 +1005,7 @@ function fnc_content_model_is_pdf_url( $url ) {
  *
  * En cas d'ecart, on ne rejette pas silencieusement : on repasse la publication
  * en brouillon et on affiche un message a l'editeur (transient). Comportement
- * volontairement PAS plus strict que le site Next.
+ * volontairement souple : publier sans fichier reste possible.
  *
  * @param int      $post_id
  * @param \WP_Post $post
@@ -1022,7 +1021,7 @@ function fnc_content_model_validate_publication_pdf( $post_id, $post ) {
 
 	$file = (string) get_post_meta( $post_id, FNC_META_PUBLICATION_FILE, true );
 	if ( '' === trim( $file ) ) {
-		return; // Publier sans fichier est autorise (parite Payload).
+		return; // Publier sans fichier est autorise.
 	}
 
 	$type = (string) get_post_meta( $post_id, FNC_META_PUBLICATION_TYPE, true );

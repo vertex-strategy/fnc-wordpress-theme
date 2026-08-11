@@ -171,7 +171,12 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 
 		$site = untrailingslashit( home_url() );
 
-		$address = array( '@type' => 'PostalAddress', 'addressLocality' => 'Brazzaville', 'addressCountry' => 'CG' );
+		// La ville n'est PAS codée en dur : les éditions ne se tiennent pas toutes
+		// à Brazzaville (ex. Pointe-Noire pour les éditions passées) et l'édition-
+		// pivot peut changer de ville. On décrit le lieu par `Place.name` = champ
+		// « Lieu » de l'édition (déjà de la forme « Hôtel…, Ville ») + le pays ;
+		// deviner la ville depuis ce champ inventerait de la donnée (RÈGLE 4).
+		$address = array( '@type' => 'PostalAddress', 'addressCountry' => 'CG' );
 		$location = array( '@type' => 'Place', 'address' => $address );
 		$loc_name = trim( (string) get_post_meta( $ed->ID, '_fnc_edition_location', true ) );
 		if ( '' !== $loc_name ) {

@@ -36,7 +36,7 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 					<span class="place"><?php echo esc_html( fnc_home_setting( 'm1_place', 'Brazzaville · République du Congo' ) ); ?></span>
 				<?php endif; ?>
 				<?php
-				// 3e .place du kicker = LIEU précis (parité Next page.tsx:136-138) :
+				// 3e .place du kicker = LIEU précis :
 				// réglage m1_venue, sinon lieu de l'édition active. Masqué si vide.
 				$fnc_m1_venue = (string) fnc_home_setting( 'm1_venue' );
 				if ( '' === trim( $fnc_m1_venue ) && $fnc_home_edition ) {
@@ -217,7 +217,7 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 	<!-- M5 — LE PROGRAMME -->
 	<?php
 	// Temps forts : sélection CURATÉE par identifiants de session (m5_highlight_ids,
-	// mêmes ids que le Next : j1-allocutions, j1-inaugurale, j1-table-ronde, j1-s1),
+	// ids de session curatés : j1-allocutions, j1-inaugurale, j1-table-ronde, j1-s1),
 	// dans l'ordre défini, une session absente est ignorée. Repli sur les 4
 	// premières sessions de l'édition en cours si aucune n'est trouvée.
 	$fnc_home_sessions = array();
@@ -397,8 +397,8 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 	<!-- M8 — LA DECISION FINALE -->
 	<?php
 	// Compte a rebours reel depuis la date de debut de l'edition en cours.
-	// Clampe a 0 quand la date est aujourd'hui/passee (jamais negatif, comme le
-	// site Next). Reste null — « — · Date a confirmer » — seulement en l'ABSENCE
+	// Clampe a 0 quand la date est aujourd'hui/passee (jamais negatif).
+	// Reste null — « — · Date a confirmer » — seulement en l'ABSENCE
 	// de date (choix produit : pas de date fictive). La date ISO est aussi
 	// exposee en attribut pour un recalcul cote client (anti-cache) dans main.js.
 	$fnc_days_left = null;
@@ -436,7 +436,7 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 			<?php if ( '' !== trim( $fnc_m8_venue ) ) : ?>
 				<p class="count-label" style="margin-top:16px;margin-bottom:0;opacity:.85;"><?php echo esc_html( $fnc_m8_venue ); ?></p>
 			<?php endif; ?>
-			<?php // CTA d'inscription (M8) : n'apparaît QUE si les inscriptions sont ouvertes (parité Next). ?>
+			<?php // CTA d'inscription (M8) : n'apparaît QUE si les inscriptions sont ouvertes. ?>
 			<?php if ( ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled() ) : ?>
 				<a class="btn btn-red" href="<?php echo esc_url( fnc_home_setting( 'm8_cta_url', fnc_page_url( 'inscription' ) ) ); ?>"><?php echo esc_html( fnc_home_setting( 'm8_cta', __( 'Réserver votre place', 'fnc-wordpress-theme' ) ) ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

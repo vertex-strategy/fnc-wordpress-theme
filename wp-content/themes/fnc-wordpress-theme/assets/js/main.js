@@ -238,7 +238,7 @@
 		});
 	});
 
-	// Parallax de SORTIE du hero d'accueil (#m1 .hero-inner), parite HomeMotion.tsx.
+	// Parallax de SORTIE du hero d'accueil (#m1 .hero-inner).
 	// rAF-throttle, transform/opacity/filter UNIQUEMENT (GPU), listener passif.
 	// Coupe sous prefers-reduced-motion.
 	var heroInner = document.querySelector('#m1 .hero-inner');
@@ -271,7 +271,7 @@
 		// Le hero #m1 est EXCLU du reveal JS : le kit lui donne une entrée
 		// cinématographique en CSS pur (#m1 .hero-inner > * → hero-enter), fiable
 		// au chargement, là où le reveal JS « claque » au premier paint. Aligné
-		// sur HomeMotion du site du Forum (voir wordpress-catchup-complet.css).
+		// sur l'animation d'accueil (voir wordpress-catchup-complet.css).
 		document.querySelectorAll('main > section:not(#m1), footer').forEach(function (sec) {
 			sec.querySelectorAll(sel).forEach(function (el, i) {
 				el.classList.add('reveal');

@@ -120,7 +120,7 @@ $fnc_type_class = static function ( $slug ) {
 							$fnc_room      = get_post_meta( $fnc_session_id, '_fnc_session_room', true );
 							$fnc_moderator = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
 							?>
-							<?php $fnc_decorative = in_array( $fnc_type, array( 'pause', 'logistique' ), true ); // parité Next : sessions décoratives sans badge ni lien. ?>
+							<?php $fnc_decorative = in_array( $fnc_type, array( 'pause', 'logistique' ), true ); // sessions décoratives sans badge ni lien. ?>
 							<div class="sess">
 								<div class="when"><?php echo esc_html( $fnc_time ? $fnc_time : '—' ); ?></div>
 								<div>

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.49' );
+define( 'FNC_THEME_VERSION', '1.0.50' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -184,7 +184,7 @@ function fnc_is_registration_page() {
 
 /**
  * Application des feature flags aux niveaux PAGE et SEO (le niveau API est géré
- * par FNC Core, le niveau CTA par les gabarits). Miroir du comportement Next :
+ * par FNC Core, le niveau CTA par les gabarits) :
  * une surface sous flag fermé renvoie un état honnête + noindex + hors sitemap.
  *
  *   - ACTUALITÉS (`fnc_news_enabled` faux) : /actualites (liste + fiche) → 404.
@@ -270,7 +270,7 @@ add_filter( 'wp_sitemaps_posts_entries', 'fnc_sitemap_filter_entries', 10, 2 );
 /**
  * Balises `hreflang` (fr / en / x-default) — émetteur unique du template.
  *
- * Next émet hreflang sur chaque page ; Polylang, dans cette configuration, ne
+ * Les balises hreflang doivent figurer sur chaque page ; Polylang, dans cette configuration, ne
  * les produit pas. On les émet donc ici, à partir des URL de traduction de la
  * page courante (repli accueil de la langue), avec `x-default` = langue par
  * défaut. N'émet rien sans Polylang (pas de multilingue → pas d'alternates).
@@ -753,7 +753,7 @@ function fnc_link_icon_svg( $url, $label = '' ) {
  * bloc poster + bouton lecture qui n'insère l'iframe (nocookie) qu'au clic
  * (géré par assets/js/main.js). Aucune requête tierce avant l'action de
  * l'utilisateur. Retourne '' si l'URL n'est pas YouTube/Vimeo (le gabarit
- * retombe alors sur un lien externe). Parité VideoFacade.tsx.
+ * retombe alors sur un lien externe).
  *
  * @param string $url    URL de la vidéo.
  * @param string $poster URL d'image d'affiche (optionnelle).
@@ -790,7 +790,7 @@ function fnc_video_facade( $url, $poster = '' ) {
 /**
  * Formate une date en gardant l'ÉCHEC de parsing : si la valeur est vide OU si
  * strtotime() échoue (retourne false), on ne rend RIEN (jamais « 1 janv. 1970 »).
- * Parité avec les helpers Next qui gardent Number.isNaN(new Date(x)).
+ * Écarte les dates invalides plutôt que d'afficher une date de repli fictive.
  *
  * @param string $raw Date brute (Y-m-d…), texte libre possible.
  * @param string $fmt Format wp_date (défaut « j F Y »).
@@ -994,10 +994,10 @@ function fnc_render_legal_header( $title, $updated_label, $breadcrumb = '' ) {
 }
 
 /**
- * Repli « à confirmer » des pages légales — fidèle au site Next : le texte
+ * Repli « à confirmer » des pages légales : le texte
  * juridique n'est jamais inventé (RÈGLE 4). Tant qu'aucun contenu réel n'est
  * publié, la page affiche le même message d'attente que le site du Forum
- * (namespace next-intl `pages.legal.pending`), au lieu d'un corps vide.
+ * (message d'attente standard des pages légales), au lieu d'un corps vide.
  *
  * @return string Le message d'attente localisé (FR/EN via le domaine de traduction).
  */

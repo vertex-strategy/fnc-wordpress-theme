@@ -859,7 +859,7 @@ function fnc_render_block_form( $a ) {
 			<?php endif; ?>
 			<?php
 			// Feature flag INSCRIPTION au niveau du bloc : fermé → état honnête
-			// (miroir du site Next), pas de formulaire. Vaut aussi pour la page
+			// pas de formulaire. Vaut aussi pour la page
 			// composée en blocs (le gabarit page-inscription.php gère le cas non-bloc).
 			if ( 'inscription' === $type && function_exists( 'fnc_registration_enabled' ) && ! fnc_registration_enabled() ) :
 				?>

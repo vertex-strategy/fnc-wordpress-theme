@@ -1,6 +1,6 @@
 <?php
 /**
- * Forum Numérique Congo — statut « Archivé » (3e état du modèle Next).
+ * Forum Numérique Congo — statut « Archivé » (3e état du modèle éditorial).
  *
  * Le modèle de référence distingue draft / published / archived. WordPress n'a
  * nativement que brouillon / publié / corbeille. On ajoute donc un statut

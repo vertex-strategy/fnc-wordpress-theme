@@ -28,7 +28,10 @@ STAGING = os.path.join(DIST, f'forum-numerique-congo-template-{VERSION}')
 
 # Exclusions (cruft de développement).
 EXCLUDE_DIRS = {'.git', 'node_modules', 'vendor', '.idea', '.vscode'}
-EXCLUDE_FILES = {'.DS_Store', 'Thumbs.db'}
+# build-dataset.mjs : générateur interne du jeu de données (lit les sources du
+# monorepo). L'intégrateur n'exécute que seed-dataset.php, qui lit le dataset.json
+# déjà produit — ce script ne doit donc pas figurer dans le paquet livré.
+EXCLUDE_FILES = {'.DS_Store', 'Thumbs.db', 'build-dataset.mjs'}
 
 
 def zip_dir(src_dir, zip_path):

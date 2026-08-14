@@ -28,7 +28,7 @@ $fnc_home_edition    = $fnc_home_edition_id ? get_post( $fnc_home_edition_id ) :
 	<section class="moment" id="m1" aria-labelledby="m1-title">
 		<?php fnc_render_home_hero_media(); ?>
 		<div class="overlay" aria-hidden="true"></div>
-		<?php // Calque d'ambiance du hero : nappe de points en vague dessinee sur canvas (variante « dots » du site du Forum, HeroBackdrop). Anime par assets/js/main.js, statique sous prefers-reduced-motion. ?>
+		<?php // Calque d'ambiance du hero : nappe de points en vague dessinee sur canvas (variante « dots » de la charte). Anime par assets/js/main.js, statique sous prefers-reduced-motion. ?>
 		<div class="hero-backdrop" aria-hidden="true"><canvas class="hb-canvas"></canvas></div>
 		<div class="hero-inner">
 			<div class="kicker">

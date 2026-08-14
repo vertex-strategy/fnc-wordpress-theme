@@ -1139,7 +1139,7 @@ function fnc_pract_wrap( $title, $default_title, $inner, $modifier = '' ) {
 	if ( '' === trim( $inner ) ) {
 		return '';
 	}
-	// Structure du site du Forum (PracticalInfo) : .practical-item + .practical-title,
+	// Structure des infos pratiques : .practical-item + .practical-title,
 	// puis le contenu tel quel (pas d'enveloppe .pract-body). Le $modifier est ignoré
 	// (le Forum ne différencie pas les rubriques par une classe modificatrice).
 	return sprintf(
@@ -1189,7 +1189,7 @@ function fnc_render_block_pract_venue( $a ) {
 		return '';
 	}
 
-	// Lieu (PracticalInfo du Forum) : .practical-item > .split [ colonne texte |
+	// Lieu : .practical-item > .split [ colonne texte |
 	// figure.practical-map ]. Le titre est DANS la colonne texte.
 	$title = fnc_attr( $a, 'title' );
 	ob_start();

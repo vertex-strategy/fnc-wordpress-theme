@@ -294,9 +294,74 @@
 		});
 	}
 
+	// Compteur des chiffres-cles (.stat-line) : chaque nombre monte de 0 a sa
+	// valeur a l'entree dans la vue (ease-out ~700ms). Amelioration progressive :
+	// sans JS ou sous prefers-reduced-motion, la valeur finale (rendue cote
+	// serveur) reste affichee. La largeur est reservee en `ch` (tabular-nums)
+	// avant l'animation -> aucun reflet de mise en page pendant le comptage.
+	(function statCounters() {
+		var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+		if ((mq && mq.matches) || !('IntersectionObserver' in window)) {
+			return;
+		}
+		var nums = document.querySelectorAll('.stat-line .stat b');
+		if (!nums.length) {
+			return;
+		}
+		var ease = function (t) {
+			return 1 - Math.pow(1 - t, 3);
+		};
+		var run = function (el) {
+			var target = parseInt(el.getAttribute('data-count-to'), 10);
+			var pre = el.getAttribute('data-count-pre') || '';
+			var post = el.getAttribute('data-count-post') || '';
+			var raw = el.getAttribute('data-count-raw') || String(target);
+			if (isNaN(target)) {
+				return;
+			}
+			var t0 = 0;
+			var step = function (ts) {
+				if (!t0) {
+					t0 = ts;
+				}
+				var p = Math.min((ts - t0) / 700, 1);
+				if (p < 1) {
+					el.textContent = pre + Math.round(ease(p) * target) + post;
+					requestAnimationFrame(step);
+				} else {
+					el.textContent = raw;
+				}
+			};
+			requestAnimationFrame(step);
+		};
+		var io = new IntersectionObserver(
+			function (entries) {
+				entries.forEach(function (e) {
+					if (e.isIntersecting) {
+						io.unobserve(e.target);
+						run(e.target);
+					}
+				});
+			},
+			{ threshold: 0.4 }
+		);
+		nums.forEach(function (el) {
+			var raw = (el.textContent || '').trim();
+			var m = raw.match(/^(\D*?)(\d[\d \s]*)(\D*)$/);
+			if (!m) {
+				return; // pas un nombre -> on laisse la valeur telle quelle.
+			}
+			el.setAttribute('data-count-raw', raw);
+			el.setAttribute('data-count-pre', m[1]);
+			el.setAttribute('data-count-to', m[2].replace(/[ \s]/g, ''));
+			el.setAttribute('data-count-post', m[3]);
+			el.style.minWidth = raw.length + 'ch';
+			io.observe(el);
+		});
+	})();
+
 	// Calque d'ambiance du hero (#m1) : nappe de points en vague dessinee sur
-	// canvas. Port fidele de la variante « dots » du composant HeroBackdrop du
-	// site reel. Statique (une passe) sous prefers-reduced-motion.
+	// canvas (variante « dots »). Statique (une passe) sous prefers-reduced-motion.
 	(function heroBackdrop() {
 		var canvas = document.querySelector('#m1 .hb-canvas');
 		var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;

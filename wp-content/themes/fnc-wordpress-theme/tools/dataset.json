@@ -944,7 +944,7 @@
       "name": "ACONOQ",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -952,7 +952,7 @@
       "name": "ACSI",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -960,7 +960,7 @@
       "name": "ADEN",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -968,7 +968,7 @@
       "name": "AKHON",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -976,7 +976,7 @@
       "name": "ARPCE",
       "type": "soutien",
       "website": "",
-      "description": "Agence de Régulation des Postes et des Communications Électroniques. Rôle a_confirmer.",
+      "description": "Agence de Régulation des Postes et des Communications Électroniques.",
       "participations": []
     },
     {
@@ -984,7 +984,7 @@
       "name": "Port Autonome de Pointe-Noire",
       "type": "soutien",
       "website": "",
-      "description": "Autorité portuaire (à confirmer). Rôle a_confirmer.",
+      "description": "Autorité portuaire (à confirmer).",
       "participations": []
     },
     {
@@ -992,7 +992,7 @@
       "name": "BIM e-solutions",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1000,7 +1000,7 @@
       "name": "BPC",
       "type": "soutien",
       "website": "",
-      "description": "Banque (à confirmer). Rôle/niveau a_confirmer.",
+      "description": "Banque (à confirmer).",
       "participations": []
     },
     {
@@ -1008,7 +1008,7 @@
       "name": "Burotec",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1016,7 +1016,7 @@
       "name": "Burotop Iris",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1024,7 +1024,7 @@
       "name": "Congo Telecom",
       "type": "soutien",
       "website": "",
-      "description": "Opérateur de télécommunications. Rôle/niveau a_confirmer.",
+      "description": "Opérateur de télécommunications.",
       "participations": []
     },
     {
@@ -1032,7 +1032,7 @@
       "name": "Conseil Congolais des Chargeurs",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1040,7 +1040,7 @@
       "name": "CORAF",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire ayant accompagné l'édition 2024. Rôle a_confirmer.",
+      "description": "Partenaire ayant accompagné l'édition 2024.",
       "participations": [
         {
           "edition": "2018-dematerialisation-gouvernance",
@@ -1094,7 +1094,7 @@
       "name": "GUCE",
       "type": "soutien",
       "website": "",
-      "description": "Guichet Unique du Commerce Extérieur. Partenaire 2024. Rôle a_confirmer.",
+      "description": "Guichet Unique du Commerce Extérieur.",
       "participations": []
     },
     {
@@ -1131,7 +1131,7 @@
       "name": "Hariom Travels",
       "type": "soutien",
       "website": "",
-      "description": "Agence de voyage. Partenaire 2024. Rôle a_confirmer.",
+      "description": "Agence de voyage.",
       "participations": []
     },
     {
@@ -1139,7 +1139,7 @@
       "name": "ILOGS",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1147,7 +1147,7 @@
       "name": "iStock",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1155,7 +1155,7 @@
       "name": "KPMG",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1163,7 +1163,7 @@
       "name": "LCB",
       "type": "soutien",
       "website": "",
-      "description": "La Congolaise de Banque (à confirmer). Partenaire 2024. Rôle a_confirmer.",
+      "description": "La Congolaise de Banque (à confirmer).",
       "participations": []
     },
     {
@@ -1171,7 +1171,7 @@
       "name": "RAgec",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1179,7 +1179,7 @@
       "name": "Silicon Connect",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1187,7 +1187,7 @@
       "name": "Skytech Congo",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1195,7 +1195,7 @@
       "name": "SNPC (Société Nationale des Pétroles du Congo)",
       "type": "soutien",
       "website": "",
-      "description": "Rôle/niveau a_confirmer.",
+      "description": "",
       "participations": [
         {
           "edition": "2027-souverainete-numerique",
@@ -1208,7 +1208,7 @@
       "name": "SOCOTRAM",
       "type": "soutien",
       "website": "",
-      "description": "Partenaire 2024. Rôle a_confirmer.",
+      "description": "",
       "participations": []
     },
     {
@@ -1216,7 +1216,7 @@
       "name": "TV Congo",
       "type": "soutien",
       "website": "",
-      "description": "Média (à confirmer). Rôle a_confirmer.",
+      "description": "Média (à confirmer).",
       "participations": []
     }
   ],

@@ -502,6 +502,10 @@ textarea {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: clamp(18px, 2vw, 28px);
+  /* Chaque carte épouse son contenu (pas d'étirement à la hauteur de la ligne) :
+     sinon la date, ancrée en bas via margin-top:auto, laisse un grand vide
+     interne dans les cartes courtes. */
+  align-items: start;
 }
 
 .pub {

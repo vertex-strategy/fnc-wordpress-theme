@@ -4,7 +4,7 @@ Theme URI: https://www.grinso.io
 Author: Grinso & Associés
 Author URI: https://www.grinso.io
 Description: Template institutionnel bilingue du Forum Numérique Congo.
-Version: 1.0.51
+Version: 1.0.52
 Requires at least: 6.4
 Requires PHP: 8.0
 Text Domain: fnc-wordpress-theme
@@ -470,6 +470,8 @@ body.js-reveal .reveal.in{opacity:1;transform:none;}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;}
 .chip{min-height:40px;padding:8px 14px;border:1px solid var(--border);border-radius:2px;background:#fff;color:var(--navy);font-weight:730;cursor:pointer;}
 .chip[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
+/* Option de filtre vide (compte 0) : désactivée, non cliquable (pas de cul-de-sac). */
+.chip.is-disabled{color:var(--texte-tert);background:var(--linen);border-color:var(--border);cursor:not-allowed;opacity:.6;}
 
 .empty{padding:42px;border:1px dashed rgba(45,49,128,.35);border-radius:5px;background:linear-gradient(135deg,#fff,var(--linen));text-align:center;}
 .empty h3{color:var(--navy);font-size:1.45rem;}

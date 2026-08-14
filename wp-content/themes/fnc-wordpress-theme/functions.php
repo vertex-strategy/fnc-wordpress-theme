@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_THEME_VERSION', '1.0.51' );
+define( 'FNC_THEME_VERSION', '1.0.52' );
 
 /**
  * Réglages globaux du site (WordPress Customizer) — pendant du Global
@@ -1092,12 +1092,26 @@ function fnc_render_filter_chips( array $args ) {
 		null !== $args['all_count'] ? ' <span aria-hidden="true">(' . esc_html( $args['all_count'] ) . ')</span>' : ''
 	);
 	foreach ( $args['options'] as $slug => $opt ) {
+		$count      = isset( $opt['count'] ) ? (int) $opt['count'] : null;
+		$is_current = $args['current'] === (string) $slug;
+		$count_html = null !== $count ? ' <span aria-hidden="true">(' . esc_html( $count ) . ')</span>' : '';
+		// Option vide (compte 0) et non sélectionnée : elle ne mènerait qu'à un
+		// « sans résultat ». On la présente désactivée (grisée, non cliquable)
+		// plutôt qu'en lien vers un cul-de-sac. « Toutes » reste toujours actif.
+		if ( 0 === $count && ! $is_current ) {
+			printf(
+				'<span class="chip is-disabled" aria-disabled="true">%s%s</span>',
+				esc_html( $opt['label'] ),
+				$count_html // phpcs:ignore WordPress.Security.EscapeOutput -- markup interne échappé.
+			);
+			continue;
+		}
 		printf(
 			'<a class="chip" href="%s" aria-pressed="%s">%s%s</a>',
 			esc_url( add_query_arg( array_merge( $preserve, array( $args['param'] => $slug ) ), $base ) ),
-			$args['current'] === (string) $slug ? 'true' : 'false',
+			$is_current ? 'true' : 'false',
 			esc_html( $opt['label'] ),
-			isset( $opt['count'] ) ? ' <span aria-hidden="true">(' . esc_html( $opt['count'] ) . ')</span>' : ''
+			$count_html // phpcs:ignore WordPress.Security.EscapeOutput -- markup interne échappé.
 		);
 	}
 	echo '</div>';
@@ -1108,6 +1122,49 @@ function fnc_render_filter_chips( array $args ) {
 			esc_html( $args['counter'] )
 		);
 	}
+}
+
+/**
+ * Nettoie une description de partenaire des marqueurs de « scaffolding » du
+ * corpus de migration : humanise le jeton brut « a_confirmer » → « à confirmer »,
+ * retire les queues sans valeur (« Rôle[/niveau] à confirmer. », « Niveau à
+ * confirmer. », « Partenaire 20xx. » isolé) tout en préservant une vraie phrase
+ * de tête si elle existe. L'espace insécable avant « : » (typographie FR) n'est
+ * jamais altéré. Si rien de réel ne subsiste → chaîne vide (la carte n'affiche
+ * que le nom).
+ *
+ * @param string $text Texte brut ou HTML (l'extrait auto est du texte).
+ * @return string Description nettoyée (texte simple), éventuellement vide.
+ */
+function fnc_clean_partner_description( $text ) {
+	$plain = trim( wp_strip_all_tags( (string) $text ) );
+	if ( '' === $plain ) {
+		return '';
+	}
+	$plain = str_replace( 'a_confirmer', 'à confirmer', $plain );
+	// Queues de scaffolding (fin de chaîne ou isolées). \h = espace horizontal
+	// (inclut l'insécable) — on ne retire QUE ces libellés précis, jamais un
+	// « DG : … » ou une vraie phrase.
+	$plain = preg_replace( '/\bR[ôo]le(\h*\/\h*niveau)?\h*:?\h*à\h+confirmer\.?/iu', '', $plain );
+	$plain = preg_replace( '/\bNiveau\h*:?\h*à\h+confirmer\.?/iu', '', $plain );
+	$plain = preg_replace( '/\bPartenaire\h+20\d{2}\.?/u', '', $plain );
+	$plain = preg_replace( '/[ \t]{2,}/', ' ', $plain );      // espaces ordinaires seulement (insécable préservé)
+	$plain = trim( $plain, " \t\n\r" );
+	// Bord résiduel : ponctuation/tiret orphelin laissé par une queue retirée.
+	$plain = preg_replace( '/^[\s.,;–—-]+|[\s,;–—-]+$/u', '', $plain );
+	return trim( $plain );
+}
+
+/**
+ * Applique le nettoyage aux extraits de partenaires, où qu'ils soient rendus
+ * (mur Partenaires, cartes de rétrospective d'édition, meta description SEO).
+ */
+add_filter( 'get_the_excerpt', 'fnc_filter_partner_excerpt', 10, 2 );
+function fnc_filter_partner_excerpt( $excerpt, $post = null ) {
+	if ( $post && 'fnc_partenaire' === get_post_type( $post ) ) {
+		return fnc_clean_partner_description( $excerpt );
+	}
+	return $excerpt;
 }
 
 /**

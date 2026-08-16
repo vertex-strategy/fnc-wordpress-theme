@@ -1,16 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_actualite".
+ * Forum Numérique Congo — liste des actualités.
  *
- * Complete la couverture des archives : les 5 autres CPT publics ont chacun
- * leur gabarit archive-{cpt}.php ; seule l'archive des actualites retombait sur
- * index.php (liste brute). Ce gabarit l'habille comme les autres.
- *
- * Rappel (modele de contenu) : la route publique des actualites du vrai site
- * est desactivee par defaut (NEWS_ENABLED) — cette archive n'affiche donc du
- * contenu que si des actualites sont reellement publiees dans l'instance, avec
- * un etat d'attente sobre sinon. On s'appuie sur la boucle principale, deja
- * filtree par langue par Polylang.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,13 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+$fnc_route_h = fnc_route_hero( 'actualites' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Actualités', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Les temps forts du Forum, au fil de l’eau.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Annonces, comptes rendus et informations publiés lorsqu’ils sont validés.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => __( 'Actualités du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Actualités', 'fnc-wordpress-theme' ),
 	)
 );
@@ -36,8 +32,8 @@ fnc_render_hero(
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Actualités', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Dernières publications.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="actualites.list.eyebrow"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="actualites.list.title"><?php echo esc_html( fnc_stitle( 'actualites', 'list', 'title' ) ); ?></h2>
 				</div>
 			</div>
 
@@ -55,7 +51,7 @@ fnc_render_hero(
 									· <?php echo esc_html( $fnc_ac_cats[0]->name ); ?>
 								<?php endif; ?>
 							</p>
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+							<h3><a href="<?php the_permalink(); ?>"><?php echo esc_html( get_the_title() ); ?></a></h3>
 							<?php if ( has_excerpt() ) : ?>
 								<p><?php echo esc_html( get_the_excerpt() ); ?></p>
 							<?php endif; ?>

@@ -1,4 +1,4 @@
-# Copyright (C) 2026 Vertex Strategy
+# Copyright (C) 2026 Grinso & Associés
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
@@ -21,17 +21,17 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: fnc-content-model.php
-msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgid "https://www.grinso.io"
 msgstr ""
 
 #. Description of the plugin
 #: fnc-content-model.php
-msgid "Modele de contenu (custom post types, taxonomies, relations) reflete depuis les collections publiques Payload CMS du site officiel Forum Numerique Congo. Voir ADR-007 (depot forum-numerique-congo). Zero dependance tierce (ADR-007, Decision 2) — hors multilinguisme, assure separement par Polylang ou equivalent (Decision 2, arbitrage bilingue)."
+msgid "Modèle de contenu du Forum Numérique Congo (types de contenu, taxonomies et relations)."
 msgstr ""
 
 #. Author of the plugin
 #: fnc-content-model.php
-msgid "Vertex Strategy"
+msgid "Grinso & Associés"
 msgstr ""
 
 #: includes/post-types.php:33

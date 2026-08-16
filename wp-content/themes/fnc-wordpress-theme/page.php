@@ -1,22 +1,11 @@
 <?php
 /**
- * Gabarit generique des Pages WordPress.
+ * Forum Numérique Congo — gabarit de page (contenu composé ou texte simple pour les pages légales).
  *
- * Indispensable a la composition par blocs (Lot 2) : sans ce fichier, les
- * Pages sans gabarit dedie retombaient sur index.php, qui affiche
- * `the_excerpt()` et non `the_content()` — le contenu compose en blocs
- * n'etait donc jamais rendu.
- *
- * Deux modes :
- *  - Page composee de blocs editoriaux FNC : le contenu est rendu tel quel,
- *    car chaque bloc produit deja ses propres <section> pleine largeur avec
- *    le markup DA figé (voir inc/blocks.php). Aucun titre n'est ajoute : il
- *    appartient au bloc « Ouverture ».
- *  - Page de contenu simple (sans bloc FNC) : habillage sobre reprenant
- *    l'en-tete des pages legales, puis le contenu en colonne de lecture.
- *
- * Les pages disposant d'un gabarit dedie (page-le-forum.php, page-contact.php…)
- * conservent la priorite via la hierarchie de templates WordPress.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,8 +39,17 @@ while ( have_posts() ) :
 		?>
 		<main id="main">
 			<section class="section">
-				<div class="container reading">
-					<?php the_content(); ?>
+				<div class="container reading prose-legal">
+					<?php
+					// Repli fidèle au Next : si aucun contenu réel n'est publié (page
+					// créée vide), afficher le message d'attente plutôt qu'un corps
+					// vide — le texte juridique n'est jamais inventé (RÈGLE 4).
+					if ( '' === trim( wp_strip_all_tags( get_the_content() ) ) ) {
+						echo '<p>' . esc_html( fnc_legal_pending_text() ) . '</p>';
+					} else {
+						the_content();
+					}
+					?>
 				</div>
 			</section>
 			<?php fnc_render_cta_band(); ?>

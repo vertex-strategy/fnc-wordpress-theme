@@ -1,19 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Édition en cours".
+ * Forum Numérique Congo — gabarit de la page « Édition en cours ».
  *
- * Structure alignee sur le site officiel reel
- * (localhost:3000/fr/edition-en-cours), suite a l'amendement de la
- * Decision 1 de l'ADR-007 : hero + statistiques + apercu programme +
- * apercu intervenants + bloc inscription. Contenu de demonstration
- * reste fictif — jamais les vraies identites de responsables publics
- * visibles sur le site officiel.
- *
- * Page DYNAMIQUE (etape 4) : recupere l'edition marquee "active" via le
- * plugin (_fnc_edition_active), avec repli sur l'edition la plus
- * recente si aucune n'est marquee. Statistiques et apercus calcules a
- * partir des vraies relations session -> edition / session -> intervenants
- * deja construites (archive-fnc_session.php, archive-fnc_intervenant.php).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,27 +14,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$fnc_active_edition = get_posts(
-	array(
-		'post_type'      => 'fnc_edition',
-		'posts_per_page' => 1,
-		'meta_key'       => '_fnc_edition_active',
-		'meta_value'     => '1',
-	)
-);
-
-if ( empty( $fnc_active_edition ) ) {
-	$fnc_active_edition = get_posts(
-		array(
-			'post_type'      => 'fnc_edition',
-			'posts_per_page' => 1,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		)
-	);
+/*
+ * Composition par blocs : des que l'editorial compose cette page avec des
+ * blocs FNC, ce gabarit s'efface au profit du contenu compose (editable et
+ * reagenceable) ; sinon il conserve son contenu de demonstration (comportement
+ * inchange). Meme convention que page.php et page-le-forum.php.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
 }
 
-$fnc_edition = ! empty( $fnc_active_edition ) ? $fnc_active_edition[0] : null;
+// Source UNIQUE = le résolveur (status='current', sinon prochaine 'upcoming'),
+// aligné avec le reste du site (plus de double lecture _fnc_edition_active).
+$fnc_edition_id = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+$fnc_edition    = $fnc_edition_id ? get_post( $fnc_edition_id ) : null;
 
 $fnc_sessions       = array();
 $fnc_speaker_ids    = array();
@@ -79,13 +71,29 @@ if ( $fnc_edition ) {
 	$fnc_speaker_ids = array_unique( $fnc_speaker_ids );
 }
 
-fnc_render_hero(
+// Aperçus : les PARTICIPANTS (ordre protocolaire
+// protocol_order → sort_index, modérateurs inclus) et le nombre de PAYS
+// proviennent des mêmes fonctions dérivées que la page /intervenants — et non
+// de l'union brute des _fnc_session_speakers (qui exclut les modérateurs et
+// ignore l'ordre).
+$fnc_participants = ( $fnc_edition && function_exists( 'fnc_edition_participants' ) )
+	? fnc_edition_participants( $fnc_edition->ID )
+	: $fnc_speaker_ids;
+$fnc_countries = ( $fnc_edition && function_exists( 'fnc_edition_countries' ) )
+	? fnc_edition_countries( $fnc_edition->ID )
+	: array();
+
+$fnc_route_h = fnc_route_hero( 'edition-en-cours' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Édition en cours', 'fnc-wordpress-theme' ),
-		'title'      => $fnc_edition ? get_the_title( $fnc_edition ) : __( 'Édition à confirmer', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Trois jours de travail collectif. Voici tout ce qu’il faut pour suivre l’édition en préparation.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-		'image_alt'  => __( 'Image éditoriale institutionnelle du Forum', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => ( $fnc_edition && get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true ) )
+			/* translators: %s: année de l'édition. */
+			? sprintf( __( 'Édition %s du Forum Numérique Congo', 'fnc-wordpress-theme' ), (string) get_post_meta( $fnc_edition->ID, '_fnc_edition_year', true ) )
+			: __( 'Édition en cours du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Édition en cours', 'fnc-wordpress-theme' ),
 	)
 );
@@ -107,17 +115,13 @@ fnc_render_hero(
 		$fnc_edition_start    = get_post_meta( $fnc_edition->ID, '_fnc_edition_start_date', true );
 		$fnc_edition_end      = get_post_meta( $fnc_edition->ID, '_fnc_edition_end_date', true );
 		$fnc_edition_location = get_post_meta( $fnc_edition->ID, '_fnc_edition_location', true );
-		$fnc_edition_dates    = '';
-		if ( $fnc_edition_start ) {
-			$fnc_edition_dates = date_i18n( 'j F Y', strtotime( $fnc_edition_start ) );
-			if ( $fnc_edition_end && $fnc_edition_end !== $fnc_edition_start ) {
-				$fnc_edition_dates .= ' – ' . date_i18n( 'j F Y', strtotime( $fnc_edition_end ) );
-			}
-		}
+		$fnc_edition_dates = fnc_format_date_range( $fnc_edition_start, $fnc_edition_end );
 		?>
 		<?php if ( $fnc_edition_theme || $fnc_edition_dates || $fnc_edition_location ) : ?>
 			<section class="section" style="padding-bottom:0;">
 				<div class="container">
+					<?php // Édition provisoire : bandeau « programme provisoire ». ?>
+					<p class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></p>
 					<?php if ( $fnc_edition_theme ) : ?>
 						<p class="frise-theme" style="font-size:1.15rem;"><?php echo esc_html( $fnc_edition_theme ); ?></p>
 					<?php endif; ?>
@@ -136,12 +140,12 @@ fnc_render_hero(
 			<div class="container">
 				<div class="stat-line">
 					<div class="stat">
-						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_sessions ) ); ?></b>
-						<span style="color:var(--texte-tert);"><?php esc_html_e( 'sessions', 'fnc-wordpress-theme' ); ?></span>
+						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_participants ) ); ?></b>
+						<span style="color:var(--texte-tert);"><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span>
 					</div>
 					<div class="stat">
-						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_speaker_ids ) ); ?></b>
-						<span style="color:var(--texte-tert);"><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span>
+						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_countries ) ); ?></b>
+						<span style="color:var(--texte-tert);"><?php esc_html_e( 'pays', 'fnc-wordpress-theme' ); ?></span>
 					</div>
 					<div class="stat">
 						<b style="color:var(--navy);"><?php echo esc_html( count( $fnc_jours ) ); ?></b>
@@ -155,30 +159,79 @@ fnc_render_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php esc_html_e( 'Le programme', 'fnc-wordpress-theme' ); ?></p>
-						<h2><?php esc_html_e( 'Un aperçu des prochaines sessions.', 'fnc-wordpress-theme' ); ?></h2>
+						<p class="eyebrow" data-fnc-st="edition-en-cours.programme.eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'eyebrow' ) ); ?></p>
+						<h2 data-fnc-st="edition-en-cours.programme.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'programme', 'title' ) ); ?></h2>
 					</div>
 				</div>
-				<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
+				<?php
+				// Aperçu Jour 1 : on EXCLUT la logistique et
+				// les pauses (inscription, déjeuner…), puis on prend les 4 premières
+				// sessions « de fond ».
+				$fnc_first_day     = $fnc_edition ? array_key_first( $fnc_sessions_by_day ) : null;
+				$fnc_session_types = fnc_content_model_session_types();
+				$fnc_day1 = ( $fnc_first_day && isset( $fnc_sessions_by_day[ $fnc_first_day ] ) )
+					? array_values(
+						array_filter(
+							$fnc_sessions_by_day[ $fnc_first_day ],
+							static function ( $s ) {
+								$t = get_post_meta( $s->ID, '_fnc_session_type', true );
+								return ! in_array( $t, array( 'pause', 'logistique' ), true );
+							}
+						)
+					)
+					: array();
+				?>
+				<?php if ( ! empty( $fnc_day1 ) ) : ?>
 					<?php
-					$fnc_first_day     = array_key_first( $fnc_sessions_by_day );
-					$fnc_session_types = fnc_content_model_session_types();
+					// En-tête de jour : « JOUR 1 · 25 mars 2027 ». La date du jour N se
+					// déduit de la date de début de l'édition (+ N-1 jours).
+					$fnc_day_num  = (int) $fnc_first_day;
+					$fnc_day_date = '';
+					if ( $fnc_edition_start ) {
+						$fnc_day_ts   = strtotime( $fnc_edition_start . ' +' . max( 0, $fnc_day_num - 1 ) . ' days' );
+						$fnc_day_date = $fnc_day_ts ? date_i18n( 'j F Y', $fnc_day_ts ) : '';
+					}
 					?>
+					<p class="eyebrow" style="color:var(--navy);">
+						<?php
+						/* translators: %d: numéro du jour. */
+						echo esc_html( $fnc_day_num ? sprintf( __( 'Jour %d', 'fnc-wordpress-theme' ), $fnc_day_num ) : (string) $fnc_first_day );
+						echo $fnc_day_date ? ' · ' . esc_html( $fnc_day_date ) : '';
+						?>
+					</p>
 					<div class="agenda">
-						<?php foreach ( array_slice( $fnc_sessions_by_day[ $fnc_first_day ], 0, 4 ) as $fnc_session ) : ?>
-							<?php
-							$fnc_type     = get_post_meta( $fnc_session->ID, '_fnc_session_type', true );
-							$fnc_no_badge = in_array( $fnc_type, array( 'pause', 'logistique' ), true );
+						<?php
+						foreach ( array_slice( $fnc_day1, 0, 4 ) as $fnc_session ) :
+							$fnc_type  = get_post_meta( $fnc_session->ID, '_fnc_session_type', true );
+							// Heure de DÉBUT simple (pas la plage).
+							$fnc_start = get_post_meta( $fnc_session->ID, '_fnc_session_start', true );
+							$fnc_start = $fnc_start ? $fnc_start : ( get_post_meta( $fnc_session->ID, '_fnc_session_time', true ) ?: '—' );
+							// Sous-titre : « Modération : … » sinon le type, puis « · N intervenants ».
+							$fnc_mod   = get_post_meta( $fnc_session->ID, '_fnc_session_moderator', true );
+							$fnc_spk   = get_post_meta( $fnc_session->ID, '_fnc_session_speakers', true );
+							$fnc_nspk  = is_array( $fnc_spk ) ? count( $fnc_spk ) : 0;
+							$fnc_sub   = '';
+							if ( $fnc_mod && function_exists( 'fnc_speaker_display_name' ) ) {
+								/* translators: %s: nom du modérateur. */
+								$fnc_sub = sprintf( __( 'Modération : %s', 'fnc-wordpress-theme' ), fnc_speaker_display_name( (int) $fnc_mod ) );
+							} elseif ( $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) {
+								$fnc_sub = $fnc_session_types[ $fnc_type ];
+							}
+							if ( $fnc_nspk > 0 ) {
+								/* translators: %d: nombre d'intervenants. */
+								$fnc_cnt = sprintf( _n( '%d intervenant', '%d intervenants', $fnc_nspk, 'fnc-wordpress-theme' ), $fnc_nspk );
+								$fnc_sub = $fnc_sub ? $fnc_sub . ' · ' . $fnc_cnt : $fnc_cnt;
+							}
 							?>
 							<a class="agenda-row" href="<?php echo esc_url( get_permalink( $fnc_session ) ); ?>">
-								<span class="time"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_time', true ) ?: '—' ); ?></span>
+								<span class="time"><?php echo esc_html( $fnc_start ); ?></span>
 								<span>
 									<strong><?php echo esc_html( get_the_title( $fnc_session ) ); ?></strong>
-									<?php if ( $fnc_type && ! $fnc_no_badge && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
-										<?php fnc_render_badge( $fnc_session_types[ $fnc_type ] ); ?>
+									<?php if ( $fnc_sub ) : ?>
+										<span class="meta" style="display:block;color:var(--texte-sec);font-size:.9rem;margin-top:2px;"><?php echo esc_html( $fnc_sub ); ?></span>
 									<?php endif; ?>
 								</span>
-								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_room', true ) ?: __( 'Salle à confirmer', 'fnc-wordpress-theme' ) ); ?></span>
+								<span class="room"><?php echo esc_html( get_post_meta( $fnc_session->ID, '_fnc_session_room', true ) ); ?></span>
 							</a>
 						<?php endforeach; ?>
 					</div>
@@ -196,22 +249,40 @@ fnc_render_hero(
 			<div class="container">
 				<div class="section-head">
 					<div>
-						<p class="eyebrow"><?php esc_html_e( 'Les intervenants', 'fnc-wordpress-theme' ); ?></p>
-						<h2><?php esc_html_e( 'Décideurs, experts et acteurs de la société civile.', 'fnc-wordpress-theme' ); ?></h2>
+						<p class="eyebrow" data-fnc-st="edition-en-cours.intervenants.eyebrow"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'eyebrow' ) ); ?></p>
+						<h2 data-fnc-st="edition-en-cours.intervenants.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'intervenants', 'title' ) ); ?></h2>
 					</div>
 				</div>
-				<?php if ( ! empty( $fnc_speaker_ids ) ) : ?>
-					<div class="grid grid-3">
-						<?php foreach ( array_slice( $fnc_speaker_ids, 0, 6 ) as $fnc_speaker_id ) : ?>
-							<article class="card fnc-card">
-								<h3><a href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_speaker_id ) ); ?></a></h3>
-								<?php
-								$fnc_excerpt = get_the_excerpt( $fnc_speaker_id );
-								if ( $fnc_excerpt ) :
+				<?php if ( ! empty( $fnc_participants ) ) : ?>
+					<div class="spk-grid is-preview">
+						<?php foreach ( array_slice( $fnc_participants, 0, 8 ) as $fnc_speaker_id ) : ?>
+							<a class="spk" href="<?php echo esc_url( get_permalink( $fnc_speaker_id ) ); ?>">
+								<div class="ph">
+									<?php
+									// la règle du droit à l’image : portrait uniquement si le droit est « obtenu » et non expire.
+									$fnc_pv = function_exists( 'fnc_speaker_portrait' )
+										? fnc_speaker_portrait( $fnc_speaker_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_speaker_id ) ) )
+										: '';
+									if ( $fnc_pv ) {
+										echo $fnc_pv; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
+									} else {
+										printf( '<span class="m" aria-hidden="true">%s</span><span class="l">%s</span>', esc_html( fnc_speaker_initials( $fnc_speaker_id ) ), esc_html__( 'Photo à venir', 'fnc-wordpress-theme' ) );
+									}
 									?>
-									<p><?php echo esc_html( $fnc_excerpt ); ?></p>
-								<?php endif; ?>
-							</article>
+								</div>
+								<?php
+								// Civilité (M./Mme…) devant le nom si renseignée (secondaire).
+								$fnc_pv_civ  = (string) get_post_meta( $fnc_speaker_id, '_fnc_speaker_title', true );
+								$fnc_pv_name = fnc_speaker_display_name( $fnc_speaker_id );
+								// Sous-titre = RÔLE/fonction (comme /intervenants), repli sur l'organisation.
+								$fnc_pv_role = get_post_meta( $fnc_speaker_id, '_fnc_speaker_role', true );
+								$fnc_pv_role = $fnc_pv_role ? $fnc_pv_role : get_post_meta( $fnc_speaker_id, '_fnc_speaker_org', true );
+								$fnc_pv_ctry = get_post_meta( $fnc_speaker_id, '_fnc_speaker_country', true );
+								?>
+								<div class="n"><?php echo esc_html( trim( ( $fnc_pv_civ ? $fnc_pv_civ . ' ' : '' ) . $fnc_pv_name ) ); ?></div>
+								<?php if ( $fnc_pv_role ) : ?><div class="r"><?php echo esc_html( $fnc_pv_role ); ?></div><?php endif; ?>
+								<?php if ( $fnc_pv_ctry ) : ?><span class="c"><?php echo esc_html( $fnc_pv_ctry ); ?></span><?php endif; ?>
+							</a>
 						<?php endforeach; ?>
 					</div>
 				<?php else : ?>
@@ -226,17 +297,22 @@ fnc_render_hero(
 
 		<?php
 		/*
-		 * Informations pratiques : sur le site reel, elles vivent sur leur page
+		 * Informations pratiques : sur le site du Forum, elles vivent sur leur page
 		 * dediee (/infos-pratiques), pas sur l'edition en cours. La page Edition
 		 * se termine donc sur l'appel a l'inscription — les infos pratiques
 		 * restent accessibles via la navigation et le pied de page.
 		 */
 		?>
-		<section class="section">
-			<div class="container reading">
-				<h2><?php esc_html_e( 'Inscription', 'fnc-wordpress-theme' ); ?></h2>
-				<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
-			</div>
+		<section class="callout">
+			<h2 data-fnc-st="edition-en-cours.inscription.title"><?php echo esc_html( fnc_stitle( 'edition-en-cours', 'inscription', 'title' ) ); ?></h2>
+			<p><?php esc_html_e( 'L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?></p>
+			<?php if ( function_exists( 'fnc_registration_enabled' ) && fnc_registration_enabled() ) : ?>
+				<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+				</a>
+			<?php else : ?>
+				<span class="btn btn-disabled" aria-disabled="true"><?php esc_html_e( 'Inscriptions à venir', 'fnc-wordpress-theme' ); ?></span>
+			<?php endif; ?>
 		</section>
 	<?php endif; ?>
 </main>

@@ -1,125 +1,15 @@
-/* ==========================================================================
-   FNC — Complément INTÉGRAL de la couche sémantique          [P3 / complet]
-   ==========================================================================
-   Source : src/app/globals.css (site Next.js de production).
-   Méthode : diff par sélecteur normalisé (commentaires ignorés) entre
-   globals.css et l'union { style.css du thème + wordpress-catchup.css (P1)
-   + wordpress-catchup-p2.css (P2) }. Déclarations EXTRAITES, non réécrites.
-   L'ORDRE SOURCE est préservé : la cascade CSS en dépend.
-   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
-
-   CE FICHIER COMPLÈTE LE PAQUET : avec lui, la couche sémantique du thème
-   atteint la parité avec globals.css (234 règles restantes, dont 9 @keyframes
-   et 7 @media).
-
-   FAMILLES COUVERTES
-     .sess                  17
-     .prose-legal           10
-     @keyframes             9
-     @media                 7
-     .route-dip             7
-     .pub                   7
-     .page-head             7
-     .person                6
-     .edition               6
-     .nav                   5
-     .field                 5
-     .day-nav               5
-     .social-chip           4
-     .practical-lodging     4
-     .practical-faq         4
-     .btn-primary           4
-     .agenda-day            4
-     .president-sign        3
-     .practical-contacts    3
-     .pcb-band              3
-     .opening               3
-     .obj                   3
-     .lang                  3
-     .info-block            3
-     .contact-line          3
-     .consent-reopen        3
-     .consent-link          3
-     .consent-decline       3
-     .btn-ghost-light       3
-     .btn                   3
-     .split                 2
-     .social-chip--icon     2
-     .programme-panorama    2
-     .programme-detail      2
-     .practical-map         2
-     .practical-item        2
-     .pcb                   2
-     .intervenants-panorama 2
-     .hero-backdrop         2
-     .consent-text          2
-     .consent-btn           2
-     .consent-accept        2
-     .consent               2
-     .chip                  2
-     .social-row            1
-     .session               1
-     .section-band          1
-     .section               1
-     .rule                  1
-     .pubs                  1
-     .prov-banner           1
-     .president-word        1
-     .practical-title       1
-     .practical-list        1
-     .people                1
-     .page-h3               1
-     .page-h2               1
-     .page-eyebrow          1
-     .nav-links             1
-     .narration             1
-     .mp-utils              1
-     .intervenants-directory 1
-     .hb-trace              1
-     .hb-beams              1
-     .hb-beam-3             1
-     .hb-beam-2             1
-     .hb-beam-1             1
-     .form-actions          1
-     .foot-logo-img         1
-     .foot-logo             1
-     .foot-brand            1
-     .filters               1
-     .empty                 1
-     .editions              1
-     .day-tabs              1
-     .contact-grid          1
-     .contact-block         1
-     .consent-inner         1
-     .consent-actions       1
-     .btn-disabled          1
-     .brand-logo--white     1
-     .brand-logo--color     1
-
-   NUANCE MÉTHODOLOGIQUE — à lire
-   Le diff porte sur l'IDENTITÉ DES SÉLECTEURS, pas sur l'équivalence visuelle.
-   Certaines de ces règles sont peut-être déjà couvertes côté thème sous un
-   AUTRE nom de classe : dans ce cas la règle livrée ici sera simplement
-   inerte (aucun sélecteur correspondant dans le markup). C'est sans risque,
-   mais cela signifie que 231 est un MAJORANT du manque réel.
-
-   FAMILLES POTENTIELLEMENT INUTILES EN WORDPRESS
-   - .route-dip (7 règles) : transition de route propre au App Router Next.js.
-     Aucun équivalent WP — supprimable sans conséquence.
-
-   INSTALLATION — dernier de la chaîne :
-     style.css
-       -> wordpress-catchup.css              (P1 : familles à zéro style)
-       -> wordpress-tailwind-utilities.css   (P4 : couche utilitaire)
-       -> wordpress-catchup-p2.css           (P2 : familles partielles)
-       -> CE FICHIER                          (P3 : tout le reste)
-   Rappel : les règles « .dad … » exigent la classe `dad` sur le <body>
-   (filtre body_class — voir l'en-tête de wordpress-catchup-p2.css).
-   ========================================================================== */
+/*
+ * Forum Numérique Congo — feuille de style — composants de la charte.
+ *
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
+ */
 
 :root {
   /* Tokens DA référencés par ce fichier, absents du thème et sans
-     fallback inline — valeurs reprises telles quelles de globals.css. */
+     fallback inline — valeurs reprises telles quelles de la charte. */
   --surface: #f2f2f5;
   --display-page: clamp(2rem, 4.4vw, 3.9rem);
   --color-background: #ffffff;
@@ -129,9 +19,9 @@
 /* ---------- Base DA-D (dé-encapsulée de @layer base) ----------
    Les directives @tailwind (build-time) et le wrapper @layer ont été retirés :
    ils n'ont aucun sens dans une CSS servie telle quelle, et @layer abaisserait
-   la priorité de cascade. Le :root de globals.css n'est PAS repris ici — le
+   la priorité de cascade. Le :root de la charte n'est PAS repris ici — le
    thème définit déjà ces tokens, et les 4 manquants sont déclarés en tête.
-   NOTE : la règle `body` ci-dessous impose fond/couleur/police du site réel ;
+   NOTE : la règle `body` ci-dessous impose fond/couleur/police du site du Forum ;
    si le thème les gère déjà, elle est redondante (sans risque). */
 html {
   -webkit-text-size-adjust: 100%;
@@ -268,6 +158,55 @@ textarea {
 @keyframes dad-trace { to { stroke-dashoffset: 0; } }
 
 /* ---------- PAGE HEADER (pages intérieures) ---------- */
+/* Hero .opening : hauteur alignee sur le site du Forum (54dvh au lieu de 78vh) —
+   les heros etaient trop hauts. Charge apres style.css, donc l'emporte. */
+.opening {
+  min-height: 54dvh;
+  padding: clamp(116px, 14vh, 156px) var(--marge) clamp(40px, 5vh, 64px);
+}
+
+/* Registre C — en-tete sobre (calque le site du Forum du site du Forum) : bandeau
+   lin, titre navy, filet PCB STATIQUE en pied. Pas de photo, pas d'eyebrow,
+   pas de fil d'ariane : uniquement le titre (et, en repli legal, une meta). */
+.page-header {
+  position: relative;
+  overflow: hidden;
+  background: var(--linen);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(56px, 8vh, 80px) var(--marge);
+}
+.page-header .container {
+  position: relative;
+  z-index: 2;
+}
+.page-header h1 {
+  max-width: 56rem;
+  font-size: var(--display-page);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--navy-deep);
+}
+.page-header .lead {
+  margin-top: 20px;
+  max-width: 42rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--texte-sec);
+}
+.page-header .pcb-static {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46px;
+  width: 100%;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
 .page-head {
   padding: clamp(120px, 18vh, 200px) var(--marge) clamp(48px, 7vh, 90px);
   background: linear-gradient(180deg, var(--navy-deep), #12143f);
@@ -449,6 +388,43 @@ textarea {
   margin-top: 2px;
 }
 
+/* ---------- FICHE DÉTAIL (intervenant / session) ---------- */
+.person-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .person-detail { grid-template-columns: 0.42fr 1fr; }
+  .person-detail__aside { position: sticky; top: 112px; }
+}
+.person-detail__portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: repeating-linear-gradient(135deg, #e9e9f2 0 2px, #f4f4fa 2px 10px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.person-detail__portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.person-detail__mono { display: block; font-family: var(--serif); font-size: clamp(2.4rem, 5vw, 3rem); font-weight: 500; color: var(--navy); line-height: 1; }
+.person-detail__pending { display: block; margin-top: 8px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--texte-sec); }
+.person-detail__meta { margin-top: 20px; }
+.person-detail__org { margin-top: 4px; font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); }
+.person-detail__country { margin-top: 6px; font-size: 0.9rem; color: var(--texte-sec); }
+.person-detail__links { margin-top: 22px; border-top: 1px solid var(--border); padding-top: 20px; }
+.person-detail__links ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.person-detail__links a { font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); text-decoration: underline; text-underline-offset: 4px; }
+.person-detail__links a:hover { color: var(--rouge); }
+.person-detail__block { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 40px; }
+.person-detail__block:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+/* Corps de lecture (bio / description) : ~42rem, 1.125rem, interligne 2. */
+.person-detail__block .prose-legal { max-width: 42rem; font-size: 1.125rem; line-height: 2; }
+
 /* ---------- PROGRAMME ---------- */
 .day-tabs {
   display: flex;
@@ -526,6 +502,10 @@ textarea {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: clamp(18px, 2vw, 28px);
+  /* Chaque carte épouse son contenu (pas d'étirement à la hauteur de la ligne) :
+     sinon la date, ancrée en bas via margin-top:auto, laisse un grand vide
+     interne dans les cartes courtes. */
+  align-items: start;
 }
 
 .pub {
@@ -623,20 +603,42 @@ textarea {
 .field select {
   font: inherit;
   font-size: 1rem;
-  padding: 13px 14px;
+  padding: 12px 16px;
   border: 1px solid var(--border);
-  border-radius: 3px;
-  background: #fff;
+  border-radius: 4px;
+  background: var(--linen);
   color: var(--texte-corps);
-  min-height: 46px;
-  transition: border-color 0.18s var(--ease);
+  min-height: 48px;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
 }
 
+/* Focus : bordure navy foncé + anneau rouge décalé (ring-2 ring-rouge ring-offset-2). */
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  border-color: var(--navy);
+  outline: none;
+  border-color: var(--navy-deep);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--rouge);
 }
+
+/* Bouton « retour » de la fiche intervenant : il vit dans une section claire (linen),
+   donc le variant ghost CLAIR (texte blanc) devenait illisible. On force le variant
+   sombre lisible (bordure + fond blanc + texte navy). */
+.person-detail__back .btn {
+  color: var(--navy-deep);
+  border-color: var(--border);
+  background: #fff;
+}
+.person-detail__back .btn:hover { border-color: var(--navy-deep); background: var(--linen); }
+
+/* Rythme vertical GLOBAL aligné sur la charte : sections un peu plus
+   resserrées que l'ancien thème. S'applique à toutes les pages. */
+.section { padding: clamp(48px, 8vh, 96px) var(--marge); }
+.callout { padding: clamp(44px, 7vh, 80px) var(--marge); }
+
+/* Métriques de bouton alignées sur la charte (padding/taille) ; on conserve une hauteur
+   mini de 48px pour la cible tactile (a11y), au lieu de la retirer complètement. */
+.btn { padding: 14px 26px; font-size: 0.95rem; min-height: 48px; }
 
 .field .help {
   font-size: 0.8rem;
@@ -729,7 +731,7 @@ textarea {
 /* Réseaux sociaux du footer : pastilles carrées icône-seule (44×44), côte à côte.
    Avec leur libellé texte, les chips devenaient larges et s'empilaient une par
    ligne dans la colonne étroite du footer. Le nom reste accessible via aria-label
-   (voir Footer.tsx). Ne concerne PAS les chips email/téléphone des pages contact
+   (voir le pied de page). Ne concerne PAS les chips email/téléphone des pages contact
    et espace-presse, qui gardent leur texte. */
 .social-chip--icon { width: 44px; padding: 0; justify-content: center; }
 
@@ -816,7 +818,7 @@ textarea {
 /* Hero (#m1) — entrée cinématographique en CSS PUR (montée + fondu + flou qui se
    lève), en cascade. Fiable au chargement, contrairement au reveal JS qui « claque »
    pour le contenu déjà à l'écran (l'IntersectionObserver se déclenche avant le 1er
-   paint). Le hero est donc EXCLU du reveal JS (voir HomeMotion). */
+   paint). Le hero est donc EXCLU du reveal JS. */
 #m1 .hero-inner > * { animation: hero-enter 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
 #m1 .hero-inner > *:nth-child(1) { animation-delay: 0.15s; }
@@ -1157,14 +1159,14 @@ textarea {
 
 .consent-reopen:focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
 
-/* ── Transition de page cinématographique — « dip » navy (RouteTransition) ─────
-   Les View Transitions natives ne s'enclenchent pas sur la navigation cliente de
-   l'App Router (le flag `experimental.viewTransition` n'expose que le composant
-   React expérimental, indisponible ici). On produit donc l'enchaînement nous-mêmes,
+/* ── Transition de page cinématographique — « dip » navy ─────
+   Les View Transitions natives du navigateur ne s'enclenchent pas de façon fiable
+   sur la navigation cliente (support partiel, indisponible ici).
+   On produit donc l'enchaînement nous-mêmes,
    robuste en dev ET en prod : à chaque changement de route, un voile navy fond très
    brièvement puis se retire — un « fondu au bleu » de cinéma, registre DA. Un filet
    PCB (rouge/jaune) trace sur le voile comme signature. `pointer-events: none` →
-   ne bloque JAMAIS l'input. Piloté par `RouteTransition` (skip au 1ᵉʳ rendu,
+   ne bloque JAMAIS l'input. Piloté par le script de transition (skip au 1ᵉʳ rendu,
    coupé en prefers-reduced-motion). */
 .route-dip {
   position: fixed;
@@ -1251,7 +1253,7 @@ textarea {
    qu'au contenu structuré à venir. Seul `p + p` modifie le rendu actuel, et il
    corrige un défaut avéré.
    Sélecteurs en descendance et NON en enfant direct (`>`) : le convertisseur
-   Payload enveloppe le contenu dans un <div class="payload-richtext">, si bien
+   Le contenu riche est enveloppé dans un conteneur intermédiaire, si bien
    que les nœuds sont des petits-enfants de .prose-legal. */
 .prose-legal p + p { margin-top: 1.1em; }
 

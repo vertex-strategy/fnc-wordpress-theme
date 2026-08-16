@@ -1,39 +1,11 @@
-/* ==========================================================================
-   FNC — Couche « utilitaires » pour le thème WordPress  (chantier P4)
-   ==========================================================================
-   Source : bundle CSS compilé du site Next.js de production
-            (/_next/static/chunks/*.css). Déclarations EXTRAITES, non réécrites.
-   Établi le 2026-07-23 face au thème « fnc-wordpress-theme » v0.2.0.
-
-   POURQUOI
-   Le vrai site style en DEUX couches : (1) les classes sémantiques de
-   globals.css, et (2) des utilitaires Tailwind posés directement dans le
-   markup. Le thème WP n'a porté que la couche (1). Résultat : tous les
-   espacements, rayons, tailles et surtout les COULEURS portés par la couche (2)
-   manquaient. Ce fichier restitue exactement ces 132 utilitaires, relevés sur
-   8 pages réelles (accueil, intervenants, éditions, ressources, contact,
-   partenaires, programme, espace-presse).
-
-   DEUX FAÇONS DE L'UTILISER
-   A. En couche utilitaire (le plus simple, fidélité immédiate) : charger ce
-      fichier et réutiliser les MÊMES noms de classes dans les templates PHP
-      que dans le site réel — le markup se recopie alors quasi tel quel.
-   B. En traduction sémantique : lire ici la déclaration exacte d'un utilitaire
-      et la replier dans la classe sémantique correspondante du thème
-      (ex. « la carte porte .p-6.rounded-md.shadow-card » -> ajouter ces
-      déclarations à .fnc-card).
-
-   DÉPENDANCES
-   - Les variables --navy, --navy-deep, --rouge, --jaune, --linen, --texte-corps,
-     --texte-sec sont DÉJÀ définies dans le thème : rien à faire.
-   - 3 tokens DA manquaient : ils sont ajoutés ci-dessous.
-   - Les variables internes --tw-* n'ont RIEN à déclarer : chaque règle définit
-     la sienne et fournit un fallback inline (vérifié).
-
-   INSTALLATION — charger APRÈS style.css (et après wordpress-catchup.css) :
-     wp_enqueue_style('fnc-utils', get_stylesheet_directory_uri().'/utilities.css',
-                      ['fnc-theme-style'], '0.2.1');
-   ========================================================================== */
+/*
+ * Forum Numérique Congo — feuille de style — utilitaires.
+ *
+ * @package   Forum Numérique Congo
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link      https://www.grinso.io
+ */
 
 :root {
   /* Tokens DA référencés par les utilitaires et absents du thème. */

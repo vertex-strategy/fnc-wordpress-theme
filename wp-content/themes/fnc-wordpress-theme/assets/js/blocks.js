@@ -1,15 +1,12 @@
 /**
- * Moteur d'édition générique des blocs éditoriaux du thème (Lot 2).
+ * Forum Numérique Congo — éditeur des blocs du thème (aperçu et champs).
  *
- * Les blocs sont déclarés une seule fois côté PHP (inc/blocks.php) et
- * transmis ici via `window.fncBlockSchemas`. Ce script construit l'interface
- * d'édition à partir de ce schéma — il n'y a donc pas un composant d'édition
- * par bloc à maintenir, et aucune étape de build (pas de JSX, pas de bundler),
- * conformément au « zéro dépendance tierce » de l'ADR-007.
- *
- * Tous les blocs sont dynamiques : `save` retourne null, le rendu public est
- * produit en PHP avec le markup DA figé du thème.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
+
 ( function ( wp, schemas ) {
 	'use strict';
 
@@ -28,6 +25,9 @@
 	var MediaUpload = wp.blockEditor.MediaUpload;
 	var MediaUploadCheck = wp.blockEditor.MediaUploadCheck;
 	var useSelect = wp.data && wp.data.useSelect;
+	var InspectorControls = wp.blockEditor.InspectorControls;
+	var PanelBody = wp.components.PanelBody;
+	var ServerSideRender = wp.serverSideRender;
 
 	/**
 	 * Champ média (image ou fichier) — stocke l'ID de la pièce jointe.
@@ -296,36 +296,59 @@
 			attributes: schema.attributes,
 
 			edit: function ( props ) {
-				var blockProps = useBlockProps( { className: 'fnc-block' } );
+				// Champs d'edition (memes controles, mais deplaces dans le panneau
+				// lateral : le canevas montre desormais la vraie section rendue).
+				var fields = schema.fields.map( function ( field ) {
+					return el( Field, {
+						key: field.name,
+						field: field,
+						value: props.attributes[ field.name ],
+						onChange: function ( value ) {
+							var patch = {};
+							patch[ field.name ] = value;
+							props.setAttributes( patch );
+						}
+					} );
+				} );
 
-				return el(
-					'div',
-					blockProps,
+				var inspector = el(
+					InspectorControls,
+					null,
 					el(
-						'div',
-						{ className: 'fnc-block__header' },
-						el( 'strong', null, schema.title ),
+						PanelBody,
+						{ title: schema.title, initialOpen: true },
 						schema.description
-							? el( 'span', { className: 'fnc-block__desc' }, schema.description )
-							: null
-					),
-					el(
-						'div',
-						{ className: 'fnc-block__fields' },
-						schema.fields.map( function ( field ) {
-							return el( Field, {
-								key: field.name,
-								field: field,
-								value: props.attributes[ field.name ],
-								onChange: function ( value ) {
-									var patch = {};
-									patch[ field.name ] = value;
-									props.setAttributes( patch );
-								}
-							} );
-						} )
+							? el( 'p', { className: 'fnc-block__desc' }, schema.description )
+							: null,
+						fields
 					)
 				);
+
+				// useBlockProps : hook appele une seule fois, inconditionnellement.
+				var blockProps = useBlockProps( {
+					className: ServerSideRender ? 'fnc-block fnc-block--preview' : 'fnc-block'
+				} );
+
+				// Canevas : apercu reel de la section via le rendu PHP (bloc
+				// dynamique). Repli sur le formulaire en canevas si ServerSideRender
+				// n'est pas disponible.
+				var canvas;
+				if ( ServerSideRender ) {
+					canvas = el( ServerSideRender, { block: name, attributes: props.attributes } );
+				} else {
+					canvas = el(
+						Fragment,
+						null,
+						el(
+							'div',
+							{ className: 'fnc-block__header' },
+							el( 'strong', null, schema.title )
+						),
+						el( 'div', { className: 'fnc-block__fields' }, fields )
+					);
+				}
+
+				return el( Fragment, null, inspector, el( 'div', blockProps, canvas ) );
 			},
 
 			// Bloc dynamique : le rendu public est produit en PHP (markup DA figé).

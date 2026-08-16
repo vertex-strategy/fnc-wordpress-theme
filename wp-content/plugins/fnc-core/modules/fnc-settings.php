@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: FNC Core — Réglages du site (Module B)
+ * Plugin Name: FNC Core — Réglages du site
  * Description: Surface unique de gouvernance transverse (identité, logos, coordonnées,
- *              réseaux, menu principal, ordre des pays, footer, SEO par défaut) + les
- *              accesseurs `fnc_get_setting()` / `fnc_social_links()` consommés par les
- *              autres modules et le thème. Portage de globals/Settings.ts (+ le filtrage
- *              des placeholders de layout.tsx).
+ *              réseaux, menu principal, ordre des pays, pied de page, SEO par défaut) et
+ *              les accesseurs `fnc_get_setting()` / `fnc_social_links()` utilisés par le
+ *              thème et les autres composants de l'extension.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Page « Réglages → FNC ».
  * Amorcé partiellement dans le thème → À DÉPLACER ici (retirer les doublons du thème
@@ -31,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* ==========================================================================
- * Stockage + valeurs par défaut (miroir des defaultValue de Settings.ts)
+ * Stockage + valeurs par défaut des réglages
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_settings_defaults' ) ) {
@@ -49,6 +51,7 @@ if ( ! function_exists( 'fnc_settings_defaults' ) ) {
 			'mainNav'               => array(), // [ ['label','linkType','internalRoute'|'externalUrl','openInNewTab','visible'], … ]
 			'countryOrder'          => array(), // [ ['name','flag'=>attachment_id], … ]
 			'footerLinkGroups'      => array(), // [ ['title','kind','links'=>[ ['label','href','external','openInNewTab','ariaLabel','enabled'] ]], … ]
+			'footerLinkGroupsText'  => '', // Saisie éditeur (texte) des groupes de liens ; analysée par le thème. Prioritaire sur footerLinkGroups.
 			'footerText'            => '',
 			'copyright'             => '',
 			'seoDefaultTitle'       => '',
@@ -91,14 +94,18 @@ if ( ! function_exists( 'fnc_get_setting' ) ) {
 }
 
 /* ==========================================================================
- * Filtrage des placeholders (portage de layout.tsx)
+ * Filtrage des coordonnées de démonstration (placeholders)
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_is_placeholder_phone' ) ) {
-	/** Téléphone fictif « À confirmer » → à ne pas publier. */
+	/**
+	 * Téléphone fictif « À confirmer » → à ne pas publier. Reprend le motif du
+	 * pied de page du site : indicatif 242 suivi uniquement de 0/6 de
+	 * remplissage (ex. +24206000000, +242060000000). Motif : ^\+?2420?60+$.
+	 */
 	function fnc_is_placeholder_phone( $value ) {
 		$n = preg_replace( '/[^\d+]/', '', (string) $value );
-		return '+24206000000' === $n || '+242060000000' === $n;
+		return 1 === preg_match( '/^\+?2420?60+$/', $n );
 	}
 }
 
@@ -430,7 +437,7 @@ if ( ! function_exists( 'fnc_settings_sanitize' ) ) {
 				$out[ $k ] = sanitize_text_field( $input[ $k ] );
 			}
 		}
-		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'seoDefaultDescription' );
+		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'footerLinkGroupsText', 'seoDefaultDescription' );
 		foreach ( $area_keys as $k ) {
 			if ( isset( $input[ $k ] ) ) {
 				$out[ $k ] = sanitize_textarea_field( $input[ $k ] );
@@ -560,6 +567,17 @@ if ( ! function_exists( 'fnc_settings_page' ) ) {
 					fnc_settings_field_area( 'footerText', 'Texte du footer' );
 					fnc_settings_field_text( 'copyright', 'Mention de copyright', 'text', 'L’année courante est ajoutée par le thème.' );
 					?>
+					<tr>
+						<th scope="row"><label for="fnc-footerLinkGroupsText">Groupes de liens</label></th>
+						<td>
+							<textarea id="fnc-footerLinkGroupsText" name="fnc_settings[footerLinkGroupsText]" rows="10" class="large-text" placeholder="Le Forum | main&#10;- Présentation | /le-forum&#10;- Programme | /programme&#10;&#10;Ressources | resources&#10;- Éditions | /editions&#10;- Dossier presse | https://… | newtab"><?php echo esc_textarea( isset( $all['footerLinkGroupsText'] ) ? $all['footerLinkGroupsText'] : '' ); ?></textarea>
+							<p class="description">
+								Une ligne d’en-tête <code>Titre | genre</code> ouvre un groupe (genre optionnel : main, resources, press, legal, useful, institutional, custom).
+								Les lignes <code>- Libellé | lien</code> qui suivent sont ses liens, dans l’ordre. Options en 3ᵉ champ : <code>newtab</code> (nouvel onglet), <code>off</code> (masqué).
+								Une ligne <code>// …</code> est une note interne. <strong>Vide → colonnes par défaut</strong> du thème (jamais de pied de page sans navigation).
+							</p>
+						</td>
+					</tr>
 				</table>
 
 				<h2><?php echo esc_html__( 'SEO par défaut', 'fnc' ); ?></h2>

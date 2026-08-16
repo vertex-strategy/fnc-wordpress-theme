@@ -1,14 +1,17 @@
 <?php
 /**
- * Plugin Name: FNC Core — Données structurées schema.org (Module D)
- * Description: Émet Organization + WebSite sur toutes les pages, et Event
- *              (édition en cours : dates, lieu, intervenants) sur l'accueil.
- *              Portage fidèle de src/lib/seo/structuredData.ts (C4).
+ * Plugin Name: FNC Core — Données structurées (SEO)
+ * Description: Émet les données structurées schema.org — Organization + WebSite sur
+ *              toutes les pages, et Event (édition en cours : dates, lieu, intervenants)
+ *              sur l'accueil — pour un meilleur référencement.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. S'accroche à wp_head.
- * DÉPEND (souplement) du Module C pour l'édition active + participants
+ * DÉPEND (souplement) des « Données du site » pour l'édition active + participants
  * (function_exists ; sans lui, l'Event est simplement omis).
  *
  * PRINCIPE : jamais de balisage PARTIEL. L'Event n'est émis que si nom + date de
@@ -90,7 +93,7 @@ if ( ! function_exists( 'fnc_sd_same_as' ) ) {
 }
 
 /* ==========================================================================
- * Constructeurs (miroir de structuredData.ts)
+ * Constructeurs schema.org
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_sd_organization' ) ) {
@@ -146,10 +149,12 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 	 * @return array|null
 	 */
 	function fnc_sd_event() {
-		if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
-			return null; // Module C requis pour l'édition active.
+		if ( ! function_exists( 'fnc_resolve_current_edition' ) ) {
+			return null; // « Données du site » requises pour l'édition en cours.
 		}
-		$ed = fnc_resolve_active_edition();
+		// JSON-LD Event de l'accueil = édition EN COURS (current-strict), jamais un
+		// repli « à venir » (parité : l'événement n'existe que s'il est « en cours »).
+		$ed = fnc_resolve_current_edition();
 		if ( ! $ed ) {
 			return null;
 		}
@@ -166,7 +171,12 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 
 		$site = untrailingslashit( home_url() );
 
-		$address = array( '@type' => 'PostalAddress', 'addressLocality' => 'Brazzaville', 'addressCountry' => 'CG' );
+		// La ville n'est PAS codée en dur : les éditions ne se tiennent pas toutes
+		// à Brazzaville (ex. Pointe-Noire pour les éditions passées) et l'édition-
+		// pivot peut changer de ville. On décrit le lieu par `Place.name` = champ
+		// « Lieu » de l'édition (déjà de la forme « Hôtel…, Ville ») + le pays ;
+		// deviner la ville depuis ce champ inventerait de la donnée (RÈGLE 4).
+		$address = array( '@type' => 'PostalAddress', 'addressCountry' => 'CG' );
 		$location = array( '@type' => 'Place', 'address' => $address );
 		$loc_name = trim( (string) get_post_meta( $ed->ID, '_fnc_edition_location', true ) );
 		if ( '' !== $loc_name ) {
@@ -202,7 +212,7 @@ if ( ! function_exists( 'fnc_sd_event' ) ) {
 			$event['image'] = fnc_sd_abs( $img );
 		}
 
-		// Intervenants (Module C). Person[] { name, jobTitle }.
+		// Intervenants. Person[] { name, jobTitle }.
 		if ( function_exists( 'fnc_edition_participants' ) ) {
 			$performers = array();
 			foreach ( fnc_edition_participants( $ed->ID ) as $sid ) {
@@ -241,10 +251,24 @@ if ( ! function_exists( 'fnc_sd_render' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fnc_sd_seo_plugin_active' ) ) {
+	/**
+	 * Un plugin SEO dédié (AIOSEO / Yoast) émet-il déjà Organization + WebSite ?
+	 * Si oui, on ne les redouble pas ici (on ne garde que l'Event, qu'aucun de
+	 * ces plugins ne sait produire pour l'édition en cours).
+	 */
+	function fnc_sd_seo_plugin_active() {
+		return defined( 'AIOSEO_VERSION' ) || function_exists( 'aioseo' ) || defined( 'WPSEO_VERSION' );
+	}
+}
+
 if ( ! function_exists( 'fnc_sd_output' ) ) {
 	function fnc_sd_output() {
-		// Identité de site — partout.
-		fnc_sd_render( fnc_sd_identity_graph() );
+		// Identité de site (Organization + WebSite) — partout, SAUF si un plugin
+		// SEO dédié les émet déjà (anti-doublon).
+		if ( ! fnc_sd_seo_plugin_active() ) {
+			fnc_sd_render( fnc_sd_identity_graph() );
+		}
 
 		// Event — sur l'accueil (comme le site réel). Décommenter is_page pour l'ajouter
 		// aussi au hub « édition en cours ».

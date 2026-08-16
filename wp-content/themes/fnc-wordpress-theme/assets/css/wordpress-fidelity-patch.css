@@ -1,0 +1,102 @@
+/*!
+ * Forum Numérique Congo — patch de fidélité (overrides DA mesurés).
+ * © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * Développé par Vanel NGOYO ADOUMA, Lead développeur.
+ */
+
+/* ==========================================================================
+   PATCH DE FIDÉLITÉ — à charger EN DERNIER (après le thème et le kit).
+   Ne corrige QUE des dérives de VALEUR CSS mesurées à l'écran par rapport à la
+   DA-D. Les écarts STRUCTURELS (titre de hero manquant, portraits, image de
+   fiche édition, badges de frise) ne se corrigent PAS ici — voir l'audit
+   (docs/design/wordpress-fidelity-audit.md). Étendre au fil des dérives trouvées.
+
+   Enqueue (functions.php du thème), en dépendance de la dernière feuille du kit :
+     wp_enqueue_style('fnc-fidelity', get_template_directory_uri().'/assets/css/wordpress-fidelity-patch.css',
+       array('fnc-catchup-complet'), '1.0.0');
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1) Carrousel « Les voix » — le NOM doit être en GRAS (DA : 700).
+   Mesuré : le nom rend en 400 (regular) → « police pas correcte ».
+   Cause : le carrousel réécrit omet le wrapper .identity, donc la règle du kit
+   `#m3 .identity .name { font-weight:700 }` ne s'applique pas, et la règle
+   maison de .name ne fixe pas la graisse. On la ré-assère ici.
+   Réf. DA : #m3 .identity .name { font-weight:700; font-size:clamp(2.1rem,4vw,3.5rem);
+             line-height:1; letter-spacing:-.02em } (les autres valeurs sont déjà bonnes).
+   -------------------------------------------------------------------------- */
+#m3 .name,
+.voix-grid .name,
+[class*="voice"] .name,
+.voice-portrait ~ .identity .name {
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2) Callout (bande CTA pré-footer) — le PARAGRAPHE doit être CENTRÉ.
+   Mesuré (ex. /edition-en-cours/) : `.callout` est `text-align:center` mais le <p>
+   a `max-width:~421px` + `margin:0` → le bloc reste collé à GAUCHE (−320px du centre),
+   donc le texte paraît aligné à gauche sous un titre centré. Ré-assère le centrage du bloc.
+   Vérifié en direct : décalage −320px → 0.
+   -------------------------------------------------------------------------- */
+.callout p,
+.callout .intro,
+.callout .lead {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* --------------------------------------------------------------------------
+   C2) Carrousel — contrôles sur UNE seule rangée [‹ · pastilles · › · lecture].
+   Mesuré : .voice-controls{flex-wrap:wrap} + .voice-dots{flex-basis:100%} + des
+   boutons de pastille larges (~44px) → les pastilles passent sur une ligne à
+   part et les fleches+lecture s'entassent dessous. On force une rangee unique,
+   dans l'ordre du DOM (prev · pastilles · next · lecture), avec de PETITES
+   pastilles (point visuel 9px, zone de clic via padding).
+   -------------------------------------------------------------------------- */
+.voice-controls { flex-wrap: nowrap !important; }
+.voice-controls .voice-arrow,
+.voice-controls .voice-play,
+.voice-controls .voice-dots { order: 0 !important; }
+.voice-dots { flex-basis: auto !important; flex-wrap: nowrap !important; }
+.voice-dots button { width: 22px !important; }
+
+/* --------------------------------------------------------------------------
+   C-play) Bouton lecture/pause — les 2 icones se SUPERPOSENT.
+   Le bouton contient 2 SVG (pause + play) dont un porte l'attribut [hidden] ;
+   le JS bascule bien cet attribut au clic (main.js). MAIS une regle generale
+   `svg { display:block }` du kit ecrase le comportement natif de [hidden] et
+   affiche les deux. On restaure la semantique de [hidden] pour ces icones.
+   -------------------------------------------------------------------------- */
+.voice-play svg[hidden],
+[data-voice-play] svg[hidden] { display: none !important; }
+
+/* --------------------------------------------------------------------------
+   C6) M6 « La communauté » — logos CONTENUS dans la case.
+   Le site du Forum n'a PAS d'images dans #m6 : des cases `.logo-ph` à taille
+   fixe (t1 184×76, t2 144×62) affichant le NOM du partenaire. En WordPress on
+   garde de VRAIS logos, mais ils doivent rester DANS la case (l'audit le
+   permet « s'ils sont contenus »). Mesuré : un logo portrait montait à 210px
+   (overflow:visible) et débordait. On cape la hauteur sous la case et on
+   centre par `object-fit:contain`, sans toucher aux dimensions de la case
+   (qui, elles, restent fidèles au Forum). Vérifié : 210 → ≤52px.
+   -------------------------------------------------------------------------- */
+.dad-linked #m6 .logo-ph img,
+#m6 .logo-ph img {
+  max-width: 84% !important;
+  max-height: 52px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+/* --------------------------------------------------------------------------
+   3) Garde-fous DA génériques (sûrs) — au cas où le thème les aurait perdus.
+   Le serif de la DA ne sert QU'AUX accents en italique (jamais aux titres) ;
+   le vert et le jaune ne sont JAMAIS des couleurs de texte (illisibles).
+   Ces règles ne changent rien si la DA est déjà respectée ; elles rattrapent
+   une éventuelle dérive.
+   -------------------------------------------------------------------------- */
+/* Le monogramme de repli (sans photo) reste un cercle d'initiales, pas un
+   faux visage : si le thème a mis une image générique en repli, la neutraliser
+   visuellement est du ressort du template (voir audit) — pas de override ici. */

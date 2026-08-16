@@ -1,18 +1,11 @@
 <?php
 /**
- * Compatibilite multilingue (Polylang) — declaration des contenus traduisibles.
+ * Forum Numérique Congo — compatibilité multilingue (contenus et taxonomies traduisibles).
  *
- * Rend les custom post types et taxonomies du plugin traduisibles PAR CODE,
- * via les filtres Polylang `pll_get_post_types` / `pll_get_taxonomies`, plutot
- * que par la configuration de l'administration (Langues → Reglages). Avantage :
- * la declaration est versionnee et s'applique des que Polylang est actif, sans
- * etape manuelle. Sans Polylang, ces filtres ne sont jamais appeles — aucun
- * effet, aucune dependance (conforme ADR-007, Decision 2 : dependance ciblee au
- * seul multilinguisme).
- *
- * Une fois declares traduisibles, chaque contenu porte une langue et peut avoir
- * des traductions ; le sélecteur de langue du theme relie alors les versions
- * entre elles (voir fnc_language_switcher / get_translation_url).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -79,3 +72,93 @@ function fnc_content_model_pll_taxonomies( $taxonomies, $is_settings ) {
 	return $taxonomies;
 }
 add_filter( 'pll_get_taxonomies', 'fnc_content_model_pll_taxonomies', 10, 2 );
+
+/**
+ * Meta d'ordre synchronisees entre traductions (copy/sync Polylang).
+ *
+ * L'ordre editorial (protocole, index de tri, mise en avant accueil) est une
+ * donnee STRUCTURELLE, pas du contenu localise : il doit rester identique en FR
+ * et en EN. Sans cette synchronisation, un ajustement du tri cote FR seulement
+ * ferait DIVERGER l'ordre des listes entre les deux langues. En declarant ces
+ * cles comme copiees, toute modification sur une traduction se propage aux
+ * autres. (Les feuilles reellement localisees — titres, textes — ne sont PAS
+ * listees ici : elles restent traduisibles independamment.)
+ *
+ * @param array<int,string> $metas Cles meta copiees/synchronisees par Polylang.
+ * @return array<int,string>
+ */
+function fnc_content_model_pll_copy_metas( $metas ) {
+	$ordering = array(
+		'_fnc_speaker_protocol_order',
+		'_fnc_speaker_sort_index',
+		'_fnc_speaker_home_featured',
+		'_fnc_speaker_home_featured_order',
+		'_fnc_partenaire_sort_index',
+	);
+	foreach ( $ordering as $key ) {
+		if ( ! in_array( $key, (array) $metas, true ) ) {
+			$metas[] = $key;
+		}
+	}
+	return $metas;
+}
+add_filter( 'pll_copy_post_metas', 'fnc_content_model_pll_copy_metas' );
+
+/**
+ * Publication source d'une NOUVELLE traduction en cours de création.
+ *
+ * Polylang ouvre l'écran de création d'une traduction avec les paramètres
+ * `from_post` (ID de la publication d'origine) et `new_lang` (langue cible). On
+ * s'appuie dessus pour PRÉ-REMPLIR la traduction avec le contenu d'origine.
+ *
+ * @return \WP_Post|null
+ */
+function fnc_content_model_translation_source() {
+	// Lecture seule de paramètres de navigation Polylang ; l'écran d'édition est
+	// déjà protégé par WordPress. On vérifie tout de même la capacité de lecture.
+	if ( empty( $_GET['from_post'] ) || empty( $_GET['new_lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return null;
+	}
+	$from_id = absint( wp_unslash( $_GET['from_post'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ! $from_id || ! current_user_can( 'read_post', $from_id ) ) {
+		return null;
+	}
+	$source = get_post( $from_id );
+	return ( $source instanceof WP_Post ) ? $source : null;
+}
+
+/**
+ * Duplique la STRUCTURE (titre, contenu en blocs, extrait) de la publication
+ * d'origine dans une nouvelle traduction, à sa création — réalisant le modèle
+ * « Option A » validé MOA : la version EN démarre sur la structure de blocs FR,
+ * et l'éditeur traduit le texte SUR PLACE (mêmes blocs, même ordre).
+ *
+ * Il s'agit d'une copie unique à la création (comme la duplication Polylang),
+ * PAS d'une synchronisation structurelle continue. L'éditeur reste libre ensuite.
+ *
+ * @param string $default Valeur par défaut proposée par WordPress.
+ * @return string
+ */
+function fnc_content_model_translation_default_content( $default ) {
+	if ( '' !== $default ) {
+		return $default;
+	}
+	$source = fnc_content_model_translation_source();
+	return $source ? $source->post_content : $default;
+}
+add_filter( 'default_content', 'fnc_content_model_translation_default_content' );
+
+/**
+ * Extrait d'origine pré-rempli sur une nouvelle traduction (voir ci-dessus).
+ *
+ * @param string $default
+ * @return string
+ */
+function fnc_content_model_translation_default_excerpt( $default ) {
+	if ( '' !== $default ) {
+		return $default;
+	}
+	$source = fnc_content_model_translation_source();
+	return $source ? $source->post_excerpt : $default;
+}
+add_filter( 'default_excerpt', 'fnc_content_model_translation_default_excerpt' );

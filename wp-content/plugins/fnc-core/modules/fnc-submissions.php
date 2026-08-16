@@ -1,12 +1,14 @@
 <?php
 /**
- * Plugin Name: FNC Core — Réception des formulaires (Module A)
+ * Plugin Name: FNC Core — Réception des formulaires
  * Description: Traitement serveur des formulaires Contact / Inscription / Partenariat :
- *              validation par champ, honeypot, anti-abus (rate-limit), stockage en CPT
- *              privé, accusé de réception e-mail. Portage fidèle de la logique Next.js
- *              (src/lib/submissions.ts + app/api/contact/route.ts).
+ *              validation par champ, anti-spam, anti-abus (limite d'envois), stockage
+ *              privé et accusé de réception par e-mail.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : ce fichier est autonome (activable tel quel) OU à fusionner dans le
  * plugin FNC Core (includes/submissions.php). Le MARKUP des formulaires reste au thème ;
@@ -22,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* ==========================================================================
- * 1. Définition des 3 formulaires — champs réels des collections Payload
+ * 1. Définition des 3 formulaires — champs de chaque formulaire
  *    (ContactSubmissions, Registrations, PartnershipRequests).
- *    Les longueurs max reflètent lib/submissions.ts (LIMITS).
+ *    Les longueurs maximales bornent chaque champ.
  * ======================================================================== */
 function fnc_submission_forms() {
 	return array(
@@ -48,7 +50,7 @@ function fnc_submission_forms() {
 				'participation' => array( 'required' => false, 'type' => 'text',     'max' => 80 ),
 				'motivation'    => array( 'required' => false, 'type' => 'textarea', 'max' => 4000 ),
 				// `edition` : résolue côté serveur (édition active), l'utilisateur ne
-				// choisit pas — voir Module C (fnc_resolve_active_edition). Cf. filtre plus bas.
+				// choisit pas — voir fnc_resolve_active_edition(). Cf. filtre plus bas.
 			),
 		),
 		'partenariat' => array(
@@ -134,8 +136,8 @@ function fnc_handle_submission() {
 		fnc_submission_success_redirect( $redirect, $type );
 	}
 
-	// Gouvernance par drapeau (Module F) : un type peut être FERMÉ (p. ex. inscriptions
-	// non ouvertes → refus honnête, comme le 403 de api/inscription). Défaut : accepté.
+	// Gouvernance par option : un type peut être FERMÉ (p. ex. inscriptions non
+	// ouvertes → refus honnête, message « fermé »). Défaut : accepté.
 	if ( ! apply_filters( 'fnc_submission_accepts', true, $type ) ) {
 		fnc_submission_flash_redirect( $redirect, $type, array( '_form' => 'closed' ), array() );
 	}
@@ -185,13 +187,23 @@ function fnc_handle_submission() {
 		fnc_submission_flash_redirect( $redirect, $type, array( '_form' => 'store' ), array(), $data );
 	}
 
+	// Rattachement AUTOMATIQUE de l'inscription à l'édition active (résolution :
+	// en cours → à venir). L'utilisateur ne choisit pas ;
+	// la demande n'est jamais orpheline. #4 audit inscription.
+	if ( 'inscription' === $type && function_exists( 'fnc_registration_edition_id' ) ) {
+		$fnc_reg_ed = fnc_registration_edition_id();
+		if ( $fnc_reg_ed ) {
+			update_post_meta( $post_id, 'edition', $fnc_reg_ed );
+		}
+	}
+
 	// Accusé de réception best-effort — la demande est déjà enregistrée.
 	$sent = fnc_submission_send_ack( $type, $data );
 	update_post_meta( $post_id, 'acknowledgement', $sent ? 'sent' : 'not-delivered' );
 
 	/**
 	 * Hook d'extension (notifications internes, CRM, résolution d'édition active pour
-	 * l'inscription via Module C, etc.).
+	 * l'inscription via fnc_current_edition_id(), etc.).
 	 */
 	do_action( 'fnc_submission_stored', $post_id, $type, $data );
 
@@ -259,10 +271,45 @@ function fnc_submission_rate_limited( $type ) {
 	return false;
 }
 
+/**
+ * IP cliente pour l'anti-abus (rate-limit).
+ *
+ * Par défaut : REMOTE_ADDR uniquement — la source la plus fiable, NON falsifiable par
+ * le client. On ne lit JAMAIS d'en-tête `X-Forwarded-For`/`Client-IP` par défaut, car
+ * ils sont librement forgeables (contournement trivial du seau).
+ *
+ * Derrière un CDN/reverse-proxy de confiance, REMOTE_ADDR devient l'IP du proxy → tous
+ * les visiteurs partagent alors le même seau (risque d'auto-DoS du formulaire). Pour
+ * restaurer la vraie IP, activez EXPLICITEMENT la confiance proxy, et UNIQUEMENT si votre
+ * proxy réécrit/nettoie l'en-tête client (sinon vous rouvrez la falsification) :
+ *
+ *   define( 'FNC_TRUSTED_PROXY', true );                       // wp-config.php
+ *   add_filter( 'fnc_client_ip_header', fn() => 'HTTP_CF_CONNECTING_IP' ); // en-tête non-spoofable du CDN
+ *
+ * `fnc_client_ip_header` par défaut = `HTTP_X_FORWARDED_FOR` (on prend alors la 1re IP
+ * valide de la liste). Préférez un en-tête dédié du CDN (ex. CF-Connecting-IP) quand il existe.
+ */
 function fnc_client_ip() {
-	// Derrière un reverse-proxy (Cloudflare…), REMOTE_ADDR est le proxy. Adapter au besoin.
-	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? wp_unslash( $_SERVER['REMOTE_ADDR'] ) : '0.0.0.0';
-	return sanitize_text_field( $ip );
+	$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
+
+	$trusted = apply_filters( 'fnc_behind_trusted_proxy', defined( 'FNC_TRUSTED_PROXY' ) && FNC_TRUSTED_PROXY );
+	if ( ! $trusted ) {
+		return $remote; // Cas par défaut : IP réseau réelle, non falsifiable.
+	}
+
+	$header = apply_filters( 'fnc_client_ip_header', 'HTTP_X_FORWARDED_FOR' );
+	if ( empty( $_SERVER[ $header ] ) ) {
+		return $remote;
+	}
+
+	$raw = sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) );
+	foreach ( explode( ',', $raw ) as $candidate ) {
+		$candidate = trim( $candidate );
+		if ( filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
+			return $candidate; // 1re IP valide = client d'origine (proxy de confiance requis).
+		}
+	}
+	return $remote;
 }
 
 /** Locale courante (Polylang si présent, sinon fr). */

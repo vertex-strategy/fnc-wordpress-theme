@@ -21,17 +21,17 @@ msgstr ""
 
 #. Theme URI of the theme
 #: style.css
-msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgid "https://www.grinso.io"
 msgstr ""
 
 #. Description of the theme
 #: style.css
-msgid "Template vitrine derive de la maquette homepage-v2 du Forum Numerique Congo (ADR-007). Produit parallele, independant du site officiel Next.js/Payload."
-msgstr "Showcase template derived from the homepage-v2 mockup of the Forum Numérique Congo (ADR-007). A parallel product, independent from the official Next.js/Payload site."
+msgid "Template institutionnel bilingue du Forum Numérique Congo."
+msgstr "Bilingual institutional template for the Forum Numérique Congo."
 
 #. Author of the theme
 #: style.css
-msgid "Vertex Strategy"
+msgid "Grinso & Associés"
 msgstr ""
 
 #: archive-fnc_actualite.php:24
@@ -2570,3 +2570,44 @@ msgstr "Join the Forum"
 #: page-mot-du-president.php:56
 msgid "La prochaine édition réunit décideurs, experts et société civile autour du numérique. Prenez part au dialogue."
 msgstr "The next edition brings together decision-makers, experts and civil society around digital. Take part in the dialogue."
+
+#: front-page.php
+msgctxt "eyebrow carrousel des voix"
+msgid "%1$s · %2$s, %3$s"
+msgstr "%1$s · %2$s, %3$s"
+
+#: front-page.php
+msgid "%d intervenant"
+msgid_plural "%d intervenants"
+msgstr[0] "%d speaker"
+msgstr[1] "%d speakers"
+
+#: front-page.php
+msgid "%d pays"
+msgid_plural "%d pays"
+msgstr[0] "%d country"
+msgstr[1] "%d countries"
+
+#: 404.php
+msgid "Erreur 404"
+msgstr "Error 404"
+
+#: 404.php
+msgid "Page non trouvée"
+msgstr "Page not found"
+
+#: 404.php
+msgid "La page demandée n’existe pas ou n’est plus disponible."
+msgstr "The requested page does not exist or is no longer available."
+
+#: 404.php
+msgid "Retour à l’accueil"
+msgstr "Back to home"
+
+#: 404.php
+msgid "Voir les éditions"
+msgstr "View editions"
+
+#: functions.php
+msgid "Le texte juridique officiel sera publié après validation."
+msgstr "The official legal text will be published after validation."

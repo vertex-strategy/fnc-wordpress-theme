@@ -1,23 +1,11 @@
 <?php
 /**
- * Custom Post Types — reflete les collections publiques Payload CMS.
+ * Forum Numérique Congo — types de contenu (éditions, intervenants, sessions, publications, partenaires, actualités).
  *
- * Correspondance (ADR-007, Decision 2, docs/adr/ADR-007-*.md du depot
- * forum-numerique-congo) :
- *
- *   Editions    -> edition
- *   Sessions    -> session
- *   Speakers    -> intervenant
- *   Partners    -> partenaire
- *   Publications -> publication
- *   News        -> actualite
- *
- * Categories/Tags -> taxonomies dediees (voir taxonomies.php).
- * Pages -> pages WordPress natives (pas de CPT).
- *
- * Collections explicitement hors perimetre (transactionnelles, sans usage
- * dans une vitrine) : ContactSubmissions, Registrations,
- * PartnershipRequests, Users, Media (mediatheque WP native).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -114,7 +102,9 @@ function fnc_content_model_register_post_types() {
 			),
 			'public'       => true,
 			'has_archive'  => true,
-			'rewrite'      => array( 'slug' => 'publications' ),
+			// Slug « ressources » (comme le site du Forum : /ressources), pas
+			// « publications » ; l'ancien 404 sur /ressources est ainsi corrigé.
+			'rewrite'      => array( 'slug' => 'ressources' ),
 			'menu_icon'    => 'dashicons-media-document',
 			'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 			'show_in_rest' => true,

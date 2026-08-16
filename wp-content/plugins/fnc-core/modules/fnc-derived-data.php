@@ -1,12 +1,15 @@
 <?php
 /**
- * Plugin Name: FNC Core — Données dérivées (Module C)
- * Description: Helpers de logique métier portables (indépendants du thème) : édition
- *              active + statut, compte à rebours, participants dérivés des sessions
- *              publiées, voix mises en avant, et garde « droit à l'image » (RÈGLE 7).
- *              Portage fidèle de src/data/agenda.ts + src/data/editions.ts.
+ * Plugin Name: FNC Core — Données du site
+ * Description: Fonctions métier portables (indépendantes du thème) : édition active +
+ *              statut, compte à rebours, participants dérivés des sessions publiées,
+ *              voix mises en avant, programme par jour, filtres d'intervenants et garde
+ *              « droit à l'image » (portrait affiché seulement si l'autorisation est acquise).
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Toutes les fonctions sont
  * gardées par function_exists() → aucun conflit avec le thème existant.
@@ -29,13 +32,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /* ==========================================================================
  * ÉDITION — résolution de l'édition active + statut + compte à rebours
- * (cf. data/editions.ts : resolveActiveEdition, loadCurrentEdition ; page.tsx : daysToForum)
+ * (édition active + compte à rebours)
  * ======================================================================== */
+
+if ( ! function_exists( 'fnc_resolve_current_edition' ) ) {
+	/**
+	 * Édition EN COURS (status='current') UNIQUEMENT — jamais de repli « à venir ».
+	 * Départage DÉTERMINISTE par année DÉCROISSANTE si plusieurs éditions sont
+	 * marquées « en cours » (la plus récente gagne). Vues current-only : accueil,
+	 * hub, agenda, participants, voix, infos-pratiques, JSON-LD. Null si aucune.
+	 *
+	 * @return WP_Post|null
+	 */
+	function fnc_resolve_current_edition() {
+		static $cache = false;
+		if ( false !== $cache ) {
+			return $cache;
+		}
+		$current = get_posts( array(
+			'post_type'      => 'fnc_edition',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'meta_key'       => '_fnc_edition_year',
+			'orderby'        => 'meta_value_num',
+			'order'          => 'DESC',
+			'meta_query'     => array(
+				array( 'key' => '_fnc_edition_status', 'value' => 'current' ),
+			),
+			'no_found_rows'  => true,
+		) );
+		return $cache = ( ! empty( $current ) ? $current[0] : null );
+	}
+}
 
 if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 	/**
-	 * Édition active = l'édition « en cours » ; à défaut, la prochaine « à venir »
-	 * (année la plus proche). L'utilisateur ne choisit jamais l'édition (décision MOA).
+	 * Édition active AVEC REPLI : « en cours », à défaut la prochaine « à venir »
+	 * (année la plus proche). RÉSERVÉE au rattachement d'inscription (parité
+	 * resolveActiveEdition du Next) — PAS aux vitrines current-only.
 	 *
 	 * @return WP_Post|null
 	 */
@@ -44,21 +78,10 @@ if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 		if ( false !== $cache ) {
 			return $cache;
 		}
-
-		// 1) « en cours »
-		$current = get_posts( array(
-			'post_type'      => 'fnc_edition',
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'meta_key'       => '_fnc_edition_status',
-			'meta_value'     => 'current',
-			'no_found_rows'  => true,
-		) );
-		if ( ! empty( $current ) ) {
-			return $cache = $current[0];
+		$current = fnc_resolve_current_edition();
+		if ( $current ) {
+			return $cache = $current;
 		}
-
-		// 2) à défaut, la prochaine « à venir » (année croissante)
 		$upcoming = get_posts( array(
 			'post_type'      => 'fnc_edition',
 			'post_status'    => 'publish',
@@ -71,14 +94,21 @@ if ( ! function_exists( 'fnc_resolve_active_edition' ) ) {
 			),
 			'no_found_rows'  => true,
 		) );
-
 		return $cache = ( ! empty( $upcoming ) ? $upcoming[0] : null );
 	}
 }
 
 if ( ! function_exists( 'fnc_current_edition_id' ) ) {
-	/** ID de l'édition active (0 si aucune). */
+	/** ID de l'édition EN COURS (current-strict ; 0 si aucune). Vues current-only. */
 	function fnc_current_edition_id() {
+		$ed = fnc_resolve_current_edition();
+		return $ed ? (int) $ed->ID : 0;
+	}
+}
+
+if ( ! function_exists( 'fnc_registration_edition_id' ) ) {
+	/** ID pour le RATTACHEMENT d'inscription : en cours → à venir (repli). */
+	function fnc_registration_edition_id() {
 		$ed = fnc_resolve_active_edition();
 		return $ed ? (int) $ed->ID : 0;
 	}
@@ -113,7 +143,7 @@ if ( ! function_exists( 'fnc_days_until_edition' ) ) {
 
 /* ==========================================================================
  * PARTICIPANTS — dérivés des sessions PUBLIÉES de l'édition
- * (cf. data/agenda.ts : deriveParticipants — modérateur + intervenants d'≥1 session,
+ * (participants = modérateur + intervenants d'≥1 session publiée,
  *  ordonnés par protocole)
  * ======================================================================== */
 
@@ -181,15 +211,22 @@ if ( ! function_exists( 'fnc_edition_participants' ) ) {
 			'no_found_rows'  => true,
 		) );
 
+		// Ordre GLOBAL (A1) : protocolOrder ASC (absent -> dernier), puis
+		// sort_index ASC (ordre editorial, editable), puis titre (tri stable).
 		usort( $speakers, function ( $a, $b ) {
 			$oa = (int) get_post_meta( $a->ID, '_fnc_speaker_protocol_order', true );
 			$ob = (int) get_post_meta( $b->ID, '_fnc_speaker_protocol_order', true );
 			$oa = $oa ? $oa : PHP_INT_MAX;
 			$ob = $ob ? $ob : PHP_INT_MAX;
-			if ( $oa === $ob ) {
-				return strcmp( get_the_title( $a ), get_the_title( $b ) );
+			if ( $oa !== $ob ) {
+				return $oa - $ob;
 			}
-			return $oa - $ob;
+			$sa = (int) get_post_meta( $a->ID, '_fnc_speaker_sort_index', true );
+			$sb = (int) get_post_meta( $b->ID, '_fnc_speaker_sort_index', true );
+			if ( $sa !== $sb ) {
+				return $sa - $sb;
+			}
+			return strcmp( get_the_title( $a ), get_the_title( $b ) );
 		} );
 
 		return wp_list_pluck( $speakers, 'ID' );
@@ -198,22 +235,54 @@ if ( ! function_exists( 'fnc_edition_participants' ) ) {
 
 if ( ! function_exists( 'fnc_home_voices' ) ) {
 	/**
-	 * Voix de la home : participants de l'édition active, plafonnés à $count.
-	 * NOTE : le site Next.js promeut certaines voix (champ homeFeatured/homeFeaturedOrder,
-	 * cf. options A/B). Ce champ n'existe PAS encore dans le modèle WP — à ajouter au
-	 * content-model si l'on veut la mise en avant. En attendant : ordre protocolaire.
+	 * Voix de la home : participants de l'édition active, avec PROMOTION
+	 * éditoriale, plafonnés à $count (défaut 10).
+	 *
+	 * Ordre (A2) : les voix « mises en avant » (_fnc_speaker_home_featured)
+	 * d'abord, triées par _fnc_speaker_home_featured_order (absent -> rang dans
+	 * l'ordre global), puis le reste dans l'ordre global (A1), le tout plafonné.
+	 * Une voix promue hors édition en cours n'apparaît pas (elle n'est pas
+	 * participante), ce qui préserve la cohérence « les voix de cette édition ».
 	 *
 	 * @return int[]
 	 */
 	function fnc_home_voices( $count = 10, $edition_id = 0 ) {
-		$ids = fnc_edition_participants( $edition_id );
-		return array_slice( $ids, 0, max( 0, (int) $count ) );
+		$count = max( 0, (int) $count );
+		$ids   = fnc_edition_participants( $edition_id ); // ordre global A1
+		if ( empty( $ids ) || 0 === $count ) {
+			return array_slice( $ids, 0, $count );
+		}
+
+		$featured = array();
+		$rest     = array();
+		foreach ( $ids as $rank => $pid ) {
+			if ( get_post_meta( $pid, '_fnc_speaker_home_featured', true ) ) {
+				$order      = get_post_meta( $pid, '_fnc_speaker_home_featured_order', true );
+				$featured[] = array(
+					'id'    => $pid,
+					'order' => ( '' === $order ) ? $rank : (int) $order,
+					'rank'  => $rank,
+				);
+			} else {
+				$rest[] = $pid;
+			}
+		}
+
+		usort( $featured, function ( $a, $b ) {
+			if ( $a['order'] !== $b['order'] ) {
+				return $a['order'] - $b['order'];
+			}
+			return $a['rank'] - $b['rank'];
+		} );
+
+		$ordered = array_merge( wp_list_pluck( $featured, 'id' ), $rest );
+		return array_slice( $ordered, 0, $count );
 	}
 }
 
 /* ==========================================================================
  * PAYS REPRÉSENTÉS — dérivés du champ pays des participants
- * (cf. data/agenda.ts : countries. L'ORDRE et les DRAPEAUX sont déjà dans le thème :
+ * (pays des participants. L'ORDRE et les DRAPEAUX peuvent venir des réglages :
  *  fnc_order_countries / fnc_country_flag — à consolider ICI à terme. On ne les
  *  redéfinit pas pour éviter tout conflit ; on les réutilise s'ils existent.)
  * ======================================================================== */
@@ -231,9 +300,15 @@ if ( ! function_exists( 'fnc_edition_countries' ) ) {
 		foreach ( fnc_edition_participants( $edition_id ) as $sid ) {
 			$raw = (string) get_post_meta( $sid, '_fnc_speaker_country', true );
 			foreach ( array_map( 'trim', explode( '/', $raw ) ) as $c ) {
-				if ( '' !== $c && ! isset( $seen[ $c ] ) ) {
-					$seen[ $c ] = true;
-					$list[]     = $c;
+				if ( '' === $c ) {
+					continue;
+				}
+				// Dédup sur la clé NORMALISÉE (« Congo » ≡ « congo »), en gardant le
+				// PREMIER libellé vu pour l'affichage.
+				$key = function_exists( 'fnc_country_key' ) ? fnc_country_key( $c ) : remove_accents( strtolower( $c ) );
+				if ( ! isset( $seen[ $key ] ) ) {
+					$seen[ $key ] = true;
+					$list[]       = $c;
 				}
 			}
 		}
@@ -251,9 +326,9 @@ if ( ! function_exists( 'fnc_edition_countries' ) ) {
 }
 
 /* ==========================================================================
- * RÈGLE 7 — GARDE « DROIT À L'IMAGE »
+ * GARDE « DROIT À L'IMAGE »
  * Un portrait n'est affiché publiquement QUE si le droit à l'image est « obtenu »
- * et non expiré. Aucune autorisation n'est présumée. (cf. data/agenda.ts mapSpeaker.)
+ * et non expiré. Aucune autorisation n'est présumée.
  *
  * ⚠️ IMPORTANT : les métas ci-dessous N'EXISTENT PAS encore dans le content-model WP.
  *    À AJOUTER à la collection Intervenant (post-types.php) :
@@ -271,7 +346,7 @@ if ( ! function_exists( 'fnc_speaker_image_allowed' ) ) {
 		$allowed = ( 'obtenu' === $status ) && $not_expired;
 
 		/**
-		 * Filtre de TRANSITION. RÈGLE 7 = false par défaut (aucune présomption).
+		 * Filtre de TRANSITION. Garde = false par défaut (aucune présomption).
 		 * Pour afficher les portraits pendant la saisie des droits :
 		 *   add_filter('fnc_speaker_image_allowed', '__return_true');
 		 * — à RETIRER une fois les droits renseignés.
@@ -299,8 +374,130 @@ if ( ! function_exists( 'fnc_speaker_portrait' ) ) {
 }
 
 /* ==========================================================================
+ * M1 — Protection d'accès aux MÉDIAS non diffusables (droit à l'image / brouillons)
+ *
+ * La garde d'AFFICHAGE (fnc_speaker_portrait → monogramme) n'empêche pas d'ATTEINDRE le
+ * FICHIER : une attachment reste servie depuis /wp-content/uploads et listée par l'API
+ * REST média. On restreint donc, pour les visiteurs NON habilités :
+ *   (a) le portrait d'un intervenant dont le droit à l'image n'est pas obtenu / a expiré ;
+ *   (b) tout média rattaché à un contenu NON publié (brouillon / en attente / privé).
+ *
+ * Couverture PHP : masquage en REST (source_url / guid / media_details retirés) + 404 sur
+ * la page d'attachment. ⚠️ L'accès DIRECT au fichier (URL uploads devinée) relève du
+ * serveur web — voir INSTALL.md (règle .htaccess / nginx) : PHP ne peut pas l'intercepter.
+ * ======================================================================== */
+/**
+ * Ensemble (clé = ID de pièce jointe) des portraits servant d'image à la une d'un
+ * intervenant SANS droit à l'image acquis. Calculé UNE seule fois par requête (une
+ * requête sur les intervenants) : la vérification par pièce jointe devient O(1), au
+ * lieu d'une recherche inverse `_thumbnail_id` déclenchée PAR pièce jointe. Évite
+ * l'amplification de charge sur l'endpoint public /wp-json/wp/v2/media (jusqu'à 100
+ * items/page → jusqu'à 100 requêtes méta non indexées auparavant).
+ */
+if ( ! function_exists( 'fnc_restricted_thumbnail_ids' ) ) {
+	function fnc_restricted_thumbnail_ids() {
+		static $ids = null;
+		if ( null !== $ids ) {
+			return $ids;
+		}
+		$ids = array();
+		if ( ! function_exists( 'fnc_speaker_image_allowed' ) ) {
+			return $ids;
+		}
+		$speakers = get_posts(
+			array(
+				'post_type'              => 'fnc_intervenant',
+				'post_status'            => 'any',
+				'numberposts'            => -1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_term_cache' => false,
+			)
+		);
+		foreach ( $speakers as $sp_id ) {
+			$thumb = (int) get_post_thumbnail_id( $sp_id );
+			// Conservateur : si UN SEUL intervenant utilisant ce fichier n'a pas le
+			// droit à l'image, le fichier est restreint (protège en cas de partage).
+			if ( $thumb && ! fnc_speaker_image_allowed( (int) $sp_id ) ) {
+				$ids[ $thumb ] = true;
+			}
+		}
+		return $ids;
+	}
+}
+
+if ( ! function_exists( 'fnc_attachment_is_restricted' ) ) {
+	function fnc_attachment_is_restricted( $att_id ) {
+		$att_id = (int) $att_id;
+		$att    = get_post( $att_id );
+		if ( ! $att || 'attachment' !== $att->post_type ) {
+			return false;
+		}
+		// (a) Portrait servant d'image à la une d'un intervenant sans droit acquis.
+		//     Le lien se fait par `_thumbnail_id` (souvent post_parent=0). On teste
+		//     l'appartenance à l'ensemble pré-calculé (O(1)) au lieu d'une recherche
+		//     inverse par pièce jointe — cf. fnc_restricted_thumbnail_ids().
+		$fnc_restricted = fnc_restricted_thumbnail_ids();
+		if ( isset( $fnc_restricted[ $att_id ] ) ) {
+			return true;
+		}
+
+		// (b) Média rattaché (post_parent) à un contenu NON publié (brouillon/en attente/privé).
+		$parent_id = (int) $att->post_parent;
+		if ( $parent_id ) {
+			$parent = get_post( $parent_id );
+			if ( $parent && 'publish' !== $parent->post_status ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+// Masque l'URL de fichier des médias restreints dans l'API REST (visiteurs non habilités).
+add_filter(
+	'rest_prepare_attachment',
+	function ( $response, $post ) {
+		if ( ! ( $response instanceof WP_REST_Response ) ) {
+			return $response;
+		}
+		if ( current_user_can( 'edit_post', $post->ID ) ) {
+			return $response; // Éditeur / Admin : accès légitime.
+		}
+		if ( ! fnc_attachment_is_restricted( $post->ID ) ) {
+			return $response;
+		}
+		$data = $response->get_data();
+		foreach ( array( 'source_url', 'guid', 'media_details', 'description', 'caption' ) as $fnc_k ) {
+			unset( $data[ $fnc_k ] );
+		}
+		$response->set_data( $data );
+		return $response;
+	},
+	10,
+	2
+);
+
+// 404 sur la page d'attachment d'un média restreint (visiteurs non habilités).
+add_action(
+	'template_redirect',
+	function () {
+		if ( ! is_attachment() ) {
+			return;
+		}
+		$fnc_att_id = get_queried_object_id();
+		if ( $fnc_att_id && fnc_attachment_is_restricted( $fnc_att_id ) && ! current_user_can( 'edit_post', $fnc_att_id ) ) {
+			global $wp_query;
+			$wp_query->set_404();
+			status_header( 404 );
+			nocache_headers();
+		}
+	}
+);
+
+/* ==========================================================================
  * AGENDA — sessions groupées par jour (jour puis horaire)
- * (cf. data/agenda.ts : `days` + `sessions.sort(day, startMinutes)`.)
+ * (sessions groupées par jour, triées par horaire.)
  * Dérivation PURE : renvoie une structure prête, ZÉRO rendu (la scénographie —
  * onglets, cartes — reste au thème). Rend l'agenda portable d'un thème à l'autre.
  * ======================================================================== */
@@ -416,7 +613,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
 		$ids = fnc_edition_participants( $edition_id );
 
 		$profils     = array(); // slug => ['slug','name','count']
-		$country_cnt = array(); // name => count
+		$country_cnt = array(); // clé pays NORMALISÉE => count
 		foreach ( $ids as $sid ) {
 			$terms = get_the_terms( $sid, 'fnc_profil' );
 			if ( is_array( $terms ) ) {
@@ -429,18 +626,24 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
 			}
 			$raw = (string) get_post_meta( $sid, '_fnc_speaker_country', true );
 			foreach ( array_map( 'trim', explode( '/', $raw ) ) as $c ) {
-				if ( '' !== $c ) {
-					$country_cnt[ $c ] = isset( $country_cnt[ $c ] ) ? $country_cnt[ $c ] + 1 : 1;
+				if ( '' === $c ) {
+					continue;
 				}
+				// Compte sur la clé NORMALISÉE (« Congo » ≡ « congo ») pour que le
+				// compteur corresponde à la frise dédupliquée.
+				$ckey                = function_exists( 'fnc_country_key' ) ? fnc_country_key( $c ) : remove_accents( strtolower( $c ) );
+				$country_cnt[ $ckey ] = isset( $country_cnt[ $ckey ] ) ? $country_cnt[ $ckey ] + 1 : 1;
 			}
 		}
 
 		// Pays ordonnés comme la frise (réutilise l'ordre éditorial déjà en place).
+		// Le compte se lit sur la clé normalisée du libellé retenu.
 		$countries = array();
 		foreach ( fnc_edition_countries( $edition_id ) as $name ) {
+			$nkey        = function_exists( 'fnc_country_key' ) ? fnc_country_key( $name ) : remove_accents( strtolower( $name ) );
 			$countries[] = array(
 				'name'  => $name,
-				'count' => isset( $country_cnt[ $name ] ) ? $country_cnt[ $name ] : 0,
+				'count' => isset( $country_cnt[ $nkey ] ) ? $country_cnt[ $nkey ] : 0,
 			);
 		}
 
@@ -458,7 +661,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
  *  • Compte à rebours (home) :
  *      <b><?php echo esc_html( fnc_days_until_edition() ); ?></b> <span>jours</span>
  *
- *  • Portraits d'intervenants (RÈGLE 7) — remplacer tout affichage direct de la
+ *  • Portraits d'intervenants (droit à l'image) — remplacer tout affichage direct de la
  *    vignette par :
  *      <?php echo fnc_speaker_portrait( $speaker_id, 'medium' ) ?: fnc_render_monogram( $speaker_id ); ?>
  *      (si le droit n'est pas acquis, la fonction renvoie '' -> afficher le monogramme, initiales)
@@ -489,7 +692,7 @@ if ( ! function_exists( 'fnc_speaker_facets' ) ) {
  *        </button>
  *      <?php endforeach; ?>
  *
- *  • Inscription (Module A) — résoudre l'édition active côté serveur :
+ *  • Inscription — résoudre l'édition active côté serveur :
  *      add_action( 'fnc_submission_stored', function ( $post_id, $type ) {
  *        if ( 'inscription' === $type ) {
  *          update_post_meta( $post_id, 'edition', fnc_current_edition_id() );

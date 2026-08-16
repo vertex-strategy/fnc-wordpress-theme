@@ -1,11 +1,11 @@
 <?php
 /**
- * Taxonomies — reflete les collections Categories/Tags de Payload CMS.
+ * Forum Numérique Congo — taxonomies (catégories, étiquettes, profils, pays, niveaux de partenariat).
  *
- * Perimetre d'attachement aligne sur ADR-006 du depot forum-numerique-congo
- * (taxonomie des publications) : categories/tags s'appliquent aux
- * actualites, publications et sessions — pas aux intervenants, partenaires
- * ni editions, qui ne portent pas ce type de classification cote Payload.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,8 +48,8 @@ function fnc_content_model_register_taxonomies() {
 	);
 
 	/*
-	 * Filtres de l'archive Intervenants (ADR-007, amendement Decision 1) :
-	 * alignes sur les fonctionnalites reelles du site officiel (filtre par
+	 * Filtres de l'archive Intervenants :
+	 * alignes sur les fonctionnalites reelles du site du Forum (filtre par
 	 * profil et par pays), pas sur la maquette statique qui n'en avait pas.
 	 */
 	register_taxonomy(
@@ -63,7 +63,13 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Le PROFIL est un CHOIX UNIQUE (Officiel / Expert / Animateur). La boîte de
+			// tags par défaut laissait cumuler plusieurs profils → l'ajout d'un nouveau
+			// n'enlevait pas l'ancien, le statut ne changeait pas à l'écran. On la
+			// remplace par une métabox à boutons radio (relations.php) et on retire le
+			// panneau REST de l'éditeur de blocs pour éviter une double saisie.
+			'show_in_rest'      => false,
+			'meta_box_cb'       => 'fnc_cm_single_term_meta_box',
 			'rewrite'           => array( 'slug' => 'profil-intervenant' ),
 		)
 	);
@@ -79,15 +85,18 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Gere automatiquement : synchronise depuis le champ texte « Pays » de
+			// la fiche intervenant (relations.php). On masque le panneau de saisie
+			// (block editor + classique) pour eviter la double saisie.
+			'show_in_rest'      => false,
+			'meta_box_cb'       => false,
 			'rewrite'           => array( 'slug' => 'pays' ),
 		)
 	);
 
 	/*
-	 * Type de partenaire (ADR-007, amendement Decision 1 ; precise lors de la
-	 * reconciliation du modele de contenu avec le vrai schema Payload) : le
-	 * site officiel reel classe chaque partenaire par type d'engagement fixe
+	 * Type de partenaire : le
+	 * site du Forum reel classe chaque partenaire par type d'engagement fixe
 	 * (Institutionnel/Organisateur/Soutien/Sponsor) sur la fiche partenaire
 	 * elle-meme - c'est le champ `type` de la collection Partners. Le slug de
 	 * cette taxonomie (`fnc_niveau_partenariat`) est conserve tel quel pour ne
@@ -107,7 +116,10 @@ function fnc_content_model_register_taxonomies() {
 			'hierarchical'      => false,
 			'public'            => true,
 			'show_admin_column' => true,
-			'show_in_rest'      => true,
+			// Type de partenaire = CHOIX UNIQUE (même problème que le profil) : métabox
+			// radio à la place de la boîte de tags, panneau REST retiré (double saisie).
+			'show_in_rest'      => false,
+			'meta_box_cb'       => 'fnc_cm_single_term_meta_box',
 			'rewrite'           => array( 'slug' => 'niveau-partenariat' ),
 		)
 	);

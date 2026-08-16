@@ -1,13 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Espace presse" (Dossier presse).
+ * Forum Numérique Congo — gabarit de la page « Espace presse ».
  *
- * Aligne sur la page reelle localhost:3000/fr/espace-presse : heros, section
- * « Information », communiques (Ressources filtrees par la categorie
- * « Communiques »), contacts presse (issus des Reglages FNC), et
- * « Accreditation » -> page Contact. Les communiques sont un type de Ressource,
- * pas une collection separee (comme le vrai site). Les contacts et communiques
- * restent en etat d'attente sobre tant qu'ils ne sont pas renseignes.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,13 +14,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+/*
+ * Composition par blocs : des que l'editorial compose cette page avec des
+ * blocs FNC, ce gabarit s'efface au profit du contenu compose (editable et
+ * reagenceable) ; sinon il conserve son contenu de demonstration (comportement
+ * inchange). Meme convention que page.php et page-le-forum.php.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
+
+$fnc_route_h = fnc_route_hero( 'espace-presse' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Presse', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Un point d’accès clair pour couvrir le Forum.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'L’Espace presse rassemble uniquement les ressources publiées et les contacts confirmés, afin de faciliter un traitement médiatique fiable.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
-		'image_alt'  => __( 'Documents préparés dans une atmosphère institutionnelle calme', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => __( 'Espace presse du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Espace presse', 'fnc-wordpress-theme' ),
 	)
 );
@@ -48,8 +64,8 @@ $fnc_communiques      = $fnc_communiques_term
 <main id="main">
 	<section class="section">
 		<div class="container reading">
-			<p class="eyebrow"><?php esc_html_e( 'Information', 'fnc-wordpress-theme' ); ?></p>
-			<h2><?php esc_html_e( 'Des ressources vérifiables, pas un dossier de façade.', 'fnc-wordpress-theme' ); ?></h2>
+			<p class="eyebrow" data-fnc-st="espace-presse.intro.eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'intro', 'eyebrow' ) ); ?></p>
+			<h2 data-fnc-st="espace-presse.intro.title"><?php echo esc_html( fnc_stitle( 'espace-presse', 'intro', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'Les communiqués, documents et contacts presse apparaissent ici lorsqu’ils sont validés. Le Forum privilégie une information traçable, sobre et utilisable.', 'fnc-wordpress-theme' ); ?></p>
 			<p class="frise-note" style="margin-top:14px;"><?php esc_html_e( 'Kit presse, contacts et modalités : à confirmer lorsque non publiés.', 'fnc-wordpress-theme' ); ?></p>
 		</div>
@@ -59,8 +75,8 @@ $fnc_communiques      = $fnc_communiques_term
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Communiqués', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Ressources presse publiées.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="espace-presse.resources.eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'resources', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="espace-presse.resources.title"><?php echo esc_html( fnc_stitle( 'espace-presse', 'resources', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les communiqués de presse restent des ressources du portail. Chaque document publié conserve son lien vers la bibliothèque.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -90,8 +106,8 @@ $fnc_communiques      = $fnc_communiques_term
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Contacts', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Contacts presse confirmés.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="espace-presse.contacts.eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'contacts', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="espace-presse.contacts.title"><?php echo esc_html( fnc_stitle( 'espace-presse', 'contacts', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les contacts presse sont portés par les Réglages du site et réutilisables par les surfaces éditoriales.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -114,7 +130,7 @@ $fnc_communiques      = $fnc_communiques_term
 								<p><?php echo esc_html( fnc_pll( $fnc_contact['organization'] ) ); ?></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['email'] ) : ?>
-								<p style="margin-top:10px;"><a class="link-more" href="mailto:<?php echo esc_attr( antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>
+								<p style="margin-top:10px;"><a class="link-more" href="<?php echo esc_url( 'mailto:' . antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['phone'] ) : ?>
 								<p><a class="link-more" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $fnc_contact['phone'] ) ); ?>"><?php echo esc_html( $fnc_contact['phone'] ); ?></a></p>
@@ -134,8 +150,8 @@ $fnc_communiques      = $fnc_communiques_term
 
 	<section class="section linen">
 		<div class="container reading">
-			<p class="eyebrow"><?php esc_html_e( 'Accréditation', 'fnc-wordpress-theme' ); ?></p>
-			<h2><?php esc_html_e( 'L’accréditation reste un échange direct.', 'fnc-wordpress-theme' ); ?></h2>
+			<p class="eyebrow" data-fnc-st="espace-presse.accreditation.eyebrow"><?php echo esc_html( fnc_stitle( 'espace-presse', 'accreditation', 'eyebrow' ) ); ?></p>
+			<h2 data-fnc-st="espace-presse.accreditation.title"><?php echo esc_html( fnc_stitle( 'espace-presse', 'accreditation', 'title' ) ); ?></h2>
 			<p><?php esc_html_e( 'Il n’existe pas de formulaire d’accréditation : les journalistes peuvent utiliser la page Contact pour signaler leur demande.', 'fnc-wordpress-theme' ); ?></p>
 			<p style="margin-top:20px;"><a class="link-more" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contacter l’organisation', 'fnc-wordpress-theme' ); ?> <span class="arrow">→</span></a></p>
 		</div>

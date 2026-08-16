@@ -386,6 +386,46 @@ if ( ! function_exists( 'fnc_speaker_portrait' ) ) {
  * la page d'attachment. ⚠️ L'accès DIRECT au fichier (URL uploads devinée) relève du
  * serveur web — voir INSTALL.md (règle .htaccess / nginx) : PHP ne peut pas l'intercepter.
  * ======================================================================== */
+/**
+ * Ensemble (clé = ID de pièce jointe) des portraits servant d'image à la une d'un
+ * intervenant SANS droit à l'image acquis. Calculé UNE seule fois par requête (une
+ * requête sur les intervenants) : la vérification par pièce jointe devient O(1), au
+ * lieu d'une recherche inverse `_thumbnail_id` déclenchée PAR pièce jointe. Évite
+ * l'amplification de charge sur l'endpoint public /wp-json/wp/v2/media (jusqu'à 100
+ * items/page → jusqu'à 100 requêtes méta non indexées auparavant).
+ */
+if ( ! function_exists( 'fnc_restricted_thumbnail_ids' ) ) {
+	function fnc_restricted_thumbnail_ids() {
+		static $ids = null;
+		if ( null !== $ids ) {
+			return $ids;
+		}
+		$ids = array();
+		if ( ! function_exists( 'fnc_speaker_image_allowed' ) ) {
+			return $ids;
+		}
+		$speakers = get_posts(
+			array(
+				'post_type'              => 'fnc_intervenant',
+				'post_status'            => 'any',
+				'numberposts'            => -1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_term_cache' => false,
+			)
+		);
+		foreach ( $speakers as $sp_id ) {
+			$thumb = (int) get_post_thumbnail_id( $sp_id );
+			// Conservateur : si UN SEUL intervenant utilisant ce fichier n'a pas le
+			// droit à l'image, le fichier est restreint (protège en cas de partage).
+			if ( $thumb && ! fnc_speaker_image_allowed( (int) $sp_id ) ) {
+				$ids[ $thumb ] = true;
+			}
+		}
+		return $ids;
+	}
+}
+
 if ( ! function_exists( 'fnc_attachment_is_restricted' ) ) {
 	function fnc_attachment_is_restricted( $att_id ) {
 		$att_id = (int) $att_id;
@@ -393,28 +433,13 @@ if ( ! function_exists( 'fnc_attachment_is_restricted' ) ) {
 		if ( ! $att || 'attachment' !== $att->post_type ) {
 			return false;
 		}
-		// (a) Portrait utilisé comme image à la une d'un intervenant sans droit acquis.
-		//     Le lien se fait par la méta `_thumbnail_id`, PAS par post_parent (un portrait
-		//     déposé dans la médiathèque a souvent post_parent=0) → recherche inverse.
-		if ( function_exists( 'fnc_speaker_image_allowed' ) ) {
-			$owners = get_posts(
-				array(
-					'post_type'   => 'fnc_intervenant',
-					'post_status' => 'any',
-					'numberposts' => -1,
-					'fields'      => 'ids',
-					'meta_key'    => '_thumbnail_id',   // phpcs:ignore WordPress.DB.SlowDBQuery -- lookup ciblé hors chemin chaud (REST média / page attachment).
-					'meta_value'  => (string) $att_id,  // phpcs:ignore WordPress.DB.SlowDBQuery
-				)
-			);
-			// Conservateur : si UN SEUL intervenant utilisant ce fichier n'a pas le droit
-			// à l'image, le fichier est restreint (un portrait ne devrait pas être partagé ;
-			// en cas de partage, on protège par défaut).
-			foreach ( $owners as $owner_id ) {
-				if ( ! fnc_speaker_image_allowed( (int) $owner_id ) ) {
-					return true;
-				}
-			}
+		// (a) Portrait servant d'image à la une d'un intervenant sans droit acquis.
+		//     Le lien se fait par `_thumbnail_id` (souvent post_parent=0). On teste
+		//     l'appartenance à l'ensemble pré-calculé (O(1)) au lieu d'une recherche
+		//     inverse par pièce jointe — cf. fnc_restricted_thumbnail_ids().
+		$fnc_restricted = fnc_restricted_thumbnail_ids();
+		if ( isset( $fnc_restricted[ $att_id ] ) ) {
+			return true;
 		}
 
 		// (b) Média rattaché (post_parent) à un contenu NON publié (brouillon/en attente/privé).

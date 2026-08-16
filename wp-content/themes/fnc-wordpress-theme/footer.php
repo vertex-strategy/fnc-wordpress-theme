@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 						<ul class="foot-contact">
 							<?php if ( $fnc_email ) : ?>
-								<li><a href="mailto:<?php echo esc_attr( antispambot( $fnc_email ) ); ?>"><?php echo esc_html( antispambot( $fnc_email ) ); ?></a></li>
+								<li><a href="<?php echo esc_url( 'mailto:' . antispambot( $fnc_email ) ); ?>"><?php echo esc_html( antispambot( $fnc_email ) ); ?></a></li>
 							<?php endif; ?>
 							<?php if ( $fnc_address ) : ?>
 								<li><?php echo nl2br( esc_html( $fnc_address ) ); ?></li>

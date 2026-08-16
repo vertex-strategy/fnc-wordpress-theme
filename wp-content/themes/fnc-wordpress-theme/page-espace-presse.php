@@ -130,7 +130,7 @@ $fnc_communiques      = $fnc_communiques_term
 								<p><?php echo esc_html( fnc_pll( $fnc_contact['organization'] ) ); ?></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['email'] ) : ?>
-								<p style="margin-top:10px;"><a class="link-more" href="mailto:<?php echo esc_attr( antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>
+								<p style="margin-top:10px;"><a class="link-more" href="<?php echo esc_url( 'mailto:' . antispambot( $fnc_contact['email'] ) ); ?>"><?php echo esc_html( antispambot( $fnc_contact['email'] ) ); ?></a></p>
 							<?php endif; ?>
 							<?php if ( $fnc_contact['phone'] ) : ?>
 								<p><a class="link-more" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $fnc_contact['phone'] ) ); ?>"><?php echo esc_html( $fnc_contact['phone'] ); ?></a></p>

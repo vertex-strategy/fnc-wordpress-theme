@@ -228,7 +228,7 @@ function fnc_render_contact_coordinates() {
 		<dt><?php esc_html_e( 'E-mail', 'fnc-wordpress-theme' ); ?></dt>
 		<dd>
 			<?php if ( $email ) : ?>
-				<a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>"><?php echo esc_html( antispambot( $email ) ); ?></a>
+				<a href="<?php echo esc_url( 'mailto:' . antispambot( $email ) ); ?>"><?php echo esc_html( antispambot( $email ) ); ?></a>
 			<?php else : ?>
 				<span class="tbc"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span>
 			<?php endif; ?>

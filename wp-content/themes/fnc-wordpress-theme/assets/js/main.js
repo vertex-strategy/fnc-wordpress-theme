@@ -347,7 +347,7 @@
 		);
 		nums.forEach(function (el) {
 			var raw = (el.textContent || '').trim();
-			var m = raw.match(/^(\D*?)(\d[\d \s]*)(\D*)$/);
+			var m = raw.match(/^(\D*?)(\d(?:[\d \s]*\d)?)(\D*)$/);
 			if (!m) {
 				return; // pas un nombre -> on laisse la valeur telle quelle.
 			}

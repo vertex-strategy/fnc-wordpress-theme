@@ -1166,6 +1166,13 @@ if ( ! function_exists( 'fnc_cm_single_term_save' ) ) {
 			}
 			$field   = 'fnc_cm_single_term_' . $taxonomy;
 			$term_id = isset( $_POST[ $field ] ) ? (int) $_POST[ $field ] : 0;
+			// Le terme doit RÉELLEMENT appartenir à cette taxonomie : sans ce contrôle,
+			// un POST falsifié pourrait passer l'ID d'un terme d'une AUTRE taxonomie et
+			// wp_set_object_terms retomberait sur wp_insert_term() → terme parasite.
+			// ID invalide/étranger → aucun terme (comportement « aucune sélection »).
+			if ( $term_id > 0 && ! ( get_term( $term_id, $taxonomy ) instanceof WP_Term ) ) {
+				$term_id = 0;
+			}
 			// `false` en 4e argument = REMPLACE tous les termes existants (choix unique).
 			wp_set_object_terms( $post_id, $term_id > 0 ? array( $term_id ) : array(), $taxonomy, false );
 		}

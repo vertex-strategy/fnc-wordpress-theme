@@ -655,6 +655,19 @@ function fnc_sanitize_choice( $value, $setting ) {
  * @param WP_Customize_Manager $wp_customize
  */
 function fnc_customize_register( $wp_customize ) {
+	// SOURCE UNIQUE DES RÉGLAGES GÉNÉRAUX.
+	// Quand l'extension FNC Core est active, elle est AUTORITAIRE : fnc_get_setting()
+	// lit l'option `fnc_settings` (administrée dans « Réglages → FNC »), PAS les
+	// theme_mods. Ce panneau Customizer écrivait des theme_mods jamais relus dans ce
+	// cas → surface d'édition morte et trompeuse (les modifications n'apparaissaient
+	// pas). On ne l'enregistre donc QUE lorsque le thème tourne SEUL (sans le plugin),
+	// où il lit alors ses propres theme_mods. Les réglages de la page d'accueil, des
+	// héros et des titres de section sont enregistrés ailleurs (panneaux distincts) et
+	// restent disponibles : ils lisent get_theme_mod() directement et fonctionnent.
+	if ( defined( 'FNC_CORE_VERSION' ) ) {
+		return;
+	}
+
 	$wp_customize->add_panel(
 		'fnc_settings',
 		array(

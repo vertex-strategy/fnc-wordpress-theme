@@ -90,6 +90,11 @@ importées avec lui. Il ne touche à **aucun** autre contenu ni média que vous 
 
 ## 3. Premiers réglages du site  *(Réglages → FNC)*
 
+> **Important — où se saisissent les réglages généraux.** Identité, logos, coordonnées,
+> réseaux, pied de page et SEO par défaut se règlent **ici, dans Réglages → FNC** — **pas**
+> dans *Apparence → Personnaliser*. Le Customizer est réservé aux réglages de la **page
+> d'accueil** (sections, héros, titres de section).
+
 Renseignez une seule fois les informations transverses du portail :
 
 - **Identité** : nom officiel, slogan, sous-titre, description.
@@ -170,8 +175,8 @@ Intervenants → *Ajouter*. Renseignez :
 **Drapeaux des pays.** Sur la page Intervenants, le drapeau de chaque pays s'affiche
 **automatiquement** à partir du nom saisi (« France », « Congo », « RDC », « États-Unis »,
 « Côte d'Ivoire »… — la casse et les accents sont indifférents ; un pays écrit de deux façons
-proches ne compte qu'une fois). Aucun réglage à faire. Pour imposer un drapeau précis, téléversez-le
-dans **Personnaliser → FNC → Intervenants** (« Ordre des pays représentés »).
+proches ne compte qu'une fois). Aucun réglage à faire : l'ordre des pays suit par défaut le
+**pays hôte** puis l'**ordre alphabétique**.
 
 **Ordre d'affichage (partout : annuaire, participants, aperçus).** Deux champs, du plus
 prioritaire au moins prioritaire :

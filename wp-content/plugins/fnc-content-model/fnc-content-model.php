@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FNC_CONTENT_MODEL_VERSION', '1.0.25' );
+define( 'FNC_CONTENT_MODEL_VERSION', '1.0.53' );
 define( 'FNC_CONTENT_MODEL_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once FNC_CONTENT_MODEL_DIR . 'includes/post-types.php';

@@ -1,0 +1,1297 @@
+{
+  "generatedAt": "2026-07-25T15:46:34.887Z",
+  "editions": [
+    {
+      "legacyId": "2018-dematerialisation-gouvernance",
+      "slug": "2018-dematerialisation-gouvernance",
+      "year": "2018",
+      "title": "1re édition — La dématérialisation et la gouvernance électronique",
+      "theme": "La dématérialisation et la gouvernance électronique",
+      "themeEn": "Dematerialization and electronic governance",
+      "status": "past",
+      "active": 0,
+      "startDate": "2018-09-10",
+      "endDate": "2018-09-12",
+      "location": ""
+    },
+    {
+      "legacyId": "2020-transformation-digitale",
+      "slug": "2020-transformation-digitale",
+      "year": "2020",
+      "title": "2e édition — La transformation digitale ou numérique : opportunités et menaces",
+      "theme": "La transformation digitale ou numérique : opportunités et menaces",
+      "themeEn": "Digital transformation: opportunities and threats",
+      "status": "past",
+      "active": 0,
+      "startDate": "2020-02-17",
+      "endDate": "2020-02-19",
+      "location": ""
+    },
+    {
+      "legacyId": "2022-innovation-donnee",
+      "slug": "2022-innovation-donnee",
+      "year": "2022",
+      "title": "3e édition — L'innovation technologique et la donnée au cœur des transformations digitales : enjeux et défis",
+      "theme": "L'innovation technologique et la donnée au cœur des transformations digitales : enjeux et défis",
+      "themeEn": "Technological innovation and data at the heart of digital transformation: issues and challenges",
+      "status": "past",
+      "active": 0,
+      "startDate": "2022-02-16",
+      "endDate": "2022-02-18",
+      "location": ""
+    },
+    {
+      "legacyId": "2024-intelligence-artificielle",
+      "slug": "2024-intelligence-artificielle",
+      "year": "2024",
+      "title": "4e édition — L’Intelligence Artificielle — Rupture ou Continuité ?",
+      "theme": "L’Intelligence Artificielle — Rupture ou Continuité ?",
+      "themeEn": "Artificial Intelligence — Disruption or Continuity?",
+      "status": "past",
+      "active": 0,
+      "startDate": "2024-03-20",
+      "endDate": "2024-03-22",
+      "location": "Hôtel Atlantic Palace, Pointe-Noire, Congo"
+    },
+    {
+      "legacyId": "2027-souverainete-numerique",
+      "slug": "2027-souverainete-numerique",
+      "year": "2027",
+      "title": "Forum Numérique Congo 2027",
+      "theme": "La souveraineté numérique : réalité ou utopie ?",
+      "themeEn": "Digital sovereignty: reality or utopia?",
+      "status": "current",
+      "active": 1,
+      "startDate": "2027-03-25",
+      "endDate": "2027-03-27",
+      "location": "Hôtel Hilton, Brazzaville"
+    }
+  ],
+  "speakers": [
+    {
+      "legacyId": "bantsimba",
+      "slug": "bantsimba",
+      "title": "",
+      "name": "Dieudonné BANTSIMBA",
+      "roleFr": "Président du Conseil Départemental et Municipal, Député Maire de Brazzaville",
+      "roleEn": "President of the Departmental and Municipal Council, Deputy Mayor of Brazzaville",
+      "org": "Ville de Brazzaville",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 50
+    },
+    {
+      "legacyId": "bouya-er",
+      "slug": "bouya-er",
+      "title": "Ing.",
+      "name": "Eugène Rufin BOUYA",
+      "roleFr": "Président du Forum Numérique Congo, Directeur Général du GUOT",
+      "roleEn": "President of the Forum Numérique Congo, Director General of GUOT",
+      "org": "Forum Numérique Congo · GUOT",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "/images/speakers/eugene-rufin-bouya.jpeg",
+      "protocolOrder": 9
+    },
+    {
+      "legacyId": "nze",
+      "slug": "nze",
+      "title": "",
+      "name": "Frédéric NZE",
+      "roleFr": "Ministre des Postes, des Télécommunications et de l’Économie Numérique",
+      "roleEn": "Minister of Posts, Telecommunications and the Digital Economy",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "/images/speakers/frederic-nze.jpeg",
+      "protocolOrder": 3
+    },
+    {
+      "legacyId": "ngouonimba",
+      "slug": "ngouonimba",
+      "title": "",
+      "name": "Josué Rodrigue NGOUONIMBA",
+      "roleFr": "Ministre des Transports, de l’Aviation Civile et de la Marine Marchande",
+      "roleEn": "Minister of Transport, Civil Aviation and the Merchant Navy",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 4
+    },
+    {
+      "legacyId": "makosso",
+      "slug": "makosso",
+      "title": "",
+      "name": "Anatole Collinet MAKOSSO",
+      "roleFr": "Premier Ministre, Chef du Gouvernement",
+      "roleEn": "Prime Minister, Head of Government",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "/images/speakers/anatole-collinet-makosso.jpg",
+      "protocolOrder": 1
+    },
+    {
+      "legacyId": "bouya-jj",
+      "slug": "bouya-jj",
+      "title": "",
+      "name": "Jean Jacques BOUYA",
+      "roleFr": "Vice-Premier Ministre chargé de la Coordination des Infrastructures de développement, de l’Aménagement du territoire et de l’Entretien routier",
+      "roleEn": "Deputy Prime Minister for the Coordination of Development Infrastructure, Territorial Planning and Road Maintenance",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "/images/speakers/jean-jacques-bouya.jpeg",
+      "protocolOrder": 2
+    },
+    {
+      "legacyId": "yoka",
+      "slug": "yoka",
+      "title": "",
+      "name": "Christian YOKA",
+      "roleFr": "Ministre des Finances, du Budget et du Portefeuille Public",
+      "roleEn": "Minister of Finance, Budget and Public Portfolio",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 5
+    },
+    {
+      "legacyId": "ngatse",
+      "slug": "ngatse",
+      "title": "",
+      "name": "Ludovic NGATSE",
+      "roleFr": "Ministre de l’Économie, du Plan et de l’Intégration Régionale",
+      "roleEn": "Minister of the Economy, Planning and Regional Integration",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 6
+    },
+    {
+      "legacyId": "djombo",
+      "slug": "djombo",
+      "title": "",
+      "name": "Michel DJOMBO BALOMBELLY",
+      "roleFr": "Ministre du Développement Industriel, des Zones Économiques Spéciales et de la Promotion du Secteur Privé",
+      "roleEn": "Minister of Industrial Development, Special Economic Zones and Private-Sector Promotion",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 7
+    },
+    {
+      "legacyId": "bahamboula",
+      "slug": "bahamboula",
+      "title": "",
+      "name": "Prince Bertrand BAHAMBOULA",
+      "roleFr": "Ministre Délégué aux Industries Touristiques",
+      "roleEn": "Minister Delegate for Tourism Industries",
+      "org": "Gouvernement du Congo",
+      "country": "Congo",
+      "kind": "official",
+      "photo": "",
+      "protocolOrder": 8
+    },
+    {
+      "legacyId": "dinga-doumas",
+      "slug": "dinga-doumas",
+      "title": "",
+      "name": "Florent Distel DINGA DOUMAS",
+      "roleFr": "Chef de service Marketing, Communication et Coopération Internationale, GUOT",
+      "roleEn": "Head of Marketing, Communication and International Cooperation, GUOT",
+      "org": "GUOT",
+      "country": "Congo",
+      "kind": "host",
+      "photo": "",
+      "protocolOrder": 60
+    },
+    {
+      "legacyId": "okoi",
+      "slug": "okoi",
+      "title": "Mme",
+      "name": "Raïssa OKOÏ",
+      "roleFr": "Communicante",
+      "roleEn": "Communicator",
+      "org": "République du Congo",
+      "country": "Congo",
+      "kind": "host",
+      "photo": "",
+      "protocolOrder": 61
+    },
+    {
+      "legacyId": "niane",
+      "slug": "niane",
+      "title": "Pr.",
+      "name": "Mamoudou NIANE",
+      "roleFr": "Expert en droit du Numérique et des affaires, Secrétaire Général de la Commission de Protection des Données",
+      "roleEn": "Expert in digital and business law, Secretary General of the Data Protection Commission",
+      "org": "Université Gaston Berger de Saint-Louis",
+      "country": "Sénégal",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 62
+    },
+    {
+      "legacyId": "jean",
+      "slug": "jean",
+      "title": "Dr.",
+      "name": "Aurélie JEAN",
+      "roleFr": "Scientifique numéricienne, experte en IA et sciences algorithmiques, Présidente et cofondatrice d’Infra, ancienne chercheuse au MIT",
+      "roleEn": "Computational scientist, AI and algorithmic-science expert, President and co-founder of Infra, former MIT researcher",
+      "org": "Infra",
+      "country": "France / États-Unis",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 63
+    },
+    {
+      "legacyId": "aubert",
+      "slug": "aubert",
+      "title": "Ing.",
+      "name": "Guillaume AUBERT",
+      "roleFr": "Expert en management informatique et transformation digitale / Télécoms, Consultant",
+      "roleEn": "IT management and digital-transformation / telecoms expert, Consultant",
+      "org": "Triglav Digital / Venthone",
+      "country": "Luxembourg",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 64
+    },
+    {
+      "legacyId": "ndukuma",
+      "slug": "ndukuma",
+      "title": "Pr.",
+      "name": "Kodjo NDUKUMA ADJAYI",
+      "roleFr": "Expert en Droit du Numérique, Cybercriminalité et Télécommunications",
+      "roleEn": "Expert in digital law, cybercrime and telecommunications",
+      "org": "Université Pédagogique Nationale, Kinshasa",
+      "country": "RDC",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 65
+    },
+    {
+      "legacyId": "klenkle",
+      "slug": "klenkle",
+      "title": "Ing.",
+      "name": "Georges KLENKLE",
+      "roleFr": "Expert en Inclusion financière, Entrepreneur, Co-fondateur de Dégetel et Eugeka, Président fondateur de Freemium Play",
+      "roleEn": "Financial-inclusion expert, entrepreneur, co-founder of Dégetel and Eugeka, founding president of Freemium Play",
+      "org": "Freemium Play",
+      "country": "France",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 66
+    },
+    {
+      "legacyId": "bartholomeeusen",
+      "slug": "bartholomeeusen",
+      "title": "Dr.",
+      "name": "Alexandre BARTHOLOMEEUSEN",
+      "roleFr": "Expert en Droit du Numérique",
+      "roleEn": "Expert in digital law",
+      "org": "Université Libre de Bruxelles",
+      "country": "Belgique",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 67
+    },
+    {
+      "legacyId": "kumar",
+      "slug": "kumar",
+      "title": "Ing.",
+      "name": "Arvind KUMAR",
+      "roleFr": "Expert en gouvernance du numérique, télécommunications et régulation des TIC, Directeur Général de STPI et Président de STPI NEXT",
+      "roleEn": "Expert in digital governance, telecommunications and ICT regulation, Director General of STPI and President of STPI NEXT",
+      "org": "Software Technology Parks of India (STPI)",
+      "country": "Inde",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 68
+    },
+    {
+      "legacyId": "djob",
+      "slug": "djob",
+      "title": "Pr.",
+      "name": "Thystère DJOB MVONDO",
+      "roleFr": "Expert en informatique",
+      "roleEn": "Computer-science expert",
+      "org": "Université de Rennes",
+      "country": "France",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 69
+    },
+    {
+      "legacyId": "essomba",
+      "slug": "essomba",
+      "title": "Ing.",
+      "name": "Marco ESSOMBA",
+      "roleFr": "Expert en Cybersécurité, Fondateur et CTO de la plateforme Block APT",
+      "roleEn": "Cybersecurity expert, Founder and CTO of Block APT",
+      "org": "Block APT",
+      "country": "Royaume-Uni",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 70
+    },
+    {
+      "legacyId": "dembele",
+      "slug": "dembele",
+      "title": "Ing.",
+      "name": "Kad DEMBELE",
+      "roleFr": "Expert en Intelligence Artificielle et gouvernance des agents IA, Fondateur et dirigeant de DEMKADA",
+      "roleEn": "AI and AI-agent-governance expert, Founder and CEO of DEMKADA",
+      "org": "DEMKADA",
+      "country": "France",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 71
+    },
+    {
+      "legacyId": "cassart",
+      "slug": "cassart",
+      "title": "",
+      "name": "Nicolas CASSART",
+      "roleFr": "Expert en Droit International et du Numérique, Responsable de l’Édition Juridique aux éditions Larcier Intersentia, Groupe Lefebvre Sarrut",
+      "roleEn": "International and digital law expert, Head of Legal Publishing at Larcier Intersentia, Lefebvre Sarrut Group",
+      "org": "Larcier Intersentia",
+      "country": "Belgique",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 72
+    },
+    {
+      "legacyId": "jacquemin",
+      "slug": "jacquemin",
+      "title": "Pr.",
+      "name": "Hervé JACQUEMIN",
+      "roleFr": "Expert en Droit du Numérique et de la Consommation, Avocat au Barreau de Bruxelles",
+      "roleEn": "Digital and consumer-law expert, Lawyer at the Brussels Bar",
+      "org": "Université de Namur",
+      "country": "Belgique",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 73
+    },
+    {
+      "legacyId": "achilleas",
+      "slug": "achilleas",
+      "title": "Pr.",
+      "name": "Philippe ACHILLEAS",
+      "roleFr": "Expert en droit des activités spatiales, en droit international et européen du numérique, Enseignant en droit public",
+      "roleEn": "Expert in space-activities law and in international and European digital law, Lecturer in public law",
+      "org": "Université Paris-Saclay",
+      "country": "France",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 74
+    },
+    {
+      "legacyId": "ntambwa",
+      "slug": "ntambwa",
+      "title": "Ing.",
+      "name": "NTAMBWA BASAMBOMBO",
+      "roleFr": "Développeur Algorithmique, Expert en Développement logiciel, PDG et responsable de produits VaultPay",
+      "roleEn": "Algorithmic developer, software-development expert, CEO and Head of Product at VaultPay",
+      "org": "VaultPay",
+      "country": "États-Unis",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 75
+    },
+    {
+      "legacyId": "koffi",
+      "slug": "koffi",
+      "title": "Mme",
+      "name": "Audrey KOFFI NIAMKEY",
+      "roleFr": "Directrice Générale d’Orange Bank Africa",
+      "roleEn": "Chief Executive Officer of Orange Bank Africa",
+      "org": "Orange Bank Africa",
+      "country": "Côte d’Ivoire",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 76
+    },
+    {
+      "legacyId": "kajeneri",
+      "slug": "kajeneri",
+      "title": "",
+      "name": "Christian KAJENERI",
+      "roleFr": "Directeur Général de Mobile Money Congo",
+      "roleEn": "Director General of Mobile Money Congo",
+      "org": "Mobile Money Congo",
+      "country": "Congo",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 77
+    },
+    {
+      "legacyId": "mouleka",
+      "slug": "mouleka",
+      "title": "Mme",
+      "name": "Sandrine MOULEKA KALALA",
+      "roleFr": "Directrice Générale de Mobile Commerce Congo",
+      "roleEn": "Director General of Mobile Commerce Congo",
+      "org": "Mobile Commerce Congo",
+      "country": "Congo",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 78
+    },
+    {
+      "legacyId": "londongo",
+      "slug": "londongo",
+      "title": "",
+      "name": "Guy Noël LONDONGO",
+      "roleFr": "Directeur Général Adjoint du GIMAC",
+      "roleEn": "Deputy Director General of GIMAC",
+      "org": "GIMAC",
+      "country": "Cameroun",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 79
+    },
+    {
+      "legacyId": "kiyindou",
+      "slug": "kiyindou",
+      "title": "Pr.",
+      "name": "Alain KIYINDOU",
+      "roleFr": "Chercheur en communication, Professeur en sciences de l’information et de la communication",
+      "roleEn": "Communication researcher, Professor of information and communication sciences",
+      "org": "Université Bordeaux-Montaigne",
+      "country": "France",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 80
+    },
+    {
+      "legacyId": "beleho",
+      "slug": "beleho",
+      "title": "Ing.",
+      "name": "Jonas BELEHO",
+      "roleFr": "Mathématicien, Informaticien, Enseignant à l’École Supérieure d’Informatique de Bruxelles et à l’Université de Douala",
+      "roleEn": "Mathematician, computer scientist, Lecturer at the Brussels School of Computing and the University of Douala",
+      "org": "ESI Bruxelles · Université de Douala",
+      "country": "Belgique / Cameroun",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 81
+    },
+    {
+      "legacyId": "milondo",
+      "slug": "milondo",
+      "title": "Ing.",
+      "name": "Solange MILONDO",
+      "roleFr": "Experte en développement logiciel, Directrice des applications et des NTIC à l’OGEFREM",
+      "roleEn": "Software-development expert, Director of Applications and ICT at OGEFREM",
+      "org": "OGEFREM",
+      "country": "RDC",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 82
+    },
+    {
+      "legacyId": "gouari",
+      "slug": "gouari",
+      "title": "",
+      "name": "Lié Rupert GOUARI",
+      "roleFr": "Expert en Facilitation du Commerce, Conseiller du Directeur Général à l’Organisation, aux Affaires Administratives et à la Prospective",
+      "roleEn": "Trade-facilitation expert, Adviser to the Director General for Organisation, Administrative Affairs and Foresight",
+      "org": "GUOT",
+      "country": "Congo",
+      "kind": "expert",
+      "photo": "",
+      "protocolOrder": 83
+    },
+    {
+      "legacyId": "ngoyo",
+      "slug": "ngoyo",
+      "title": "Ing.",
+      "name": "Vanel NGOYO ADOUMA",
+      "roleFr": "Expert en développement logiciel et certification électronique, Directeur du Développement et de la Certification Électronique, GUOT",
+      "roleEn": "Software-development and e-certification expert, Director of Development and Electronic Certification, GUOT",
+      "org": "GUOT",
+      "country": "Congo",
+      "kind": "expert",
+      "photo": "/images/speakers/vanel-ngoyo-adouma.jpeg",
+      "protocolOrder": 84
+    }
+  ],
+  "sessions": [
+    {
+      "legacyId": "j1-inscription",
+      "slug": "j1-inscription",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "7h30",
+      "end": "",
+      "time": "7h30",
+      "type": "logistique",
+      "titleFr": "Inscription",
+      "titleEn": "Registration",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-allocutions",
+      "slug": "j1-allocutions",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "9h00",
+      "end": "10h00",
+      "time": "9h00 – 10h00",
+      "type": "allocution",
+      "titleFr": "Allocutions de bienvenue",
+      "titleEn": "Welcome addresses",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [
+        "bantsimba",
+        "bouya-er",
+        "nze",
+        "ngouonimba",
+        "makosso"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-inaugurale",
+      "slug": "j1-inaugurale",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "10h00",
+      "end": "11h00",
+      "time": "10h00 – 11h00",
+      "type": "inaugurale",
+      "titleFr": "Session inaugurale — Vision panoramique sur la souveraineté numérique",
+      "titleEn": "Inaugural session — A panoramic view of digital sovereignty",
+      "moderatorLegacy": "bouya-er",
+      "speakerLegacyIds": [
+        "niane",
+        "jean",
+        "aubert",
+        "ndukuma"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-interview",
+      "slug": "j1-interview",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "11h00",
+      "end": "",
+      "time": "11h00",
+      "type": "interview",
+      "titleFr": "Interview — Digitalisation des services publics",
+      "titleEn": "Interview — Digitalisation of public services",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [
+        "bouya-jj"
+      ],
+      "note": "Interviewé par M. Florent Distel DINGA DOUMAS (GUOT)."
+    },
+    {
+      "legacyId": "j1-table-ronde",
+      "slug": "j1-table-ronde",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "11h00",
+      "end": "12h00",
+      "time": "11h00 – 12h00",
+      "type": "table-ronde",
+      "titleFr": "Table ronde gouvernementale — Digitalisation : enjeux de développement et de bonne gouvernance",
+      "titleEn": "Government roundtable — Digitalisation: development and good-governance stakes",
+      "moderatorLegacy": "dinga-doumas",
+      "speakerLegacyIds": [
+        "yoka",
+        "ngatse",
+        "nze",
+        "djombo"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-visite",
+      "slug": "j1-visite",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "12h00",
+      "end": "13h30",
+      "time": "12h00 – 13h30",
+      "type": "pause",
+      "titleFr": "Visite des stands",
+      "titleEn": "Exhibition visit",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-pause",
+      "slug": "j1-pause",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "13h30",
+      "end": "14h00",
+      "time": "13h30 – 14h00",
+      "type": "pause",
+      "titleFr": "Pause-café",
+      "titleEn": "Coffee break",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-s1",
+      "slug": "j1-s1",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "14h00",
+      "end": "15h00",
+      "time": "14h00 – 15h00",
+      "type": "session",
+      "titleFr": "Session 1 — Numérique, géopolitique et chaînes de valeur",
+      "titleEn": "Session 1 — Digital, geopolitics and value chains",
+      "moderatorLegacy": "klenkle",
+      "speakerLegacyIds": [
+        "bartholomeeusen",
+        "kumar",
+        "djob",
+        "ndukuma"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-s2",
+      "slug": "j1-s2",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "15h30",
+      "end": "16h30",
+      "time": "15h30 – 16h30",
+      "type": "session",
+      "titleFr": "Session 2 — Intelligence Artificielle, Cybersécurité et Télécommunications : enjeux et défis de souveraineté numérique",
+      "titleEn": "Session 2 — AI, Cybersecurity and Telecommunications: digital-sovereignty stakes and challenges",
+      "moderatorLegacy": "ndukuma",
+      "speakerLegacyIds": [
+        "aubert",
+        "jean",
+        "essomba",
+        "dembele"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-s3",
+      "slug": "j1-s3",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "17h00",
+      "end": "18h00",
+      "time": "17h00 – 18h00",
+      "type": "session",
+      "titleFr": "Session 3 — Protection de la vie privée, de la propriété intellectuelle et sécurité des données",
+      "titleEn": "Session 3 — Privacy, intellectual property and data security",
+      "moderatorLegacy": "cassart",
+      "speakerLegacyIds": [
+        "niane",
+        "jacquemin",
+        "ndukuma",
+        "bartholomeeusen"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j1-fin",
+      "slug": "j1-fin",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 1,
+      "jour": "Jour 1",
+      "start": "18h30",
+      "end": "",
+      "time": "18h30",
+      "type": "cloture",
+      "titleFr": "Fin des travaux · Dîner",
+      "titleEn": "End of the day · Dinner",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-inscription",
+      "slug": "j2-inscription",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "8h00",
+      "end": "9h00",
+      "time": "8h00 – 9h00",
+      "type": "logistique",
+      "titleFr": "Inscription",
+      "titleEn": "Registration",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-s4",
+      "slug": "j2-s4",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "9h00",
+      "end": "10h00",
+      "time": "9h00 – 10h00",
+      "type": "session",
+      "titleFr": "Session 4 — Dépendance aux câbles sous-marins, réseaux satellitaires, data centers et cloud : quelle souveraineté numérique pour les États ?",
+      "titleEn": "Session 4 — Dependence on submarine cables, satellite networks, data centres and cloud: what digital sovereignty for states?",
+      "moderatorLegacy": "jacquemin",
+      "speakerLegacyIds": [
+        "achilleas",
+        "ndukuma",
+        "bartholomeeusen",
+        "kumar"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-s5",
+      "slug": "j2-s5",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "10h30",
+      "end": "11h30",
+      "time": "10h30 – 11h30",
+      "type": "session",
+      "titleFr": "Session 5 — Systèmes de paiements dématérialisés et souveraineté numérique",
+      "titleEn": "Session 5 — Cashless payment systems and digital sovereignty",
+      "moderatorLegacy": "achilleas",
+      "speakerLegacyIds": [
+        "ntambwa",
+        "koffi",
+        "kajeneri",
+        "mouleka",
+        "londongo"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-s6",
+      "slug": "j2-s6",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "12h00",
+      "end": "13h00",
+      "time": "12h00 – 13h00",
+      "type": "session",
+      "titleFr": "Session 6 — Intelligence Artificielle et Éthique : responsabilité et souveraineté numérique",
+      "titleEn": "Session 6 — AI and Ethics: responsibility and digital sovereignty",
+      "moderatorLegacy": "kiyindou",
+      "speakerLegacyIds": [
+        "bartholomeeusen",
+        "niane",
+        "cassart",
+        "essomba"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-s7",
+      "slug": "j2-s7",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "13h30",
+      "end": "14h30",
+      "time": "13h30 – 14h30",
+      "type": "session",
+      "titleFr": "Session 7 — Souveraineté numérique dans la dématérialisation et l’interopérabilité des systèmes informatiques",
+      "titleEn": "Session 7 — Digital sovereignty in the dematerialisation and interoperability of IT systems",
+      "moderatorLegacy": "jacquemin",
+      "speakerLegacyIds": [
+        "aubert",
+        "djob",
+        "beleho",
+        "milondo"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-s8",
+      "slug": "j2-s8",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "15h00",
+      "end": "16h00",
+      "time": "15h00 – 16h00",
+      "type": "session",
+      "titleFr": "Session 8 — Gouvernance et protection des données : enjeux de souveraineté numérique",
+      "titleEn": "Session 8 — Data governance and protection: digital-sovereignty stakes",
+      "moderatorLegacy": "aubert",
+      "speakerLegacyIds": [
+        "bartholomeeusen",
+        "milondo",
+        "djob",
+        "beleho"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j2-fin",
+      "slug": "j2-fin",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 2,
+      "jour": "Jour 2",
+      "start": "16h30",
+      "end": "",
+      "time": "16h30",
+      "type": "cloture",
+      "titleFr": "Fin des travaux",
+      "titleEn": "End of the day",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j3-inscription",
+      "slug": "j3-inscription",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 3,
+      "jour": "Jour 3",
+      "start": "8h00",
+      "end": "8h30",
+      "time": "8h00 – 8h30",
+      "type": "logistique",
+      "titleFr": "Inscription",
+      "titleEn": "Registration",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [],
+      "note": ""
+    },
+    {
+      "legacyId": "j3-s9",
+      "slug": "j3-s9",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 3,
+      "jour": "Jour 3",
+      "start": "9h00",
+      "end": "10h00",
+      "time": "9h00 – 10h00",
+      "type": "session",
+      "titleFr": "Session 9 — Souveraineté technologique : innovation africaine",
+      "titleEn": "Session 9 — Technological sovereignty: African innovation",
+      "moderatorLegacy": "gouari",
+      "speakerLegacyIds": [
+        "ntambwa",
+        "beleho",
+        "ngoyo",
+        "koffi"
+      ],
+      "note": ""
+    },
+    {
+      "legacyId": "j3-cloture",
+      "slug": "j3-cloture",
+      "editionLegacy": "2027-souverainete-numerique",
+      "day": 3,
+      "jour": "Jour 3",
+      "start": "10h30",
+      "end": "",
+      "time": "10h30",
+      "type": "cloture",
+      "titleFr": "Clôture du Forum — Communiqué final, remerciements et discours de clôture",
+      "titleEn": "Forum closing — Final communiqué, thanks and closing address",
+      "moderatorLegacy": "",
+      "speakerLegacyIds": [
+        "bouya-er",
+        "ngouonimba",
+        "bahamboula"
+      ],
+      "note": ""
+    }
+  ],
+  "partners": [
+    {
+      "legacyId": "aace",
+      "name": "Alliance Africaine pour le Commerce Électronique (AACE)",
+      "type": "institutionnel",
+      "website": "",
+      "description": "Co-organisateur de la Conférence Internationale sur les Guichets Uniques (volet Single Window).",
+      "participations": []
+    },
+    {
+      "legacyId": "aconoq",
+      "name": "ACONOQ",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "acsi",
+      "name": "ACSI",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "aden",
+      "name": "ADEN",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "akhon",
+      "name": "AKHON",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "arpce",
+      "name": "ARPCE",
+      "type": "soutien",
+      "website": "",
+      "description": "Agence de Régulation des Postes et des Communications Électroniques.",
+      "participations": []
+    },
+    {
+      "legacyId": "autonome-port-pointe-noire",
+      "name": "Port Autonome de Pointe-Noire",
+      "type": "soutien",
+      "website": "",
+      "description": "Autorité portuaire (à confirmer).",
+      "participations": []
+    },
+    {
+      "legacyId": "bim-e-solutions",
+      "name": "BIM e-solutions",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "bpc",
+      "name": "BPC",
+      "type": "soutien",
+      "website": "",
+      "description": "Banque (à confirmer).",
+      "participations": []
+    },
+    {
+      "legacyId": "burotec",
+      "name": "Burotec",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "burotop-iris",
+      "name": "Burotop Iris",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "congo-telecom",
+      "name": "Congo Telecom",
+      "type": "soutien",
+      "website": "",
+      "description": "Opérateur de télécommunications.",
+      "participations": []
+    },
+    {
+      "legacyId": "conseil-congolais-des-chargeurs",
+      "name": "Conseil Congolais des Chargeurs",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "coraf",
+      "name": "CORAF",
+      "type": "soutien",
+      "website": "",
+      "description": "Partenaire ayant accompagné l'édition 2024.",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "officiel"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "officiel"
+        }
+      ]
+    },
+    {
+      "legacyId": "grinso",
+      "name": "Cabinet GRINSO & Associés",
+      "type": "organisateur",
+      "website": "",
+      "description": "Cabinet co-organisateur du Forum, en collaboration avec le GUOT.",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "principal"
+        }
+      ]
+    },
+    {
+      "legacyId": "guce",
+      "name": "GUCE",
+      "type": "soutien",
+      "website": "",
+      "description": "Guichet Unique du Commerce Extérieur.",
+      "participations": []
+    },
+    {
+      "legacyId": "guot",
+      "name": "Guichet Unique des Opérations Transfrontalières (GUOT)",
+      "type": "organisateur",
+      "website": "",
+      "description": "Organisateur principal du Forum Numérique Congo. Structure à l'initiative de l'évènement (DG : Eugène Rufin BOUYA).",
+      "participations": [
+        {
+          "edition": "2018-dematerialisation-gouvernance",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2020-transformation-digitale",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2022-innovation-donnee",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2024-intelligence-artificielle",
+          "niveau": "principal"
+        },
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "principal"
+        }
+      ]
+    },
+    {
+      "legacyId": "hariom-travels",
+      "name": "Hariom Travels",
+      "type": "soutien",
+      "website": "",
+      "description": "Agence de voyage.",
+      "participations": []
+    },
+    {
+      "legacyId": "ilogs",
+      "name": "ILOGS",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "istock",
+      "name": "iStock",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "kpmg",
+      "name": "KPMG",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "lcb",
+      "name": "LCB",
+      "type": "soutien",
+      "website": "",
+      "description": "La Congolaise de Banque (à confirmer).",
+      "participations": []
+    },
+    {
+      "legacyId": "ragec",
+      "name": "RAgec",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "silicon-connect",
+      "name": "Silicon Connect",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "skytech-congo",
+      "name": "Skytech Congo",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "snpc",
+      "name": "SNPC (Société Nationale des Pétroles du Congo)",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": [
+        {
+          "edition": "2027-souverainete-numerique",
+          "niveau": "officiel"
+        }
+      ]
+    },
+    {
+      "legacyId": "socotram",
+      "name": "SOCOTRAM",
+      "type": "soutien",
+      "website": "",
+      "description": "",
+      "participations": []
+    },
+    {
+      "legacyId": "tv-congo",
+      "name": "TV Congo",
+      "type": "soutien",
+      "website": "",
+      "description": "Média (à confirmer).",
+      "participations": []
+    }
+  ],
+  "publications": [
+    {
+      "legacyId": "compte-rendu-1re-edition-2018",
+      "title": "Compte rendu — 1re édition (2018)",
+      "type": "compte_rendu",
+      "editionLegacy": "2018-dematerialisation-gouvernance",
+      "date": "2018",
+      "url": "https://forumnumeriquecongo.net/edition/",
+      "description": ""
+    },
+    {
+      "legacyId": "compte-rendu-2e-edition-2020",
+      "title": "Compte rendu — 2e édition (2020)",
+      "type": "compte_rendu",
+      "editionLegacy": "2020-transformation-digitale",
+      "date": "2020-02-21",
+      "url": "https://forumnumeriquecongo.net/edition/",
+      "description": ""
+    },
+    {
+      "legacyId": "compte-rendu-3e-edition-2022",
+      "title": "Compte rendu — 3e édition (2022)",
+      "type": "compte_rendu",
+      "editionLegacy": "2022-innovation-donnee",
+      "date": "2022",
+      "url": "https://forumnumeriquecongo.net/edition/",
+      "description": ""
+    },
+    {
+      "legacyId": "informations-pratiques-pointe-noire",
+      "title": "Informations pratiques (hébergement, pays, visa, transport, santé)",
+      "type": "document_pratique",
+      "editionLegacy": "",
+      "date": "",
+      "url": "https://forumnumeriquecongo.net/archive/",
+      "description": ""
+    },
+    {
+      "legacyId": "note-conceptuelle-2027",
+      "title": "Note conceptuelle — 5e édition (2027)",
+      "type": "note_conceptuelle",
+      "editionLegacy": "2027-souverainete-numerique",
+      "date": "",
+      "url": "https://forumnumeriquecongo.net/note-conceptuelle/",
+      "description": ""
+    },
+    {
+      "legacyId": "programme-agenda-a-confirmer",
+      "title": "Programme / Agenda (flipbook PDF) — à confirmer",
+      "type": "programme",
+      "editionLegacy": "2024-intelligence-artificielle",
+      "date": "",
+      "url": "",
+      "description": ""
+    },
+    {
+      "legacyId": "paroles-dexperts-cryptomonnaies-fiscalite",
+      "title": "Paroles d'Experts — Émission n°2, saison 2 : Les cryptomonnaies et la fiscalité",
+      "type": "video",
+      "editionLegacy": "",
+      "date": "",
+      "url": "https://www.youtube.com/embed/-POYy8AK13c",
+      "description": ""
+    },
+    {
+      "legacyId": "paroles-dexperts-protection-donnees-personnelles",
+      "title": "Paroles d'Experts — La protection des données à caractère personnel : enjeux et défis",
+      "type": "video",
+      "editionLegacy": "",
+      "date": "",
+      "url": "",
+      "description": ""
+    }
+  ]
+}

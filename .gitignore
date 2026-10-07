@@ -1,0 +1,7 @@
+# Paquet d'installation généré par build-package.ps1 (artefacts binaires).
+/dist/
+
+# Système / éditeurs.
+.DS_Store
+Thumbs.db
+*.log

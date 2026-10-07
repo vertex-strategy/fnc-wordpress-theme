@@ -1,18 +1,20 @@
 <?php
 /**
- * Plugin Name: FNC Core — Consentement + Matomo (Module E)
- * Description: Mesure d'audience Matomo ANONYME et SANS COOKIE pour tous (exemptée de
+ * Plugin Name: FNC Core — Consentement & mesure d'audience
+ * Description: Mesure d'audience ANONYME et SANS COOKIE pour tous (exemptée de
  *              consentement, position CNIL) ; le cookie de mesure n'est déposé qu'après
- *              un « oui » explicite. Bandeau où refuser est aussi simple qu'autoriser.
- *              Portage fidèle de src/lib/consent.ts + ConsentBanner + le script Matomo
- *              de layout.tsx.
+ *              un « oui » explicite. Bandeau où refuser est aussi simple qu'autoriser,
+ *              avec réouverture depuis le pied de page.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. S'accroche à wp_head (tracker)
  * et wp_footer (bandeau). Aucune dépendance aux autres modules.
  *
- * DEUX NIVEAUX À NE PAS CONFONDRE (cf. consent.ts) :
+ * DEUX NIVEAUX À NE PAS CONFONDRE :
  *   1. La MESURE est anonyme et sans cookie par défaut (`requireCookieConsent` côté
  *      tracker). Exemptée de consentement → tourne pour tout le monde, même après refus.
  *   2. Le COOKIE de mesure — seul à reconnaître une visite récurrente — n'est déposé
@@ -37,16 +39,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! function_exists( 'fnc_matomo_url' ) ) {
 	/** URL du tracker Matomo (avec slash final). Défaut = site réel. */
 	function fnc_matomo_url() {
-		$url = defined( 'FNC_MATOMO_URL' ) ? FNC_MATOMO_URL : 'https://analytics.vertexstrategy.io/';
+		// Vide par défaut : la mesure reste inactive tant que l'URL du traqueur n'est pas
+		// configurée (constante FNC_MATOMO_URL ou filtre 'fnc_matomo_url').
+		$url = defined( 'FNC_MATOMO_URL' ) ? FNC_MATOMO_URL : '';
 		$url = trim( (string) apply_filters( 'fnc_matomo_url', $url ) );
 		return $url ? trailingslashit( $url ) : '';
 	}
 }
 
 if ( ! function_exists( 'fnc_matomo_site_id' ) ) {
-	/** Identifiant de site Matomo. Défaut = '3' (comme layout.tsx). */
+	/** Identifiant de site Matomo (à configurer ; vide = mesure inactive). */
 	function fnc_matomo_site_id() {
-		$sid = defined( 'FNC_MATOMO_SITE_ID' ) ? FNC_MATOMO_SITE_ID : '3';
+		$sid = defined( 'FNC_MATOMO_SITE_ID' ) ? FNC_MATOMO_SITE_ID : '';
 		return trim( (string) apply_filters( 'fnc_matomo_site_id', $sid ) );
 	}
 }
@@ -115,7 +119,7 @@ if ( ! function_exists( 'fnc_consent_strings' ) ) {
 }
 
 /* ==========================================================================
- * Tracker Matomo — wp_head  (portage de layout.tsx)
+ * Tracker Matomo — wp_head
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_matomo_head' ) ) {
@@ -125,9 +129,9 @@ if ( ! function_exists( 'fnc_matomo_head' ) ) {
 		}
 		$url = fnc_matomo_url();
 		$sid = fnc_matomo_site_id();
-		$key = 'fnc.consent.analytics'; // = CONSENT_STORAGE_KEY (consent.ts)
+		$key = 'fnc.consent.analytics'; // clé du choix de consentement (stockage local)
 		?>
-<!-- Matomo (FNC Core — Module E) : mesure anonyme sans cookie ; cookie après « oui » -->
+<!-- Mesure d'audience (FNC Core) : anonyme sans cookie ; cookie après « oui » -->
 <script>
 var _paq = window._paq = window._paq || [];
 _paq.push(['requireCookieConsent']);
@@ -150,20 +154,20 @@ _paq.push(['enableLinkTracking']);
 }
 
 /* ==========================================================================
- * Bandeau de consentement — wp_footer  (portage de ConsentBanner.tsx)
+ * Bandeau de consentement — wp_footer
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_consent_inline_js' ) ) {
 	/**
-	 * Comportement du bandeau — miroir de consent.ts + ConsentBanner.
+	 * Comportement du bandeau de consentement (choix stocké en local, sans cookie).
 	 * read/write en localStorage, apply → _paq (setCookieConsentGiven /
 	 * forgetCookieConsentGiven), réouverture via l'évènement `fnc:consent-reopen`.
 	 * Le bandeau est masqué par un style inline (robuste quel que soit le display du
 	 * kit) et révélé par JS si aucun choix n'est encore stocké.
 	 */
 	function fnc_consent_inline_js() {
-		$key = wp_json_encode( 'fnc.consent.analytics' ); // CONSENT_STORAGE_KEY
-		$evt = wp_json_encode( 'fnc:consent-reopen' );     // CONSENT_REOPEN_EVENT
+		$key = wp_json_encode( 'fnc.consent.analytics' ); // clé du choix
+		$evt = wp_json_encode( 'fnc:consent-reopen' );     // évènement de réouverture
 		return <<<JS
 (function(){
   var KEY=$key, EVT=$evt;
@@ -190,10 +194,23 @@ JS;
 	}
 }
 
+if ( ! function_exists( 'fnc_consent_ui_enabled' ) ) {
+	/**
+	 * Faut-il AFFICHER le bandeau + le bouton de consentement ? DÉCOUPLÉ de la mesure :
+	 * l'UI de consentement s'affiche par défaut (démo/vitrine — le visiteur voit
+	 * l'expérience CNIL), même sans Matomo configuré. La MESURE réelle, elle, reste
+	 * conditionnée à `fnc_matomo_is_enabled()` (voir fnc_matomo_head). Filtrable :
+	 *   add_filter( 'fnc_consent_ui_enabled', '__return_false' ); // masquer partout
+	 */
+	function fnc_consent_ui_enabled() {
+		return (bool) apply_filters( 'fnc_consent_ui_enabled', true );
+	}
+}
+
 if ( ! function_exists( 'fnc_consent_banner' ) ) {
 	function fnc_consent_banner() {
-		if ( ! fnc_matomo_is_enabled() ) {
-			return; // pas de mesure → pas de bandeau.
+		if ( ! fnc_consent_ui_enabled() ) {
+			return; // UI de consentement désactivée (filtre).
 		}
 		$s      = fnc_consent_strings();
 		$policy = fnc_privacy_url();
@@ -235,7 +252,7 @@ if ( ! function_exists( 'fnc_consent_reopen_button' ) ) {
 	 * @return string
 	 */
 	function fnc_consent_reopen_button( $label = '' ) {
-		if ( ! fnc_matomo_is_enabled() ) {
+		if ( ! fnc_consent_ui_enabled() ) {
 			return '';
 		}
 		$s     = fnc_consent_strings();

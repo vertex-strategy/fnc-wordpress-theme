@@ -1,20 +1,23 @@
 <?php
 /**
- * Plugin Name: FNC Core — Drapeaux de fonctionnalité (Module F)
- * Description: Surfaces construites mais FERMÉES par défaut, activables sans rebuild :
- *              Inscriptions (`REGISTRATION_ENABLED`) et Actualités (`NEWS_ENABLED`).
- *              Portage fidèle de src/lib/features.ts.
+ * Plugin Name: FNC Core — Options d'affichage
+ * Description: Surfaces prêtes mais FERMÉES par défaut, activables sans code :
+ *              Inscriptions et Actualités. Réglage dans « Réglages → FNC (fonctionnalités) »,
+ *              ou via une constante / variable d'environnement.
  * Version: 0.1.0
- * Author: FNC
+ * Author: Grinso & Associés
+ * Author URI: https://www.grinso.io
+ * Copyright: © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ *            Développé par Vanel NGOYO ADOUMA, Lead développeur.
  *
  * INTÉGRATION : autonome OU à fusionner dans FNC Core. Page « Réglages → FNC
- * (fonctionnalités) ». S'accroche au filtre `fnc_submission_accepts` du Module A pour
- * refuser honnêtement une inscription fermée (équivalent du 403 de api/inscription).
+ * (fonctionnalités) ». S'accroche au filtre `fnc_submission_accepts` (réception des
+ * formulaires) pour refuser honnêtement une inscription fermée.
  *
- * PRINCIPE (features.ts) : drapeaux SERVEUR, faux par défaut ; jamais de bloc vide.
+ * PRINCIPE : options SERVEUR, fausses par défaut ; jamais de bloc vide.
  * Résolution, par priorité :
  *   1. constante wp-config  (FNC_REGISTRATION_ENABLED / FNC_NEWS_ENABLED)
- *   2. variable d'env       (REGISTRATION_ENABLED / NEWS_ENABLED — parité Next)
+ *   2. variable d'environnement (REGISTRATION_ENABLED / NEWS_ENABLED)
  *   3. option WP            (case à cocher, activable sans redéploiement)
  * → toutes surchargeables par filtre. 1 et 2 « forcent » (la case devient indicative).
  */
@@ -64,7 +67,7 @@ if ( ! function_exists( 'fnc_feature_flag' ) ) {
 }
 
 if ( ! function_exists( 'fnc_registration_enabled' ) ) {
-	/** Inscriptions ouvertes ? (M9.19 · L6). Faux par défaut. */
+	/** Inscriptions ouvertes ? Faux par défaut. */
 	function fnc_registration_enabled() {
 		return (bool) apply_filters(
 			'fnc_registration_enabled',
@@ -84,13 +87,13 @@ if ( ! function_exists( 'fnc_news_enabled' ) ) {
 }
 
 /* ==========================================================================
- * Câblage — refus honnête d'une inscription fermée (seam du Module A)
+ * Câblage — refus honnête d'une inscription fermée (réception des formulaires)
  * ======================================================================== */
 
 if ( ! function_exists( 'fnc_feature_gate_submission' ) ) {
 	function fnc_feature_gate_submission( $accepts, $type ) {
 		if ( 'inscription' === $type && ! fnc_registration_enabled() ) {
-			return false; // → Module A émet le flash « closed » et ne stocke rien.
+			return false; // → la réception affiche le message « fermé » et ne stocke rien.
 		}
 		return $accepts;
 	}

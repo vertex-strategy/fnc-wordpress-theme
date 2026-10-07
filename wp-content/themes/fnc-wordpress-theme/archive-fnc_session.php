@@ -1,14 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_session" — le Programme.
+ * Forum Numérique Congo — programme (liste des sessions).
  *
- * Alignee sur la page reelle localhost:3000/fr/programme : heros « Deux jours de
- * dialogue », panorama (badge « Programme provisoire » + statistiques
- * intervenants / pays / jours), puis l'agenda groupe par journee
- * (.programme-detail > .agenda-day > .sess), et le callout « Réservez votre
- * place ». Le regroupement se fait sur _fnc_session_jour, dans l'ordre de la
- * requete principale. Contenu de demonstration (jamais les vraies identites du
- * site officiel).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,13 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+$fnc_route_h = fnc_route_hero( 'programme' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Programme', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Deux jours de dialogue', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Sessions plénières, tables rondes et ateliers. Le programme détaillé sera publié après validation des intervenants et des horaires.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-pupitre.png',
-		'image_alt'  => __( 'Pupitre du Forum Numérique Congo sur la scène plénière', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => __( 'Programme du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Programme', 'fnc-wordpress-theme' ),
 	)
 );
@@ -43,7 +41,7 @@ if ( have_posts() ) {
 	ksort( $fnc_sessions_by_day, SORT_NATURAL | SORT_FLAG_CASE );
 }
 
-// FNC Core (Module C) fait autorite sur le regroupement/tri/scoping edition :
+// FNC Core (données du site) fait autorite sur le regroupement/tri/scoping edition :
 // on prefere ses donnees quand elles existent ; le gabarit garde le rendu.
 if ( function_exists( 'fnc_edition_sessions_by_day' ) ) {
 	$fnc_plugin_days = fnc_edition_sessions_by_day();
@@ -80,12 +78,29 @@ $fnc_type_class = static function ( $slug ) {
 <main id="main">
 	<section class="section linen programme-panorama">
 		<div class="container">
-			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+			<span class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></span>
+			<?php
+			$fnc_prog_edition = function_exists( 'fnc_current_edition_id' ) ? fnc_current_edition_id() : 0;
+			$fnc_prog_theme   = $fnc_prog_edition ? get_post_meta( $fnc_prog_edition, '_fnc_edition_theme', true ) : '';
+			if ( $fnc_prog_theme ) :
+				?>
+				<p style="margin-top:20px;max-width:54ch;color:var(--texte-sec);font-size:1.05rem;">
+					<b style="color:var(--navy-deep);"><?php esc_html_e( 'Thème', 'fnc-wordpress-theme' ); ?> · </b>
+					<span style="font-style:italic;font-family:var(--serif);">« <?php echo esc_html( $fnc_prog_theme ); ?> »</span>
+				</p>
+			<?php endif; ?>
 			<div class="stat-line">
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_pays ) ); ?></b><span><?php esc_html_e( 'pays représentés', 'fnc-wordpress-theme' ); ?></span></div>
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_stat_jours ) ); ?></b><span><?php esc_html_e( 'jours', 'fnc-wordpress-theme' ); ?></span></div>
 			</div>
+			<?php if ( ! empty( $fnc_sessions_by_day ) ) : ?>
+				<nav class="day-nav" aria-label="<?php esc_attr_e( 'Journées', 'fnc-wordpress-theme' ); ?>">
+					<?php foreach ( $fnc_sessions_by_day as $fnc_nav_label => $fnc_nav_ids ) : ?>
+						<a href="#fnc-jour-<?php echo esc_attr( sanitize_title( $fnc_nav_label ) ); ?>"><b><?php echo esc_html( $fnc_nav_label ); ?></b></a>
+					<?php endforeach; ?>
+				</nav>
+			<?php endif; ?>
 		</div>
 	</section>
 
@@ -105,21 +120,45 @@ $fnc_type_class = static function ( $slug ) {
 							$fnc_room      = get_post_meta( $fnc_session_id, '_fnc_session_room', true );
 							$fnc_moderator = (int) get_post_meta( $fnc_session_id, '_fnc_session_moderator', true );
 							?>
+							<?php $fnc_decorative = in_array( $fnc_type, array( 'pause', 'logistique' ), true ); // sessions décoratives sans badge ni lien. ?>
 							<div class="sess">
 								<div class="when"><?php echo esc_html( $fnc_time ? $fnc_time : '—' ); ?></div>
 								<div>
-									<?php if ( $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
+									<?php if ( ! $fnc_decorative && $fnc_type && isset( $fnc_session_types[ $fnc_type ] ) ) : ?>
 										<span class="type <?php echo esc_attr( $fnc_type_class( $fnc_type ) ); ?>"><?php echo esc_html( $fnc_session_types[ $fnc_type ] ); ?></span>
 									<?php endif; ?>
-									<div class="s-title"><a href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a></div>
-									<?php if ( $fnc_moderator > 0 || $fnc_room ) : ?>
-										<div class="s-mod">
-											<?php if ( $fnc_moderator > 0 ) : ?>
-												<?php esc_html_e( 'Modération', 'fnc-wordpress-theme' ); ?> : <?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?>
-											<?php endif; ?>
-											<?php if ( $fnc_moderator > 0 && $fnc_room ) : ?> · <?php endif; ?>
-											<?php echo esc_html( $fnc_room ); ?>
-										</div>
+									<div class="s-title"><?php if ( $fnc_decorative ) : ?><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?><?php else : ?><a class="s-title-link" href="<?php echo esc_url( get_permalink( $fnc_session_id ) ); ?>"><?php echo esc_html( get_the_title( $fnc_session_id ) ); ?></a><?php endif; ?></div>
+									<?php
+									if ( $fnc_moderator > 0 ) :
+										$fnc_mod_org  = get_post_meta( $fnc_moderator, '_fnc_speaker_org', true );
+										$fnc_mod_ctry = get_post_meta( $fnc_moderator, '_fnc_speaker_country', true );
+										?>
+										<p class="s-mod">
+											<?php esc_html_e( 'Modérateur', 'fnc-wordpress-theme' ); ?> · <b><a class="spk-link" href="<?php echo esc_url( get_permalink( $fnc_moderator ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_moderator ) ); ?></a></b><?php if ( $fnc_mod_org || $fnc_mod_ctry ) : ?> — <?php echo esc_html( $fnc_mod_org ); ?><?php if ( $fnc_mod_ctry ) : ?> (<?php echo esc_html( $fnc_mod_ctry ); ?>)<?php endif; ?><?php endif; ?>
+										</p>
+									<?php endif; ?>
+									<?php $fnc_note = get_post_meta( $fnc_session_id, '_fnc_session_note', true ); ?>
+									<?php if ( $fnc_note ) : ?>
+										<p class="s-note"><?php echo esc_html( $fnc_note ); ?></p>
+									<?php endif; ?>
+									<?php
+									$fnc_spk = get_post_meta( $fnc_session_id, '_fnc_session_speakers', true );
+									$fnc_spk = is_array( $fnc_spk ) ? array_values( array_filter( array_map( 'intval', $fnc_spk ) ) ) : array();
+									if ( ! empty( $fnc_spk ) ) :
+										?>
+										<details>
+											<summary><?php echo esc_html( count( $fnc_spk ) ); ?> <?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></summary>
+											<ul class="spk-list">
+												<?php foreach ( $fnc_spk as $fnc_sp_id ) : ?>
+													<?php
+													$fnc_sp_role = get_post_meta( $fnc_sp_id, '_fnc_speaker_role', true );
+													$fnc_sp_org2 = get_post_meta( $fnc_sp_id, '_fnc_speaker_org', true );
+													$fnc_sp_ctry = get_post_meta( $fnc_sp_id, '_fnc_speaker_country', true );
+													?>
+													<li><b><a class="spk-link" href="<?php echo esc_url( get_permalink( $fnc_sp_id ) ); ?>"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></a></b><?php echo $fnc_sp_role ? ' — ' . esc_html( $fnc_sp_role ) : ''; ?><?php echo $fnc_sp_org2 ? ', ' . esc_html( $fnc_sp_org2 ) : ''; ?> <?php if ( $fnc_sp_ctry ) : ?><span class="ctry">(<?php echo esc_html( $fnc_sp_ctry ); ?>)</span><?php endif; ?></li>
+												<?php endforeach; ?>
+											</ul>
+										</details>
 									<?php endif; ?>
 								</div>
 							</div>
@@ -136,7 +175,7 @@ $fnc_type_class = static function ( $slug ) {
 	</section>
 
 	<section class="callout">
-		<h2><?php esc_html_e( 'Réservez votre place', 'fnc-wordpress-theme' ); ?></h2>
+		<h2 data-fnc-st="programme.cta.title"><?php echo esc_html( fnc_stitle( 'programme', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'L’accès aux sessions se fait sur inscription. L’ouverture des inscriptions sera annoncée prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
 		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'Réserver votre place', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

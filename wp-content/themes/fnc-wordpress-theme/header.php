@@ -1,7 +1,11 @@
 <?php
 /**
- * En-tete du theme : <head>, navigation desktop, panneau mobile.
- * Porte la navigation de docs/mockups/homepage-v2/index.html (ADR-007).
+ * Forum Numérique Congo — en-tête du site (identité, navigation principale, sélecteur de langue).
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php wp_body_open(); ?>
 <a class="skip" href="#main"><?php esc_html_e( 'Aller au contenu', 'fnc-wordpress-theme' ); ?></a>
 
-<header class="nav" id="nav">
+<header class="nav<?php echo fnc_has_linen_header() ? ' solid' : ''; ?>" id="nav">
 	<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( '%s — accueil', 'fnc-wordpress-theme' ), fnc_site_name() ) ); ?>">
 		<?php
 		// Logos officiels du Forum Numérique Congo : version claire sur l'en-tête
@@ -49,17 +53,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="nav-utils">
 		<?php fnc_language_switcher(); ?>
 		<?php
-		// CTA d'inscription pilote par le drapeau REGISTRATION_ENABLED (FNC Core,
-		// Module F) : ouvert → « S'inscrire » vers /inscription ; ferme (defaut) →
-		// « Decouvrir l'edition » vers l'edition en cours. Meme seam que
-		// fnc_registration_cta() du plugin, en conservant la fleche.
-		$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();
-		$fnc_cta_href = $fnc_reg_open ? fnc_page_url( 'inscription' ) : fnc_page_url( 'edition-en-cours' );
-		$fnc_cta_lbl  = $fnc_reg_open ? __( 'S’inscrire', 'fnc-wordpress-theme' ) : __( 'Découvrir l’édition', 'fnc-wordpress-theme' );
-		?>
-		<a class="cta" href="<?php echo esc_url( $fnc_cta_href ); ?>"><?php echo esc_html( $fnc_cta_lbl ); ?>
-			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-		</a>
+		// CTA d'inscription : affiché UNIQUEMENT si les inscriptions sont ouvertes
+		// (fnc_registration_enabled), exactement comme le site du Forum. Fermées
+		// (état par défaut) : aucun CTA dans l'en-tête.
+		if ( ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled() ) :
+			?>
+			<a class="cta" href="<?php echo esc_url( fnc_page_url( 'inscription' ) ); ?>"><?php esc_html_e( 'S’inscrire', 'fnc-wordpress-theme' ); ?>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+			</a>
+		<?php endif; ?>
 		<button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="mobile-panel" aria-label="<?php esc_attr_e( 'Ouvrir le menu', 'fnc-wordpress-theme' ); ?>">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 		</button>

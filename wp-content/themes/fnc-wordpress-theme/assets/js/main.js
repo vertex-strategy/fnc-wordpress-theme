@@ -1,29 +1,72 @@
 /**
- * FNC WordPress Theme — comportements de la page d'accueil.
- * Porte le script de docs/mockups/homepage-v2/index.html (ADR-007).
+ * Forum Numérique Congo — interactions front (navigation, animations, consentement).
+ *
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
+
 (function () {
 	'use strict';
 
 	var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	var nav = document.getElementById('nav');
+	var nav = document.getElementById('nav') || document.querySelector('.nav');
+	// Pages a bandeau lin (registre C, ex. pages legales) : pas de hero sombre
+	// sous la barre → la nav reste solide en permanence (texte navy lisible).
+	var linenHeader = document.body.classList.contains('linen-header');
+	// Hero sombre sous la barre (accueil #m1, page-head, opening) et son titre :
+	// on solidifie selon la POSITION REELLE du titre, pas un seuil fixe. Le titre
+	// de l'accueil est en bas d'un hero 100dvh (justify:flex-end) → il atteint la
+	// barre AVANT 60 % de defilement ; un seuil fixe laissait le logo blanc sur le
+	// texte blanc et le fond blanc arriver en retard.
+	var darkHero = document.querySelector('#m1, .page-head, .opening');
+	var heading = darkHero ? darkHero.querySelector('h1') : null;
 
 	function onScroll() {
 		if (!nav) {
 			return;
 		}
-		if (window.scrollY > window.innerHeight * 0.6) {
+		// Page a fond clair OU pas de hero sombre → solide d'emblee.
+		if (linenHeader || !darkHero) {
 			nav.classList.add('solid');
-		} else {
-			nav.classList.remove('solid');
+			return;
 		}
+		// Solide des que le titre atteint la barre, avec une marge (hauteur de la
+		// barre + 40px) pour que le fond blanc soit en place AVANT le contact avec
+		// le logo. On teste le haut du titre (ou, a defaut, le bas du hero).
+		var limit = nav.offsetHeight + 40;
+		var el = heading || darkHero;
+		var pos = heading ? el.getBoundingClientRect().top : el.getBoundingClientRect().bottom;
+		nav.classList.toggle('solid', pos <= limit);
 	}
-	window.addEventListener('scroll', onScroll, { passive: true });
+
+	// rAF-throttle (perf) : au plus une passe par frame.
+	var navTicking = false;
+	window.addEventListener('scroll', function () {
+		if (navTicking) {
+			return;
+		}
+		navTicking = true;
+		window.requestAnimationFrame(function () {
+			onScroll();
+			navTicking = false;
+		});
+	}, { passive: true });
+	window.addEventListener('resize', onScroll, { passive: true });
 	onScroll();
 
 	// Menu mobile
 	var burger = document.getElementById('burger');
 	var panel = document.getElementById('mobile-panel');
+
+	function panelFocusables() {
+		return panel
+			? Array.prototype.slice.call(
+					panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+				)
+			: [];
+	}
 
 	function setMenu(open) {
 		if (!panel || !burger) {
@@ -37,9 +80,20 @@
 		);
 		panel.setAttribute('aria-hidden', open ? 'false' : 'true');
 		document.body.classList.toggle('menu-open', open);
+		if (open) {
+			panel.removeAttribute('inert');
+			var f = panelFocusables();
+			if (f.length) { f[0].focus(); }
+		} else {
+			// Rendre le focus au burger s'il était piégé dans le panneau, puis
+			// rendre le panneau inerte (retiré de l'ordre de tabulation).
+			if (panel.contains(document.activeElement)) { burger.focus(); }
+			panel.setAttribute('inert', '');
+		}
 	}
 
 	if (burger && panel) {
+		panel.setAttribute('inert', ''); // Fermé au chargement : hors tabulation.
 		burger.addEventListener('click', function () {
 			setMenu(!panel.classList.contains('open'));
 		});
@@ -49,8 +103,25 @@
 			});
 		});
 		document.addEventListener('keydown', function (e) {
+			if (!panel.classList.contains('open')) {
+				return;
+			}
 			if (e.key === 'Escape') {
 				setMenu(false);
+				burger.focus();
+			} else if (e.key === 'Tab') {
+				// Piège de focus : le Tab cycle à l'intérieur du panneau ouvert.
+				var f = panelFocusables();
+				if (!f.length) { return; }
+				var first = f[0];
+				var last = f[f.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if (!e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				}
 			}
 		});
 	}
@@ -109,7 +180,7 @@
 	}
 
 	// Carte des informations pratiques : chargement au clic uniquement
-	// (privacy-first, comme le vrai site). Aucune requete vers le service
+	// (privacy-first, comme sur le site du Forum). Aucune requete vers le service
 	// tiers n'est emise tant que l'utilisateur ne l'a pas demande.
 	document.querySelectorAll('.pract-map').forEach(function (wrap) {
 		var btn = wrap.querySelector('.pract-map-load');
@@ -129,6 +200,69 @@
 		});
 	});
 
+	// Facades video (YouTube/Vimeo) : click-to-load, iframe NOCOOKIE inseree
+	// uniquement au clic (ou Entree/Espace). Aucune requete tierce avant l'action.
+	document.querySelectorAll('.video-facade').forEach(function (wrap) {
+		if (wrap.dataset.loaded === '1') {
+			return;
+		}
+		var load = function () {
+			if (wrap.dataset.loaded === '1') {
+				return;
+			}
+			var provider = wrap.dataset.provider;
+			var id = wrap.dataset.id;
+			if (!provider || !id) {
+				return;
+			}
+			var src = provider === 'vimeo'
+				? 'https://player.vimeo.com/video/' + encodeURIComponent(id) + '?autoplay=1'
+				: 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0';
+			var frame = document.createElement('iframe');
+			frame.src = src;
+			frame.loading = 'lazy';
+			frame.referrerPolicy = 'strict-origin-when-cross-origin';
+			frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+			frame.setAttribute('allowfullscreen', '');
+			frame.setAttribute('title', wrap.getAttribute('aria-label') || 'Vidéo');
+			wrap.dataset.loaded = '1';
+			wrap.innerHTML = '';
+			wrap.appendChild(frame);
+		};
+		wrap.addEventListener('click', load);
+		wrap.addEventListener('keydown', function (e) {
+			if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+				e.preventDefault();
+				load();
+			}
+		});
+	});
+
+	// Parallax de SORTIE du hero d'accueil (#m1 .hero-inner).
+	// rAF-throttle, transform/opacity/filter UNIQUEMENT (GPU), listener passif.
+	// Coupe sous prefers-reduced-motion.
+	var heroInner = document.querySelector('#m1 .hero-inner');
+	if (!reduce && heroInner) {
+		var heroTicking = false;
+		var applyHeroParallax = function () {
+			heroTicking = false;
+			var vh = window.innerHeight || 1;
+			var p = Math.min(1, window.scrollY / (vh * 0.68));
+			var e = p * p;
+			heroInner.style.transform = 'translateY(' + (-190 * e).toFixed(2) + 'px) scale(' + (1 - 0.07 * e).toFixed(4) + ')';
+			heroInner.style.opacity = String(Math.max(0, 1 - 1.08 * e));
+			heroInner.style.filter = e > 0.001 ? 'blur(' + (7 * e).toFixed(2) + 'px)' : 'none';
+		};
+		heroInner.style.willChange = 'transform, opacity, filter';
+		window.addEventListener('scroll', function () {
+			if (!heroTicking) {
+				heroTicking = true;
+				window.requestAnimationFrame(applyHeroParallax);
+			}
+		}, { passive: true });
+		applyHeroParallax();
+	}
+
 	// Reveal au scroll (amelioration progressive)
 	if (!reduce) {
 		document.body.classList.add('js-reveal');
@@ -137,7 +271,7 @@
 		// Le hero #m1 est EXCLU du reveal JS : le kit lui donne une entrée
 		// cinématographique en CSS pur (#m1 .hero-inner > * → hero-enter), fiable
 		// au chargement, là où le reveal JS « claque » au premier paint. Aligné
-		// sur HomeMotion du site réel (voir wordpress-catchup-complet.css).
+		// sur l'animation d'accueil (voir wordpress-catchup-complet.css).
 		document.querySelectorAll('main > section:not(#m1), footer').forEach(function (sec) {
 			sec.querySelectorAll(sel).forEach(function (el, i) {
 				el.classList.add('reveal');
@@ -160,9 +294,74 @@
 		});
 	}
 
+	// Compteur des chiffres-cles (.stat-line) : chaque nombre monte de 0 a sa
+	// valeur a l'entree dans la vue (ease-out ~700ms). Amelioration progressive :
+	// sans JS ou sous prefers-reduced-motion, la valeur finale (rendue cote
+	// serveur) reste affichee. La largeur est reservee en `ch` (tabular-nums)
+	// avant l'animation -> aucun reflet de mise en page pendant le comptage.
+	(function statCounters() {
+		var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+		if ((mq && mq.matches) || !('IntersectionObserver' in window)) {
+			return;
+		}
+		var nums = document.querySelectorAll('.stat-line .stat b');
+		if (!nums.length) {
+			return;
+		}
+		var ease = function (t) {
+			return 1 - Math.pow(1 - t, 3);
+		};
+		var run = function (el) {
+			var target = parseInt(el.getAttribute('data-count-to'), 10);
+			var pre = el.getAttribute('data-count-pre') || '';
+			var post = el.getAttribute('data-count-post') || '';
+			var raw = el.getAttribute('data-count-raw') || String(target);
+			if (isNaN(target)) {
+				return;
+			}
+			var t0 = 0;
+			var step = function (ts) {
+				if (!t0) {
+					t0 = ts;
+				}
+				var p = Math.min((ts - t0) / 700, 1);
+				if (p < 1) {
+					el.textContent = pre + Math.round(ease(p) * target) + post;
+					requestAnimationFrame(step);
+				} else {
+					el.textContent = raw;
+				}
+			};
+			requestAnimationFrame(step);
+		};
+		var io = new IntersectionObserver(
+			function (entries) {
+				entries.forEach(function (e) {
+					if (e.isIntersecting) {
+						io.unobserve(e.target);
+						run(e.target);
+					}
+				});
+			},
+			{ threshold: 0.4 }
+		);
+		nums.forEach(function (el) {
+			var raw = (el.textContent || '').trim();
+			var m = raw.match(/^(\D*?)(\d(?:[\d \s]*\d)?)(\D*)$/);
+			if (!m) {
+				return; // pas un nombre -> on laisse la valeur telle quelle.
+			}
+			el.setAttribute('data-count-raw', raw);
+			el.setAttribute('data-count-pre', m[1]);
+			el.setAttribute('data-count-to', m[2].replace(/[ \s]/g, ''));
+			el.setAttribute('data-count-post', m[3]);
+			el.style.minWidth = raw.length + 'ch';
+			io.observe(el);
+		});
+	})();
+
 	// Calque d'ambiance du hero (#m1) : nappe de points en vague dessinee sur
-	// canvas. Port fidele de la variante « dots » du composant HeroBackdrop du
-	// site reel. Statique (une passe) sous prefers-reduced-motion.
+	// canvas (variante « dots »). Statique (une passe) sous prefers-reduced-motion.
 	(function heroBackdrop() {
 		var canvas = document.querySelector('#m1 .hb-canvas');
 		var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
@@ -213,5 +412,98 @@
 			draw();
 		});
 		draw();
+	})();
+
+	/* ------------------------------------------------------------------ *
+	 * Carrousel « Les voix » (M3) : defilement auto (4 s), pause au survol
+	 * et au focus, fleches, pastilles et lecture/pause. Toutes les voix sont
+	 * montees dans le DOM ; on bascule l'active (fondu enchaine en CSS).
+	 * Respecte prefers-reduced-motion (pas de defilement auto).
+	 * ------------------------------------------------------------------ */
+	(function () {
+		var root = document.querySelector('[data-voices]');
+		if (!root) { return; }
+		var slides = root.querySelectorAll('.voice-slide');
+		var ids = root.querySelectorAll('[data-voice-identity]');
+		var dots = root.querySelectorAll('[data-voice-dot]');
+		var prev = root.querySelector('[data-voice-prev]');
+		var next = root.querySelector('[data-voice-next]');
+		var play = root.querySelector('[data-voice-play]');
+		var iconPause = root.querySelector('[data-voice-icon-pause]');
+		var iconPlay = root.querySelector('[data-voice-icon-play]');
+		var count = ids.length;
+		if (count < 1) { return; }
+
+		var active = 0;
+		var paused = false;
+		var playing = true;
+
+		// aria-hidden : uniquement sur les portraits <img> (le monogramme reste
+		// decoratif et toujours masque aux lecteurs d'ecran).
+		function ariaHide(el, hide) {
+			if (el && el.tagName === 'IMG') {
+				if (hide) { el.setAttribute('aria-hidden', 'true'); } else { el.removeAttribute('aria-hidden'); }
+			}
+		}
+
+		function show(i) {
+			i = (i % count + count) % count;
+			if (slides[active]) { slides[active].classList.remove('on'); ariaHide(slides[active], true); }
+			if (ids[active]) { ids[active].classList.remove('on'); ids[active].setAttribute('hidden', ''); }
+			if (dots[active]) { dots[active].classList.remove('on'); dots[active].removeAttribute('aria-current'); }
+
+			active = i;
+
+			if (slides[active]) { slides[active].classList.add('on'); ariaHide(slides[active], false); }
+			if (ids[active]) {
+				ids[active].removeAttribute('hidden');
+				void ids[active].offsetWidth; // relance l'animation de fondu
+				ids[active].classList.add('on');
+			}
+			if (dots[active]) { dots[active].classList.add('on'); dots[active].setAttribute('aria-current', 'true'); }
+		}
+
+		function step(delta) { show(active + delta); }
+
+		if (prev) { prev.addEventListener('click', function () { step(-1); }); }
+		if (next) { next.addEventListener('click', function () { step(1); }); }
+		for (var d = 0; d < dots.length; d++) {
+			(function (idx) { dots[idx].addEventListener('click', function () { show(idx); }); })(d);
+		}
+		if (play) {
+			play.addEventListener('click', function () {
+				playing = !playing;
+				play.setAttribute('aria-pressed', playing ? 'false' : 'true');
+				if (iconPause) { if (playing) { iconPause.removeAttribute('hidden'); } else { iconPause.setAttribute('hidden', ''); } }
+				if (iconPlay) { if (playing) { iconPlay.setAttribute('hidden', ''); } else { iconPlay.removeAttribute('hidden'); } }
+			});
+		}
+
+		root.addEventListener('mouseenter', function () { paused = true; });
+		root.addEventListener('mouseleave', function () { paused = false; });
+		root.addEventListener('focusin', function () { paused = true; });
+		root.addEventListener('focusout', function () { paused = false; });
+
+		window.setInterval(function () {
+			if (paused || !playing || reduce || count < 2) { return; }
+			step(1);
+		}, 4000);
+	})();
+
+	/* ============================================================
+	   Compte a rebours M8 — recalcul cote client (anti-cache).
+	   Le nombre de jours est deja rendu cote serveur (repli sans JS
+	   + SEO). On le recalcule au chargement depuis la date ISO portee
+	   par l'attribut data-fnc-countdown, pour qu'une page mise en
+	   cache reste exacte. Aucune date -> l'element n'a pas l'attribut
+	   et rien n'est touche (« — · Date a confirmer » preserve).
+	   ============================================================ */
+	(function countdown() {
+		var el = document.querySelector('.num[data-fnc-countdown]');
+		if (!el) { return; }
+		var target = Date.parse(el.getAttribute('data-fnc-countdown'));
+		if (isNaN(target)) { return; }
+		var days = Math.max(0, Math.ceil((target - Date.now()) / 86400000));
+		el.textContent = String(days);
 	})();
 })();

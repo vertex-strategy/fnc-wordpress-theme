@@ -21,17 +21,17 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: fnc-content-model.php
-msgid "https://github.com/vertex-strategy/fnc-wordpress-theme"
+msgid "https://www.grinso.io"
 msgstr ""
 
 #. Description of the plugin
 #: fnc-content-model.php
-msgid "Modele de contenu (custom post types, taxonomies, relations) reflete depuis les collections publiques Payload CMS du site officiel Forum Numerique Congo. Voir ADR-007 (depot forum-numerique-congo). Zero dependance tierce (ADR-007, Decision 2) — hors multilinguisme, assure separement par Polylang ou equivalent (Decision 2, arbitrage bilingue)."
-msgstr "Content model (custom post types, taxonomies, relations) mirrored from the public Payload CMS collections of the official Forum Numérique Congo site. See ADR-007 (forum-numerique-congo repository). Zero third-party dependency (ADR-007, Decision 2) — except multilingualism, handled separately by Polylang or equivalent."
+msgid "Modèle de contenu du Forum Numérique Congo (types de contenu, taxonomies et relations)."
+msgstr "Content model for the Forum Numérique Congo (content types, taxonomies and relations)."
 
 #. Author of the plugin
 #: fnc-content-model.php
-msgid "Vertex Strategy"
+msgid "Grinso & Associés"
 msgstr ""
 
 #: includes/post-types.php:33

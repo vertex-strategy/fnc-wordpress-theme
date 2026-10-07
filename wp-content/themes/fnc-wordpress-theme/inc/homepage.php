@@ -1,21 +1,11 @@
 <?php
 /**
- * Page d'accueil éditable — storyboard M1→M8 (Lot 3).
+ * Forum Numérique Congo — contenu éditable de la page d’accueil.
  *
- * Pendant WordPress natif de l'archétype « Homepage » de Payload
- * (src/payload/blocks/homepageFields.ts). Comme sur le vrai site, le
- * storyboard est **figé** : on n'expose pas une liste de blocs réordonnables
- * mais un groupe de champs fixe par moment. L'éditeur administre uniquement le
- * contenu (textes, médias, libellés de CTA) ; il ne peut ni changer l'ordre,
- * ni supprimer un moment, ni toucher à la DA.
- *
- * C'est pourquoi ces réglages passent par le Customizer et non par des blocs :
- * il ne s'agit pas de composition (cf. inc/blocks.php) mais de paramétrage
- * d'une structure figée — et le Customizer offre en prime l'aperçu en direct.
- *
- * Extension par rapport au vrai site (demande du Décideur) : le média du héros
- * M1 est configurable en **image fixe, vidéo ou slider**. Le vrai site ne
- * propose qu'une image de fond.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,7 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fnc_home_setting( $key, $default = '' ) {
 	$value = get_theme_mod( 'fnc_home_' . $key, $default );
-	return ( '' === $value || null === $value ) ? $default : $value;
+	if ( '' === $value || null === $value ) {
+		return $default;
+	}
+	// Bilingue (Polylang) : le TEXTE éditorial de l'accueil (M1–M8 : sur-titres,
+	// titres, taglines, manifeste, libellés CTA) est enregistré comme chaîne
+	// traduisible et renvoyé dans la langue courante — FR ≠ EN. On EXCLUT les
+	// clés non textuelles (médias, URL, nombres, réglages techniques).
+	if ( is_string( $value ) && '' !== $value
+		&& ! preg_match( '/(_image|_video|_poster|_url|_count|_interval|_type|_ids|_side)$/', $key )
+		&& false === strpos( $key, 'slide_' )
+		&& function_exists( 'pll_register_string' ) && function_exists( 'pll__' ) ) {
+		pll_register_string( 'fnc_home_' . $key, $value, 'FNC Accueil', true );
+		$value = pll__( $value );
+	}
+	return $value;
 }
 
 /**
@@ -260,6 +264,7 @@ function fnc_homepage_customize_register( $wp_customize ) {
 
 	// -- Contenu éditorial M1
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_place', __( 'Lieu (kicker)', 'fnc-wordpress-theme' ), 'text', 'Brazzaville · République du Congo' );
+	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_venue', __( 'Lieu précis (kicker, 2e ligne)', 'fnc-wordpress-theme' ), 'text', '' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_dates', __( 'Dates (kicker)', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_title_line1', __( 'Titre — ligne 1', 'fnc-wordpress-theme' ), 'text', 'Forum' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m1', 'm1_title_line2', __( 'Titre — ligne 2 (fine)', 'fnc-wordpress-theme' ), 'text', 'Numérique' );
@@ -323,6 +328,14 @@ function fnc_homepage_customize_register( $wp_customize ) {
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_title', __( 'Titre', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_date_label', __( 'Libellé de date', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m5', 'm5_link', __( 'Lien — libellé', 'fnc-wordpress-theme' ), 'text' );
+	fnc_home_add_field(
+		$wp_customize,
+		'fnc_home_m5',
+		'm5_highlight_ids',
+		__( 'Temps forts — identifiants de sessions (séparés par des virgules)', 'fnc-wordpress-theme' ),
+		'text',
+		'j1-allocutions,j1-inaugurale,j1-table-ronde,j1-s1'
+	);
 
 	/* -------------------------------------------------- M6 */
 	$wp_customize->add_section(
@@ -356,6 +369,7 @@ function fnc_homepage_customize_register( $wp_customize ) {
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_label', __( 'Label', 'fnc-wordpress-theme' ), 'text', 'La prochaine édition' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_title_before', __( 'Titre — avant le compte', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_title_after', __( 'Titre — après le compte', 'fnc-wordpress-theme' ), 'text', 'jours' );
+	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_venue', __( 'Lieu (sous le compte)', 'fnc-wordpress-theme' ), 'text', '', array( 'description' => __( 'Vide → lieu de l’édition en cours. Ligne masquée si les deux sont vides.', 'fnc-wordpress-theme' ) ) );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_cta', __( 'CTA — libellé', 'fnc-wordpress-theme' ), 'text' );
 	fnc_home_add_field( $wp_customize, 'fnc_home_m8', 'm8_cta_url', __( 'CTA — lien', 'fnc-wordpress-theme' ), 'url' );
 }
@@ -413,11 +427,14 @@ function fnc_render_home_hero_media() {
 				esc_attr( $interval * 1000 )
 			);
 			foreach ( $slides as $index => $url ) {
-				printf(
-					'<img class="media-cover hero-slide%1$s" src="%2$s" alt="" %3$s />',
-					0 === $index ? ' is-active' : '',
-					esc_url( $url ),
-					0 === $index ? '' : 'loading="lazy"'
+				echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+					$url,
+					'',
+					array(
+						'class'       => 'media-cover hero-slide' . ( 0 === $index ? ' is-active' : '' ),
+						'eager'       => 0 === $index,
+						'aria_hidden' => true,
+					)
 				);
 			}
 			echo '</div>';
@@ -425,15 +442,20 @@ function fnc_render_home_hero_media() {
 		}
 		// Moins de deux images : pas de slider, on affiche ce qui existe.
 		if ( 1 === count( $slides ) ) {
-			printf( '<img class="media-cover" src="%s" alt="" aria-hidden="true" />', esc_url( $slides[0] ) );
+			echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+				$slides[0],
+				'',
+				array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true )
+			);
 			return;
 		}
 		$mode = 'image';
 	}
 
-	// Mode image (ou repli).
-	printf(
-		'<img class="media-cover" src="%s" alt="" aria-hidden="true" />',
-		esc_url( fnc_home_media_url( 'm1_image', $fallback ) )
+	// Mode image (ou repli). Héros LCP → WebP + eager + fetchpriority via le helper.
+	echo fnc_theme_image( // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+		fnc_home_media_url( 'm1_image', $fallback ),
+		'',
+		array( 'class' => 'media-cover', 'eager' => true, 'aria_hidden' => true )
 	);
 }

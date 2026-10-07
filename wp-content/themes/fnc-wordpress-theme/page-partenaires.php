@@ -1,17 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Partenaires".
+ * Forum Numérique Congo — gabarit de la page « Partenaires ».
  *
- * Structure alignee sur le site officiel reel (localhost:3000/fr/partenaires) :
- * heros, "Pourquoi devenir partenaire", "Types et niveaux", mur de partenaires
- * groupes par niveau d'engagement (Institutionnel / Organisateur / Soutien /
- * Sponsor), puis une section "Discutons d'un partenariat" avec le formulaire de
- * demande de partenariat.
- *
- * Le mur de partenaires est DYNAMIQUE : vrais posts fnc_partenaire publies,
- * groupes par la taxonomie fnc_niveau_partenariat. Le formulaire reste non
- * fonctionnel (pas de handler d'envoi), fidele a la posture du site reel tant
- * que le canal officiel n'est pas ouvert.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,18 +14,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+/*
+ * Composition par blocs : des que l'editorial compose cette page avec des
+ * blocs FNC, ce gabarit s'efface au profit du contenu compose (editable et
+ * reagenceable) ; sinon il conserve son contenu de demonstration (comportement
+ * inchange). Meme convention que page.php et page-le-forum.php.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
+
+$fnc_route_h = fnc_route_hero( 'partenaires' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Partenaires', 'fnc-wordpress-theme' ),
-		'title'      => __( 'S’associer au Forum, c’est engager l’avenir numérique du Congo.', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Le Forum réunit institutions, organisations et entreprises autour d’une même ambition. Découvrez pourquoi et comment s’y associer.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/la-main.png',
-		'image_alt'  => __( 'Poignée de main lors du Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => __( 'Partenaires du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Partenaires', 'fnc-wordpress-theme' ),
 	)
 );
 
-// Champs du formulaire de demande de partenariat (ceux du site reel).
+// Champs du formulaire de demande de partenariat (ceux du site du Forum).
 $fnc_pa_flash = function_exists( 'fnc_take_flash' ) ? fnc_take_flash( 'partenariat' ) : null;
 $fnc_interest_options = array(
 	__( 'Partenariat institutionnel', 'fnc-wordpress-theme' ),
@@ -43,24 +55,24 @@ $fnc_interest_options = array(
 ?>
 
 <main id="main">
-	<section class="section">
+	<section class="section linen">
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'S’associer', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Pourquoi devenir partenaire.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.why.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.why.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'why', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Soutenir le Forum, c’est prendre part à un espace de dialogue durable sur le numérique. Chaque partenaire renforce la crédibilité collective de la démarche et gagne en visibilité auprès des décideurs.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 		</div>
 	</section>
 
-	<section class="section linen">
+	<section class="section">
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Cadre', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Types et niveaux de partenariat.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.types.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.types.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'types', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Le partenariat distingue clairement l’engagement institutionnel de l’engagement commercial.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
@@ -75,30 +87,33 @@ $fnc_interest_options = array(
 		</div>
 	</section>
 
-	<section class="section">
+	<section class="section linen">
 		<div class="container">
 			<div class="section-head">
 				<div>
-					<p class="eyebrow"><?php esc_html_e( 'Ils nous font confiance', 'fnc-wordpress-theme' ); ?></p>
-					<h2><?php esc_html_e( 'Partenaires confirmés.', 'fnc-wordpress-theme' ); ?></h2>
+					<p class="eyebrow" data-fnc-st="partenaires.confirmed.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'eyebrow' ) ); ?></p>
+					<h2 data-fnc-st="partenaires.confirmed.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'confirmed', 'title' ) ); ?></h2>
 				</div>
 				<p><?php esc_html_e( 'Les organisations associées au Forum, regroupées par nature d’engagement.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
 			<?php
-			$fnc_niveaux = get_terms(
-				array(
-					'taxonomy'   => 'fnc_niveau_partenariat',
-					'object_ids' => get_posts( array( 'post_type' => 'fnc_partenaire', 'posts_per_page' => -1, 'fields' => 'ids' ) ),
-				)
-			);
+			// Groupement dans l'ordre FIXE du site du Forum (institution ->
+			// organisateur -> soutien -> sponsor), partenaires tries par ordre
+			// d'affichage (_fnc_partenaire_sort_index).
 			$fnc_has_partners = false;
-			if ( ! is_wp_error( $fnc_niveaux ) && ! empty( $fnc_niveaux ) ) :
-				foreach ( $fnc_niveaux as $fnc_niveau ) :
+			foreach ( array( 'institutionnel', 'organisateur', 'soutien', 'sponsor' ) as $fnc_niveau_slug ) :
+				$fnc_niveau = get_term_by( 'slug', $fnc_niveau_slug, 'fnc_niveau_partenariat' );
+				if ( ! $fnc_niveau || is_wp_error( $fnc_niveau ) ) {
+					continue;
+				}
 					$fnc_partners = get_posts(
 						array(
 							'post_type'      => 'fnc_partenaire',
 							'posts_per_page' => -1,
+							'orderby'        => 'meta_value_num title',
+							'meta_key'       => '_fnc_partenaire_sort_index',
+							'order'          => 'ASC',
 							'tax_query'      => array(
 								array(
 									'taxonomy' => 'fnc_niveau_partenariat',
@@ -122,6 +137,17 @@ $fnc_interest_options = array(
 									?>
 									<a class="partner-logo" href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_partner ) ); ?>">
 										<?php echo get_the_post_thumbnail( $fnc_partner, 'medium', array( 'alt' => esc_attr( get_the_title( $fnc_partner ) ) ) ); ?>
+									</a>
+								<?php else :
+									// Repli DA-cohérent (registre RÈGLE 7) : monogramme, jamais une carte nom-seul brute.
+									$fnc_p_words = preg_split( '/\s+/', trim( wp_strip_all_tags( get_the_title( $fnc_partner ) ) ) );
+									$fnc_p_mono  = '';
+									foreach ( array_slice( (array) $fnc_p_words, 0, 2 ) as $fnc_p_w ) {
+										$fnc_p_mono .= mb_strtoupper( mb_substr( $fnc_p_w, 0, 1 ) );
+									}
+									?>
+									<a class="partner-logo partner-logo--mono" href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>" aria-label="<?php echo esc_attr( get_the_title( $fnc_partner ) ); ?>">
+										<span aria-hidden="true"><?php echo esc_html( $fnc_p_mono ); ?></span>
 									</a>
 								<?php endif; ?>
 								<h3><a href="<?php echo esc_url( get_permalink( $fnc_partner ) ); ?>"><?php echo esc_html( get_the_title( $fnc_partner ) ); ?></a></h3>
@@ -166,7 +192,6 @@ $fnc_interest_options = array(
 					</div>
 					<?php
 				endforeach;
-			endif;
 			if ( ! $fnc_has_partners ) :
 				?>
 				<div class="empty" role="status">
@@ -178,15 +203,15 @@ $fnc_interest_options = array(
 	</section>
 
 	<!-- Échanger : demande de partenariat -->
-	<section class="section linen">
+	<section class="section">
 		<div class="split media-left">
 			<div>
-				<span class="eyebrow"><?php esc_html_e( 'Échanger', 'fnc-wordpress-theme' ); ?></span>
-				<h2 class="lines"><?php esc_html_e( 'Discutons d’un partenariat.', 'fnc-wordpress-theme' ); ?></h2>
+				<span class="eyebrow" data-fnc-st="partenaires.cta.eyebrow"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'eyebrow' ) ); ?></span>
+				<h2 class="lines" data-fnc-st="partenaires.cta.title"><?php echo esc_html( fnc_stitle( 'partenaires', 'cta', 'title' ) ); ?></h2>
 				<p class="body"><?php esc_html_e( 'Vous représentez une institution ou une entreprise ? Contactez l’organisation pour construire un partenariat adapté.', 'fnc-wordpress-theme' ); ?></p>
 			</div>
 
-			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>">
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?>" aria-describedby="fnc-partenariat-help">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Demande de partenariat', 'fnc-wordpress-theme' ); ?></h2>
 				<p class="help"><?php esc_html_e( 'Votre demande est enregistrée avant tout accusé de réception. Les modalités détaillées restent à confirmer par l’organisation.', 'fnc-wordpress-theme' ); ?></p>
 
@@ -234,8 +259,8 @@ $fnc_interest_options = array(
 					</div>
 				</div>
 
-				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
-				<button class="btn btn-red" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
+				<p class="help" id="fnc-partenariat-help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires. Aucun niveau, montant ou avantage n’est présumé.', 'fnc-wordpress-theme' ); ?></p>
+				<button class="btn" type="submit"><?php esc_html_e( 'Envoyer la demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>

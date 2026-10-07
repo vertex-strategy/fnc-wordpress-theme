@@ -1,27 +1,11 @@
 <?php
 /**
- * Blocs éditoriaux — composition de pages (Lot 2).
+ * Forum Numérique Congo — blocs éditoriaux : palette, composition des pages et rendu.
  *
- * Pendant WordPress natif des palettes de blocs Payload :
- *   - institutionalSections.ts → blocs « fnc/inst-* » (Le Forum, Contact…)
- *   - pageSections.ts          → blocs « fnc/* » génériques (page composable)
- *
- * Principe repris à l'identique du vrai site : **la DA reste dans le code**.
- * Chaque bloc est un bloc dynamique (rendu serveur via `render_callback`) qui
- * produit le markup DA figé du thème ; l'éditeur n'administre que le contenu,
- * les médias et les CTA — jamais la mise en forme ni la structure.
- *
- * Implémentation « pilotée par schéma » : les champs de chaque bloc sont
- * déclarés une seule fois ci-dessous, puis (a) convertis en attributs de bloc,
- * (b) rendus en PHP, (c) transmis au script d'édition générique
- * (assets/js/blocks.js) qui construit l'interface. Cela évite d'écrire 14
- * composants d'édition distincts et respecte le « zéro dépendance tierce »
- * (ADR-007, Décision 2) — aucun build JS, aucun plugin de champs.
- *
- * Frontière assumée : les champs « richtext » sont des zones de texte simples
- * rendues avec `wpautop()`. Le vrai site utilise un éditeur riche Lexical ;
- * répliquer un éditeur riche multi-champs sans build JS n'apporterait pas assez
- * pour la complexité induite sur un produit vitrine.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -254,7 +238,7 @@ function fnc_block_schemas() {
 		),
 
 		/* ---------------- Informations pratiques (rattachees a l'Edition) ----------------
-		 * Miroir de practicalInfo.ts : agregat de rubriques porte par l'objet
+		 * Miroir de les informations pratiques : agregat de rubriques porte par l'objet
 		 * pivot Edition. Chaque rubrique est optionnelle et masquee si vide.
 		 * A composer dans le contenu d'une fiche Edition, pas d'une Page.
 		 */
@@ -366,6 +350,49 @@ function fnc_block_schemas() {
 				array( 'name' => 'body', 'type' => 'richtext', 'label' => __( 'Contenu', 'fnc-wordpress-theme' ) ),
 			),
 		),
+
+		/* ---------------- Blocs fonctionnels (formulaire / coordonnees) ---------------- */
+		'form'                => array(
+			'title'       => __( 'Formulaire', 'fnc-wordpress-theme' ),
+			'icon'        => 'feedback',
+			'description' => __( 'Formulaire (contact, inscription ou partenariat) traité par FNC Core — les champs et l’envoi restent gérés par le plugin.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array(
+					'name'    => 'formType',
+					'type'    => 'select',
+					'label'   => __( 'Type de formulaire', 'fnc-wordpress-theme' ),
+					'default' => 'contact',
+					'options' => array(
+						'contact'     => __( 'Contact', 'fnc-wordpress-theme' ),
+						'inscription' => __( 'Inscription', 'fnc-wordpress-theme' ),
+						'partenariat' => __( 'Partenariat', 'fnc-wordpress-theme' ),
+					),
+				),
+				array( 'name' => 'eyebrow', 'type' => 'text', 'label' => __( 'Sur-titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'intro', 'type' => 'textarea', 'label' => __( 'Introduction', 'fnc-wordpress-theme' ) ),
+				array(
+					'name'    => 'linen',
+					'type'    => 'select',
+					'label'   => __( 'Fond', 'fnc-wordpress-theme' ),
+					'default' => '0',
+					'options' => array(
+						'0' => __( 'Standard', 'fnc-wordpress-theme' ),
+						'1' => __( 'Lin', 'fnc-wordpress-theme' ),
+					),
+				),
+			),
+		),
+		'coordonnees'         => array(
+			'title'       => __( 'Coordonnées', 'fnc-wordpress-theme' ),
+			'icon'        => 'phone',
+			'description' => __( 'Coordonnées officielles issues des Réglages du site (e-mail, téléphone, adresse, réseaux). Modifiez-les dans Réglages FNC.', 'fnc-wordpress-theme' ),
+			'fields'      => array(
+				array( 'name' => 'eyebrow', 'type' => 'text', 'label' => __( 'Sur-titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'title', 'type' => 'text', 'label' => __( 'Titre', 'fnc-wordpress-theme' ) ),
+				array( 'name' => 'intro', 'type' => 'textarea', 'label' => __( 'Introduction', 'fnc-wordpress-theme' ) ),
+			),
+		),
 	);
 }
 
@@ -462,21 +489,56 @@ function fnc_register_blocks() {
 add_action( 'init', 'fnc_register_blocks' );
 
 /**
+ * Verrouille la palette de blocs des Pages pour préserver la direction
+ * artistique. Sur une Page composable ou institutionnelle, seuls les blocs du
+ * thème (« fnc/* ») sont proposés, plus un paragraphe libre ; l'éditeur ne peut
+ * donc pas insérer de bloc hors charte. Les pages à contenu simple (mentions,
+ * confidentialité…) et les pages à liste gardent l'éditeur standard.
+ *
+ * La liste des blocs autorisés est dérivée du registre : tout bloc « fnc/* »
+ * ajouté au thème est automatiquement disponible, sans maintenance ici.
+ *
+ * @param bool|string[]           $allowed Blocs autorisés (true = tous).
+ * @param WP_Block_Editor_Context $context Contexte de l'éditeur.
+ * @return bool|string[]
+ */
+function fnc_restrict_page_blocks( $allowed, $context ) {
+	if ( empty( $context->post ) || 'page' !== $context->post->post_type ) {
+		return $allowed;
+	}
+	$archetype = function_exists( 'fnc_page_archetype' ) ? fnc_page_archetype( $context->post->ID ) : 'legal';
+	if ( ! in_array( $archetype, array( 'institutional', 'generic' ), true ) ) {
+		return $allowed; // Contenu simple, liste, détail : éditeur standard.
+	}
+
+	$palette = array();
+	foreach ( WP_Block_Type_Registry::get_instance()->get_all_registered() as $block_name => $block_type ) {
+		if ( 0 === strpos( $block_name, 'fnc/' ) ) {
+			$palette[] = $block_name;
+		}
+	}
+	$palette[] = 'core/paragraph'; // Un paragraphe libre reste utile et sans risque pour la charte.
+
+	return $palette;
+}
+add_filter( 'allowed_block_types_all', 'fnc_restrict_page_blocks', 10, 2 );
+
+/**
  * Charge le moteur d'édition générique et lui transmet les schémas.
  */
 function fnc_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'fnc-blocks',
 		get_template_directory_uri() . '/assets/js/blocks.js',
-		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'wp-data' ),
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'wp-data', 'wp-server-side-render' ),
 		FNC_THEME_VERSION,
 		true
 	);
 
 	// Schémas transmis au JS : une seule source de vérité (ce fichier).
-	$payload = array();
+	$block_schemas = array();
 	foreach ( fnc_block_schemas() as $slug => $schema ) {
-		$payload[ 'fnc/' . $slug ] = array(
+		$block_schemas[ 'fnc/' . $slug ] = array(
 			'title'       => $schema['title'],
 			'icon'        => $schema['icon'],
 			'category'    => isset( $schema['category'] ) ? $schema['category'] : 'fnc',
@@ -487,7 +549,7 @@ function fnc_enqueue_block_editor_assets() {
 	}
 	wp_add_inline_script(
 		'fnc-blocks',
-		'window.fncBlockSchemas = ' . wp_json_encode( $payload ) . ';',
+		'window.fncBlockSchemas = ' . wp_json_encode( $block_schemas ) . ';',
 		'before'
 	);
 
@@ -571,6 +633,39 @@ function fnc_attachment_url( $id, $size = 'full' ) {
 	return $src ? $src[0] : '';
 }
 
+/**
+ * <img> d'un attachement de bloc : taille dimensionnée + srcset natif WP + lazy.
+ * Les médias téléversés portent ainsi width/height (anti-CLS) et un srcset
+ * responsive ; repli chaîne vide si l'ID est absent/invalide.
+ *
+ * @param int   $id   ID de l'attachement.
+ * @param array $args { class:string, alt:string, size:string, eager:bool, sizes:string }
+ * @return string
+ */
+function fnc_block_image( $id, $args = array() ) {
+	$id = (int) $id;
+	if ( $id <= 0 ) {
+		return '';
+	}
+	$args = wp_parse_args(
+		$args,
+		array( 'class' => '', 'alt' => '', 'size' => 'large', 'eager' => false, 'sizes' => '' )
+	);
+	$attr = array(
+		'class'    => $args['class'],
+		'alt'      => $args['alt'],
+		'decoding' => 'async',
+		'loading'  => $args['eager'] ? 'eager' : 'lazy',
+	);
+	if ( $args['eager'] ) {
+		$attr['fetchpriority'] = 'high';
+	}
+	if ( '' !== $args['sizes'] ) {
+		$attr['sizes'] = $args['sizes'];
+	}
+	return wp_get_attachment_image( $id, $args['size'], false, $attr );
+}
+
 /** Rendu d'un texte multi-ligne en paragraphes. */
 function fnc_render_rich( $text ) {
 	return wp_kses_post( wpautop( $text ) );
@@ -600,7 +695,7 @@ function fnc_render_cta_button( $label, $href, $class = 'btn btn-red' ) {
 /* ---------------- Palette institutionnelle ---------------- */
 
 function fnc_render_block_inst_hero( $a ) {
-	$image      = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image      = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'class' => 'media-cover', 'size' => '1536x1536', 'eager' => true, 'sizes' => '100vw' ) );
 	$breadcrumb = fnc_attr( $a, 'breadcrumb' );
 	$eyebrow    = fnc_attr( $a, 'eyebrow' );
 	$title_a    = fnc_attr( $a, 'titleA' );
@@ -610,9 +705,7 @@ function fnc_render_block_inst_hero( $a ) {
 	ob_start();
 	?>
 	<header class="opening">
-		<?php if ( $image ) : ?>
-			<img class="media-cover" src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<?php if ( $breadcrumb ) : ?>
@@ -635,7 +728,7 @@ function fnc_render_block_inst_hero( $a ) {
 }
 
 function fnc_render_block_inst_split( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ) );
 	$l1    = fnc_attr( $a, 'l1' );
 	$l2    = fnc_attr( $a, 'l2' );
 	$l3    = fnc_attr( $a, 'l3' );
@@ -660,7 +753,7 @@ function fnc_render_block_inst_split( $a ) {
 				<?php endif; ?>
 			</div>
 			<?php if ( $image ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -704,14 +797,12 @@ function fnc_render_block_inst_objectives( $a ) {
 }
 
 function fnc_render_block_inst_manifesto( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'size' => '1536x1536', 'sizes' => '100vw' ) );
 
 	ob_start();
 	?>
 	<section class="territory">
-		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="ov" aria-hidden="true"></div>
 		<div class="inner">
 			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
@@ -748,8 +839,72 @@ function fnc_render_block_inst_callout( $a ) {
 	return (string) ob_get_clean();
 }
 
+/** Bloc formulaire : rend le formulaire la réception des formulaires du type choisi. */
+function fnc_render_block_form( $a ) {
+	$type  = fnc_attr( $a, 'formType', 'contact' );
+	$linen = '1' === (string) fnc_attr( $a, 'linen', '0' );
+
+	ob_start();
+	?>
+	<section class="section<?php echo $linen ? ' linen' : ''; ?>">
+		<div class="container reading">
+			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
+				<span class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></span>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'title' ) ) : ?>
+				<h2><?php echo esc_html( fnc_attr( $a, 'title' ) ); ?></h2>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'intro' ) ) : ?>
+				<p class="body"><?php echo esc_html( fnc_attr( $a, 'intro' ) ); ?></p>
+			<?php endif; ?>
+			<?php
+			// Feature flag INSCRIPTION au niveau du bloc : fermé → état honnête
+			// pas de formulaire. Vaut aussi pour la page
+			// composée en blocs (le gabarit page-inscription.php gère le cas non-bloc).
+			if ( 'inscription' === $type && function_exists( 'fnc_registration_enabled' ) && ! fnc_registration_enabled() ) :
+				?>
+				<div class="callout">
+					<h2><?php esc_html_e( 'Les inscriptions ne sont pas encore ouvertes', 'fnc-wordpress-theme' ); ?></h2>
+					<p><?php esc_html_e( 'La billetterie de la prochaine édition ouvrira prochainement. Revenez bientôt ou suivez nos actualités pour être informé·e de l’ouverture.', 'fnc-wordpress-theme' ); ?></p>
+					<a class="btn btn-ghost-light" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Découvrir le Forum', 'fnc-wordpress-theme' ); ?></a>
+				</div>
+				<?php
+			else :
+				echo function_exists( 'fnc_render_submission_form' ) ? fnc_render_submission_form( $type ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			endif;
+			?>
+		</div>
+	</section>
+	<?php
+	return (string) ob_get_clean();
+}
+
+/** Bloc coordonnees : rend les coordonnees officielles (Reglages). */
+function fnc_render_block_coordonnees( $a ) {
+	ob_start();
+	?>
+	<section class="section linen">
+		<div class="container reading">
+			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
+				<span class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></span>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'title' ) ) : ?>
+				<h2><?php echo esc_html( fnc_attr( $a, 'title' ) ); ?></h2>
+			<?php endif; ?>
+			<?php if ( fnc_attr( $a, 'intro' ) ) : ?>
+				<p class="body"><?php echo esc_html( fnc_attr( $a, 'intro' ) ); ?></p>
+			<?php endif; ?>
+			<?php
+			echo function_exists( 'fnc_render_contact_coordinates' ) ? fnc_render_contact_coordinates() : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- markup echappe dans le helper.
+			?>
+		</div>
+	</section>
+	<?php
+	return (string) ob_get_clean();
+}
+
 function fnc_render_block_inst_president( $a ) {
-	$photo   = fnc_attachment_url( fnc_attr( $a, 'photo', 0 ) );
+	$photo   = fnc_block_image( fnc_attr( $a, 'photo', 0 ), array( 'alt' => fnc_attr( $a, 'name' ), 'size' => 'large' ) );
 	$excerpt = fnc_attr( $a, 'excerpt' );
 	$message = fnc_attr( $a, 'message' );
 
@@ -783,7 +938,7 @@ function fnc_render_block_inst_president( $a ) {
 				?>
 			</div>
 			<?php if ( $photo ) : ?>
-				<figure><img src="<?php echo esc_url( $photo ); ?>" alt="<?php echo esc_attr( fnc_attr( $a, 'name' ) ); ?>" /></figure>
+				<figure><?php echo $photo; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -835,14 +990,12 @@ function fnc_render_block_inst_faq( $a ) {
 /* ---------------- Palette générique ---------------- */
 
 function fnc_render_block_hero( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ), array( 'size' => '1536x1536', 'eager' => true, 'sizes' => '100vw' ) );
 
 	ob_start();
 	?>
 	<section class="hero secondary">
-		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="" />
-		<?php endif; ?>
+		<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?>
 		<div class="hero-inner">
 			<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
 				<p class="eyebrow"><?php echo esc_html( fnc_attr( $a, 'eyebrow' ) ); ?></p>
@@ -892,7 +1045,7 @@ function fnc_render_block_richtext( $a ) {
 }
 
 function fnc_render_block_split( $a ) {
-	$image = fnc_attachment_url( fnc_attr( $a, 'image', 0 ) );
+	$image = fnc_block_image( fnc_attr( $a, 'image', 0 ) );
 	$left  = 'left' === fnc_attr( $a, 'mediaSide', 'right' );
 
 	ob_start();
@@ -900,7 +1053,7 @@ function fnc_render_block_split( $a ) {
 	<section class="section">
 		<div class="split<?php echo $left ? ' media-left' : ''; ?>">
 			<?php if ( $image && $left ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 			<div>
 				<?php if ( fnc_attr( $a, 'eyebrow' ) ) : ?>
@@ -916,7 +1069,7 @@ function fnc_render_block_split( $a ) {
 				?>
 			</div>
 			<?php if ( $image && ! $left ) : ?>
-				<figure><img src="<?php echo esc_url( $image ); ?>" alt="" /></figure>
+				<figure><?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper. ?></figure>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -986,9 +1139,11 @@ function fnc_pract_wrap( $title, $default_title, $inner, $modifier = '' ) {
 	if ( '' === trim( $inner ) ) {
 		return '';
 	}
+	// Structure des infos pratiques : .practical-item + .practical-title,
+	// puis le contenu tel quel (pas d'enveloppe .pract-body). Le $modifier est ignoré
+	// (le Forum ne différencie pas les rubriques par une classe modificatrice).
 	return sprintf(
-		'<article class="pract-item%1$s"><h3 class="pract-title">%2$s</h3><div class="pract-body">%3$s</div></article>',
-		$modifier ? ' pract-item--' . esc_attr( $modifier ) : '',
+		'<article class="practical-item"><h3 class="practical-title">%1$s</h3>%2$s</article>',
 		esc_html( $title ? $title : $default_title ),
 		$inner
 	);
@@ -1000,7 +1155,12 @@ function fnc_render_pract_simple( $a, $default_title, $modifier ) {
 	if ( ! $body ) {
 		return '';
 	}
-	return fnc_pract_wrap( fnc_attr( $a, 'title' ), $default_title, fnc_render_rich( $body ), $modifier );
+	return fnc_pract_wrap(
+		fnc_attr( $a, 'title' ),
+		$default_title,
+		'<div class="prose-legal" style="margin-top:12px;">' . fnc_render_rich( $body ) . '</div>',
+		$modifier
+	);
 }
 
 function fnc_render_block_pract_transport( $a ) {
@@ -1022,33 +1182,41 @@ function fnc_render_block_pract_accessibility( $a ) {
 function fnc_render_block_pract_venue( $a ) {
 	$address   = fnc_attr( $a, 'address' );
 	$body      = fnc_attr( $a, 'body' );
-	$map_image = fnc_attachment_url( fnc_attr( $a, 'mapImage', 0 ) );
+	$map_image = fnc_block_image( fnc_attr( $a, 'mapImage', 0 ) );
 	$map_url   = fnc_attr( $a, 'mapEmbedUrl' );
 
-	ob_start();
+	if ( ! $address && ! $body && ! $map_image && ! $map_url ) {
+		return '';
+	}
 
+	// Lieu : .practical-item > .split [ colonne texte |
+	// figure.practical-map ]. Le titre est DANS la colonne texte.
+	$title = fnc_attr( $a, 'title' );
+	ob_start();
+	echo '<article class="practical-item"><div class="split"><div>';
+	printf( '<h3 class="practical-title">%s</h3>', esc_html( $title ? $title : __( 'Lieu & plan d’accès', 'fnc-wordpress-theme' ) ) );
 	if ( $address ) {
-		printf( '<p class="pract-address">%s</p>', nl2br( esc_html( $address ) ) );
+		printf( '<p class="body" style="white-space:pre-line;">%s</p>', esc_html( $address ) );
 	}
 	if ( $body ) {
-		echo fnc_render_rich( $body ); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
-	}
-	if ( $map_image ) {
-		printf( '<img class="pract-map-image" src="%s" alt="" loading="lazy" />', esc_url( $map_image ) );
+		echo '<div class="prose-legal" style="margin-top:12px;">' . fnc_render_rich( $body ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
 	}
 	if ( $map_url ) {
-		// Privacy-first (comme le vrai site) : aucune requête vers le service
-		// tiers avant un clic explicite de l'utilisateur.
+		// Privacy-first (comme sur le site du Forum) : aucune requête vers le service
+		// tiers avant un clic explicite (lien externe, pas d'embed automatique).
 		printf(
-			'<div class="pract-map" data-map-url="%1$s" data-map-title="%2$s"><button type="button" class="btn btn-soft pract-map-load">%3$s</button><p class="help">%4$s</p></div>',
+			'<a class="link-more" href="%1$s" target="_blank" rel="noopener noreferrer" style="margin-top:12px;display:inline-block;">%2$s <span class="arrow" aria-hidden="true">→</span></a>',
 			esc_url( $map_url ),
-			esc_attr__( 'Carte du lieu', 'fnc-wordpress-theme' ),
-			esc_html__( 'Afficher la carte interactive', 'fnc-wordpress-theme' ),
-			esc_html__( 'La carte n’est chargée qu’à votre demande : aucun contenu tiers n’est appelé avant.', 'fnc-wordpress-theme' )
+			esc_html__( 'Ouvrir le plan', 'fnc-wordpress-theme' )
 		);
 	}
+	echo '</div>';
+	if ( $map_image ) {
+		echo '<figure class="practical-map">' . $map_image . '</figure>'; // phpcs:ignore WordPress.Security.EscapeOutput -- markup échappé dans le helper.
+	}
+	echo '</div></article>';
 
-	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Lieu & plan d’accès', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'venue' );
+	return (string) ob_get_clean();
 }
 
 function fnc_render_block_pract_lodging( $a ) {
@@ -1058,7 +1226,7 @@ function fnc_render_block_pract_lodging( $a ) {
 	}
 
 	ob_start();
-	echo '<ul class="pract-list">';
+	echo '<ul class="practical-lodging" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$name = isset( $item['name'] ) ? $item['name'] : '';
 		if ( ! $name ) {
@@ -1066,14 +1234,15 @@ function fnc_render_block_pract_lodging( $a ) {
 		}
 		$url  = isset( $item['url'] ) ? $item['url'] : '';
 		$note = isset( $item['note'] ) ? $item['note'] : '';
-		echo '<li>';
+		echo '<li><span class="lodging-name">';
 		if ( $url ) {
 			printf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $url ), esc_html( $name ) );
 		} else {
-			echo '<strong>' . esc_html( $name ) . '</strong>';
+			echo esc_html( $name );
 		}
+		echo '</span>';
 		if ( $note ) {
-			echo ' <span class="pract-note">' . esc_html( $note ) . '</span>';
+			echo '<span class="lodging-note"> — ' . esc_html( $note ) . '</span>';
 		}
 		echo '</li>';
 	}
@@ -1089,21 +1258,22 @@ function fnc_render_block_pract_contacts( $a ) {
 	}
 
 	ob_start();
-	echo '<dl class="pract-contacts">';
+	echo '<ul class="practical-contacts" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$label = isset( $item['label'] ) ? $item['label'] : '';
 		$value = isset( $item['value'] ) ? $item['value'] : '';
 		if ( ! $label && ! $value ) {
 			continue;
 		}
-		printf( '<dt>%s</dt>', esc_html( $label ) );
+		echo '<li><span class="contact-label">' . esc_html( $label ) . '</span><span class="contact-value">';
 		if ( is_email( $value ) ) {
-			printf( '<dd><a href="mailto:%1$s">%1$s</a></dd>', esc_attr( antispambot( $value ) ) );
+			printf( '<a href="mailto:%1$s">%1$s</a>', esc_attr( antispambot( $value ) ) );
 		} else {
-			printf( '<dd>%s</dd>', esc_html( $value ) );
+			echo esc_html( $value );
 		}
+		echo '</span></li>';
 	}
-	echo '</dl>';
+	echo '</ul>';
 
 	return fnc_pract_wrap( fnc_attr( $a, 'title' ), __( 'Contacts utiles', 'fnc-wordpress-theme' ), (string) ob_get_clean(), 'contacts' );
 }
@@ -1115,15 +1285,15 @@ function fnc_render_block_pract_faq( $a ) {
 	}
 
 	ob_start();
-	echo '<div class="faq-list">';
+	echo '<div class="practical-faq" style="margin-top:12px;">';
 	foreach ( $items as $item ) {
 		$q = isset( $item['q'] ) ? $item['q'] : '';
 		if ( ! $q ) {
 			continue;
 		}
-		echo '<details class="faq-item"><summary>' . esc_html( $q ) . '</summary>';
+		echo '<details><summary>' . esc_html( $q ) . '</summary>';
 		if ( ! empty( $item['a'] ) ) {
-			echo '<div class="faq-answer">' . fnc_render_rich( $item['a'] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
+			echo '<div class="prose-legal">' . fnc_render_rich( $item['a'] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé par wp_kses_post.
 		}
 		echo '</details>';
 	}
@@ -1136,7 +1306,7 @@ function fnc_render_block_pract_faq( $a ) {
  * Rend l'agrégat « informations pratiques » d'une édition.
  *
  * Les rubriques sont composées dans le contenu de la fiche Édition (objet
- * pivot, comme sur le vrai site) : on extrait ici les seuls blocs
+ * pivot, comme sur le site du Forum) : on extrait ici les seuls blocs
  * `fnc/pract-*` pour les rendre, en ignorant le reste du contenu. Chaque
  * rubrique vide s'auto-masque (son renderer retourne une chaîne vide).
  *

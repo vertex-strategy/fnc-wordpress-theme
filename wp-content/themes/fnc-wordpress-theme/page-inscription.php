@@ -1,15 +1,11 @@
 <?php
 /**
- * Gabarit de page — "Inscription".
+ * Forum Numérique Congo — gabarit de la page « Inscription ».
  *
- * Aligne sur la page reelle localhost:3000/fr/inscription : heros « Demander une
- * inscription » puis la carte « Votre demande » avec le formulaire (nom, e-mail,
- * organisation, profil, mode de participation, motivation).
- *
- * Formulaire non fonctionnel (pas de handler d'envoi) — fidele a la posture du
- * site tant que le canal n'est pas ouvert, et a l'exclusion de la collection
- * "Registrations" du perimetre (ADR-007, Decision 2). Seule partie dynamique :
- * le nom de l'edition active reelle (_fnc_edition_active).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,11 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+/*
+ * Composition par blocs : des que l'editorial compose cette page avec des
+ * blocs FNC, ce gabarit s'efface au profit du contenu compose (editable et
+ * reagenceable) ; sinon il conserve son contenu de demonstration (comportement
+ * inchange). Meme convention que page.php et page-le-forum.php.
+ */
+if ( function_exists( 'fnc_page_has_blocks' ) && fnc_page_has_blocks() ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
+
+fnc_render_opening_hero(
 	array(
 		'eyebrow'    => __( 'Participer', 'fnc-wordpress-theme' ),
 		'title'      => __( 'Demander une inscription', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation.', 'fnc-wordpress-theme' ),
+		'intro'      => __( 'Adressez votre demande de participation. Notre équipe l’examine et revient vers vous — cette demande ne vaut pas confirmation.', 'fnc-wordpress-theme' ),
 		'image'      => get_template_directory_uri() . '/assets/images/le-badge.png',
 		'image_alt'  => __( 'Badge du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Inscription', 'fnc-wordpress-theme' ),
@@ -56,9 +69,25 @@ $fnc_participations = array(
 <main id="main">
 	<section class="section">
 		<div class="container reading">
-			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Formulaire d’inscription', 'fnc-wordpress-theme' ); ?>">
+			<?php
+			// État « fermé » honnête quand les inscriptions ne sont pas ouvertes
+			// La page reste en ligne mais passe en noindex
+			// (posé par fnc_feature_flag_gate / inc/seo.php) et le formulaire est
+			// remplacé par un message ; le CTA d'inscription est déjà masqué ailleurs.
+			$fnc_reg_open = ! function_exists( 'fnc_registration_enabled' ) || fnc_registration_enabled();
+			if ( ! $fnc_reg_open ) :
+				?>
+				<div class="callout">
+					<h2><?php esc_html_e( 'Les inscriptions ne sont pas encore ouvertes', 'fnc-wordpress-theme' ); ?></h2>
+					<p><?php esc_html_e( 'La billetterie de la prochaine édition ouvrira prochainement. Revenez bientôt ou suivez nos actualités pour être informé·e de l’ouverture.', 'fnc-wordpress-theme' ); ?></p>
+					<a class="btn btn-ghost-light" href="<?php echo esc_url( fnc_page_url( 'le-forum' ) ); ?>"><?php esc_html_e( 'Découvrir le Forum', 'fnc-wordpress-theme' ); ?></a>
+				</div>
+				<?php
+			else :
+				?>
+			<form class="card form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" aria-label="<?php esc_attr_e( 'Formulaire d’inscription', 'fnc-wordpress-theme' ); ?>" aria-describedby="fnc-inscription-help">
 				<h2 style="font-size:1.6rem;color:var(--navy-deep);"><?php esc_html_e( 'Votre demande', 'fnc-wordpress-theme' ); ?></h2>
-				<p class="help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
+				<p class="help" id="fnc-inscription-help"><?php esc_html_e( 'Les champs marqués d’un astérisque sont obligatoires.', 'fnc-wordpress-theme' ); ?></p>
 				<?php if ( $fnc_edition_title ) : ?>
 					<p class="help"><?php esc_html_e( 'Vous vous inscrivez à', 'fnc-wordpress-theme' ); ?> <strong><?php echo esc_html( $fnc_edition_title ); ?></strong></p>
 				<?php endif; ?>
@@ -103,10 +132,11 @@ $fnc_participations = array(
 					</div>
 				</div>
 
-				<button class="btn btn-red" type="submit"><?php esc_html_e( 'Envoyer ma demande', 'fnc-wordpress-theme' ); ?>
+				<button class="btn" type="submit"><?php esc_html_e( 'Envoyer ma demande', 'fnc-wordpress-theme' ); ?>
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 				</button>
 			</form>
+			<?php endif; ?>
 		</div>
 	</section>
 </main>

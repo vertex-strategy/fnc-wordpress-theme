@@ -1,23 +1,11 @@
 <?php
 /**
- * SEO par document + rendu des métadonnées (Lot 5).
+ * Forum Numérique Congo — référencement (balises et données structurées).
  *
- * Pendant WordPress natif des `seoFields` de Payload (groupe `seo` avec titre
- * et description, étalé dans les collections du vrai site) et de la logique de
- * `generateMetadata()` : chaque document peut surcharger le titre et la
- * description, sinon on retombe sur le titre du document, puis sur les valeurs
- * par défaut du site (onglet « SEO par défaut » des Réglages FNC, Lot 1).
- *
- * Choix d'implémentation : ces champs vivent dans le THÈME et non dans le
- * plugin de modèle de contenu, alors que le vrai site les porte dans ses
- * collections. Raison : c'est le thème qui produit les balises, et le besoin
- * couvre uniformément les Pages/articles WordPress natifs *et* les contenus du
- * plugin — garder toute la cascade (document → défaut global) au même endroit
- * la rend beaucoup plus simple à raisonner.
- *
- * L'image de partage par document suit la convention WordPress : l'image mise
- * en avant sert d'`og:image`, avec repli sur l'image OpenGraph par défaut. Pas
- * de champ média supplémentaire à saisir.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,6 +15,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 const FNC_META_SEO_TITLE       = '_fnc_seo_title';
 const FNC_META_SEO_DESCRIPTION = '_fnc_seo_description';
 const FNC_META_SEO_NOINDEX     = '_fnc_seo_noindex';
+
+/**
+ * Un plugin SEO dédié (AIOSEO / Yoast) est-il actif ? Si oui, le thème lui
+ * DÉLÈGUE le <title>, la meta description, l'OpenGraph, la canonique et le
+ * schema Organization/WebSite : ces plugins les émettent déjà, et doublonner
+ * dégraderait le SEO. Le thème conserve alors uniquement ce que le plugin ne
+ * produit pas (le schema Event de l'édition, via le Module D « données du site »).
+ *
+ * @return bool
+ */
+function fnc_seo_delegated() {
+	return defined( 'AIOSEO_VERSION' ) || function_exists( 'aioseo' ) || defined( 'WPSEO_VERSION' );
+}
 
 /**
  * Types de contenu recevant les champs SEO : Pages et articles natifs, plus
@@ -136,7 +137,7 @@ add_action( 'save_post', 'fnc_seo_save_meta', 10, 2 );
 
 /**
  * Titre SEO résolu : SEO du document → titre du document → titre par défaut
- * du site → nom du site. Même cascade que `generateMetadata()` du vrai site.
+ * du site → nom du site. Même cascade que `generateMetadata()` du site du Forum.
  *
  * @return string
  */
@@ -191,13 +192,17 @@ function fnc_seo_description() {
  * @return string URL, ou chaîne vide.
  */
 function fnc_seo_image() {
+	// Taille dédiée au partage social : og 1200×630 (recadrage dur) quand elle
+	// existe, repli sur l'original sinon (image trop petite pour la générer).
 	if ( is_singular() && has_post_thumbnail() ) {
-		$url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+		$url = get_the_post_thumbnail_url( get_the_ID(), 'fnc-og' );
+		$url = $url ? $url : get_the_post_thumbnail_url( get_the_ID(), 'full' );
 		if ( $url ) {
 			return $url;
 		}
 	}
-	return fnc_get_setting_image_url( 'og_default_image', 'full' );
+	$url = fnc_get_setting_image_url( 'og_default_image', 'fnc-og' );
+	return $url ? $url : fnc_get_setting_image_url( 'og_default_image', 'full' );
 }
 
 /**
@@ -206,6 +211,10 @@ function fnc_seo_image() {
  * @return bool
  */
 function fnc_seo_is_noindex() {
+	// Refus forcé par le contexte (ex. surface sous feature flag fermé).
+	if ( apply_filters( 'fnc_force_noindex', false ) ) {
+		return true;
+	}
 	return is_singular() && '1' === (string) get_post_meta( get_the_ID(), FNC_META_SEO_NOINDEX, true );
 }
 
@@ -221,11 +230,21 @@ function fnc_seo_is_noindex() {
  * @return array<string,string>
  */
 function fnc_seo_document_title_parts( $parts ) {
+	if ( fnc_seo_delegated() ) {
+		return $parts; // AIOSEO / Yoast gère le <title>.
+	}
 	if ( is_singular() ) {
 		$custom = get_post_meta( get_the_ID(), FNC_META_SEO_TITLE, true );
 		if ( $custom ) {
 			$parts['title'] = $custom;
 		}
+	}
+	// Nom du site dans le <title> = nom officiel du Forum (réglage officialName),
+	// et NON le « Nom du site » brut de WordPress. On ne remplace que la partie
+	// « site » LORSQU'ELLE EXISTE (pages internes) : sur l'accueil WordPress place
+	// déjà le nom en titre, l'ajouter dupliquerait « Nom – slogan – Nom ».
+	if ( isset( $parts['site'] ) ) {
+		$parts['site'] = fnc_site_name();
 	}
 	return $parts;
 }
@@ -238,6 +257,11 @@ add_filter( 'document_title_parts', 'fnc_seo_document_title_parts' );
  * sinon valeurs par défaut du site (Réglages FNC → SEO par défaut).
  */
 function fnc_head_meta() {
+	// Déléguée à AIOSEO/Yoast s'il est actif : ne rien émettre ici (meta
+	// description, OpenGraph, canonique, twitter) pour éviter les balises en double.
+	if ( fnc_seo_delegated() ) {
+		return;
+	}
 	$site_name   = fnc_site_name();
 	$description = fnc_seo_description();
 	$title       = fnc_seo_title();
@@ -247,13 +271,27 @@ function fnc_head_meta() {
 	$url = is_singular() ? get_permalink() : home_url( add_query_arg( array() ) );
 	$url = $url ? $url : home_url( '/' );
 
+	// Canonique : WordPress n'émet rel=canonical que sur les vues « singular ».
+	// On la complète pour l'accueil et les archives (où elle manquait).
+	if ( ! is_singular() ) {
+		printf( '<link rel="canonical" href="%s" />' . "\n", esc_url( $url ) );
+	}
+
 	if ( $description ) {
 		printf( '<meta name="description" content="%s" />' . "\n", esc_attr( $description ) );
 		printf( '<meta property="og:description" content="%s" />' . "\n", esc_attr( $description ) );
 	}
 	printf( '<meta property="og:site_name" content="%s" />' . "\n", esc_attr( $site_name ) );
 	printf( '<meta property="og:title" content="%s" />' . "\n", esc_attr( $title ) );
-	printf( '<meta property="og:type" content="%s" />' . "\n", is_singular() ? 'article' : 'website' );
+	// og:type = « article » UNIQUEMENT sur le détail des ressources et actualités
+	// (routes ressources/[slug] et actualites/[slug]) ; « website » partout
+	// ailleurs (pages, éditions, intervenants, sessions, partenaires, archives, accueil).
+	$fnc_is_article = is_singular( array( 'fnc_publication', 'fnc_actualite' ) );
+	printf( '<meta property="og:type" content="%s" />' . "\n", $fnc_is_article ? 'article' : 'website' );
+	if ( $fnc_is_article ) {
+		printf( '<meta property="article:published_time" content="%s" />' . "\n", esc_attr( get_post_time( 'c', true ) ) );
+		printf( '<meta property="article:modified_time" content="%s" />' . "\n", esc_attr( get_post_modified_time( 'c', true ) ) );
+	}
 	printf( '<meta property="og:url" content="%s" />' . "\n", esc_url( $url ) );
 	if ( $image ) {
 		printf( '<meta property="og:image" content="%s" />' . "\n", esc_url( $image ) );
@@ -273,6 +311,14 @@ add_action( 'wp_head', 'fnc_head_meta', 5 );
  * @return array<string,mixed>
  */
 function fnc_filter_robots( $robots ) {
+	// Page introuvable (404) : jamais indexée.
+	if ( is_404() ) {
+		$robots['noindex']  = true;
+		$robots['nofollow'] = true;
+		unset( $robots['index'], $robots['follow'] );
+		return $robots;
+	}
+
 	// Le refus d'indexation porté par le document prime sur le réglage global.
 	if ( fnc_seo_is_noindex() ) {
 		$robots['noindex']  = true;
@@ -303,3 +349,57 @@ function fnc_filter_robots( $robots ) {
 	return $robots;
 }
 add_filter( 'wp_robots', 'fnc_filter_robots' );
+
+/**
+ * robots.txt : interdit l'admin et l'API REST aux robots, et pointe le sitemap.
+ * Idempotent (n'ajoute chaque directive que si absente), pour ne pas doublonner
+ * ce que le cœur WordPress émet déjà. Aligné sur la politique robots du site.
+ *
+ * @param string $output
+ * @param bool   $public
+ * @return string
+ */
+function fnc_robots_txt( $output, $public ) {
+	if ( ! $public ) {
+		return $output; // Site en « décourager les moteurs » : ne pas surcharger.
+	}
+	if ( false === strpos( $output, '/wp-admin/' ) ) {
+		$output .= "Disallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n";
+	}
+	if ( false === strpos( $output, '/wp-json/' ) ) {
+		$output .= "Disallow: /wp-json/\n";
+	}
+	if ( false === strpos( $output, 'Sitemap:' ) && function_exists( 'get_sitemap_url' ) ) {
+		$sitemap = get_sitemap_url( 'index' );
+		if ( $sitemap ) {
+			$output .= 'Sitemap: ' . esc_url_raw( $sitemap ) . "\n";
+		}
+	}
+	return $output;
+}
+add_filter( 'robots_txt', 'fnc_robots_txt', 10, 2 );
+
+/**
+ * Redirection 301 des anciennes URL /publications(/…) vers /ressources(/…).
+ * Le CPT a été renommé (slug « ressources ») ; on préserve le préfixe de langue
+ * (/en) et la chaîne de requête. Aligné sur la règle 301 de redirection du site.
+ */
+function fnc_redirect_legacy_publications() {
+	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		return;
+	}
+	$uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$path = (string) wp_parse_url( $uri, PHP_URL_PATH );
+	if ( preg_match( '#^(/en)?/publications(/.*)?/?$#', untrailingslashit( $path ), $m ) ) {
+		$prefix = isset( $m[1] ) ? $m[1] : '';
+		$rest   = isset( $m[2] ) ? $m[2] : '';
+		$target = home_url( $prefix . '/ressources' . $rest );
+		$query  = (string) wp_parse_url( $uri, PHP_URL_QUERY );
+		if ( '' !== $query ) {
+			$target .= '?' . $query;
+		}
+		wp_safe_redirect( $target, 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'fnc_redirect_legacy_publications' );

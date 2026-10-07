@@ -1,18 +1,11 @@
 <?php
 /**
- * Fiche d'une actualite (single-fnc_actualite.php).
+ * Forum Numérique Congo — fiche détaillée d’une actualité.
  *
- * Complete la couverture des gabarits single : le CPT fnc_actualite avait une
- * URL publique mais aucun gabarit dedie, retombant sur index.php (extrait seul).
- *
- * Le CPT ne porte que les champs natifs (titre, contenu, image, extrait) et les
- * taxonomies partagees (categories, etiquettes). La fiche affiche le contenu
- * editorial en colonne de lecture, avec la date et les classifications. Chaque
- * element est masque si la donnee n'existe pas.
- *
- * Rappel (voir modele de contenu) : la route publique des actualites du vrai
- * site est desactivee par defaut (NEWS_ENABLED) ; ce gabarit reste disponible
- * si des actualites sont publiees dans cette instance.
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,16 +21,18 @@ while ( have_posts() ) :
 	$fnc_ac_cats = get_the_terms( $fnc_ac_id, 'fnc_categorie' );
 	$fnc_ac_tags = get_the_terms( $fnc_ac_id, 'fnc_tag' );
 
-	fnc_render_hero(
-		array(
-			'eyebrow'    => get_the_date(),
-			'title'      => get_the_title(),
-			'lead'       => has_excerpt() ? get_the_excerpt() : '',
-			'image'      => has_post_thumbnail() ? get_the_post_thumbnail_url( $fnc_ac_id, 'full' ) : get_template_directory_uri() . '/assets/images/le-territoire-brazzaville.png',
-			'image_alt'  => '',
-			'breadcrumb' => get_the_title(),
-		)
-	);
+	?>
+	<header class="section" style="padding-top:calc(clamp(64px,9vh,118px) + 40px);padding-bottom:0;">
+		<div class="container reading">
+			<p class="breadcrumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Accueil', 'fnc-wordpress-theme' ); ?></a> · <a href="<?php echo esc_url( fnc_archive_url( 'fnc_actualite' ) ); ?>"><?php esc_html_e( 'Actualités', 'fnc-wordpress-theme' ); ?></a></p>
+			<p class="page-eyebrow text-navy"><?php echo esc_html( get_the_date() ); ?><?php if ( $fnc_ac_cats && ! is_wp_error( $fnc_ac_cats ) ) { echo ' · ' . esc_html( $fnc_ac_cats[0]->name ); } ?></p>
+			<h1 class="page-h2"><?php echo esc_html( get_the_title() ); ?></h1>
+			<?php if ( has_excerpt() ) : ?>
+				<p class="intro"><?php echo esc_html( get_the_excerpt() ); ?></p>
+			<?php endif; ?>
+		</div>
+	</header>
+	<?php
 	?>
 
 	<main id="main">

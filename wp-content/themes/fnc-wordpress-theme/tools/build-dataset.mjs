@@ -1,0 +1,194 @@
+/**
+ * Forum Numérique Congo — extraction du jeu de données canonique vers dataset.json.
+ *
+ * Lit les sources de vérité (module d'agenda typé + fiches Markdown) et produit
+ * un unique `dataset.json` consommé par tools/seed-dataset.php. Séparer
+ * l'extraction (dev) du semis (WordPress) garde le semis autonome et rejouable.
+ *
+ * Exécution :  npx tsx tools/build-dataset.mjs
+ *   Variable FNC_SRC : racine des données canoniques
+ *   (défaut : C:/projets_dev/forum-numerique-congo).
+ *
+ * @author    Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+const SRC = process.env.FNC_SRC || 'C:/projets_dev/forum-numerique-congo';
+const OUT = path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), 'dataset.json');
+
+// Ordre protocolaire (repris de src/data/agenda-2027.ts, non exporté).
+const PRIORITY_ORDER = ['makosso', 'bouya-jj', 'nze', 'ngouonimba', 'yoka', 'ngatse', 'djombo', 'bahamboula', 'bouya-er'];
+
+/** Parseur minimal de frontmatter YAML (clés scalaires « key: "value" »). */
+function frontmatter(file) {
+  const txt = fs.readFileSync(file, 'utf8');
+  const m = txt.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const out = {};
+  if (!m) return out;
+  for (const line of m[1].split(/\r?\n/)) {
+    const mm = line.match(/^([a-zA-Z0-9_]+):\s*(.*)$/);
+    if (!mm) continue;
+    let v = mm[2].trim();
+    if (v === '' || v === '[]') { out[mm[1]] = ''; continue; }
+    v = v.replace(/^"(.*)"$/, '$1').replace(/^'(.*)'$/, '$1');
+    out[mm[1]] = v;
+  }
+  return out;
+}
+
+function mdFiles(dir) {
+  const d = path.join(SRC, dir);
+  return fs.existsSync(d) ? fs.readdirSync(d).filter((f) => f.endsWith('.md')) : [];
+}
+
+const statusMap = { passee: 'past', a_venir: 'upcoming', en_cours: 'current' };
+
+async function main() {
+  const agenda = await import(pathToFileURL(path.join(SRC, 'src/data/agenda-2027.ts')).href);
+
+  // --- Éditions (frontmatter des 5 fiches) ---
+  const editions = [];
+  for (const f of mdFiles('docs/sources/content-migration/02-editions').filter((f) => /^\d{4}-/.test(f))) {
+    const fm = frontmatter(path.join(SRC, 'docs/sources/content-migration/02-editions', f));
+    const slug = f.replace(/\.md$/, '');
+    const year = fm.year || slug.slice(0, 4);
+    const is2027 = year === '2027';
+    // Titre au format du site du Forum : l'édition active porte le nom de
+    // l'évènement ; les précédentes, leur rang ordinal + le thème.
+    const ordinals = { '2018': '1re', '2020': '2e', '2022': '3e', '2024': '4e', '2027': '5e' };
+    const ord = ordinals[year] || '';
+    // Corrections/traductions VALIDÉES MOA, absentes des sources statiques :
+    //  - thème FR canonique (le CMS Payload porte une version plus riche pour 2024) ;
+    //  - thème EN des éditions passées (le CMS ne les a pas saisis → traductions
+    //    validées par le Décideur). 2027 garde son themeEn de agenda-2027.ts.
+    const THEME_FR_OVERRIDE = {
+      '2024-intelligence-artificielle': 'L’Intelligence Artificielle — Rupture ou Continuité ?',
+    };
+    const PAST_THEME_EN = {
+      '2018-dematerialisation-gouvernance': 'Dematerialization and electronic governance',
+      '2020-transformation-digitale': 'Digital transformation: opportunities and threats',
+      '2022-innovation-donnee': 'Technological innovation and data at the heart of digital transformation: issues and challenges',
+      '2024-intelligence-artificielle': 'Artificial Intelligence — Disruption or Continuity?',
+    };
+    const themeFr = THEME_FR_OVERRIDE[slug] || fm.theme || '';
+    const title = is2027
+      ? `Forum Numérique Congo ${year}`
+      : ( ord ? `${ord} édition — ${themeFr}`.trim() : `Édition ${year}` );
+    editions.push({
+      legacyId: slug,
+      slug,
+      year,
+      title,
+      theme: themeFr,
+      themeEn: is2027 ? agenda.edition.themeEn : ( PAST_THEME_EN[slug] || '' ),
+      // L'édition active pilote l'accueil : statut « current » (le résolveur la
+      // choisit en priorité), même si l'évènement est à venir (compte à rebours).
+      status: is2027 ? 'current' : ( statusMap[fm.status] || 'past' ),
+      active: is2027 ? 1 : 0,
+      startDate: fm.start_date || '',
+      endDate: fm.end_date || '',
+      location: is2027 ? agenda.edition.venue : '',
+    });
+  }
+
+  // --- Intervenants (agenda-2027.ts) ---
+  const speakers = agenda.speakers.map((s, i) => {
+    const p = PRIORITY_ORDER.indexOf(s.id);
+    return {
+      legacyId: s.id,
+      slug: s.slug || s.id,
+      title: s.title || '',
+      name: s.name,
+      roleFr: s.roleFr || '',
+      roleEn: s.roleEn || '',
+      org: s.org || '',
+      country: s.country || '',
+      kind: s.kind,
+      photo: s.photo || '',
+      protocolOrder: p >= 0 ? p + 1 : 50 + i,
+    };
+  });
+
+  // --- Sessions (agenda-2027.ts) ---
+  const edition2027 = editions.find((e) => e.year === '2027');
+  const sessions = agenda.sessions.map((s) => ({
+    legacyId: s.id,
+    slug: s.slug || s.id,
+    editionLegacy: edition2027 ? edition2027.legacyId : '',
+    day: s.day,
+    jour: `Jour ${s.day}`,
+    start: s.start || '',
+    end: s.end || '',
+    time: s.end ? `${s.start} – ${s.end}` : (s.start || ''),
+    type: s.type,
+    titleFr: s.titleFr || '',
+    titleEn: s.titleEn || '',
+    moderatorLegacy: s.moderatorId || '',
+    speakerLegacyIds: Array.isArray(s.speakerIds) ? s.speakerIds : [],
+    note: s.note || '',
+  }));
+
+  // --- Partenaires (frontmatter) ---
+  // #10 — rattachements partenaire↔édition PAR NIVEAU (fait curaté MOA, ABSENT des
+  // sources markdown). Organisateurs (GUOT, Grinso) = « principal » sur toutes les
+  // éditions ; sponsor officiel par édition = « officiel » (Coraf 2018→2024, SNPC 2027).
+  // Niveaux valides : principal | majeur | officiel | contributeur. Éditions par legacyId.
+  const ALL_EDITIONS = [
+    '2018-dematerialisation-gouvernance',
+    '2020-transformation-digitale',
+    '2022-innovation-donnee',
+    '2024-intelligence-artificielle',
+    '2027-souverainete-numerique',
+  ];
+  const PARTNER_PARTICIPATIONS = {
+    guot: ALL_EDITIONS.map((e) => ({ edition: e, niveau: 'principal' })),
+    grinso: ALL_EDITIONS.map((e) => ({ edition: e, niveau: 'principal' })),
+    coraf: [
+      '2018-dematerialisation-gouvernance',
+      '2020-transformation-digitale',
+      '2022-innovation-donnee',
+      '2024-intelligence-artificielle',
+    ].map((e) => ({ edition: e, niveau: 'officiel' })),
+    snpc: [{ edition: '2027-souverainete-numerique', niveau: 'officiel' }],
+  };
+  const partners = [];
+  for (const f of mdFiles('docs/sources/content-migration/05-partenaires')) {
+    const fm = frontmatter(path.join(SRC, 'docs/sources/content-migration/05-partenaires', f));
+    if (!fm.name) continue;
+    const legacyId = fm.slug || f.replace(/\.md$/, '');
+    partners.push({
+      legacyId,
+      name: fm.name,
+      type: fm.partner_type || 'soutien',
+      website: fm.website_url || '',
+      description: fm.description || '',
+      participations: PARTNER_PARTICIPATIONS[legacyId] || [],
+    });
+  }
+
+  // --- Publications (frontmatter) ---
+  const publications = [];
+  for (const f of mdFiles('docs/sources/content-migration/06-ressources')) {
+    const fm = frontmatter(path.join(SRC, 'docs/sources/content-migration/06-ressources', f));
+    if (!fm.title) continue;
+    publications.push({
+      legacyId: fm.slug || f.replace(/\.md$/, ''),
+      title: fm.title,
+      type: fm.resource_type || 'document',
+      editionLegacy: fm.edition_slug || '',
+      date: fm.publication_date || '',
+      url: fm.external_url || fm.file_source_url || '',
+      description: fm.description || '',
+    });
+  }
+
+  const data = { generatedAt: new Date().toISOString(), editions, speakers, sessions, partners, publications };
+  fs.writeFileSync(OUT, JSON.stringify(data, null, 2), 'utf8');
+  console.log(`dataset.json écrit : ${OUT}`);
+  console.log(`  éditions=${editions.length} intervenants=${speakers.length} sessions=${sessions.length} partenaires=${partners.length} publications=${publications.length}`);
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });

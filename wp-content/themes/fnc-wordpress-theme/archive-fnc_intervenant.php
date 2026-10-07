@@ -1,17 +1,11 @@
 <?php
 /**
- * Archive du custom post type "fnc_intervenant" — « Les voix du Forum ».
+ * Forum Numérique Congo — liste des intervenants.
  *
- * Alignee sur la page reelle localhost:3000/fr/intervenants : heros « Les voix
- * du Forum », panorama (badge « Programme provisoire » + statistiques + frise
- * des pays representes), puis l'explorateur d'intervenants (.spk-explorer) avec
- * filtres par profil (compteurs) et par pays, et la grille de cartes .spk.
- * Se termine sur le callout « Proposer une intervention ».
- *
- * Le filtrage passe par les query vars natifs des taxonomies (fnc_profil /
- * fnc_pays) — degradation gracieuse sans JavaScript. Les compteurs sont
- * calcules cote serveur. Contenu de demonstration (jamais les vraies identites
- * du site officiel).
+ * @package    Forum Numérique Congo
+ * @author     Vanel NGOYO ADOUMA, Lead développeur — Grinso & Associés
+ * @copyright  © 2026 Grinso & Associés (https://www.grinso.io) — Tous droits réservés.
+ * @link       https://www.grinso.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,13 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-fnc_render_hero(
+$fnc_route_h = fnc_route_hero( 'intervenants' );
+fnc_render_opening_hero(
 	array(
-		'eyebrow'    => __( 'Intervenants', 'fnc-wordpress-theme' ),
-		'title'      => __( 'Les voix du Forum', 'fnc-wordpress-theme' ),
-		'lead'       => __( 'Décideurs, chercheurs, entrepreneurs et acteurs de la société civile qui font avancer la réflexion sur le numérique en Afrique centrale.', 'fnc-wordpress-theme' ),
-		'image'      => get_template_directory_uri() . '/assets/images/le-portrait.png',
-		'image_alt'  => __( 'Portrait d’un intervenant du Forum Numérique Congo', 'fnc-wordpress-theme' ),
+		'eyebrow'    => $fnc_route_h['eyebrow'],
+		'title'      => $fnc_route_h['title'],
+		'intro'      => $fnc_route_h['intro'],
+		'image'      => $fnc_route_h['image'],
+		'image_alt'  => __( 'Intervenants du Forum Numérique Congo', 'fnc-wordpress-theme' ),
 		'breadcrumb' => __( 'Intervenants', 'fnc-wordpress-theme' ),
 	)
 );
@@ -35,22 +30,49 @@ $fnc_archive_url    = get_post_type_archive_link( 'fnc_intervenant' );
 $fnc_current_profil = isset( $_GET['fnc_profil'] ) ? sanitize_title( wp_unslash( $_GET['fnc_profil'] ) ) : '';
 $fnc_current_pays   = isset( $_GET['fnc_pays'] ) ? sanitize_title( wp_unslash( $_GET['fnc_pays'] ) ) : '';
 $fnc_profils        = get_terms( array( 'taxonomy' => 'fnc_profil', 'hide_empty' => false ) );
+// Ordre des filtres : Officiels · Experts · Hôtes (et non l'ordre
+// alphabétique par défaut des termes). Tout slug hors barème passe en fin de liste.
+if ( ! is_wp_error( $fnc_profils ) && ! empty( $fnc_profils ) ) {
+	$fnc_profil_order = array( 'official' => 0, 'expert' => 1, 'host' => 2 );
+	usort(
+		$fnc_profils,
+		static function ( $a, $b ) use ( $fnc_profil_order ) {
+			$oa = isset( $fnc_profil_order[ $a->slug ] ) ? $fnc_profil_order[ $a->slug ] : 99;
+			$ob = isset( $fnc_profil_order[ $b->slug ] ) ? $fnc_profil_order[ $b->slug ] : 99;
+			return $oa <=> $ob;
+		}
+	);
+}
+// Libellés de FILTRE au pluriel : « Officiels / Experts /
+// Hôtes » (« Hôtes » et non « Animateur »). N'affecte que les chips de filtre ;
+// les termes eux-mêmes restent inchangés. Repli sur le nom du terme si inconnu.
+$fnc_profil_labels = array(
+	'official' => __( 'Officiels', 'fnc-wordpress-theme' ),
+	'expert'   => __( 'Experts', 'fnc-wordpress-theme' ),
+	'host'     => __( 'Hôtes', 'fnc-wordpress-theme' ),
+);
 $fnc_pays_terms     = get_terms( array( 'taxonomy' => 'fnc_pays', 'hide_empty' => false ) );
 
 // Panorama : total d'intervenants et frise des pays representes (champ texte
 // libre _fnc_speaker_country, pouvant cumuler plusieurs pays separes par « / »).
 $fnc_all_speaker_ids = get_posts( array( 'post_type' => 'fnc_intervenant', 'posts_per_page' => -1, 'fields' => 'ids' ) );
 $fnc_total_speakers  = count( $fnc_all_speaker_ids );
-$fnc_countries       = array();
+$fnc_countries      = array();
+$fnc_seen_countries = array();
 foreach ( $fnc_all_speaker_ids as $fnc_speaker_id ) {
 	foreach ( fnc_split_countries( get_post_meta( $fnc_speaker_id, '_fnc_speaker_country', true ) ) as $fnc_country ) {
-		$fnc_countries[ $fnc_country ] = true;
+		// Dédup sur la clé NORMALISÉE (« Congo » ≡ « congo »), premier libellé gardé.
+		$fnc_ck = function_exists( 'fnc_country_key' ) ? fnc_country_key( $fnc_country ) : remove_accents( strtolower( $fnc_country ) );
+		if ( ! isset( $fnc_seen_countries[ $fnc_ck ] ) ) {
+			$fnc_seen_countries[ $fnc_ck ] = true;
+			$fnc_countries[]               = $fnc_country;
+		}
 	}
 }
-$fnc_countries     = fnc_order_countries( array_keys( $fnc_countries ) );
+$fnc_countries     = fnc_order_countries( $fnc_countries );
 $fnc_country_count = count( $fnc_countries );
 
-// FNC Core (Module C) fait autorite sur les facettes (total, comptes par profil,
+// FNC Core (données du site) fait autorite sur les facettes (total, comptes par profil,
 // pays), scopees aux participants de l'edition en cours. Repli sur le calcul du
 // theme si le plugin est absent.
 $fnc_facet_counts = array();
@@ -61,11 +83,13 @@ if ( function_exists( 'fnc_speaker_facets' ) ) {
 		foreach ( $fnc_facets['profils'] as $fnc_pf ) { $fnc_facet_counts[ $fnc_pf['slug'] ] = (int) $fnc_pf['count']; }
 		$fnc_countries = array();
 		foreach ( $fnc_facets['countries'] as $fnc_ct ) { if ( (int) $fnc_ct['count'] > 0 ) { $fnc_countries[] = $fnc_ct['name']; } }
+		// Congo en tête, pas l'ordre brut des facettes.
+		$fnc_countries     = function_exists( 'fnc_order_countries' ) ? fnc_order_countries( $fnc_countries ) : $fnc_countries;
 		$fnc_country_count = count( $fnc_countries );
 	}
 }
 
-// Classe de categorie (.cat-*) derivee du slug de profil, comme le vrai site.
+// Classe de categorie (.cat-*) derivee du slug de profil, comme sur le site du Forum.
 $fnc_cat_class = static function ( $slug ) {
 	$slug = strtolower( (string) $slug );
 	if ( false !== strpos( $slug, 'off' ) ) { return 'cat-official'; }
@@ -78,7 +102,7 @@ $fnc_cat_class = static function ( $slug ) {
 <main id="main">
 	<section class="section linen intervenants-panorama">
 		<div class="container">
-			<?php fnc_render_badge( __( 'Programme provisoire', 'fnc-wordpress-theme' ) ); ?>
+			<span class="prov-banner"><?php esc_html_e( 'Programme provisoire', 'fnc-wordpress-theme' ); ?></span>
 
 			<div class="stat-line">
 				<div class="stat"><b><?php echo esc_html( number_format_i18n( $fnc_total_speakers ) ); ?></b><span><?php esc_html_e( 'intervenants', 'fnc-wordpress-theme' ); ?></span></div>
@@ -112,7 +136,7 @@ $fnc_cat_class = static function ( $slug ) {
 							</a>
 							<?php foreach ( $fnc_profils as $fnc_profil ) : ?>
 								<a class="spk-chip" href="<?php echo esc_url( add_query_arg( array_filter( array( 'fnc_profil' => $fnc_profil->slug, 'fnc_pays' => $fnc_current_pays ) ), $fnc_archive_url ) ); ?>" aria-pressed="<?php echo $fnc_current_profil === $fnc_profil->slug ? 'true' : 'false'; ?>">
-									<?php echo esc_html( $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( isset( $fnc_facet_counts[ $fnc_profil->slug ] ) ? $fnc_facet_counts[ $fnc_profil->slug ] : $fnc_profil->count ) ); ?></span>
+									<?php echo esc_html( isset( $fnc_profil_labels[ $fnc_profil->slug ] ) ? $fnc_profil_labels[ $fnc_profil->slug ] : $fnc_profil->name ); ?> <span class="spk-chip-n"><?php echo esc_html( number_format_i18n( isset( $fnc_facet_counts[ $fnc_profil->slug ] ) ? $fnc_facet_counts[ $fnc_profil->slug ] : $fnc_profil->count ) ); ?></span>
 								</a>
 							<?php endforeach; ?>
 						</div>
@@ -152,16 +176,18 @@ $fnc_cat_class = static function ( $slug ) {
 							$fnc_sp_id      = get_the_ID();
 							$fnc_sp_profils = get_the_terms( $fnc_sp_id, 'fnc_profil' );
 							$fnc_sp_profil  = ( $fnc_sp_profils && ! is_wp_error( $fnc_sp_profils ) ) ? $fnc_sp_profils[0] : null;
+							$fnc_sp_role    = get_post_meta( $fnc_sp_id, '_fnc_speaker_role', true );
 							$fnc_sp_org     = get_post_meta( $fnc_sp_id, '_fnc_speaker_org', true );
+							$fnc_sp_desc    = $fnc_sp_role ? $fnc_sp_role : $fnc_sp_org; // Fonction (comme le site du Forum), repli sur l'organisation.
 							$fnc_sp_country = get_post_meta( $fnc_sp_id, '_fnc_speaker_country', true );
 							?>
 							<a class="spk" href="<?php the_permalink(); ?>">
 								<?php if ( $fnc_sp_profil ) : ?>
-									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( $fnc_sp_profil->name ); ?></span>
+									<span class="cat <?php echo esc_attr( $fnc_cat_class( $fnc_sp_profil->slug ) ); ?>"><?php echo esc_html( isset( $fnc_profil_labels[ $fnc_sp_profil->slug ] ) ? $fnc_profil_labels[ $fnc_sp_profil->slug ] : $fnc_sp_profil->name ); ?></span>
 								<?php endif; ?>
 								<div class="ph">
 									<?php
-									// RÈGLE 7 : fnc_speaker_portrait ne renvoie la photo que si le droit est
+									// la règle du droit à l’image : fnc_speaker_portrait ne renvoie la photo que si le droit est
 									// « obtenu » et non expire ; sinon on affiche l'illustration neutre (jamais la vraie photo).
 									$fnc_portrait = function_exists( 'fnc_speaker_portrait' )
 										? fnc_speaker_portrait( $fnc_sp_id, 'medium', array( 'alt' => fnc_speaker_display_name( $fnc_sp_id ) ) )
@@ -169,13 +195,21 @@ $fnc_cat_class = static function ( $slug ) {
 									if ( $fnc_portrait ) {
 										echo $fnc_portrait; // phpcs:ignore WordPress.Security.EscapeOutput -- markup <img> genere par WP/plugin.
 									} else {
-										printf( '<img src="%s" alt="" aria-hidden="true" />', esc_url( get_template_directory_uri() . '/assets/images/le-portrait.png' ) );
+										// Repli monogramme (initiales) — jamais un faux visage generique, comme le site du Forum.
+										printf(
+											'<span class="m" aria-hidden="true">%s</span><span class="l">%s</span>',
+											esc_html( fnc_speaker_initials( $fnc_sp_id ) ),
+											esc_html__( 'Photo à venir', 'fnc-wordpress-theme' )
+										);
 									}
 									?>
 								</div>
 								<div class="n"><?php echo esc_html( fnc_speaker_display_name( $fnc_sp_id ) ); ?></div>
+								<?php if ( $fnc_sp_role ) : ?>
+									<div class="r"><?php echo esc_html( $fnc_sp_role ); ?></div>
+								<?php endif; ?>
 								<?php if ( $fnc_sp_org ) : ?>
-									<div class="r"><?php echo esc_html( $fnc_sp_org ); ?></div>
+									<div class="o"><?php echo esc_html( $fnc_sp_org ); ?></div>
 								<?php endif; ?>
 								<?php if ( $fnc_sp_country ) : ?>
 									<span class="c"><?php echo esc_html( $fnc_sp_country ); ?></span>
@@ -185,7 +219,24 @@ $fnc_cat_class = static function ( $slug ) {
 						endwhile;
 						?>
 					</div>
-					<?php wp_reset_postdata(); ?>
+					<?php
+					// Pagination serveur (12/page) en préservant les filtres profil/pays.
+					$fnc_pg_args = array(); // phpcs:disable WordPress.Security.NonceVerification.Recommended
+					if ( ! empty( $_GET['fnc_profil'] ) ) {
+						$fnc_pg_args['fnc_profil'] = sanitize_key( wp_unslash( $_GET['fnc_profil'] ) );
+					}
+					if ( ! empty( $_GET['fnc_pays'] ) ) {
+						$fnc_pg_args['fnc_pays'] = sanitize_text_field( wp_unslash( $_GET['fnc_pays'] ) );
+					}
+					// phpcs:enable WordPress.Security.NonceVerification.Recommended
+					the_posts_pagination( array(
+						'add_args'  => $fnc_pg_args,
+						'prev_text' => __( '← Précédent', 'fnc-wordpress-theme' ),
+						'next_text' => __( 'Suivant →', 'fnc-wordpress-theme' ),
+						'class'     => 'fnc-pagination',
+					) );
+					wp_reset_postdata();
+					?>
 				<?php else : ?>
 					<div class="empty" role="status">
 						<h3><?php esc_html_e( 'Aucun intervenant ne correspond', 'fnc-wordpress-theme' ); ?></h3>
@@ -197,7 +248,7 @@ $fnc_cat_class = static function ( $slug ) {
 	</section>
 
 	<section class="callout">
-		<h2><?php esc_html_e( 'Proposer une intervention', 'fnc-wordpress-theme' ); ?></h2>
+		<h2 data-fnc-st="intervenants.cta.title"><?php echo esc_html( fnc_stitle( 'intervenants', 'cta', 'title' ) ); ?></h2>
 		<p><?php esc_html_e( 'Vous souhaitez contribuer au programme ? Les candidatures d’intervenants seront ouvertes prochainement.', 'fnc-wordpress-theme' ); ?> <span class="tbc" style="color:#fff"><?php esc_html_e( 'À confirmer', 'fnc-wordpress-theme' ); ?></span></p>
 		<a class="btn btn-red" href="<?php echo esc_url( fnc_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Nous contacter', 'fnc-wordpress-theme' ); ?>
 			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>

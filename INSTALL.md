@@ -11,6 +11,7 @@ Le paquet contient le **thème** et deux **extensions**.
 | `fnc-content-model.zip` | Extension : types de contenu (éditions, intervenants, sessions, publications, partenaires, actualités), taxonomies et relations. |
 | `fnc-core.zip` | Extension : réglages du site, formulaires, mesure d'audience, édition des pages. |
 | `GUIDE.md` | Guide complet d'administration et d'édition. |
+| `DEVELOPER.md` | Manuel du développeur : architecture, modèle de réglages, API, hooks, build. |
 
 ## Prérequis
 

@@ -17,8 +17,8 @@ Le template se compose de **trois éléments** :
 | **Extension « FNC Content Model »** | Le modèle de données : types de contenu (éditions, intervenants, sessions…), taxonomies, relations, statut *archivé*. |
 | **Extension « FNC Core »** | La logique du site : réglages, données dérivées (programme, annuaire, compteurs), formulaires, mesure d'audience, SEO. |
 
-> Voir aussi : **`INSTALL.md`** (installation pas à pas) et **`README.md`** (référence
-> technique développeur).
+> Voir aussi : **`INSTALL.md`** (installation pas à pas) et **`DEVELOPER.md`** (manuel du
+> développeur : architecture, API, hooks, build).
 
 ---
 

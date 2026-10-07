@@ -64,7 +64,7 @@ def main():
     for rel_src, zip_name in targets:
         zip_dir(os.path.join(ROOT, rel_src), os.path.join(STAGING, zip_name))
 
-    for doc in ('INSTALL.md', 'GUIDE.md'):
+    for doc in ('INSTALL.md', 'GUIDE.md', 'DEVELOPER.md'):
         shutil.copy2(os.path.join(ROOT, doc), os.path.join(STAGING, doc))
 
     # Archive complète du paquet (extensions + documentation).

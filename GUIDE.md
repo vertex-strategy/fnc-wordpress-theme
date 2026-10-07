@@ -108,6 +108,10 @@ Renseignez une seule fois les informations transverses du portail :
   ses liens, dans l'ordre. Options en 3ᵉ champ : `newtab` (nouvel onglet), `off` (masqué).
   Une ligne `// …` est une note interne. **Laissé vide → colonnes par défaut** (le pied de
   page n'est jamais sans navigation).
+- **Contacts presse** : un contact par ligne (`Nom | Rôle | Organisation | Email | Téléphone`) ;
+  affichés sur l'espace presse uniquement s'ils sont renseignés.
+- **Ordre des pays** (frise « Pays représentés » de la page Intervenants) : un pays par ligne,
+  drapeau optionnel (`Pays | URL`). Laissé vide → pays hôte puis ordre alphabétique.
 - **SEO par défaut** : titre et description affichés lors des partages.
 
 > Ces valeurs alimentent l'en-tête, le pied de page et les informations de contact partout
@@ -175,8 +179,8 @@ Intervenants → *Ajouter*. Renseignez :
 **Drapeaux des pays.** Sur la page Intervenants, le drapeau de chaque pays s'affiche
 **automatiquement** à partir du nom saisi (« France », « Congo », « RDC », « États-Unis »,
 « Côte d'Ivoire »… — la casse et les accents sont indifférents ; un pays écrit de deux façons
-proches ne compte qu'une fois). Aucun réglage à faire : l'ordre des pays suit par défaut le
-**pays hôte** puis l'**ordre alphabétique**.
+proches ne compte qu'une fois). Par défaut, l'ordre suit le **pays hôte** puis l'**ordre
+alphabétique** ; pour l'imposer, **Réglages → FNC → Intervenants — ordre des pays**.
 
 **Ordre d'affichage (partout : annuaire, participants, aperçus).** Deux champs, du plus
 prioritaire au moins prioritaire :

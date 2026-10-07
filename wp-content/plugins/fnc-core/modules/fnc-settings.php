@@ -47,6 +47,8 @@ if ( ! function_exists( 'fnc_settings_defaults' ) ) {
 			'email'                 => '',
 			'phone'                 => '',
 			'address'               => '',
+			'press_contacts'        => '', // Texte : « Nom | Rôle | Organisation | Email | Téléphone », un contact par ligne (lu par le thème).
+			'country_order'         => '', // Texte : « Pays | URL drapeau », un par ligne — ordre de la frise « Pays représentés » (lu par le thème).
 			'social'                => array(), // [ ['platform','label','url'], … ]
 			'mainNav'               => array(), // [ ['label','linkType','internalRoute'|'externalUrl','openInNewTab','visible'], … ]
 			'countryOrder'          => array(), // [ ['name','flag'=>attachment_id], … ]
@@ -437,7 +439,7 @@ if ( ! function_exists( 'fnc_settings_sanitize' ) ) {
 				$out[ $k ] = sanitize_text_field( $input[ $k ] );
 			}
 		}
-		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'footerLinkGroupsText', 'seoDefaultDescription' );
+		$area_keys = array( 'description', 'shortIntro', 'address', 'footerText', 'footerLinkGroupsText', 'seoDefaultDescription', 'press_contacts', 'country_order' );
 		foreach ( $area_keys as $k ) {
 			if ( isset( $input[ $k ] ) ) {
 				$out[ $k ] = sanitize_textarea_field( $input[ $k ] );
@@ -580,7 +582,35 @@ if ( ! function_exists( 'fnc_settings_page' ) ) {
 					</tr>
 				</table>
 
-				<h2><?php echo esc_html__( 'SEO par défaut', 'fnc' ); ?></h2>
+				<h2><?php echo esc_html__( 'Intervenants — ordre des pays', 'fnc' ); ?></h2>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row"><label for="fnc-country_order"><?php echo esc_html__( 'Ordre des pays (frise « Pays représentés »)', 'fnc' ); ?></label></th>
+							<td>
+								<textarea id="fnc-country_order" name="fnc_settings[country_order]" rows="6" class="large-text" placeholder="Congo&#10;Côte d’Ivoire | https://…/ci.svg&#10;France"><?php echo esc_textarea( isset( $all['country_order'] ) ? $all['country_order'] : '' ); ?></textarea>
+								<p class="description">
+									Un pays par ligne, dans l’ordre voulu. Drapeau optionnel en 2ᵉ champ : <code>Pays | URL du drapeau</code> (sinon le drapeau intégré est utilisé si le pays est reconnu).
+									Les pays non listés suivent, par ordre alphabétique. <strong>Vide → pays hôte en tête puis tri alphabétique.</strong>
+								</p>
+							</td>
+						</tr>
+					</table>
+
+					<h2><?php echo esc_html__( 'Contacts presse', 'fnc' ); ?></h2>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row"><label for="fnc-press_contacts"><?php echo esc_html__( 'Contacts presse', 'fnc' ); ?></label></th>
+							<td>
+								<textarea id="fnc-press_contacts" name="fnc_settings[press_contacts]" rows="5" class="large-text" placeholder="Nom | Rôle | Organisation | email@domaine | +242…"><?php echo esc_textarea( isset( $all['press_contacts'] ) ? $all['press_contacts'] : '' ); ?></textarea>
+								<p class="description">
+									Un contact par ligne, champs séparés par <code>|</code> dans l’ordre : Nom | Rôle | Organisation | Email | Téléphone.
+									Affichés uniquement lorsqu’ils sont renseignés — <strong>ne jamais saisir de données fictives</strong>.
+								</p>
+							</td>
+						</tr>
+					</table>
+
+					<h2><?php echo esc_html__( 'SEO par défaut', 'fnc' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<?php
 					fnc_settings_field_text( 'seoDefaultTitle', 'Titre par défaut' );
